@@ -1,19 +1,17 @@
+package ControlFlow.Level_1;
+
 import java.util.Scanner;
 
-public class Divisibility5 {
+public class DivisibleBy_5 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Enter a number: ");
+        System.out.print("Enter a number: ");   
         int number = scanner.nextInt();
-
-
         if (number % 5 == 0) {
-            System.out.println("Is the number " + number + " divisible by 5? Yes");
+            System.out.println("The number is divisible by 5.");
         } else {
-            System.out.println("Is the number " + number + " divisible by 5? No");
+            System.out.println("The number is not divisible by 5.");
         }
-
         scanner.close();
     }
 }
