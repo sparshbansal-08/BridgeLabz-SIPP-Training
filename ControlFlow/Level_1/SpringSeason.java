@@ -1,4 +1,3 @@
-package ControlFlow.Level_1;
 import java.util.Scanner;
 public class SpringSeason{
      public static void main(String[] args) {
