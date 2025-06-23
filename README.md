@@ -128,8 +128,7 @@ BridgeLabz-SIPP-Training/
 │   └── Level1/
 │   └── Level2/
 
-
----
+```
 
 ## 👩‍💻 Prepared By:
 **[Sparsh Bansal]**  
