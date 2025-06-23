@@ -130,7 +130,7 @@ BridgeLabz-SIPP-Training/
 
 ```
 
-## 👩‍💻 Prepared By:
+## 👨‍💻 Prepared By:
 **[Sparsh Bansal]**  
 For practice under guidance of **Kajal Wankhede**  
 Using Java SE Development Kit  
