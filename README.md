@@ -1,137 +1,194 @@
-# 🖥️ Java Practice Modules - BridgeLabz SIPP Training
+# 🖥️ BridgeLabz SIPP Training
 
-This repository contains categorized Java programming concepts and lab practices guided by **Kajal Wankhede** from **11 June onwards**. It is divided into thematic modules and organized by levels for progressive learning.
-
----
-
-## 📘 01 - Java Programming Elements (11 June)
-
-**Concepts Practiced:**
-
-1. Java Comments  
-2. Java Basic Data Types  
-3. Java Variables  
-4. Arithmetic Operators  
-5. Operator Precedence  
-6. Type Conversion  
-7. Taking User Input in Programs  
+This repository contains categorized Java programming concepts and lab practices guided by **Kajal Wankhede** from **11 June onwards**. Work is structured **week-wise** and organized across the following branches:  
+✅ `Core-Java` • ✅ `OOPs` • ✅ `Workshop`
 
 ---
 
-## 🔁 02 - Java Control Flows (12 June)
+## 📅 Week 1 – Core-Java Branch
 
-**Concepts Practiced:**
-
-1. Java Control Flows  
-2. Java `boolean` Data Type  
-3. Boolean Expressions  
-4. Logical Operators  
-5. `if`, `else if`, `else` Statements  
-6. Java Loops: `for` and `while`  
-7. `break` and `continue` Statements  
-8. `switch` Statement  
+> **Branch:** `Core-Java`  
+> **Date Range:** 11 June – 21 June
 
 ---
 
-## 🧮 03 - Java Arrays (13 June)
+### 📘 01 - Java Programming Elements (11 June)
 
-**Concepts Practiced:**
+**Concepts:**
 
-1. Java Arrays  
-2. Creating Arrays  
-3. Accessing Arrays  
-4. Accessing Arrays using `for` Loop  
-5. Modifying Arrays  
-6. Using `length` Property  
-7. Multidimensional Arrays  
-8. 2D Arrays (Matrix)  
-9. Accessing and Finding Size of Multi-Dimensional Arrays  
-10. Using `System.err.println()` and `System.exit()`  
+- Java Comments
+- Data Types
+- Variables
+- Arithmetic Operators
+- Type Conversion
+- User Input
 
 ---
 
-## 🔧 04 - Java Methods (16 June)
+### 🔁 02 - Java Control Flows (12 June)
 
-**Concepts Practiced:**
+**Concepts:**
 
-1. User-Defined Methods  
-2. Using Methods Multiple Times  
-3. Making Methods More Dynamic  
-4. Recursive Methods  
-5. Static Methods  
-6. Java Standard Library Methods  
-7. `java.lang.Math` Class  
+- Boolean Expressions
+- Logical Operators
+- `if`, `else`, `switch`
+- Loops: `for`, `while`
+- `break`, `continue`
 
 ---
 
-## 🔤 05 - Java String (17 June)
+### 🧮 03 - Java Arrays (13 June)
 
-**Concepts Practiced:**
+**Concepts:**
 
-1. Java Strings  
-2. Creating Strings  
-3. Escape Sequences (`\`)  
-4. Taking String Input  
-5. String Arrays  
-6. Strings as Method Parameters  
-7. String Class Built-in Methods  
-8. ASCII Character Codes  
+- 1D and 2D Arrays
+- Multidimensional Arrays
+- Modifying and Accessing Arrays
+- `length`, `System.exit()`, `System.err`
 
 ---
 
-## 🕒 EXTRAS - Built-in Functions & Java Date and Time (19 June)
+### 🔧 04 - Java Methods (16 June)
 
-**Concepts Introduced:**
+**Concepts:**
 
-### ✅ Common Built-in Functions:
-- `Math` Class Methods  
-- `Random` Class  
-
-### 🗓️ Date and Time:
-- Importance of Date & Time in Applications  
-- Managing Date & Time in Java (Java 8+ APIs like `LocalDate`, `LocalTime`, `LocalDateTime`)  
-- Improvements in newer Java versions for date-time handling  
+- User-defined, Static & Recursive Methods
+- Method Reusability
+- `Math` Class
 
 ---
 
-## 📂 Folder Structure Recommendation
+### 🔤 05 - Java String (17 June)
+
+**Concepts:**
+
+- Creating & Taking Input
+- String Arrays
+- String Built-in Methods
+- ASCII Characters
+
+---
+
+### 🕒 06 - Built-in Functions & Date-Time (19 June)
+
+**Concepts:**
+
+- `Math`, `Random` Classes
+- Java 8+ APIs: `LocalDate`, `LocalTime`, `LocalDateTime`
+
+---
+
+### 📚 07 - **Extras: String Handling & Functions** (21 June)
+
+**Concepts:**
+
+- Advanced String Handling
+- Common String Functions
+- Parameter Passing & Return Concepts
+
+---
+
+## 📅 Week 2 – OOPs Branch
+
+> **Branch:** `OOPs`  
+> **Date Range:** 23 June – 26 June
+
+---
+
+### 🔷 01 - Java Class & Object Concepts (📅 23 June)
+
+**Submission Due:** 23 June, 11:59 PM  
+**Concepts:**
+
+- Procedural vs Object-Oriented Programming
+- Java Class and Object
+
+---
+
+### 🔷 02 - Constructors & OOP Keywords (📅 24 June)
+
+**Concepts:**
+
+- Java Constructors
+- Instance vs Class Variables
+- Access Modifiers
+
+---
+
+### 🔷 03 - Keywords (Contd.) & Eclipse IDE (📅 25 June)
+
+**Concepts:**
+
+- Deep Dive into:
+  - `this`, `static`, `final`, `instanceof`
+- Eclipse IDE Setup and Usage
+
+---
+
+### 🔷 04 - Object Modeling & Diagrams (📅 26 June)
+
+**Concepts:**
+
+- Class Diagrams
+- Object Diagrams
+- Sequence Diagrams
+
+---
+
+## 🛠️ Workshop Branch
+
+> **Branch:** `Workshop`  
+> **Date Range:** 27–28 June
+
+---
+
+### 🧪 27 June – Review
+
+- `NonRepeatingChar.java`
+- `ShoppingBillingSimulator.java`
+
+---
+
+### ☕ 28 June – The Coffee Counter Chronicles
+
+**Features:**
+
+- Switch-based menu
+- Quantity \* Price + GST
+- Exit on `"exit"` input
+
+---
+
+## 📂 Folder Structure (Branch-wise)
 
 ```bash
 BridgeLabz-SIPP-Training/
 │
-├── ProgrammingElements/
-│   └── Level1/
-│   └── Level2/
+├── Core-Java/
+│   ├── ProgrammingElements/
+│   ├── ControlFlow/
+│   ├── Array/
+│   ├── Methods/
+│   ├── String/
+│   ├── BuiltIn_Functions/
+│   ├── Extras_String/
 │
-├── ControlFlow/
-│   └── Level1/
-│   └── Level2/
-│   └── Level3/
+├── OOPs/
+│   ├── Class_and_Object/
+│   ├── JavaConstructors/
+│   ├── KeywordsandInstanceof/
+│   ├── ObjectOrientedDesign_Principles/
 │
-├── Array/
-│   └── Level1/
-│   └── Level2/
-│
-├── Methods/
-│   └── Level1/
-│   └── Level2/
-│   └── Level3/
-│
-├── String/
-│   └── Level1/
-│   └── Level2/
-│   └── Level3/
-│
-├── BuiltIn_Function/
-│
-├── Class_and_Object/
-│   └── Level1/
-│   └── Level2/
+├── Workshop/
+│   ├── NonRepeatingChar.java
+│   ├── ShoppingBillingSimulator.java
+│   └── CoffeeCounterChronicles.java
+
 
 ```
 
-## 👨‍💻 Prepared By:
+## 👩‍💻 Prepared By:
+
 **[Sparsh Bansal]**  
 For practice under guidance of **Kajal Wankhede**  
-Using Java SE Development Kit  
-
+Using Java SE Development Kit
