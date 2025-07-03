@@ -82,7 +82,7 @@ This repository contains categorized Java programming concepts and lab practices
 ---
 
 ### 🔷 01 - Java Class & Object Concepts (📅 23 June)
-**Submission Due:** 23 June, 11:59 PM  
+
 **Concepts:**
 - Procedural vs Object-Oriented Programming  
 - Java Class and Object  
@@ -110,6 +110,27 @@ This repository contains categorized Java programming concepts and lab practices
 - Class Diagrams  
 - Object Diagrams  
 - Sequence Diagrams  
+
+---
+
+## 🛠️ Workshop Branch
+
+> **Branch:** `Workshop`  
+> **Date Range:** 27–28 June
+
+---
+
+### 🧪 27 June – Review
+- `NonRepeatingChar.java`  
+- `ShoppingBillingSimulator.java`
+
+---
+
+### ☕ 28 June – The Coffee Counter Chronicles
+**Features:**
+- Switch-based menu  
+- Quantity * Price + GST  
+- Exit on `"exit"` input  
 
 ---
 
@@ -143,26 +164,6 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-## 🛠️ Workshop Branch
-
-> **Branch:** `Workshop`  
-> **Date Range:** 27–28 June
-
----
-
-### 🧪 27 June – Review
-- `NonRepeatingChar.java`  
-- `ShoppingBillingSimulator.java`
-
----
-
-### ☕ 28 June – The Coffee Counter Chronicles
-**Features:**
-- Switch-based menu  
-- Quantity * Price + GST  
-- Exit on `"exit"` input  
-
----
 
 ## 📂 Folder Structure (Branch-wise)
 
@@ -197,5 +198,5 @@ BridgeLabz-SIPP-Training/
 ## 👩‍💻 Prepared By:
 **[Sparsh Bansal]**  
 For practice under guidance of **Kajal Wankhede**  
-Using Java SE Development Kit  
+Using Java SE Development Kit and Eclipse IDE
 
