@@ -113,6 +113,36 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
+## 📅 Week 3 – OOPs Branch
+
+> **Branch:** `OOPs`  
+> **Date Range:** 1 July – 2 July
+
+---
+
+### 🧬 05 - Inheritance (📅 1 July)
+**Concepts:**
+- Inheritance Overview  
+- Single-Level Inheritance  
+- Multilevel Inheritance  
+- Hierarchical Inheritance  
+- Key Features of Inheritance  
+- Method Overriding  
+- Constructor Inheritance  
+- Polymorphism and Inheritance  
+- Access Modifiers & Inheritance  
+
+---
+
+### 🧩 06 - OOP Principles (📅 2 July)
+**Concepts:**
+- Encapsulation  
+- Polymorphism (Compile-Time & Run-Time)  
+- Interfaces  
+- Abstract Classes  
+
+---
+
 ## 🛠️ Workshop Branch
 
 > **Branch:** `Workshop`  
@@ -152,8 +182,10 @@ BridgeLabz-SIPP-Training/
 │   ├── Class_and_Object/         
 │   ├── JavaConstructors/              
 │   ├── KeywordsandInstanceof/              
-│   ├── ObjectOrientedDesign_Principles/           
-│   
+│   ├── ObjectOrientedDesign_Principles/            
+│   ├── Inheritance/
+│   ├── EncapsulationPolymorphismInterfaceandAbstract/ 
+│
 ├── Workshop/
 │   ├── NonRepeatingChar.java
 │   ├── ShoppingBillingSimulator.java
