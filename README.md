@@ -164,6 +164,37 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
+### 🧠 Assignment Submission (📅 3 July)
+**Concepts:**
+- **`abstract class` and `abstract method`**  
+  Enables partial implementation and enforces subclass responsibility.
+
+- **`interface` and `implements`**  
+  Supports abstraction and multiple inheritance via contract-based design.
+
+- **Method Overriding using `@Override` annotation**  
+  Allows runtime polymorphism and ensures method signature correctness.
+
+- **Access Modifiers (`private`, `public`)**  
+  Controls class member visibility and enforces encapsulation.
+
+- **Constructor Chaining with `super()`**  
+  Reuses base class constructor logic in child classes.
+
+- **Encapsulation using Getters and Setters**  
+  Protects fields and maintains data integrity.
+
+- **Real-world Domain Modeling with OOP**  
+  Represents entities and relationships with proper abstraction and hierarchy.
+
+- **Interface-driven Design**  
+  Promotes flexible, loosely-coupled, and scalable architecture.
+
+- **Code Reuse via Inheritance**  
+  Avoids redundancy and promotes DRY principles in object hierarchies.
+
+---
+
 
 ## 📂 Folder Structure (Branch-wise)
 
