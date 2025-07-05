@@ -137,7 +137,7 @@ This repository contains categorized Java programming concepts and lab practices
 ## 📅 Week 3 – OOPs Branch
 
 > **Branch:** `OOPs`  
-> **Date Range:** 1 July – 2 July
+> **Date Range:** 1 July – 4 July
 
 ---
 
@@ -195,6 +195,43 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
+## 🛠️ Workshop Branch
+
+> **Branch:** `Workshop`  
+> **Date Range:** 4 July
+
+---
+
+- #### 🚗 Vehicle Management System  
+**Concepts:** Inheritance, Polymorphism, Method Overriding  
+
+Design a system to manage different types of vehicles in a garage:  
+- **Base Class:** `Vehicle` with attributes like `brand`, `model`, and `fuelType`.  
+- **Subclasses:** `Car`, `Bike`, `Truck` – each overrides `calculateServiceCost()` method.  
+
+**Requirements:**  
+- Implement `printServiceDetails()` that behaves differently for each vehicle type.  
+- Use **runtime polymorphism** to store different vehicle types in a list and invoke service-related methods polymorphically.
+
+
+
+- #### 🛍️ Online Store Billing System  
+**Concepts:** Inheritance, Abstract Classes, Polymorphism  
+
+Create a billing system for an online store:  
+- **Abstract Base Class:** `Product` with fields like `name` and `price`.  
+- **Subclasses:** `Electronics`, `Clothing`, `Grocery` – each overrides `calculateDiscount()` method.
+
+**Requirements:**  
+- Use an **abstract method** in `Product` to enforce discount calculation.  
+- Apply different discount logic in subclasses:  
+  - **Electronics:** 10%  
+  - **Clothing:** 20%  
+  - **Grocery:** 0%  
+
+---
+
+
 
 ## 📂 Folder Structure (Branch-wise)
 
@@ -221,7 +258,9 @@ BridgeLabz-SIPP-Training/
 ├── Workshop/
 │   ├── NonRepeatingChar.java
 │   ├── ShoppingBillingSimulator.java
-│   └── CoffeeCounterChronicles.java
+│   ├── CoffeeCounterChronicles.java
+│   ├── VehicleManagement/
+│   ├── OnlineStoreBillingSystem/
 
 
 
