@@ -225,9 +225,9 @@ Create a billing system for an online store:
 **Requirements:**  
 1. Use an **abstract method** in `Product` to enforce discount calculation.  
 2. Apply different discount logic in subclasses:  
-  * **Electronics:** 10%  
-  * **Clothing:** 20%  
-  * **Grocery:** 0%  
+  + **Electronics:** 10%  
+  + **Clothing:** 20%  
+  + **Grocery:** 0%  
 
 ---
 
