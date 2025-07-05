@@ -5,7 +5,7 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-<h2 style="color:green;">📅 Week 1 – Core-Java Branch</h2>
+## 📅 Week 1 – Core-Java Branch
 
 > **Branch:** `Core-Java`  
 > **Date Range:** 11 June – 21 June
