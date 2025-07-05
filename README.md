@@ -231,6 +231,25 @@ Create a billing system for an online store:
 
 ---
 
+## 📅 Week 4 – DSA Branch
+
+> **Branch:** `DSA`  
+> **Date Range:** 5 July – July 
+
+---
+
+### 🧵 01 - Data Structure Introduction & LinkedList (📅 5 July)
+
+**Concepts:**
+- Introduction to Data Structures  
+- Key Features of Data Structures in Java  
+- Types of Data Structures in Java  
+- **Singly Linked List**  
+- **Doubly Linked List**  
+- **Circular Linked List**  
+
+---
+
 
 ## 📂 Folder Structure (Branch-wise)
 
