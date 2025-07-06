@@ -238,7 +238,7 @@ Create a billing system for an online store:
 
 ---
 
-### 🧵 01 - Data Structure Introduction & LinkedList (📅 5 July)
+### 🧵 01 - Data Structure Introduction & LinkedList (📅 5-6 July)
 
 **Concepts:**
 - Introduction to Data Structures  
