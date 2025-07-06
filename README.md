@@ -256,7 +256,7 @@ Create a billing system for an online store:
 ```bash
 BridgeLabz-SIPP-Training/
 │
-├── Core-Java/
+├── Core-Java
 │   ├── ProgrammingElements/
 │   ├── ControlFlow/
 │   ├── Array/
@@ -265,15 +265,18 @@ BridgeLabz-SIPP-Training/
 │   ├── BuiltIn_Functions/
 │   ├── Extras_String/
 │
-├── OOPs/
+├── OOPs
 │   ├── Class_and_Object/         
 │   ├── JavaConstructors/              
 │   ├── KeywordsandInstanceof/              
 │   ├── ObjectOrientedDesign_Principles/            
 │   ├── Inheritance/
 │   ├── EncapsulationPolymorphismInterfaceandAbstract/ 
-│
-├── Workshop/
+│   
+├── DSA
+│   ├── LinkedList/         
+│                 
+├── Workshop
 │   ├── NonRepeatingChar.java
 │   ├── ShoppingBillingSimulator.java
 │   ├── CoffeeCounterChronicles.java
