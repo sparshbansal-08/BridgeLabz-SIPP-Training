@@ -4,8 +4,12 @@ class Student {
     int age;
     String grade;
     Student next;
+
     Student(int roll, String name, int age, String grade) {
-        this.roll = roll; this.name = name; this.age = age; this.grade = grade;
+        this.roll = roll;
+        this.name = name;
+        this.age = age;
+        this.grade = grade;
     }
 }
 
@@ -27,7 +31,10 @@ class StudentList {
     }
 
     void addAtPosition(int pos, int roll, String name, int age, String grade) {
-        if (pos <= 0 || head == null) { addAtBeginning(roll, name, age, grade); return; }
+        if (pos <= 0 || head == null) {
+            addAtBeginning(roll, name, age, grade);
+            return;
+        }
         Student temp = head;
         for (int i = 1; i < pos && temp.next != null; i++) temp = temp.next;
         Student s = new Student(roll, name, age, grade);
@@ -43,25 +50,58 @@ class StudentList {
         if (temp.next != null) temp.next = temp.next.next;
     }
 
-    Student searchByRoll(int roll) {
+    void searchByRoll(int roll) {
         Student temp = head;
         while (temp != null) {
-            if (temp.roll == roll) return temp;
+            if (temp.roll == roll) {
+                System.out.println(temp.roll + " " + temp.name + " " + temp.age + " " + temp.grade);
+                return;
+            }
             temp = temp.next;
         }
-        return null;
+        System.out.println("Student not found");
     }
 
-    void updateGrade(int roll, String grade) {
-        Student s = searchByRoll(roll);
-        if (s != null) s.grade = grade;
+    void updateGrade(int roll, String newGrade) {
+        Student temp = head;
+        while (temp != null) {
+            if (temp.roll == roll) {
+                temp.grade = newGrade;
+                return;
+            }
+            temp = temp.next;
+        }
     }
 
-    void displayAll() {
+    void display() {
         Student temp = head;
         while (temp != null) {
             System.out.println(temp.roll + " " + temp.name + " " + temp.age + " " + temp.grade);
             temp = temp.next;
         }
+    }
+}
+
+public class StudentRecordTest {
+    public static void main(String[] args) {
+        StudentList list = new StudentList();
+
+        list.addAtEnd(1, "Alice", 20, "A");
+        list.addAtBeginning(2, "Bob", 21, "B");
+        list.addAtPosition(1, 3, "Charlie", 19, "C");
+
+        System.out.println("All Students:");
+        list.display();
+
+        System.out.println("\nSearching for Roll 2:");
+        list.searchByRoll(2);
+
+        System.out.println("\nUpdating Grade of Roll 3 to A+");
+        list.updateGrade(3, "A+");
+        list.display();
+
+        System.out.println("\nDeleting Roll 1:");
+        list.deleteByRoll(1);
+        list.display();
     }
 }
