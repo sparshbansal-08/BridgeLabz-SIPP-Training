@@ -12,7 +12,7 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-### 📘 01 - Java Programming Elements (11 June)
+### 📘 01 - Java Programming Elements (📅 11 June)
 **Concepts:**
 - Java Comments  
 - Data Types  
@@ -23,7 +23,7 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-### 🔁 02 - Java Control Flows (12 June)
+### 🔁 02 - Java Control Flows (📅 12 June)
 **Concepts:**
 - Boolean Expressions  
 - Logical Operators  
@@ -33,7 +33,7 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-### 🧮 03 - Java Arrays (13 June)
+### 🧮 03 - Java Arrays (📅 13 June)
 **Concepts:**
 - 1D and 2D Arrays  
 - Multidimensional Arrays  
@@ -42,7 +42,7 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-### 🔧 04 - Java Methods (16 June)
+### 🔧 04 - Java Methods (📅 16 June)
 **Concepts:**
 - User-defined, Static & Recursive Methods  
 - Method Reusability  
@@ -50,7 +50,7 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-### 🔤 05 - Java String (17 June)
+### 🔤 05 - Java String (📅 17 June)
 **Concepts:**
 - Creating & Taking Input  
 - String Arrays  
@@ -59,14 +59,31 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-### 🕒 06 - Built-in Functions & Date-Time (19 June)
+### 🔤 Java String Practices (📅 18 June)
+**Concepts:**
+- Java Strings  
+- Creating Strings  
+- Use of `"\\"` Escape Sequence  
+- Taking String Input  
+- String Arrays  
+- String as Method Parameters  
+- String Class Built-In Methods  
+- ASCII Character Codes  
+- Java Exceptions  
+- Java Exception Hierarchy  
+- Types of Exceptions (Checked & Unchecked)  
+- `java.lang.RuntimeException`  
+
+---
+
+### 🕒 06 - Built-in Functions & Date-Time (📅 19 June)
 **Concepts:**
 - `Math`, `Random` Classes  
 - Java 8+ APIs: `LocalDate`, `LocalTime`, `LocalDateTime`
 
 ---
 
-### 📚 07 - **Extras: String Handling & Functions** (21 June)
+### 📚 07 - **Extras: String Handling & Functions** (📅 21 June)
 **Concepts:**
 - Advanced String Handling  
 - Common String Functions  
@@ -81,7 +98,7 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-### 🔷 01 - Java Class & Object Concepts (📅 23 June)
+### 🧱 01 - Java Class & Object Concepts (📅 23 June)
 
 **Concepts:**
 - Procedural vs Object-Oriented Programming  
@@ -89,7 +106,7 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-### 🔷 02 - Constructors & OOP Keywords (📅 24 June)
+### 🛠️ 02 - Constructors & OOP Keywords (📅 24 June)
 **Concepts:**
 - Java Constructors  
 - Instance vs Class Variables  
@@ -97,7 +114,7 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-### 🔷 03 - Keywords (Contd.) & Eclipse IDE (📅 25 June)
+### 🧠 03 - Keywords (Contd.) & Eclipse IDE (📅 25 June)
 **Concepts:**
 - Deep Dive into:  
   - `this`, `static`, `final`, `instanceof`  
@@ -105,13 +122,14 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-### 🔷 04 - Object Modeling & Diagrams (📅 26 June)
+### 🗂️ 04 - Object Modeling & Diagrams (📅 26 June)
 **Concepts:**
 - Class Diagrams  
 - Object Diagrams  
 - Sequence Diagrams  
 
 ---
+
 
 ## 🛠️ Workshop Branch
 
@@ -262,8 +280,8 @@ BridgeLabz-SIPP-Training/
 │   ├── Array/
 │   ├── Methods/
 │   ├── String/
+│   ├── Extras_String/   
 │   ├── BuiltIn_Functions/
-│   ├── Extras_String/
 │
 ├── OOPs
 │   ├── Class_and_Object/         
