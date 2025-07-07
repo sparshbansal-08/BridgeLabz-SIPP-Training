@@ -1,7 +1,7 @@
 # 🖥️ BridgeLabz SIPP Training
 
 This repository contains categorized Java programming concepts and lab practices guided by **Kajal Wankhede** from **11 June onwards**. Work is structured **week-wise** and organized across the following branches:  
-✅ `Core-Java` • ✅ `OOPs` • ✅ `Workshop`
+✅ `Core-Java` • ✅ `OOPs` • ✅ `DSA` • ✅ `Workshop`
 
 ---
 
