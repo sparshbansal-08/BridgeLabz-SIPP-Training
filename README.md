@@ -295,9 +295,73 @@ Kindly go through the following topics as part of your advanced DSA practice:
 ## 🛠️ Workshop Branch
 
 > **Branch:** `Workshop`  
-> **Date Range:** 8-9 July
+> **Date Range:** 8 July
 
 ---
+
+- #### 🚘 Vehicle Rental Application  
+**Concepts:** Class, Interface, Constructors, Access Modifiers, Operators  
+**OOP Principles:** Abstraction, Inheritance, Polymorphism, Encapsulation  
+
+**Scenario:**  
+Build a system for renting **bikes, cars, and trucks** to customers.
+
+**Implementation Highlights:**  
+1. **Classes:**  
+   - `Vehicle` (base class with model, numberPlate, baseRate)  
+   - `Bike`, `Car`, `Truck` (extend Vehicle)  
+   - `Customer` class to manage renter info  
+
+2. **Constructors:**  
+   - Custom constructors for initializing different vehicle types  
+
+3. **Access Modifiers:**  
+   - `protected` attributes in Vehicle for subclass access  
+
+4. **Interface:**  
+   - `Rentable` with method `calculateRent(int days)` to abstract rent logic  
+
+5. **Operators:**  
+   - Used in rent formula: `baseRate × days ± surcharges`  
+
+6. **OOP Usage:**  
+   - **Abstraction:** `Rentable` hides rent calculation behavior  
+   - **Inheritance:** Vehicle → Bike, Car, Truck  
+   - **Polymorphism:** Each vehicle overrides `calculateRent()`  
+   - **Encapsulation:** Fields hidden via getters/setters  
+
+---
+
+- #### 🍽️ FoodLoop – Restaurant Ordering System  
+**Concepts:** Class, Interface, Constructors, Operators  
+**OOP Principles:** Encapsulation, Inheritance, Polymorphism  
+
+**Scenario:**  
+Design an app where users can **place food orders** from local restaurants.
+
+**Implementation Highlights:**  
+1. **Classes:**  
+   - `FoodItem` with `name`, `category`, `price`, `availability`  
+   - `VegItem` and `NonVegItem` (extend `FoodItem`)  
+   - `Order` contains list of food items and total amount  
+
+2. **Constructors:**  
+   - Used to create custom combo meals or menu items  
+
+3. **Interface:**  
+   - `IOrderable` with methods `placeOrder()` and `cancelOrder()`  
+
+4. **Operators:**  
+   - Used to calculate `totalPrice = sum(itemPrices) - discount`  
+
+5. **OOP Usage:**  
+   - **Encapsulation:** Stock levels are private; accessed via methods  
+   - **Inheritance:** `VegItem` and `NonVegItem` inherit `FoodItem`  
+   - **Polymorphism:** `applyDiscount()` behaves differently based on total  
+
+---
+
+✅ These scenario-based projects helped implement real-world OOP patterns and enhanced understanding of abstraction, encapsulation, and modular design.
 
 
 
