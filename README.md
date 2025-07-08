@@ -388,7 +388,8 @@ BridgeLabz-SIPP-Training/
 │   ├── EncapsulationPolymorphismInterfaceandAbstract/ 
 │   
 ├── DSA
-│   ├── LinkedList/         
+│   ├── LinkedList/  
+│   ├── Stack_Queue_and_HashMap/       
 │                 
 ├── Workshop
 │   ├── NonRepeatingChar.java
