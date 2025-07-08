@@ -268,6 +268,38 @@ Create a billing system for an online store:
 
 ---
 
+### 🧬 02 - Stack, Queue, HashMap and Non-Linear Data Structures (📅 7 July)
+
+**Concepts:**
+- **Stack**
+- **Queue**
+- **HashMap**
+- **Hashing Function**
+- Collision Handling Techniques: Chaining & Open Addressing
+- Applications of Stack, Queue, and Hashing in real-world problems
+
+---
+
+**Extra Work (Advanced DSA Practice):**
+Kindly go through the following topics as part of your advanced DSA practice:
+
+- **Non-Linear Data Structures**
+  - **Binary Tree**
+  - **Binary Search Tree (BST)**
+  - **Heap** (Min Heap / Max Heap)
+  - **AVL Tree**
+  - **Red-Black Tree**
+
+---
+
+## 🛠️ Workshop Branch
+
+> **Branch:** `Workshop`  
+> **Date Range:** 8-9 July
+
+---
+
+
 
 ## 📂 Folder Structure (Branch-wise)
 
