@@ -268,15 +268,55 @@ Create a billing system for an online store:
 
 ---
 
-### 🧬 02 - Stack, Queue, HashMap and Non-Linear Data Structures (📅 7 July)
+### 🧬 02 - Stack, Queue and Non-Linear Data Structures (📅 7 July)
 
-**Concepts:**
+**Concepts Covered:**
+
 - **Stack**
+  - LIFO (Last In First Out) Principle
+  - Key operations: `push()`, `pop()`, `peek()`, `isEmpty()`
+  - Use Cases:
+    - Expression evaluation
+    - Undo operations
+    - Function call stack
+    - Balanced parentheses checking
+  - Java Built-in: `java.util.Stack`
+  - Custom Implementation: Using arrays or linked lists
+  - Internal Working:
+    - `push()` → O(1)
+    - `pop()` → O(1)
+    - `peek()` → O(1)
+  - Applications:
+    - Backtracking
+    - Call stack
+    - Parenthesis matching
+  - Sample Problem: Balanced Parentheses Checker
+  - Best Practices:
+    - Always check `isEmpty()` before `pop()` or `peek()`
+    - Use synchronized structures for thread safety
+
 - **Queue**
-- **HashMap**
-- **Hashing Function**
-- Collision Handling Techniques: Chaining & Open Addressing
-- Applications of Stack, Queue, and Hashing in real-world problems
+  - FIFO (First In First Out) Principle
+  - Types:
+    - Simple Queue
+    - `PriorityQueue`
+    - `Deque` (Double-Ended Queue)
+  - Key operations: `offer()`, `poll()`, `peek()`, `isEmpty()`
+  - Use Cases:
+    - Task scheduling
+    - Request buffering
+    - Breadth-first search
+  - Java Implementations:
+    - `LinkedList`, `ArrayDeque`, `PriorityQueue`
+  - Internal Working:
+    - Enqueue → Add to end → O(1)
+    - Dequeue → Remove from front → O(1)
+  - Sample Problem: Ticket Counter Management System
+  - Best Practices:
+    - Use `offer()` instead of `add()` for safe enqueue
+    - Use `poll()` instead of `remove()` to avoid exceptions
+    - Avoid storing `null` values
+    - Prefer thread-safe queues like `ConcurrentLinkedQueue` for concurrency
 
 ---
 
@@ -363,6 +403,58 @@ Design an app where users can **place food orders** from local restaurants.
 
 ✅ These scenario-based projects helped implement real-world OOP patterns and enhanced understanding of abstraction, encapsulation, and modular design.
 
+---
+
+## 🗃️ DSA Branch
+
+> **Branch:** `DSA`
+
+---
+
+### 🧬 02 - HashMap and Hashing Function (📅 8 July)
+
+**Concepts Covered:**
+
+- **HashMap**
+  - Stores key-value pairs
+  - Allows fast retrieval, insertion, and deletion
+  - Key operations: `put()`, `get()`, `remove()`, `containsKey()`, `isEmpty()`
+  - Time Complexity (Average Case):
+    - `put()` → O(1)
+    - `get()` → O(1)
+    - `remove()` → O(1)
+  - Internal Working:
+    - Uses an **array of buckets**
+    - Each bucket stores a **linked list or tree** of entries (in case of collision)
+    - Hashing used to calculate the index for storing keys
+
+- **Hashing Function**
+  - Converts a key into an integer (hash code)
+  - Then maps it to a bucket index using `index = hash % capacity`
+  - Good hashing minimizes collisions and distributes keys uniformly
+
+- **Collision Handling Techniques**
+  - **Chaining**: Use a linked list at each bucket to store multiple entries with the same hash
+  - **Open Addressing**: Find the next empty slot in the array using linear/quadratic probing
+
+- **Applications**
+  - Caching
+  - Database indexing
+  - Symbol tables in compilers
+  - Storing user data (e.g., login credentials)
+
+- **Java Implementation**
+  - Built-in class: `java.util.HashMap<K, V>`
+  - Supports null keys and values
+  - Not synchronized → use `Collections.synchronizedMap()` or `ConcurrentHashMap` for thread safety
+
+- **Best Practices**
+  - Use immutable keys to avoid unexpected behavior
+  - Set initial capacity if size is predictable to avoid frequent resizing
+  - Use `containsKey()` before `get()` to avoid null pointer exceptions
+  - Avoid storing `null` as key/value if not needed (for clarity)
+
+---
 
 
 ## 📂 Folder Structure (Branch-wise)
