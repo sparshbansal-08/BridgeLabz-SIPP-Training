@@ -213,7 +213,7 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-## 🛠️ Workshop Branch
+## 🛠️ [Workshop Branch](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/Workshop?tab=readme-ov-file)
 
 > **Branch:** `Workshop`  
 > **Date Range:** 4 July
