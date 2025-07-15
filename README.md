@@ -5,7 +5,7 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-## 📅 Week 1 – Core-Java Branch
+## 📅 Week 1 – [Core-Java Branch](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/Core-Java?tab=readme-ov-file)
 
 > **Branch:** `Core-Java`  
 > **Date Range:** 11 June – 21 June
