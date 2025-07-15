@@ -152,7 +152,7 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-## 📅 Week 3 – [OOPs Branch]((https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/OOPs?tab=readme-ov-file))
+## 📅 Week 3 – [OOPs Branch](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/OOPs?tab=readme-ov-file)
 
 > **Branch:** `OOPs`  
 > **Date Range:** 1 July – 4 July
