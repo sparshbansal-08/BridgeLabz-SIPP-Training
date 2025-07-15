@@ -252,7 +252,7 @@ Create a billing system for an online store:
 ## 📅 Week 4 – DSA Branch
 
 > **Branch:** `DSA`  
-> **Date Range:** 5 July – 11 July 
+> **Date Range:** 5 July – 15 July 
 
 ---
 
@@ -585,7 +585,7 @@ Design an app where users can **place food orders** from local restaurants.
 
 ---
 
-# 🔁 15 July - LinkedList Use Cases: Browser History & Music Playlist
+### 🔁 15 July - LinkedList Use Cases: Browser History & Music Playlist
 
 This README documents the **scenario-based problem-solving tasks** using **Java LinkedList**, focusing on **OOP principles** like **Encapsulation, Abstraction, Inheritance, and Polymorphism**.
 
