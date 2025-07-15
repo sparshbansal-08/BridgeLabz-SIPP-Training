@@ -456,31 +456,31 @@ Design an app where users can **place food orders** from local restaurants.
 
 ---
 
-### 🧬 03 - Sorting Algorithms (📅 9 July)
+### 📚 03 - Sorting Algorithms (📅 9 July)
 
-**Concepts Covered:**
+**📌 Concepts Covered:**
 
-- **Bubble Sort**
+- **🫧 Bubble Sort**
   - Compares adjacent elements; swaps if in wrong order
   - Time: Worst → O(n²), Best (already sorted) → O(n)
 
-- **Insertion Sort**
+- **📥 Insertion Sort**
   - Builds the sorted array one item at a time
   - Time: Worst → O(n²), Best → O(n)
 
-- **Merge Sort**
+- **🔀 Merge Sort**
   - Divide & conquer; always O(n log n)
   - Stable and good for large datasets
 
-- **Quick Sort**
+- **⚡ Quick Sort**
   - Selects pivot, partitions array
   - Avg: O(n log n), Worst: O(n²), In-place
 
 ---
 
-### 🧬 04 & 05 - Searching & String/File Handling (📅 10 July)
+### 🔍 04 & 05 - Searching & String/File Handling (📅 10 July)
 
-**Concepts Covered:**
+**📌 Concepts Covered:**
 
 - **Linear Search**
   - Checks each element
@@ -503,7 +503,7 @@ Design an app where users can **place food orders** from local restaurants.
 
 ### 🧬 06 - Algorithm Runtime & Big-O Notation (📅 11 July)
 
-**Concepts Covered:**
+**📌 Concepts Covered:**
 
 - **Runtime Analysis**
   - Measures time & space efficiency of code
@@ -655,7 +655,10 @@ BridgeLabz-SIPP-Training/
 │   
 ├── DSA
 │   ├── LinkedList/  
-│   ├── Stack_Queue_and_HashMap/       
+│   ├── Stack_Queue_and_HashMap/  
+│   ├── SortingAlgorithms/ 
+│   ├── LinearAndBinarySearch/ 
+│   ├── Big-O-Notation_Problems/      
 │                 
 ├── Workshop
 │   ├── NonRepeatingChar.java
@@ -664,6 +667,10 @@ BridgeLabz-SIPP-Training/
 │   ├── VehicleManagement/
 │   ├── OnlineStoreBillingSystem/
 │   ├── VehicleRental/
+│   ├── FoodLoopSystem/
+│   ├── BrowserHistory/
+│   ├── MusicPlaylist/
+
 
 
 
