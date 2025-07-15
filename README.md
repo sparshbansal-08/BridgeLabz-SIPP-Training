@@ -249,7 +249,7 @@ Create a billing system for an online store:
 
 ---
 
-## 📅 Week 4 – DSA Branch
+## 📅 Week 4 – [DSA Branch](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/DSA?tab=readme-ov-file)
 
 > **Branch:** `DSA`  
 > **Date Range:** 5 July – 15 July 
