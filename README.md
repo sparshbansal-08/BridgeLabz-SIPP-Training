@@ -252,7 +252,7 @@ Create a billing system for an online store:
 ## 📅 Week 4 – DSA Branch
 
 > **Branch:** `DSA`  
-> **Date Range:** 5 July – July 
+> **Date Range:** 5 July – 11 July 
 
 ---
 
@@ -453,6 +453,180 @@ Design an app where users can **place food orders** from local restaurants.
   - Set initial capacity if size is predictable to avoid frequent resizing
   - Use `containsKey()` before `get()` to avoid null pointer exceptions
   - Avoid storing `null` as key/value if not needed (for clarity)
+
+---
+
+### 🧬 03 - Sorting Algorithms (📅 9 July)
+
+**Concepts Covered:**
+
+- **Bubble Sort**
+  - Compares adjacent elements; swaps if in wrong order
+  - Time: Worst → O(n²), Best (already sorted) → O(n)
+
+- **Insertion Sort**
+  - Builds the sorted array one item at a time
+  - Time: Worst → O(n²), Best → O(n)
+
+- **Merge Sort**
+  - Divide & conquer; always O(n log n)
+  - Stable and good for large datasets
+
+- **Quick Sort**
+  - Selects pivot, partitions array
+  - Avg: O(n log n), Worst: O(n²), In-place
+
+---
+
+### 🧬 04 & 05 - Searching & String/File Handling (📅 10 July)
+
+**Concepts Covered:**
+
+- **Linear Search**
+  - Checks each element
+  - Time: O(n)
+
+- **Binary Search**
+  - Works on sorted arrays only
+  - Time: O(log n)
+
+- **StringBuilder vs StringBuffer**
+  - Both are mutable strings
+  - `StringBuilder`: Non-synchronized (faster)
+  - `StringBuffer`: Synchronized (thread-safe)
+
+- **BufferedReader, FileReader, InputStreamReader**
+  - Used for file and input handling
+  - `BufferedReader` improves performance by buffering input
+
+---
+
+### 🧬 06 - Algorithm Runtime & Big-O Notation (📅 11 July)
+
+**Concepts Covered:**
+
+- **Runtime Analysis**
+  - Measures time & space efficiency of code
+
+- **Big-O Notation**
+  - Expresses worst-case time complexity
+
+- **Time Complexity**
+  - O(1), O(n), O(log n), O(n²), etc.
+
+- **Space Complexity**
+  - Tracks memory usage of an algorithm
+
+- **Best, Worst, Average Case**
+  - Help analyze real-world performance
+
+- **Optimization Guidelines**
+  - Avoid nested loops
+  - Use appropriate data structures (e.g., HashMap)
+
+---
+
+## 🛠️ Workshop Branch
+
+> **Branch:** `Workshop`  
+> **Date Range:** 14 July - 15 July
+
+---
+
+### 🧬 07 - OOPs Concepts in Java (📅 14 July - Review Day)
+
+**Concepts Covered:**
+
+- **Class & Object**
+  - Class = blueprint, Object = real-world instance
+
+- **Encapsulation**
+  - Use of `private` fields + `public` getters/setters
+  - Hides implementation, improves security
+
+- **Inheritance**
+  - One class inherits from another using `extends`
+  - Promotes code reuse
+
+- **Abstraction**
+  - Hiding complexity, showing only relevant details
+  - Achieved using:
+    - `abstract class` (can have both abstract and concrete methods)
+    - `interface` (100% abstract; from Java 8 supports default/static methods)
+
+- **Interface**
+  - A contract with abstract methods
+  - Implemented using `implements`
+  - Supports multiple inheritance
+
+- **Polymorphism**
+  - One thing, many forms
+  - Compile-time (Overloading): same method name, different params
+  - Runtime (Overriding): same method signature, different class
+
+- **Overloading vs Overriding**
+
+| Feature             | Overloading                  | Overriding                    |
+|---------------------|------------------------------|-------------------------------|
+| Happens In          | Same class                   | Subclass                      |
+| Parameters          | Must be different            | Must be same                  |
+| Return Type         | Can vary                     | Must match or be covariant    |
+| Binding Time        | Compile-time                 | Runtime                       |
+
+- **Multiple Inheritance**
+  - **With classes**: ❌ Not supported (to avoid Diamond Problem)
+  - **With interfaces**: ✅ Supported
+
+---
+
+✅ **Java is Not 100% Object-Oriented**
+- Uses **primitive types** (`int`, `char`, `boolean`, etc.)
+- These are not objects, hence Java is **not fully OOP**
+
+---
+
+# 🔁 15 July - LinkedList Use Cases: Browser History & Music Playlist
+
+This README documents the **scenario-based problem-solving tasks** using **Java LinkedList**, focusing on **OOP principles** like **Encapsulation, Abstraction, Inheritance, and Polymorphism**.
+
+---
+
+## 📌 Scenario 1: Browser History Navigation
+
+### 🧩 Use Case:
+Maintain a user’s browsing history with the ability to move **back and forward**, just like real browsers.
+
+### ✅ Why `LinkedList`?
+- A **Doubly Linked List** is ideal since it allows traversal in both directions (backward & forward).
+
+### 🧠 OOP Concepts Applied:
+- **Encapsulation**: History data is hidden inside a class with private members.
+- **Abstraction**: Public methods like `visitPage()`, `goBack()`, and `goForward()` abstract internal list operations.
+- **Inheritance & Polymorphism**: The same navigation logic could be reused for other apps (e.g., document viewer, gallery).
+
+# 🎵 Scenario 2: Music Playlist Queue
+
+## 🧩 Use Case:
+Design a music player that can:
+- Play songs **sequentially**
+- **Add** songs to the playlist
+- **Remove** songs dynamically
+
+
+## ✅ Why Use `LinkedList`?
+- `LinkedList` allows:
+  - Fast **insertion/removal** at both ends
+  - Efficient queue-like behavior for **playing next song**
+  - Ideal structure for dynamic playlist management
+
+
+## 🧠 OOP Concepts Applied:
+
+| OOP Concept     | Description                                                                 |
+|------------------|-----------------------------------------------------------------------------|
+| **Encapsulation** | The playlist (LinkedList) is kept private inside the class                |
+| **Abstraction**   | Methods like `addSong()` and `playNext()` hide internal logic             |
+| **Polymorphism**  | Class can be extended to play other media like podcasts or videos         |
 
 ---
 
