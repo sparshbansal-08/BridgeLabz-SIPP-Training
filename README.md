@@ -332,7 +332,7 @@ Kindly go through the following topics as part of your advanced DSA practice:
 
 ---
 
-## 🛠️ Workshop Branch
+## 🛠️ [Workshop Branch](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/Workshop?tab=readme-ov-file)
 
 > **Branch:** `Workshop`  
 > **Date Range:** 8 July
@@ -405,7 +405,7 @@ Design an app where users can **place food orders** from local restaurants.
 
 ---
 
-## 🗃️ DSA Branch
+## 🗃️ [DSA Branch](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/DSA?tab=readme-ov-file)
 
 > **Branch:** `DSA`
 
@@ -526,7 +526,7 @@ Design an app where users can **place food orders** from local restaurants.
 
 ---
 
-## 🛠️ Workshop Branch
+## 🛠️ [Workshop Branch](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/Workshop?tab=readme-ov-file)
 
 > **Branch:** `Workshop`  
 > **Date Range:** 14 July - 15 July
