@@ -604,16 +604,16 @@ Maintain a user’s browsing history with the ability to move **back and forward
 - **Abstraction**: Public methods like `visitPage()`, `goBack()`, and `goForward()` abstract internal list operations.
 - **Inheritance & Polymorphism**: The same navigation logic could be reused for other apps (e.g., document viewer, gallery).
 
-# 🎵 Scenario 2: Music Playlist Queue
+## 🎵 Scenario 2: Music Playlist Queue
 
-## 🧩 Use Case:
+### 🧩 Use Case:
 Design a music player that can:
 - Play songs **sequentially**
 - **Add** songs to the playlist
 - **Remove** songs dynamically
 
 
-## ✅ Why Use `LinkedList`?
+### ✅ Why Use `LinkedList`?
 - `LinkedList` allows:
   - Fast **insertion/removal** at both ends
   - Efficient queue-like behavior for **playing next song**
