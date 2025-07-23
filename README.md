@@ -714,6 +714,85 @@ At a multi-day food festival, organizers track customer footfall at every stall.
 
 ---
 
+# 🌿🎯🗓️🎟️ DSA Solutions: Scenario-Based Problem Solving (18 July)
+
+## 🌿 Scenario 1: AgroBot – Automated Irrigation System
+
+### 🧩 Use Case:
+Develop a smart agriculture application that deploys different types of bots to irrigate fields. The system requires a flexible design to accommodate various irrigation methods and integrate external sensor data securely.
+
+### ✅ OOP Concepts Applied:
+-   **`Abstraction`**: A base class `IrrigationUnit` defines common behaviors (like `startWatering()`) without specifying implementation details, forcing subclasses to provide their own.
+-   **`Polymorphism`**: Specialized units like `Sprinkler` and `DripSystem` override the `startWatering()` method, allowing a single call to `startWatering()` to behave differently based on the specific object type.
+-   **`Interface`**: The `SensorReadable` interface allows any `IrrigationUnit` (or other classes) to integrate external sensor data, promoting loose coupling and flexibility.
+-   **`Access Modifiers`**: Used to protect internal calibration logic within classes (e.g., `private` fields or methods), preventing unauthorized external tampering.
+-   **`Constructor Chaining`**: Constructors in `Sprinkler` and `DripSystem` call the base class `IrrigationUnit` constructor using `super()`, ensuring proper initialization of inherited properties.
+
+### 🧠 Solution Highlights:
+-   **Modular Design**: Easily add new irrigation unit types by extending `IrrigationUnit`.
+-   **Sensor Integration**: Seamlessly connect to various sensors via the `SensorReadable` interface.
+-   **Data Security**: Protect sensitive internal settings using `private` access modifiers.
+
+---
+
+## 🎯 Scenario 2: EventHive – Event Registration Platform
+
+### 🧩 Use Case:
+Design an event registration platform where users can sign up for tech events. The system needs clear separation of concerns between users, events, and tickets, with an administrative interface for event management.
+
+### ✅ Class Design & OOP Concepts Applied:
+-   **`Class Design`**: Clearly defined classes for `User`, `Event`, and `Ticket` encapsulate their respective data and behaviors, promoting maintainability and readability.
+-   **`Constructor`**: The `Ticket` object is created via a parameterized constructor, ensuring that all necessary details (like `User` and `Event` references) are provided upon creation.
+-   **`Interface`**: The `EventManager` interface defines a contract for administrative operations (like `modifyEvent()` or `removeEvent()`), separating the "what" from the "how."
+-   **`Object Interaction`**: Demonstrates how objects from different classes (`User`, `Event`, `Ticket`) interact to achieve the registration flow.
+-   **`Sequence Diagram` (Conceptual)**:
+    1.  **User** interacts with the system to **Register** for an `Event`.
+    2.  The system, possibly an `EventRegistrationService`, validates the `User` and `Event`.
+    3.  A **Ticket** object is then **created** with references to the `User` and `Event`.
+    4.  The `Ticket` is issued back to the `User`.
+
+### 🧠 Solution Highlights:
+-   **Structured Data**: Clear object models for all entities in the system.
+-   **Admin Control**: `EventManager` interface provides a consistent way for administrators to manage events.
+-   **Transactional Flow**: The creation of a `Ticket` links a `User` to an `Event`.
+
+---
+
+## 🗓️ Scenario 3: Daily Task Planner – LinkedList + Abstraction
+
+### 🧩 Use Case:
+Create a digital planner that stores a sequential list of tasks for the user. The planner needs to handle different types of tasks, each with a unique execution method, and allow users to search for tasks.
+
+### ✅ DSA & OOP Concepts Applied:
+-   **`LinkedList`**: Used to maintain the sequence of tasks, allowing for efficient additions and removals. `LinkedList<Task>` provides flexibility for dynamic task management.
+-   **`Abstraction`**: `Task` is defined as an `abstract class`, serving as a blueprint for all task types. It declares an `abstract execute()` method, forcing all concrete task subclasses to implement their specific logic.
+-   **`Inheritance`**: `Meeting`, `Workout`, and `CodingSession` are concrete subclasses that `extend` the `Task` abstract class, inheriting its properties and implementing the `execute()` method.
+-   **`Linear Search`**: Implemented to allow users to search for tasks by keyword, iterating through the `LinkedList` until a match is found.
+
+### 🧠 Solution Highlights:
+-   **Flexible Task Types**: Easily add new task types by creating new subclasses of `Task`.
+-   **Polymorphic Execution**: Call `execute()` on any `Task` object, and the specific implementation for `Meeting`, `Workout`, or `CodingSession` will run.
+-   **Simple Search**: Provides basic search functionality for tasks within the planner.
+
+---
+
+## 🎟️ Scenario 4: Event Ticketing System – Queue + HashMap + Constructor Overloading
+
+### 🧩 Use Case:
+Develop a system for people to queue up and book tickets for various events (concerts, plays). The system needs to manage event-specific booking queues and efficiently handle attendee information, including optional contact details.
+
+### ✅ DSA & OOP Concepts Applied:
+-   **`HashMap`**: `HashMap<String, Queue<Attendee>>` maps an event name (String) to its specific booking `Queue<Attendee>`. This allows for quick lookup of the correct queue for any given event.
+-   **`Queue`**: Each `Queue<Attendee>` represents the waiting line for a specific event, ensuring that attendees are processed in a First-In, First-Out (FIFO) manner for ticket booking.
+-   **`Constructor Overloading`**: The `Attendee` class has multiple constructors. One takes `name` and `age`, while another takes `name`, `age`, and an optional `email`. This provides flexibility when creating `Attendee` objects.
+-   **`Linear Search`**: A method is implemented to find the position of a specific person within an event's booking queue by iterating through the `Queue` elements.
+
+### 🧠 Solution Highlights:
+-   **Event-Specific Queues**: Efficiently manage separate queues for different events.
+-   **Flexible Attendee Data**: `Constructor overloading` allows for capturing varying levels of attendee information.
+-   **Queue Position Tracking**: Ability to find an attendee's current place in line.
+
+---
 
 ## 📂 Folder Structure (Branch-wise)
 
