@@ -630,6 +630,90 @@ Design a music player that can:
 
 ---
 
+# 🚀 DSA Solutions: Scenario-Based Problem Solving (16-17 July)
+
+## 📚 Scenario 1: BookShelf – Library Organizer
+
+### 🧩 Use Case:
+Develop a library system to manage books based on genre and author. The system needs to efficiently handle borrowing and returning books, dynamically updating the catalog.
+
+### ✅ DSA Concepts Applied:
+- **`HashMap`**: Used to map `genre` to a `LinkedList` of books, providing fast lookup for specific genres.
+- **`LinkedList`**: Enables efficient insertion and deletion of books within a genre's catalog as books are borrowed or returned, maintaining dynamic updates.
+- **`HashSet` (Optional)**: Can be used within each book list to prevent duplicate book entries if a book is accidentally added multiple times to the same genre.
+
+### 🧠 Solution Highlights:
+- **Genre-wise Catalog**: `HashMap<String, LinkedList<Book>>` facilitates organizing books by genre.
+- **Efficient Updates**: `LinkedList` allows O(1) insertion/deletion at specific points if the node reference is known, or O(n) if searching for the book.
+- **Duplication Prevention**: `HashSet` ensures unique book entries within a genre.
+
+---
+
+## 🛒 Scenario 2: SmartCheckout – Supermarket Billing Queue
+
+### 🧩 Use Case:
+Design a supermarket billing system where each checkout counter manages a queue of customers. The system needs to quickly fetch item prices and update stock upon purchase.
+
+### ✅ DSA Concepts Applied:
+- **`Queue`**: Represents the customer line at each checkout counter, ensuring FIFO (First-In, First-Out) processing of customers.
+- **`HashMap`**: Used to store item prices and stock levels, allowing O(1) average time complexity for fetching prices and updating stock.
+
+### 🧠 Solution Highlights:
+- **Customer Management**: `Queue<Customer>` efficiently handles adding and removing customers from the checkout line.
+- **Quick Price Lookup**: `HashMap<String, Double>` (for prices) and `HashMap<String, Integer>` (for stock) provide rapid access to item information.
+- **Stock Updates**: `HashMap` allows for direct modification of stock levels upon purchase.
+
+---
+
+## 🍦 Scenario 3: IceCreamRush – Sorting Flavors by Popularity
+
+### 🧩 Use Case:
+"IceCreamRush" needs to sort its 8 ice cream flavors by sales popularity at the end of each week. Given the small data size and manual updates, a simple sorting method is preferred.
+
+### ✅ DSA Concepts Applied:
+- **`Bubble Sort`**: Chosen for its simplicity and ease of implementation, suitable for small datasets where efficiency is not the primary concern.
+- **Small Data Size**: The limited number of flavors (8) makes Bubble Sort a viable and understandable option, despite its O(n^2) worst-case time complexity.
+- **Repeated Adjacent Comparisons**: The core mechanism of Bubble Sort, where adjacent elements are repeatedly compared and swapped, aligns with the manual update process.
+
+### 🧠 Solution Highlights:
+- **Simplicity**: Easy to understand and implement for a small, manually updated list.
+- **Direct Application**: Directly applies the concept of repeatedly comparing and swapping adjacent elements.
+
+---
+
+## 🎬 Scenario 4: MovieTime – Theater Show Listings
+
+### 🧩 Use Case:
+A movie theater app allows users to sort upcoming showtimes. Since new shows are added throughout the day to an already nearly sorted list, an efficient method for real-time insertion is needed.
+
+### ✅ DSA Concepts Applied:
+- **`Insertion Sort`**: Ideal for datasets that are mostly sorted or where elements are added one at a time and need to be placed into their correct position.
+- **Real-time Insertion**: Insertion Sort efficiently places new showtimes into their correct chronological slot without re-sorting the entire list.
+- **Time-based Ordering**: The algorithm naturally supports maintaining a sorted order based on showtimes.
+
+### 🧠 Solution Highlights:
+- **Efficiency for Nearly Sorted Data**: Insertion Sort performs well on data that is almost sorted, making it suitable for dynamic showtime updates.
+- **Incremental Sorting**: Each new showtime is "inserted" into its correct place, maintaining the sorted order incrementally.
+
+---
+
+## 🍔 Scenario 5: FoodFest – Sorting Stalls by Customer Footfall
+
+### 🧩 Use Case:
+At a multi-day food festival, organizers track customer footfall at every stall. Daily logs from different zones (already sorted by count) need to be combined into a master list for performance evaluation.
+
+### ✅ DSA Concepts Applied:
+- **`Merge Sort`**: Excellent for combining multiple already sorted datasets into a single, comprehensively sorted list. Its divide-and-conquer approach is well-suited for this task.
+- **Combining Multiple Sorted Datasets**: The core strength of Merge Sort, allowing efficient merging of sorted sub-arrays (or lists of footfall data from different zones).
+- **Stability in Data with Equal Values**: Merge Sort is a stable sorting algorithm, meaning that elements with equal values maintain their relative order in the sorted output. This is important if there are multiple stalls with the same footfall and their original zonal order needs to be preserved.
+
+### 🧠 Solution Highlights:
+- **Efficient Merging**: `Merge Sort` efficiently combines the already sorted zonal data into a single master list.
+- **Scalability**: Handles larger datasets effectively, unlike O(n^2) sorts.
+- **Data Integrity**: Stability ensures that the relative order of stalls with identical footfall counts is maintained.
+
+---
+
 
 ## 📂 Folder Structure (Branch-wise)
 
