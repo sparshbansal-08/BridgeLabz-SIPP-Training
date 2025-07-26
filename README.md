@@ -630,6 +630,13 @@ Design a music player that can:
 
 ---
 
+## 📅 Week 4 – [DSA Branch](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/DSA?tab=readme-ov-file)
+
+> **Branch:** `DSA`  
+> **Date Range:** 16 July – 20 July 
+
+---
+
 # 🚀 DSA Solutions: Scenario-Based Problem Solving (16-17 July)
 
 ## 📚 Scenario 1: BookShelf – Library Organizer
