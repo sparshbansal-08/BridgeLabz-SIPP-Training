@@ -637,7 +637,7 @@ Design a music player that can:
 
 ---
 
-# 🚀 DSA Solutions: Scenario-Based Problem Solving (16-17 July)
+# 🚀 DSA Solutions: [Scenario-Based Problem Solving](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/DSA/Scenario) (16-17 July)
 
 ## 📚 Scenario 1: BookShelf – Library Organizer
 
