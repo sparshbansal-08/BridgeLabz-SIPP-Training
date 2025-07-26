@@ -801,6 +801,195 @@ Develop a system for people to queue up and book tickets for various events (con
 
 ---
 
+## 📅 Week 5 – [GenericsCollections Branch](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/GenericsCollections?tab=readme-ov-file)
+
+> **Branch:** `GenericsCollections`  
+> **Date Range:** 21 July – 27 July
+
+---
+
+### 🧬 01 - Java Generics (📅 21 July)
+
+**Concepts Covered:**
+
+- **Introduction to Generics**
+  - Provides compile-time type safety
+  - Eliminates need for type casting
+  - Supports code reusability and clean APIs
+
+- **Type Parameters**
+  - Syntax: `<T>`, `<K, V>` (for key-value pairs)
+  - Used to define generic classes and methods
+
+- **Generic Classes**
+  - Define classes with type parameters
+  - Example: `class Box<T> { T value; }`
+  - Instantiation: `Box<String> strBox = new Box<>();`
+
+- **Generic Methods**
+  - Methods with their own type parameters
+  - Example: `<T> void printArray(T[] array)`
+
+- **Bounded Type Parameters**
+  - Restricts types using `extends`
+  - Example: `<T extends Number>` – only accepts subclasses of `Number`
+
+- **Wildcards**
+  - Unbounded: `<?>`
+  - Upper bounded: `<? extends Number>`
+  - Lower bounded: `<? super Integer>`
+  - Used for flexibility with unknown types in method parameters
+
+---
+
+### 📊 Graphs (📅 22 Jul)
+**Concepts:**
+- Graph Representations (Adjacency List and Matrix)
+- Traversal Techniques (BFS & DFS)
+- Implementation Examples
+
+**Attached Resources:**
+- `Scenario-Based Graph Practice Problems.pdf`
+- `Graph Problem Set.pdf`
+- `Graph.pdf`
+
+---
+
+### 🧮 02 - Collections Framework (📅 23 July)
+
+**Concepts Covered:**
+
+- **Overview of Collections Framework**
+  - Provides standard architecture to manage groups of objects
+  - Interfaces: `List`, `Set`, `Queue`, `Map`
+
+- **Hierarchy of Collections Framework**
+  - Root Interface: `Collection`
+  - Subinterfaces: `List`, `Set`, `Queue`
+  - Separate hierarchy: `Map`
+
+- **List Interface and Implementing Classes**
+  - Implementations: `ArrayList`, `LinkedList`, `Vector`
+  - Maintains order, allows duplicates
+  - Use Case: Dynamic array, indexed access
+
+- **Set Interface and Implementing Classes**
+  - Implementations: `HashSet`, `LinkedHashSet`, `TreeSet`
+  - No duplicates allowed
+  - `HashSet`: Unordered, `LinkedHashSet`: Insertion order, `TreeSet`: Sorted
+
+- **Queue and Deque Interfaces**
+  - `Queue`: FIFO – `LinkedList`, `PriorityQueue`
+  - `Deque`: Double-ended – `ArrayDeque`, `LinkedList`
+  - Methods: `offer()`, `poll()`, `peek()`
+
+- **Map Interface and Its Implementations**
+  - Key-Value pair structure
+  - Implementations: `HashMap`, `LinkedHashMap`, `TreeMap`, `Hashtable`
+  - `HashMap`: Fast, unordered
+  - `LinkedHashMap`: Maintains order
+  - `TreeMap`: Sorted keys
+
+- **Comparison of Different Implementations**
+
+  | Interface | Implementation | Ordered | Duplicates | Sorted | Thread-safe |
+  |-----------|----------------|---------|------------|--------|-------------|
+  | List      | ArrayList      | ✅      | ✅         | ❌     | ❌          |
+  | Set       | HashSet        | ❌      | ❌         | ❌     | ❌          |
+  | Queue     | PriorityQueue  | ❌      | ✅         | ✅     | ❌          |
+  | Map       | TreeMap        | ✅      | Keys: ❌   | ✅     | ❌          |
+
+- **Real-World Use Cases and Best Practices**
+  - `ArrayList`: Shopping cart, music playlist
+  - `HashSet`: Unique student IDs
+  - `PriorityQueue`: CPU task scheduling
+  - `HashMap`: Caching, dictionary implementations
+
+  **Best Practices:**
+  - Use `offer()`/`poll()` over `add()`/`remove()` to avoid exceptions
+  - Prefer `ArrayList` for random access
+  - Always check `containsKey()` before using `get()` in maps
+  - Use generics for type safety and cleaner code
+
+---
+
+### 📚 Collections Submission (📅 24–25 July)
+
+**Concepts Submitted:**
+
+#### 📋 List Interface
+
+- **Implemented Using**: `ArrayList`, `LinkedList`, `Vector`
+- **Properties**:
+  - Ordered
+  - Allows duplicates
+  - Index-based access
+- **Key Methods**: `add()`, `get()`, `set()`, `remove()`, `size()`
+- **Use Cases**:
+  - Dynamic arrays
+  - User activity logs
+- **Best Practices**:
+  - Use `ArrayList` for fast read operations
+  - Use `LinkedList` for frequent insertions/deletions
+
+#### 🧮 Set Interface
+
+- **Implemented Using**: `HashSet`, `LinkedHashSet`, `TreeSet`
+- **Properties**:
+  - No duplicates
+  - `HashSet`: Unordered
+  - `LinkedHashSet`: Maintains insertion order
+  - `TreeSet`: Sorted elements
+- **Use Cases**:
+  - Unique user IDs
+  - Tag filtering
+- **Best Practices**:
+  - Use `HashSet` for fast lookups
+  - Use `TreeSet` when sorted order is needed
+
+#### 🔁 Queue Interface
+
+- **Implemented Using**: `LinkedList`, `PriorityQueue`
+- **Properties**:
+  - FIFO (First In First Out)
+  - `PriorityQueue`: Sorted based on natural ordering or comparator
+- **Key Methods**: `offer()`, `poll()`, `peek()`
+- **Use Cases**:
+  - Job/task scheduling
+  - BFS traversal
+- **Best Practices**:
+  - Use `offer()` and `poll()` to avoid exceptions
+  - Avoid storing `null` values in queues
+
+#### 🔄 Deque Interface
+
+- **Implemented Using**: `ArrayDeque`, `LinkedList`
+- **Properties**:
+  - Can insert and delete from both ends
+- **Key Methods**: `addFirst()`, `addLast()`, `removeFirst()`, `removeLast()`
+- **Use Cases**:
+  - Palindrome checking
+  - Undo/redo operations
+
+#### 🗺️ Map Interface
+
+- **Implemented Using**: `HashMap`, `LinkedHashMap`, `TreeMap`, `Hashtable`
+- **Properties**:
+  - Stores key-value pairs
+  - Keys are unique
+- **Key Methods**: `put()`, `get()`, `remove()`, `containsKey()`, `entrySet()`
+- **Use Cases**:
+  - Lookup tables
+  - Storing user preferences
+- **Best Practices**:
+  - Use `containsKey()` before `get()`
+  - Use `TreeMap` when sorting is required
+  - Use `LinkedHashMap` for maintaining order
+
+✅ **Submission Complete**  
+📁 Submitted: `List`, `Set`, `Queue`, `Deque`, `Map` implementations  
+🛠️ Practice done using: `java.util` classes 
+
 ## 📂 Folder Structure (Branch-wise)
 
 ```bash
