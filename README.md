@@ -639,7 +639,7 @@ Design a music player that can:
 
 # 🚀 DSA Solutions: [Scenario-Based Problem Solving](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/DSA/Scenario) (16-17 July)
 
-## 📚 Scenario 1: BookShelf – Library Organizer
+## 📚 Scenario 1: [BookShelf – Library Organizer](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/DSA/Scenario/LibrarySystem)
 
 ### 🧩 Use Case:
 Develop a library system to manage books based on genre and author. The system needs to efficiently handle borrowing and returning books, dynamically updating the catalog.
@@ -656,7 +656,7 @@ Develop a library system to manage books based on genre and author. The system n
 
 ---
 
-## 🛒 Scenario 2: SmartCheckout – Supermarket Billing Queue
+## 🛒 Scenario 2: [SmartCheckout – Supermarket Billing Queue](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/DSA/Scenario/SmartCheckout)
 
 ### 🧩 Use Case:
 Design a supermarket billing system where each checkout counter manages a queue of customers. The system needs to quickly fetch item prices and update stock upon purchase.
@@ -672,7 +672,7 @@ Design a supermarket billing system where each checkout counter manages a queue 
 
 ---
 
-## 🍦 Scenario 3: IceCreamRush – Sorting Flavors by Popularity
+## 🍦 Scenario 3: [IceCreamRush – Sorting Flavors by Popularity](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/DSA/Scenario/IceCream)
 
 ### 🧩 Use Case:
 "IceCreamRush" needs to sort its 8 ice cream flavors by sales popularity at the end of each week. Given the small data size and manual updates, a simple sorting method is preferred.
@@ -688,7 +688,7 @@ Design a supermarket billing system where each checkout counter manages a queue 
 
 ---
 
-## 🎬 Scenario 4: MovieTime – Theater Show Listings
+## 🎬 Scenario 4: [MovieTime – Theater Show Listings](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/DSA/Scenario/Movie)
 
 ### 🧩 Use Case:
 A movie theater app allows users to sort upcoming showtimes. Since new shows are added throughout the day to an already nearly sorted list, an efficient method for real-time insertion is needed.
@@ -704,7 +704,7 @@ A movie theater app allows users to sort upcoming showtimes. Since new shows are
 
 ---
 
-## 🍔 Scenario 5: FoodFest – Sorting Stalls by Customer Footfall
+## 🍔 Scenario 5: [FoodFest – Sorting Stalls by Customer Footfall](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/DSA/Scenario/FoodFest)
 
 ### 🧩 Use Case:
 At a multi-day food festival, organizers track customer footfall at every stall. Daily logs from different zones (already sorted by count) need to be combined into a master list for performance evaluation.
