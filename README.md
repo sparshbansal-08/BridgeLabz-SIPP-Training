@@ -721,9 +721,9 @@ At a multi-day food festival, organizers track customer footfall at every stall.
 
 ---
 
-# 🌿🎯🗓️🎟️ DSA Solutions: Scenario-Based Problem Solving (18 July)
+# 🌿🎯🗓️🎟️ DSA Solutions: [Scenario-Based Problem Solving](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/DSA/Scenario) (18 July)
 
-## 🌿 Scenario 1: AgroBot – Automated Irrigation System
+## 🌿 Scenario 1: [AgroBot – Automated Irrigation System](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/DSA/Scenario/AgroBot)
 
 ### 🧩 Use Case:
 Develop a smart agriculture application that deploys different types of bots to irrigate fields. The system requires a flexible design to accommodate various irrigation methods and integrate external sensor data securely.
@@ -742,7 +742,7 @@ Develop a smart agriculture application that deploys different types of bots to 
 
 ---
 
-## 🎯 Scenario 2: EventHive – Event Registration Platform
+## 🎯 Scenario 2: [EventHive – Event Registration Platform](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/DSA/Scenario/EventHive)
 
 ### 🧩 Use Case:
 Design an event registration platform where users can sign up for tech events. The system needs clear separation of concerns between users, events, and tickets, with an administrative interface for event management.
@@ -765,7 +765,7 @@ Design an event registration platform where users can sign up for tech events. T
 
 ---
 
-## 🗓️ Scenario 3: Daily Task Planner – LinkedList + Abstraction
+## 🗓️ Scenario 3: [Daily Task Planner – LinkedList + Abstraction](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/DSA/Scenario/DailyTask)
 
 ### 🧩 Use Case:
 Create a digital planner that stores a sequential list of tasks for the user. The planner needs to handle different types of tasks, each with a unique execution method, and allow users to search for tasks.
@@ -783,7 +783,7 @@ Create a digital planner that stores a sequential list of tasks for the user. Th
 
 ---
 
-## 🎟️ Scenario 4: Event Ticketing System – Queue + HashMap + Constructor Overloading
+## 🎟️ Scenario 4: [Event Ticketing System – Queue + HashMap + Constructor Overloading](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/DSA/Scenario/Ticketing)
 
 ### 🧩 Use Case:
 Develop a system for people to queue up and book tickets for various events (concerts, plays). The system needs to manage event-specific booking queues and efficiently handle attendee information, including optional contact details.
