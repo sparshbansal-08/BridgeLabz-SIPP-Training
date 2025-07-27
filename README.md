@@ -1018,7 +1018,11 @@ BridgeLabz-SIPP-Training/
 │   ├── SortingAlgorithms/ 
 │   ├── LinearAndBinarySearch/ 
 │   ├── Big-O-Notation_Problems/
-│   ├── Scenario/       
+│   ├── Scenario/
+│
+├── GenericsCollections
+│   ├── Generics/
+│   ├── Collections/       
 │                 
 ├── Workshop
 │   ├── NonRepeatingChar.java
@@ -1030,10 +1034,8 @@ BridgeLabz-SIPP-Training/
 │   ├── FoodLoopSystem/
 │   ├── BrowserHistory/
 │   ├── MusicPlaylist/
-│
-├── GenericsCollections
-│   ├── Generics/
-│   ├── Collections/
+
+
 
 
 
