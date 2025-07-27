@@ -91,7 +91,7 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-## 📅 Week 2 – OOPs Branch
+## 📅 Week 2 – [OOPs Branch](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/OOPs?tab=readme-ov-file)
 
 > **Branch:** `OOPs`  
 > **Date Range:** 23 June – 26 June
@@ -131,7 +131,7 @@ This repository contains categorized Java programming concepts and lab practices
 ---
 
 
-## 🛠️ Workshop Branch
+## 🛠️ [Workshop Branch](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/Workshop?tab=readme-ov-file)
 
 > **Branch:** `Workshop`  
 > **Date Range:** 27–28 June
