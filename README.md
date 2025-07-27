@@ -220,7 +220,7 @@ This repository contains categorized Java programming concepts and lab practices
 
 ---
 
-- #### 🚗 Vehicle Management System  
+- #### 🚗 [Vehicle Management System](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/Workshop/VehicleManagement)
 **Concepts:** Inheritance, Polymorphism, Method Overriding  
 
 Design a system to manage different types of vehicles in a garage:  
@@ -233,7 +233,7 @@ Design a system to manage different types of vehicles in a garage:
 
 
 
-- #### 🛍️ Online Store Billing System  
+- #### 🛍️ [Online Store Billing System](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/Workshop/OnlineStoreBillingSystem)  
 **Concepts:** Inheritance, Abstract Classes, Polymorphism  
 
 Create a billing system for an online store:  
@@ -339,7 +339,7 @@ Kindly go through the following topics as part of your advanced DSA practice:
 
 ---
 
-- #### 🚘 Vehicle Rental Application  
+- #### 🚘 [Vehicle Rental Application](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/Workshop/VehicleRental)  
 **Concepts:** Class, Interface, Constructors, Access Modifiers, Operators  
 **OOP Principles:** Abstraction, Inheritance, Polymorphism, Encapsulation  
 
@@ -372,7 +372,7 @@ Build a system for renting **bikes, cars, and trucks** to customers.
 
 ---
 
-- #### 🍽️ FoodLoop – Restaurant Ordering System  
+- #### 🍽️ [FoodLoop – Restaurant Ordering System](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/Workshop/FoodLoopSystem)  
 **Concepts:** Class, Interface, Constructors, Operators  
 **OOP Principles:** Encapsulation, Inheritance, Polymorphism  
 
@@ -591,7 +591,7 @@ This README documents the **scenario-based problem-solving tasks** using **Java 
 
 ---
 
-## 📌 Scenario 1: Browser History Navigation
+## 📌 Scenario 1: [Browser History Navigation](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/Workshop/BrowserHistory)
 
 ### 🧩 Use Case:
 Maintain a user’s browsing history with the ability to move **back and forward**, just like real browsers.
@@ -604,7 +604,7 @@ Maintain a user’s browsing history with the ability to move **back and forward
 - **Abstraction**: Public methods like `visitPage()`, `goBack()`, and `goForward()` abstract internal list operations.
 - **Inheritance & Polymorphism**: The same navigation logic could be reused for other apps (e.g., document viewer, gallery).
 
-## 🎵 Scenario 2: Music Playlist Queue
+## 🎵 Scenario 2: [Music Playlist Queue](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/Workshop/MusicPlaylist)
 
 ### 🧩 Use Case:
 Design a music player that can:
@@ -1017,7 +1017,8 @@ BridgeLabz-SIPP-Training/
 │   ├── Stack_Queue_and_HashMap/  
 │   ├── SortingAlgorithms/ 
 │   ├── LinearAndBinarySearch/ 
-│   ├── Big-O-Notation_Problems/      
+│   ├── Big-O-Notation_Problems/
+│   ├── Scenario/       
 │                 
 ├── Workshop
 │   ├── NonRepeatingChar.java
@@ -1029,6 +1030,10 @@ BridgeLabz-SIPP-Training/
 │   ├── FoodLoopSystem/
 │   ├── BrowserHistory/
 │   ├── MusicPlaylist/
+│
+├── GenericsCollections
+│   ├── Generics/
+│   ├── Collections/
 
 
 
