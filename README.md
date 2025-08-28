@@ -1,7 +1,7 @@
 # 🖥️ BridgeLabz SIPP Training
 
 This repository contains categorized Java programming concepts and lab practices guided by **Kajal Wankhede** from **11 June onwards**. Work is structured **week-wise** and organized across the following branches:  
-✅ `Core-Java`  ✅ `OOPs`  ✅ `DSA`   ✅ `GenericsCollections`  ✅ `Workshop`
+✅ `Core-Java`  ✅ `OOPs`  ✅ `DSA`   ✅ `GenericsCollections`  ✅ `Workshop`  ✅ `PseudoCode`
 
 ---
 
@@ -990,6 +990,17 @@ Develop a system for people to queue up and book tickets for various events (con
 📁 Submitted: `List`, `Set`, `Queue`, `Deque`, `Map` implementations  
 🛠️ Practice done using: `java.util` classes 
 
+---
+
+## 📅 Week 6 – [GenericsCollections Branch](https://github.com/sparshbansal-08/BridgeLabz-SIPP-Training/tree/GenericsCollections?tab=readme-ov-file)
+
+> **Branch:** `GenericsCollections`  
+> **Date Range:** 28 July – 02 Aug
+
+
+
+---
+
 ## 📂 Folder Structure (Branch-wise)
 
 ```bash
@@ -1035,6 +1046,11 @@ BridgeLabz-SIPP-Training/
 │   ├── BrowserHistory/
 │   ├── MusicPlaylist/
 │   ├── PetAdoption/
+│ 
+├── PseudoCode
+│   ├── Day1/
+│   ├── Day2/
+│   ├── Day3/
 
 
 ```
