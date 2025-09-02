@@ -1,0 +1,37 @@
+CLASS Student
+    VARIABLES: name, marks
+END CLASS
+
+FUNCTION mergeSort(list)
+    IF list has 0 or 1 element THEN
+        RETURN list
+    SPLIT list into left and right
+    leftSorted = mergeSort(left)
+    rightSorted = mergeSort(right)
+    RETURN merge(leftSorted, rightSorted)
+END FUNCTION
+
+FUNCTION merge(left, right)
+    result = empty list
+    WHILE left NOT EMPTY AND right NOT EMPTY
+        IF left[0].marks > right[0].marks THEN
+            ADD left[0] TO result
+            REMOVE left[0]
+        ELSE IF left[0].marks < right[0].marks THEN
+            ADD right[0] TO result
+            REMOVE right[0]
+        ELSE   // marks equal → compare names
+            IF left[0].name < right[0].name THEN
+                ADD left[0] TO result
+                REMOVE left[0]
+            ELSE
+                ADD right[0] TO result
+                REMOVE right[0]
+            END IF
+    ADD remaining left and right to result
+    RETURN result
+END FUNCTION
+
+MAIN
+    students = [Rahul-88, Aditi-95, Zoya-88, Karan-76, Meera-95, Aarav-92]
+    sortedList = mergeSort(student

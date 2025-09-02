@@ -1,0 +1,32 @@
+CLASS Product
+    VARIABLES: name, category, stock
+END CLASS
+
+FUNCTION generateReport(products)
+    IF products is empty THEN
+        PRINT "No products available"
+        RETURN
+
+    CLEAN products → remove negative stock and null category
+
+    stockByCategory = GROUP products BY category AND SUM stock
+
+    PRINT "Choose Report: 1. Category | 2. Total | 3. Both"
+    choice = READ_INPUT()
+
+    SWITCH choice
+        CASE 1:
+            PRINT stockByCategory
+        CASE 2:
+            totalStock = SUM of stockByCategory values
+            PRINT "Total Stock = " + totalStock
+        CASE 3:
+            PRINT stockByCategory
+            PRINT "Total Stock = " + totalStock
+        DEFAULT:
+            PRINT "Invalid choice"
+END FUNCTION
+
+MAIN
+    products = [Laptop-Elec-5, Shirt-Cloth-10, Phone-Elec-7,
+                Shoes-Cloth-3, Boo

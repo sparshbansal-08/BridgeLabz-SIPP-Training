@@ -1,0 +1,45 @@
+ABSTRACT CLASS Course
+    VARIABLES: title, duration, price, instructor, schedule
+    ABSTRACT METHOD conductAssessment()
+END CLASS
+
+CLASS ProgrammingCourse EXTENDS Course
+    METHOD conductAssessment()
+        PRINT "Coding Challenge"
+END CLASS
+
+CLASS DesignCourse EXTENDS Course
+    METHOD conductAssessment()
+        PRINT "Portfolio Submission"
+END CLASS
+
+CLASS BusinessCourse EXTENDS Course
+    METHOD conductAssessment()
+        PRINT "Case Study Presentation"
+END CLASS
+
+CLASS Instructor
+    VARIABLES: name, expertise, rating
+END CLASS
+
+CLASS Schedule
+    VARIABLES: dayOfWeek, timeSlot, mode
+END CLASS
+
+MAIN
+    CREATE instructor1 ("Dr. Rajeev", "Java", 4.9)
+    CREATE schedule1 ("Monday", "7-9 PM", "Live")
+    CREATE ProgrammingCourse javaCourse WITH instructor1 + schedule1
+
+    CREATE instructor2 ("Ms. Ananya", "UX", 4.7)
+    CREATE schedule2 ("Flexible", "-", "Recorded")
+    CREATE DesignCourse designCourse WITH instructor2 + schedule2
+
+    CREATE instructor3 ("Mr. Arvind", "Business", 4.6)
+    CREATE schedule3 ("Friday", "6-8 PM", "Live")
+    CREATE BusinessCourse businessCourse WITH instructor3 + schedule3
+
+    CALL javaCourse.conductAssessment()
+    CALL designCourse.conductAssessment()
+    CALL businessCourse.conductAssessment()
+END MAIN

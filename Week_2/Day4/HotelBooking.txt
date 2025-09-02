@@ -1,0 +1,50 @@
+INTERFACE Promotion(customer, amount) RETURNS finalAmount
+
+CLASS RegularPromotion IMPLEMENTS Promotion
+    METHOD applyDiscount(customer, amount)
+        discount = 5% of amount
+        IF customer.loyaltyPoints > 100 THEN
+            discount = discount + 2% of amount
+        RETURN amount - discount
+END CLASS
+
+CLASS PremiumPromotion IMPLEMENTS Promotion
+    METHOD applyDiscount(customer, amount)
+        discount = 15% of amount
+        IF customer.membershipYears > 5 THEN
+            discount = discount + 5% of amount
+        RETURN amount - discount
+END CLASS
+
+CLASS CorporatePromotion IMPLEMENTS Promotion
+    METHOD applyDiscount(customer, amount)
+        IF customer.employeeCount > 50 THEN
+            discount = 20% of amount
+        ELSE
+            discount = 10% of amount
+        RETURN amount - discount
+END CLASS
+
+CLASS HotelBookingEngine
+    VARIABLE promotion
+    METHOD calculateFinalAmount(customer, amount)
+        RETURN promotion.applyDiscount(customer, amount)
+END CLASS
+
+MAIN
+    CREATE Alice (Regular, 120 points)
+    CREATE Bob (Premium, 6 years)
+    CREATE TechCorp (Corporate, 75 employees)
+    CREATE John (Regular, 0 points)
+
+    Engine1 = HotelBookingEngine(RegularPromotion)
+    PRINT Engine1.calculateFinalAmount(Alice, 10000)
+
+    Engine2 = HotelBookingEngine(PremiumPromotion)
+    PRINT Engine2.calculateFinalAmount(Bob, 20000)
+
+    Engine3 = HotelBookingEngine(CorporatePromotion)
+    PRINT Engine3.calculateFinalAmount(TechCorp, 50000)
+
+    PRINT Engine1.calculateFinalAmount(John, 10000)
+END MAIN

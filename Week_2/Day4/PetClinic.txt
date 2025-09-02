@@ -1,0 +1,35 @@
+CLASS Pet
+    VARIABLES:
+        name
+        species
+        lastVaccinationDate
+
+    METHOD checkVaccinationStatus()
+        monthsPassed = difference in months between TODAY and lastVaccinationDate
+        IF monthsPassed > 12 THEN
+            RETURN "OVERDUE"
+        ELSE IF monthsPassed = 11 THEN
+            RETURN "DUE SOON"
+        ELSE
+            RETURN "UP-TO-DATE"
+        END IF
+END CLASS
+
+CLASS ClinicManager
+    VARIABLE pets = empty list
+
+    METHOD registerPet(pet)
+        ADD pet TO pets
+        PRINT "Registering: " + pet.name + " (" + pet.species + ")"
+        PRINT "Status: " + pet.checkVaccinationStatus()
+END CLASS
+
+MAIN
+    CREATE ClinicManager cm
+    CREATE Pet bruno ("Bruno", "Dog", "2024-10-12")
+    cm.registerPet(bruno)
+    CREATE Pet mittens ("Mittens", "Cat", "2023-06-15")
+    cm.registerPet(mittens)
+    CREATE Pet snowy ("Snowy", "Rabbit", "2024-09-10")
+    cm.registerPet(snowy)
+END MAIN

@@ -1,0 +1,28 @@
+GRAPH = adjacency list of users and their friends
+
+FUNCTION recommendFriends(user)
+    directFriends = GRAPH[user]
+    visited = empty set
+    queue = [(user, 0)]   // node + level
+    recommendations = empty list
+
+    WHILE queue NOT EMPTY
+        (current, level) = REMOVE FIRST from queue
+        IF current already visited THEN CONTINUE
+        ADD current to visited
+
+        IF level = 2 AND current NOT IN directFriends AND current != user THEN
+            ADD current TO recommendations
+        END IF
+
+        FOR each neighbor of current in GRAPH
+            ADD (neighbor, level+1) TO queue
+    END WHILE
+
+    PRINT "Direct Friends of " + user + " : " + directFriends
+    PRINT "Friend Suggestions: " + recommendations
+END FUNCTION
+
+MAIN
+    CALL recommendFriends("Alice")
+END MAIN
