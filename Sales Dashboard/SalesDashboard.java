@@ -15,7 +15,8 @@ class Order {
         this.items = items;
     }
     public LocalDate getDate() { return date; }
-    public List<Item> getItems() { return items; }
+
+    public List<Item> getItems(){return items;}
 }
 
 class Customer {
@@ -54,10 +55,10 @@ public class SalesDashboard {
         Order o3 = new Order(LocalDate.now().minusDays(50), Arrays.asList(i1));
         Order o4 = new Order(LocalDate.now().minusDays(100), Arrays.asList(i2));
 
-        Customer c1 = new Customer("Alice", Arrays.asList(o1, o2, o3, o4));
-        Customer c2 = new Customer("Bob", Arrays.asList(o1, o2));
+        Customer c1 = new Customer("Sparsh", Arrays.asList(o1, o2, o3, o4));
+        Customer c2 = new Customer("Raj", Arrays.asList(o1, o2));
 
-        Store s1 = new Store(Map.of("Alice", c1, "Bob", c2));
+        Store s1 = new Store(Map.of("Sparsh", c1, "Raj", c2));
         City city1 = new City(Arrays.asList(s1));
 
         List<City> cities = Arrays.asList(city1);
