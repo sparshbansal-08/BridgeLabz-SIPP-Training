@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OOP Mastery — Step by Step with Real-World Examples</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0a0e18;
+  --bg2:      #0f1422;
+  --bg3:      #161d30;
+  --card:     #1a2238;
+  --card2:    #1f2942;
+  --border:   #25305078;
+  --p1:       #5b8def;
+  --p1-dim:   rgba(91,141,239,0.13);
+  --p2:       #21d4b4;
+  --p2-dim:   rgba(33,212,180,0.11);
+  --p3:       #f59e42;
+  --p3-dim:   rgba(245,158,66,0.11);
+  --p4:       #e8568a;
+  --p4-dim:   rgba(232,86,138,0.11);
+  --p5:       #a78bfa;
+  --p5-dim:   rgba(167,139,250,0.11);
+  --p6:       #4ade80;
+  --p6-dim:   rgba(74,222,128,0.11);
+  --p7:       #f87171;
+  --p7-dim:   rgba(248,113,113,0.11);
+  --text:     #e6ebf5;
+  --text2:    #97a3bd;
+  --text3:    #5a6680;
+  --ck: #a78bfa; --ct: #5b8def; --cs: #86efac; --cc: #475569;
+  --cn: #fbbf24; --cf: #67e8f9; --ca: #e8568a; --cx: #e6ebf5;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);line-height:1.72;font-size:14.5px;}
+
+.hero{background:linear-gradient(165deg,#0a0e18 0%,#101630 55%,#0a0e18 100%);
+  border-bottom:1px solid var(--border);padding:74px 32px 60px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);
+  width:800px;height:340px;background:radial-gradient(ellipse,rgba(91,141,239,.10) 0%,transparent 68%);}
+.hero-eye{display:inline-flex;align-items:center;gap:8px;background:rgba(91,141,239,.1);
+  border:1px solid rgba(91,141,239,.3);color:var(--p1);font-size:10.5px;font-weight:700;
+  letter-spacing:2.5px;text-transform:uppercase;padding:5px 16px;border-radius:30px;margin-bottom:24px;}
+.hero h1{font-size:clamp(28px,5vw,50px);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:16px;}
+.hero h1 em{color:var(--p1);font-style:normal;}
+.hero-sub{color:var(--text2);font-size:15.5px;max-width:640px;margin:0 auto 30px;line-height:1.7;}
+.topics{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+.tp{padding:6px 16px;border-radius:30px;font-size:11.5px;font-weight:600;border:1px solid;}
+.tp.a{background:var(--p1-dim);border-color:rgba(91,141,239,.3);color:var(--p1);}
+.tp.b{background:var(--p2-dim);border-color:rgba(33,212,180,.3);color:var(--p2);}
+.tp.c{background:var(--p3-dim);border-color:rgba(245,158,66,.3);color:var(--p3);}
+.tp.d{background:var(--p4-dim);border-color:rgba(232,86,138,.3);color:var(--p4);}
+.tp.e{background:var(--p5-dim);border-color:rgba(167,139,250,.3);color:var(--p5);}
+
+.toc-wrap{max-width:980px;margin:42px auto;padding:0 24px;}
+.toc-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:30px;}
+.toc-label{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--text3);margin-bottom:18px;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;}
+.toc-link{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text2);font-size:13px;
+  padding:10px 12px;border-radius:9px;border:1px solid transparent;transition:all .18s;}
+.toc-link:hover{background:var(--bg3);border-color:var(--border);color:var(--p1);}
+.toc-idx{width:24px;height:24px;border-radius:7px;background:var(--bg3);border:1px solid var(--border);
+  font-size:11px;font-weight:700;color:var(--text3);display:flex;align-items:center;justify-content:center;}
+
+.sec{max-width:980px;margin:0 auto 72px;padding:0 24px;}
+.sec-head{display:flex;align-items:flex-start;gap:18px;margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--border);}
+.sec-num{width:52px;height:52px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:800;color:#fff;}
+.n1{background:linear-gradient(135deg,var(--p1),#3b6dd6);}
+.n2{background:linear-gradient(135deg,var(--p2),#0fa691);}
+.n3{background:linear-gradient(135deg,var(--p3),#c97a26);}
+.n4{background:linear-gradient(135deg,var(--p4),#b3325f);}
+.n5{background:linear-gradient(135deg,var(--p5),#7c5fd4);}
+.n6{background:linear-gradient(135deg,var(--p6),#3aaf63);}
+.n7{background:linear-gradient(135deg,var(--p7),#d04949);}
+.n8{background:linear-gradient(135deg,#f5a623,#c97a26);}
+.sec-title h2{font-size:26px;font-weight:800;letter-spacing:-.4px;margin-bottom:5px;}
+.sec-title p{color:var(--text2);font-size:13px;}
+
+.box{border-radius:11px;padding:17px 20px;margin:16px 0;display:flex;gap:13px;align-items:flex-start;font-size:13.5px;}
+.box-icon{font-size:19px;flex-shrink:0;margin-top:1px;}
+.box-body strong{display:block;font-size:12.5px;font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px;}
+.box-body p,.box-body li{color:var(--text2);font-size:13px;line-height:1.7;}
+.box-body ul{padding-left:18px;}.box-body li{margin-bottom:4px;}
+.box.what{background:var(--p1-dim);border:1px solid rgba(91,141,239,.25);} .box.what strong{color:var(--p1);}
+.box.why{background:var(--p2-dim);border:1px solid rgba(33,212,180,.25);} .box.why strong{color:var(--p2);}
+.box.when{background:var(--p3-dim);border:1px solid rgba(245,158,66,.25);} .box.when strong{color:var(--p3);}
+.box.prob{background:var(--p7-dim);border:1px solid rgba(248,113,113,.25);} .box.prob strong{color:var(--p7);}
+.box.tip{background:var(--p5-dim);border:1px solid rgba(167,139,250,.25);} .box.tip strong{color:var(--p5);}
+.box.rule{background:var(--p6-dim);border:1px solid rgba(74,222,128,.25);} .box.rule strong{color:var(--p6);}
+
+.analogy{background:var(--card2);border:1px solid var(--border);border-left:3px solid var(--p5);
+  border-radius:10px;padding:17px 21px;margin:18px 0;font-size:13.5px;}
+.analogy-tag{display:block;font-size:10.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--p5);margin-bottom:8px;}
+.analogy p{margin-bottom:7px;color:var(--text2);}
+.analogy p:last-child{margin-bottom:0;}
+
+.code{background:#060911;border:1px solid var(--border);border-radius:13px;overflow:hidden;margin:18px 0;font-family:'JetBrains Mono',monospace;}
+.code-top{display:flex;align-items:center;justify-content:space-between;padding:10px 17px;background:var(--bg3);border-bottom:1px solid var(--border);}
+.dots{display:flex;gap:6px;}.dot{width:11px;height:11px;border-radius:50%;}
+.dot.r{background:#f87171;}.dot.y{background:#fbbf24;}.dot.g{background:#34d399;}
+.file-name{font-size:11px;color:var(--text3);font-family:'Manrope',sans-serif;font-weight:500;}
+.code-body{padding:21px 23px;overflow-x:auto;}
+pre{margin:0;font-size:12.5px;line-height:1.85;}
+.kw{color:var(--ck);font-weight:500;}.ty{color:var(--ct);}.st{color:var(--cs);}
+.cm{color:var(--cc);font-style:italic;}.nm{color:var(--cn);}.fn{color:var(--cf);}
+.an{color:var(--ca);}.tx{color:var(--cx);}
+
+code{background:#060911;border:1px solid var(--border);padding:2px 7px;border-radius:4px;
+  font-family:'JetBrains Mono';font-size:11.5px;color:var(--p1);}
+
+.benefits{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:14px 0;}
+.benefit{display:flex;align-items:flex-start;gap:10px;background:var(--card);
+  border:1px solid var(--border);border-radius:9px;padding:12px 14px;font-size:12.5px;}
+.benefit-icon{font-size:16px;color:var(--p6);flex-shrink:0;margin-top:1px;}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0;}
+.icard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;}
+.icard-icon{font-size:22px;margin-bottom:10px;}
+.icard h4{font-size:13.5px;font-weight:700;margin-bottom:7px;}
+.icard p{font-size:12.5px;color:var(--text2);line-height:1.62;}
+.icard.a{border-color:rgba(91,141,239,.28);background:var(--p1-dim);}
+.icard.b{border-color:rgba(33,212,180,.28);background:var(--p2-dim);}
+.icard.c{border-color:rgba(245,158,66,.28);background:var(--p3-dim);}
+.icard.d{border-color:rgba(232,86,138,.28);background:var(--p4-dim);}
+.icard.e{border-color:rgba(167,139,250,.28);background:var(--p5-dim);}
+.icard.f{border-color:rgba(74,222,128,.28);background:var(--p6-dim);}
+
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0;}
+.compare-card{border-radius:12px;padding:18px;border:1px solid;}
+.compare-card h4{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+.compare-card ul{padding-left:16px;}.compare-card li{font-size:12.5px;color:var(--text2);margin-bottom:6px;}
+.compare-card.bad{background:var(--p7-dim);border-color:rgba(248,113,113,.28);}
+.compare-card.bad h4{color:var(--p7);}
+.compare-card.good{background:var(--p6-dim);border-color:rgba(74,222,128,.28);}
+.compare-card.good h4{color:var(--p6);}
+
+.tbl{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;}
+.tbl th{background:var(--bg3);border:1px solid var(--border);padding:11px 14px;text-align:left;
+  font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);}
+.tbl td{border:1px solid var(--border);padding:11px 14px;color:var(--text);}
+.tbl tr:nth-child(even) td{background:rgba(255,255,255,.018);}
+.tbl code{padding:2px 7px;font-size:11.5px;}
+
+.ex{background:var(--card);border:1px solid rgba(245,158,66,.32);border-radius:14px;overflow:hidden;margin:26px 0;}
+.ex-head{background:rgba(245,158,66,.07);padding:14px 22px;display:flex;align-items:center;gap:14px;border-bottom:1px solid rgba(245,158,66,.2);}
+.ex-level{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:20px;}
+.ex-level.easy{background:rgba(74,222,128,.2);color:var(--p6);}
+.ex-level.med{background:rgba(245,158,66,.2);color:var(--p3);}
+.ex-level.hard{background:rgba(167,139,250,.2);color:var(--p5);}
+.ex-title{font-size:14px;font-weight:700;}
+.ex-body{padding:22px;}
+.ex-q{font-size:13.5px;margin-bottom:16px;line-height:1.7;color:var(--text2);}
+.ex-q ol{margin:8px 0 8px 22px;}
+.ex-q ol li{margin-bottom:5px;}
+.sol-btn{background:rgba(33,212,180,.1);border:1px solid rgba(33,212,180,.32);color:var(--p2);
+  padding:9px 20px;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;font-weight:600;
+  display:inline-flex;align-items:center;gap:8px;transition:all .18s;}
+.sol-btn:hover{background:rgba(33,212,180,.2);}
+.sol-panel{display:none;margin-top:16px;}
+.sol-panel.open{display:block;}
+
+h3.sub{font-size:18px;font-weight:700;margin:30px 0 14px;color:var(--text);
+  padding-bottom:8px;border-bottom:1px solid var(--border);}
+.sub-emoji{margin-right:8px;}
+
+.topic-block{background:linear-gradient(180deg,var(--card) 0%,var(--card2) 100%);
+  border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin:18px 0;}
+.topic-block h3{font-size:16px;font-weight:700;margin-bottom:11px;}
+.topic-block p{font-size:13.5px;color:var(--text2);line-height:1.72;margin-bottom:8px;}
+.topic-block p:last-child{margin-bottom:0;}
+.topic-block strong{color:var(--p1);}
+
+.pillars{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0;}
+.pillar{border-radius:13px;padding:20px;border:1px solid;}
+.pillar h4{font-size:15px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.pillar p{font-size:12.5px;color:var(--text2);line-height:1.65;}
+.p-enc{border-color:rgba(91,141,239,.3);background:var(--p1-dim);} .p-enc h4{color:var(--p1);}
+.p-inh{border-color:rgba(33,212,180,.3);background:var(--p2-dim);} .p-inh h4{color:var(--p2);}
+.p-pol{border-color:rgba(167,139,250,.3);background:var(--p5-dim);} .p-pol h4{color:var(--p5);}
+.p-abs{border-color:rgba(245,158,66,.3);background:var(--p3-dim);} .p-abs h4{color:var(--p3);}
+
+hr.div{border:none;border-top:1px solid var(--border);margin:60px 0;}
+footer{text-align:center;padding:44px 24px;border-top:1px solid var(--border);color:var(--text3);font-size:12px;}
+
+@media(max-width:600px){
+  .pillars,.compare{grid-template-columns:1fr;}
+  .grid2,.benefits{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eye">☕ Java OOP Mastery</div>
+  <h1>OOP Concepts Explained<br>with <em>Real Examples</em></h1>
+  <p class="hero-sub">
+    Beginner-friendly explanations of every important OOP concept — with banking, e-commerce, and HR examples. Plain language, easy steps, real practice.
+  </p>
+  <div class="topics">
+    <span class="tp a">Copy Constructor</span>
+    <span class="tp b">Method Overloading</span>
+    <span class="tp c">Method Overriding</span>
+    <span class="tp d">4 OOP Pillars</span>
+    <span class="tp e">super &amp; Deep Copy</span>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc-wrap">
+  <div class="toc-box">
+    <div class="toc-label">What You'll Learn</div>
+    <div class="toc-grid">
+      <a href="#s1" class="toc-link"><div class="toc-idx">1</div>Copy Constructor</a>
+      <a href="#s2" class="toc-link"><div class="toc-idx">2</div>Method Overloading</a>
+      <a href="#s3" class="toc-link"><div class="toc-idx">3</div>Method Overriding</a>
+      <a href="#s4" class="toc-link"><div class="toc-idx">4</div>Encapsulation</a>
+      <a href="#s5" class="toc-link"><div class="toc-idx">5</div>Inheritance</a>
+      <a href="#s6" class="toc-link"><div class="toc-idx">6</div>Polymorphism</a>
+      <a href="#s7" class="toc-link"><div class="toc-idx">7</div>Abstraction</a>
+      <a href="#s8" class="toc-link"><div class="toc-idx">8</div>super Keyword</a>
+      <a href="#s9" class="toc-link"><div class="toc-idx">9</div>Shallow vs Deep Copy</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--          SECTION 1 — COPY CONSTRUCTOR                   -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="sec" id="s1">
+  <div class="sec-head">
+    <div class="sec-num n1">01</div>
+    <div class="sec-title">
+      <h2>Copy Constructor</h2>
+      <p>Making a real, independent duplicate of an object</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is it?</strong>
+      <p>A copy constructor is a special constructor that creates a NEW object by copying values from an EXISTING object of the same class. Think of it as a "duplicate maker."</p>
+      <p>In Java, you have to write it yourself (Java doesn't make one for you automatically).</p>
+    </div>
+  </div>
+
+  <div class="box why">
+    <span class="box-icon">💡</span>
+    <div class="box-body">
+      <strong>Why does it matter?</strong>
+      <p>If you just write <code>Account b = a;</code>, you're NOT copying. Both <code>a</code> and <code>b</code> point to the SAME object in memory. Change one, the other also changes — which causes serious bugs in banking, HR, or e-commerce systems.</p>
+      <p>A copy constructor solves this by creating a truly separate object with the same values.</p>
+    </div>
+  </div>
+
+  <div class="box when">
+    <span class="box-icon">📅</span>
+    <div class="box-body">
+      <strong>When to use it?</strong>
+      <ul>
+        <li>Taking a backup of an account before risky transactions</li>
+        <li>Duplicating an order to create a refund version</li>
+        <li>Cloning an employee record for a similar new hire</li>
+        <li>Creating "what-if" copies you can modify safely</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <span class="analogy-tag">🏦 Real-World Analogy — Bank Locker Duplicate Key</span>
+    <p>When you ask the bank for a duplicate key to your locker, they don't give you the same key. They make a brand new key with the exact same shape. Both keys open the same locker, but losing one doesn't affect the other.</p>
+    <p>A copy constructor works exactly like this — it creates a fresh, independent object with the same data as the original.</p>
+  </div>
+
+  <h3 class="sub">🛠️ Syntax — How to Write It</h3>
+  <div class="code">
+    <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">Basic syntax</span></div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">ClassName</span> <span class="tx">{</span>
+    <span class="kw">private</span> <span class="ty">Type</span> <span class="tx">field1;</span>
+
+    <span class="cm">// Regular constructor</span>
+    <span class="kw">public</span> <span class="ty">ClassName</span><span class="tx">(</span><span class="ty">Type</span> <span class="tx">f1) { </span><span class="kw">this</span><span class="tx">.field1 = f1; }</span>
+
+    <span class="cm">// ── COPY CONSTRUCTOR — takes another instance of THE SAME CLASS</span>
+    <span class="kw">public</span> <span class="ty">ClassName</span><span class="tx">(</span><span class="ty">ClassName</span> <span class="tx">other) {</span>
+        <span class="kw">this</span><span class="tx">.field1 = other.field1;</span>   <span class="cm">// copy each field</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+    </div>
+  </div>
+
+  <h3 class="sub">🏦 Real Scenario — Account Snapshot Before Transfer</h3>
+  <p style="color:var(--text2);margin-bottom:12px;">Imagine SBI Bank wants to take a "snapshot" of an account before transferring money. If the transfer fails, they can compare with the snapshot to fix the problem.</p>
+
+  <div class="code">
+    <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">BankAccount.java</span></div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">BankAccount</span> <span class="tx">{</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">accountNumber;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">holderName;</span>
+    <span class="kw">private double</span> <span class="tx">balance;</span>
+
+    <span class="cm">// ── Regular constructor</span>
+    <span class="kw">public</span> <span class="ty">BankAccount</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">accNo, </span><span class="ty">String</span> <span class="tx">name, </span><span class="kw">double</span> <span class="tx">bal) {</span>
+        <span class="kw">this</span><span class="tx">.accountNumber = accNo;</span>
+        <span class="kw">this</span><span class="tx">.holderName    = name;</span>
+        <span class="kw">this</span><span class="tx">.balance       = bal;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── COPY CONSTRUCTOR — creates a duplicate</span>
+    <span class="kw">public</span> <span class="ty">BankAccount</span><span class="tx">(</span><span class="ty">BankAccount</span> <span class="tx">source) {</span>
+        <span class="kw">this</span><span class="tx">.accountNumber = source.accountNumber;</span>
+        <span class="kw">this</span><span class="tx">.holderName    = source.holderName;</span>
+        <span class="kw">this</span><span class="tx">.balance       = source.balance;</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"📋 Snapshot created"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">withdraw</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) { balance -= amount; }</span>
+
+    <span class="kw">public void</span> <span class="fn">show</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(accountNumber + </span><span class="st">" | "</span> <span class="tx">+ holderName + </span><span class="st">" | ₹"</span> <span class="tx">+ balance);</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="ty">String</span><span class="tx">[] args) {</span>
+        <span class="ty">BankAccount</span> <span class="tx">live = </span><span class="kw">new</span> <span class="ty">BankAccount</span><span class="tx">(</span><span class="st">"SBI001"</span><span class="tx">, </span><span class="st">"Priya"</span><span class="tx">, </span><span class="nm">50000</span><span class="tx">);</span>
+
+        <span class="cm">// Take a backup using the copy constructor</span>
+        <span class="ty">BankAccount</span> <span class="tx">backup = </span><span class="kw">new</span> <span class="ty">BankAccount</span><span class="tx">(live);</span>
+
+        <span class="cm">// Withdraw from live account</span>
+        <span class="tx">live.</span><span class="fn">withdraw</span><span class="tx">(</span><span class="nm">45000</span><span class="tx">);</span>
+
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Live   : "</span><span class="tx">);</span> <span class="tx">live.</span><span class="fn">show</span><span class="tx">();</span>      <span class="cm">// ₹5000</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Backup : "</span><span class="tx">);</span> <span class="tx">backup.</span><span class="fn">show</span><span class="tx">();</span>    <span class="cm">// ₹50000 (untouched!)</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+    </div>
+  </div>
+
+  <h3 class="sub">📝 Code Explanation — Step by Step</h3>
+  <div class="topic-block">
+    <p><strong>Step 1:</strong> We create a normal account called <code>live</code> with ₹50,000.</p>
+    <p><strong>Step 2:</strong> <code>new BankAccount(live)</code> calls the COPY constructor (Java picks it because we passed another BankAccount object). It creates <code>backup</code> with the same values.</p>
+    <p><strong>Step 3:</strong> When we withdraw from <code>live</code>, only <code>live</code> changes. The <code>backup</code> stays at ₹50,000 because they are two SEPARATE objects in memory.</p>
+  </div>
+
+  <h3 class="sub">✅ Benefits</h3>
+  <div class="benefits">
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Independence:</strong> Original and copy work separately.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Safety:</strong> Take backups before risky operations.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Audit:</strong> Keep history while making changes.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>No Bugs:</strong> Avoids reference-sharing problems.</div></div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-head"><span class="ex-level easy">Beginner</span><span class="ex-title">Practice 1 — Order Refund Duplicate</span></div>
+    <div class="ex-body">
+      <p class="ex-q">Create a class <code>Order</code> for Flipkart with fields: <code>orderId</code>, <code>customer</code>, <code>product</code>, <code>amount</code>, and <code>status</code> (default "ACTIVE"). Write a copy constructor. In main, create an order, then a refund copy. Change the refund's status to "REFUNDED" and show that the original is still "ACTIVE".</p>
+      <button class="sol-btn" onclick="toggleSol('sol1')">▶ Show Solution</button>
+      <div class="sol-panel" id="sol1">
+        <div class="code">
+          <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">Order.java — Solution</span></div>
+          <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Order</span> <span class="tx">{</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">orderId, customer, product, status;</span>
+    <span class="kw">private double</span> <span class="tx">amount;</span>
+
+    <span class="kw">public</span> <span class="ty">Order</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">id, </span><span class="ty">String</span> <span class="tx">cust, </span><span class="ty">String</span> <span class="tx">prod, </span><span class="kw">double</span> <span class="tx">amt) {</span>
+        <span class="kw">this</span><span class="tx">.orderId = id;</span>
+        <span class="kw">this</span><span class="tx">.customer = cust;</span>
+        <span class="kw">this</span><span class="tx">.product = prod;</span>
+        <span class="kw">this</span><span class="tx">.amount = amt;</span>
+        <span class="kw">this</span><span class="tx">.status = </span><span class="st">"ACTIVE"</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Copy constructor</span>
+    <span class="kw">public</span> <span class="ty">Order</span><span class="tx">(</span><span class="ty">Order</span> <span class="tx">other) {</span>
+        <span class="kw">this</span><span class="tx">.orderId  = other.orderId + </span><span class="st">"-RFD"</span><span class="tx">;</span>
+        <span class="kw">this</span><span class="tx">.customer = other.customer;</span>
+        <span class="kw">this</span><span class="tx">.product  = other.product;</span>
+        <span class="kw">this</span><span class="tx">.amount   = other.amount;</span>
+        <span class="kw">this</span><span class="tx">.status   = other.status;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">setStatus</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">s) { </span><span class="kw">this</span><span class="tx">.status = s; }</span>
+    <span class="kw">public void</span> <span class="fn">show</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(orderId + </span><span class="st">" | "</span> <span class="tx">+ customer + </span><span class="st">" | "</span> <span class="tx">+ product + </span><span class="st">" | "</span> <span class="tx">+ status);</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="ty">String</span><span class="tx">[] a) {</span>
+        <span class="ty">Order</span> <span class="tx">o1 = </span><span class="kw">new</span> <span class="ty">Order</span><span class="tx">(</span><span class="st">"FK001"</span><span class="tx">, </span><span class="st">"Rahul"</span><span class="tx">, </span><span class="st">"iPhone"</span><span class="tx">, </span><span class="nm">79900</span><span class="tx">);</span>
+        <span class="ty">Order</span> <span class="tx">refund = </span><span class="kw">new</span> <span class="ty">Order</span><span class="tx">(o1);</span>
+        <span class="tx">refund.</span><span class="fn">setStatus</span><span class="tx">(</span><span class="st">"REFUNDED"</span><span class="tx">);</span>
+        <span class="tx">o1.</span><span class="fn">show</span><span class="tx">();</span>      <span class="cm">// FK001 | Rahul | iPhone | ACTIVE</span>
+        <span class="tx">refund.</span><span class="fn">show</span><span class="tx">();</span>  <span class="cm">// FK001-RFD | Rahul | iPhone | REFUNDED</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--          SECTION 2 — METHOD OVERLOADING                 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="sec" id="s2">
+  <div class="sec-head">
+    <div class="sec-num n2">02</div>
+    <div class="sec-title">
+      <h2>Method Overloading</h2>
+      <p>Same method name, different inputs — flexible methods for different situations</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is it?</strong>
+      <p>Method overloading means writing MULTIPLE methods with the SAME NAME but DIFFERENT parameters in the SAME class. Java picks the correct one based on what you pass to it.</p>
+      <p>This is called <strong>compile-time polymorphism</strong> because Java decides which method to use while compiling your code.</p>
+    </div>
+  </div>
+
+  <div class="box why">
+    <span class="box-icon">💡</span>
+    <div class="box-body">
+      <strong>Why does it matter?</strong>
+      <p>Imagine you have a calculator. You want <code>add()</code> to work with 2 numbers, 3 numbers, integers, or decimals. Without overloading, you'd need ugly names like <code>add2Ints</code>, <code>add3Ints</code>, <code>add2Doubles</code>... With overloading, you just call <code>add()</code> and Java figures out which version to use.</p>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <span class="analogy-tag">📞 Real-World Analogy — Restaurant Menu</span>
+    <p>At a restaurant, when you order "Pizza", the chef makes different pizzas based on what you add:</p>
+    <p>• "One pizza" → Margherita (default)<br>
+       • "One pizza with mushroom" → Mushroom pizza<br>
+       • "One pizza with mushroom and cheese" → Mushroom-cheese pizza</p>
+    <p>Same word "Pizza", different result based on what extras you mention. That's overloading!</p>
+  </div>
+
+  <h3 class="sub">⚙️ The 3 Ways to Overload</h3>
+  <div class="grid2">
+    <div class="icard a"><h4>1. Different number of parameters</h4><p><code>add(int, int)</code> vs <code>add(int, int, int)</code></p></div>
+    <div class="icard b"><h4>2. Different parameter types</h4><p><code>add(int, int)</code> vs <code>add(double, double)</code></p></div>
+    <div class="icard c"><h4>3. Different order of parameters</h4><p><code>display(String, int)</code> vs <code>display(int, String)</code></p></div>
+  </div>
+
+  <div class="box prob">
+    <span class="box-icon">⚠️</span>
+    <div class="box-body">
+      <strong>What does NOT count as overloading?</strong>
+      <p>Just changing the return type is NOT enough. <code>int add(int, int)</code> and <code>double add(int, int)</code> will give a compile error — Java can't tell which one to call.</p>
+    </div>
+  </div>
+
+  <h3 class="sub">🏦 Real Scenario — Bank Transfer Methods</h3>
+  <div class="code">
+    <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">BankService.java — Method overloading</span></div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">BankService</span> <span class="tx">{</span>
+
+    <span class="cm">// Version 1: Transfer using account number (string)</span>
+    <span class="kw">public void</span> <span class="fn">transfer</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">accountNo, </span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Sent ₹"</span> <span class="tx">+ amount + </span><span class="st">" to account "</span> <span class="tx">+ accountNo);</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Version 2: Transfer using UPI ID</span>
+    <span class="kw">public void</span> <span class="fn">transfer</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">upiId, </span><span class="kw">double</span> <span class="tx">amount, </span><span class="ty">String</span> <span class="tx">note) {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"UPI: ₹"</span> <span class="tx">+ amount + </span><span class="st">" to "</span> <span class="tx">+ upiId + </span><span class="st">" — "</span> <span class="tx">+ note);</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Version 3: Transfer with scheduled date</span>
+    <span class="kw">public void</span> <span class="fn">transfer</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">accountNo, </span><span class="kw">double</span> <span class="tx">amount, </span><span class="ty">String</span> <span class="tx">date, </span><span class="kw">boolean</span> <span class="tx">scheduled) {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Scheduled ₹"</span> <span class="tx">+ amount + </span><span class="st">" to "</span> <span class="tx">+ accountNo + </span><span class="st">" on "</span> <span class="tx">+ date);</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="ty">String</span><span class="tx">[] args) {</span>
+        <span class="ty">BankService</span> <span class="tx">b = </span><span class="kw">new</span> <span class="ty">BankService</span><span class="tx">();</span>
+
+        <span class="cm">// Java picks the right version based on what you pass</span>
+        <span class="tx">b.</span><span class="fn">transfer</span><span class="tx">(</span><span class="st">"SBI001"</span><span class="tx">, </span><span class="nm">5000</span><span class="tx">);</span>                       <span class="cm">// → Version 1</span>
+        <span class="tx">b.</span><span class="fn">transfer</span><span class="tx">(</span><span class="st">"rahul@upi"</span><span class="tx">, </span><span class="nm">200</span><span class="tx">, </span><span class="st">"Lunch"</span><span class="tx">);</span>             <span class="cm">// → Version 2</span>
+        <span class="tx">b.</span><span class="fn">transfer</span><span class="tx">(</span><span class="st">"SBI002"</span><span class="tx">, </span><span class="nm">10000</span><span class="tx">, </span><span class="st">"2026-06-01"</span><span class="tx">, </span><span class="kw">true</span><span class="tx">);</span>    <span class="cm">// → Version 3</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+    </div>
+  </div>
+
+  <div class="topic-block">
+    <h3>📝 Explanation</h3>
+    <p>All three methods are named <code>transfer</code>, but each has DIFFERENT parameters. Java automatically picks the right one based on what you pass.</p>
+    <p>The user doesn't need to remember three different method names — just <code>transfer()</code> with the right inputs.</p>
+  </div>
+
+  <h3 class="sub">✅ Benefits</h3>
+  <div class="benefits">
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Cleaner code:</strong> One method name instead of many.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Flexible:</strong> Use the same method in many situations.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Easy to read:</strong> Code reads more naturally.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>No confusion:</strong> Java picks the right version automatically.</div></div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-head"><span class="ex-level easy">Beginner</span><span class="ex-title">Practice 2 — Calculator with Overloading</span></div>
+    <div class="ex-body">
+      <p class="ex-q">Create a <code>Calculator</code> class with 4 versions of an <code>add</code> method:</p>
+      <p class="ex-q"><ol>
+        <li><code>add(int a, int b)</code> — adds 2 integers</li>
+        <li><code>add(int a, int b, int c)</code> — adds 3 integers</li>
+        <li><code>add(double a, double b)</code> — adds 2 doubles</li>
+        <li><code>add(String a, String b)</code> — concatenates 2 strings</li>
+      </ol></p>
+      <button class="sol-btn" onclick="toggleSol('sol2')">▶ Show Solution</button>
+      <div class="sol-panel" id="sol2">
+        <div class="code">
+          <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">Calculator.java — Solution</span></div>
+          <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Calculator</span> <span class="tx">{</span>
+
+    <span class="kw">public int</span> <span class="fn">add</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">a, </span><span class="kw">int</span> <span class="tx">b)            { </span><span class="kw">return</span> <span class="tx">a + b; }</span>
+
+    <span class="kw">public int</span> <span class="fn">add</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">a, </span><span class="kw">int</span> <span class="tx">b, </span><span class="kw">int</span> <span class="tx">c)     { </span><span class="kw">return</span> <span class="tx">a + b + c; }</span>
+
+    <span class="kw">public double</span> <span class="fn">add</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">a, </span><span class="kw">double</span> <span class="tx">b)   { </span><span class="kw">return</span> <span class="tx">a + b; }</span>
+
+    <span class="kw">public</span> <span class="ty">String</span> <span class="fn">add</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">a, </span><span class="ty">String</span> <span class="tx">b)  { </span><span class="kw">return</span> <span class="tx">a + </span><span class="st">" "</span> <span class="tx">+ b; }</span>
+
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="ty">String</span><span class="tx">[] args) {</span>
+        <span class="ty">Calculator</span> <span class="tx">c = </span><span class="kw">new</span> <span class="ty">Calculator</span><span class="tx">();</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(c.</span><span class="fn">add</span><span class="tx">(</span><span class="nm">5</span><span class="tx">, </span><span class="nm">3</span><span class="tx">));</span>                  <span class="cm">// 8</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(c.</span><span class="fn">add</span><span class="tx">(</span><span class="nm">1</span><span class="tx">, </span><span class="nm">2</span><span class="tx">, </span><span class="nm">3</span><span class="tx">));</span>               <span class="cm">// 6</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(c.</span><span class="fn">add</span><span class="tx">(</span><span class="nm">2.5</span><span class="tx">, </span><span class="nm">3.5</span><span class="tx">));</span>              <span class="cm">// 6.0</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(c.</span><span class="fn">add</span><span class="tx">(</span><span class="st">"Hello"</span><span class="tx">, </span><span class="st">"World"</span><span class="tx">));</span>     <span class="cm">// Hello World</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--          SECTION 3 — METHOD OVERRIDING                  -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="sec" id="s3">
+  <div class="sec-head">
+    <div class="sec-num n3">03</div>
+    <div class="sec-title">
+      <h2>Method Overriding</h2>
+      <p>Child class changes the behavior of a parent's method</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is it?</strong>
+      <p>Method overriding is when a CHILD class re-defines a method that already exists in its PARENT class. The child gives the method a NEW behavior — different from what the parent does.</p>
+      <p>This is called <strong>runtime polymorphism</strong> because Java decides which version to run while the program is actually running, based on the type of object.</p>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <span class="analogy-tag">👨‍👩‍👧 Real-World Analogy — Family Recipe</span>
+    <p>Your grandmother has a recipe for "pizza" using a traditional oven. Your mom uses the same recipe name "pizza" but bakes it in a modern oven with different temperature. You inherited the recipe name but added your own twist with a microwave.</p>
+    <p>Same recipe name (method), different way of making it (behavior) — that's overriding!</p>
+  </div>
+
+  <h3 class="sub">📋 Rules of Method Overriding</h3>
+  <div class="benefits">
+    <div class="benefit"><span class="benefit-icon">✓</span><div>Method name must be the SAME</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div>Parameters must be SAME (same count, same types)</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div>Return type must be SAME (or sub-type)</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div>Use <code>@Override</code> annotation (good practice)</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div>Must be in PARENT-CHILD relationship</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div>Cannot override <code>private</code>, <code>static</code>, or <code>final</code> methods</div></div>
+  </div>
+
+  <h3 class="sub">💳 Real Scenario — Different Payment Types</h3>
+  <div class="code">
+    <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">Payment system — Method overriding</span></div>
+    <div class="code-body"><pre>
+<span class="cm">// ── PARENT class with default behavior</span>
+<span class="kw">public class</span> <span class="ty">Payment</span> <span class="tx">{</span>
+    <span class="kw">protected double</span> <span class="tx">amount;</span>
+
+    <span class="kw">public</span> <span class="ty">Payment</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amt) { </span><span class="kw">this</span><span class="tx">.amount = amt; }</span>
+
+    <span class="kw">public void</span> <span class="fn">process</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Processing payment of ₹"</span> <span class="tx">+ amount);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── CHILD class overrides process() with UPI behavior</span>
+<span class="kw">public class</span> <span class="ty">UPIPayment</span> <span class="kw">extends</span> <span class="ty">Payment</span> <span class="tx">{</span>
+    <span class="kw">public</span> <span class="ty">UPIPayment</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amt) { </span><span class="kw">super</span><span class="tx">(amt); }</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">process</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"💚 UPI Payment of ₹"</span> <span class="tx">+ amount + </span><span class="st">" — instant!"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── Another CHILD class with different behavior</span>
+<span class="kw">public class</span> <span class="ty">CardPayment</span> <span class="kw">extends</span> <span class="ty">Payment</span> <span class="tx">{</span>
+    <span class="kw">public</span> <span class="ty">CardPayment</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amt) { </span><span class="kw">super</span><span class="tx">(amt); }</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">process</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"💳 Card Payment of ₹"</span> <span class="tx">+ amount + </span><span class="st">" — OTP required"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── In Main:</span>
+<span class="kw">public class</span> <span class="ty">Main</span> <span class="tx">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="ty">String</span><span class="tx">[] args) {</span>
+        <span class="ty">Payment</span> <span class="tx">p1 = </span><span class="kw">new</span> <span class="ty">UPIPayment</span><span class="tx">(</span><span class="nm">500</span><span class="tx">);</span>
+        <span class="ty">Payment</span> <span class="tx">p2 = </span><span class="kw">new</span> <span class="ty">CardPayment</span><span class="tx">(</span><span class="nm">25000</span><span class="tx">);</span>
+
+        <span class="tx">p1.</span><span class="fn">process</span><span class="tx">();</span>   <span class="cm">// 💚 UPI Payment of ₹500 — instant!</span>
+        <span class="tx">p2.</span><span class="fn">process</span><span class="tx">();</span>   <span class="cm">// 💳 Card Payment of ₹25000 — OTP required</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+    </div>
+  </div>
+
+  <h3 class="sub">⚔️ Overloading vs Overriding — Key Differences</h3>
+  <table class="tbl">
+    <tr><th>Aspect</th><th>Overloading</th><th>Overriding</th></tr>
+    <tr><td>Where it happens</td><td>SAME class</td><td>PARENT-CHILD classes</td></tr>
+    <tr><td>Method signature</td><td>DIFFERENT (different parameters)</td><td>SAME (everything matches)</td></tr>
+    <tr><td>When decided</td><td>Compile-time</td><td>Runtime</td></tr>
+    <tr><td>Inheritance needed?</td><td>No</td><td>Yes</td></tr>
+    <tr><td>Purpose</td><td>Same operation, different inputs</td><td>Specialize parent behavior</td></tr>
+    <tr><td>Polymorphism type</td><td>Compile-time / Static</td><td>Runtime / Dynamic</td></tr>
+  </table>
+
+  <div class="ex">
+    <div class="ex-head"><span class="ex-level med">Intermediate</span><span class="ex-title">Practice 3 — Employee Salary Override</span></div>
+    <div class="ex-body">
+      <p class="ex-q">Create a parent class <code>Employee</code> with method <code>calculateSalary()</code> that returns <code>basicSalary</code>. Create two child classes:</p>
+      <p class="ex-q"><ol>
+        <li><code>Manager</code> — overrides to return <code>basicSalary + 20000</code> bonus</li>
+        <li><code>Intern</code> — overrides to return <code>basicSalary - 5000</code> training fee</li>
+      </ol></p>
+      <p class="ex-q">In main, create one of each and call <code>calculateSalary()</code> on each.</p>
+      <button class="sol-btn" onclick="toggleSol('sol3')">▶ Show Solution</button>
+      <div class="sol-panel" id="sol3">
+        <div class="code">
+          <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">Employee hierarchy — Solution</span></div>
+          <div class="code-body"><pre>
+<span class="kw">class</span> <span class="ty">Employee</span> <span class="tx">{</span>
+    <span class="kw">protected</span> <span class="ty">String</span> <span class="tx">name;</span>
+    <span class="kw">protected double</span> <span class="tx">basicSalary;</span>
+
+    <span class="kw">public</span> <span class="ty">Employee</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">name, </span><span class="kw">double</span> <span class="tx">basic) {</span>
+        <span class="kw">this</span><span class="tx">.name = name;</span>
+        <span class="kw">this</span><span class="tx">.basicSalary = basic;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public double</span> <span class="fn">calculateSalary</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">basicSalary; }</span>
+<span class="tx">}</span>
+
+<span class="kw">class</span> <span class="ty">Manager</span> <span class="kw">extends</span> <span class="ty">Employee</span> <span class="tx">{</span>
+    <span class="kw">public</span> <span class="ty">Manager</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">name, </span><span class="kw">double</span> <span class="tx">basic) { </span><span class="kw">super</span><span class="tx">(name, basic); }</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public double</span> <span class="fn">calculateSalary</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">basicSalary + </span><span class="nm">20000</span><span class="tx">; }</span>
+<span class="tx">}</span>
+
+<span class="kw">class</span> <span class="ty">Intern</span> <span class="kw">extends</span> <span class="ty">Employee</span> <span class="tx">{</span>
+    <span class="kw">public</span> <span class="ty">Intern</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">name, </span><span class="kw">double</span> <span class="tx">basic) { </span><span class="kw">super</span><span class="tx">(name, basic); }</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public double</span> <span class="fn">calculateSalary</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">basicSalary - </span><span class="nm">5000</span><span class="tx">; }</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">Main</span> <span class="tx">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="ty">String</span><span class="tx">[] args) {</span>
+        <span class="ty">Manager</span> <span class="tx">m = </span><span class="kw">new</span> <span class="ty">Manager</span><span class="tx">(</span><span class="st">"Ananya"</span><span class="tx">, </span><span class="nm">60000</span><span class="tx">);</span>
+        <span class="ty">Intern</span>  <span class="tx">i = </span><span class="kw">new</span> <span class="ty">Intern</span><span class="tx">(</span><span class="st">"Rohit"</span><span class="tx">, </span><span class="nm">20000</span><span class="tx">);</span>
+
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(m.name + </span><span class="st">": ₹"</span> <span class="tx">+ m.</span><span class="fn">calculateSalary</span><span class="tx">());</span>   <span class="cm">// ₹80000</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(i.name + </span><span class="st">": ₹"</span> <span class="tx">+ i.</span><span class="fn">calculateSalary</span><span class="tx">());</span>   <span class="cm">// ₹15000</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--          SECTION 4 — ENCAPSULATION                      -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="sec" id="s4">
+  <div class="sec-head">
+    <div class="sec-num n4">04</div>
+    <div class="sec-title">
+      <h2>Encapsulation — Pillar 1 of OOP</h2>
+      <p>Protecting your data — hide what's inside, expose only what's needed</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is it?</strong>
+      <p>Encapsulation is the idea of WRAPPING data (fields) and methods (behaviors) together inside a class, AND HIDING the data so that outside code can't directly mess with it.</p>
+      <p>You make fields <code>private</code>, then provide controlled access through public <code>get</code> and <code>set</code> methods.</p>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <span class="analogy-tag">🏦 Real-World Analogy — Bank Vault &amp; Teller</span>
+    <p>A bank keeps money inside a VAULT. Customers can't walk into the vault to take money themselves. They go to the TELLER, who:</p>
+    <p>1. Checks ID (validation)<br>
+       2. Checks balance (business rule)<br>
+       3. Hands over the requested amount<br>
+       4. Records the transaction</p>
+    <p>The vault is your <code>private</code> field. The teller is your <code>public</code> method. That's encapsulation!</p>
+  </div>
+
+  <h3 class="sub">🛡️ Real Scenario — Customer Data Protection</h3>
+  <div class="code">
+    <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">Customer.java — Full encapsulation</span></div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Customer</span> <span class="tx">{</span>
+    <span class="cm">// ── All fields are PRIVATE — no direct outside access</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">name;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">email;</span>
+    <span class="kw">private int</span>    <span class="tx">age;</span>
+    <span class="kw">private double</span> <span class="tx">balance;</span>
+
+    <span class="kw">public</span> <span class="ty">Customer</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">name, </span><span class="ty">String</span> <span class="tx">email, </span><span class="kw">int</span> <span class="tx">age) {</span>
+        <span class="kw">this</span><span class="tx">.name = name;</span>
+        <span class="fn">setEmail</span><span class="tx">(email);</span>    <span class="cm">// goes through validation</span>
+        <span class="fn">setAge</span><span class="tx">(age);</span>        <span class="cm">// goes through validation</span>
+        <span class="kw">this</span><span class="tx">.balance = </span><span class="nm">0</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── GETTERS — read-only access</span>
+    <span class="kw">public</span> <span class="ty">String</span> <span class="fn">getName</span><span class="tx">()    { </span><span class="kw">return</span> <span class="tx">name; }</span>
+    <span class="kw">public</span> <span class="ty">String</span> <span class="fn">getEmail</span><span class="tx">()   { </span><span class="kw">return</span> <span class="tx">email; }</span>
+    <span class="kw">public int</span>    <span class="fn">getAge</span><span class="tx">()     { </span><span class="kw">return</span> <span class="tx">age; }</span>
+    <span class="kw">public double</span> <span class="fn">getBalance</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">balance; }</span>
+
+    <span class="cm">// ── SETTERS — with VALIDATION rules</span>
+    <span class="kw">public void</span> <span class="fn">setEmail</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">email) {</span>
+        <span class="kw">if</span> <span class="tx">(email == </span><span class="kw">null</span> <span class="tx">|| !email.</span><span class="fn">contains</span><span class="tx">(</span><span class="st">"@"</span><span class="tx">)) {</span>
+            <span class="kw">throw new</span> <span class="ty">IllegalArgumentException</span><span class="tx">(</span><span class="st">"Bad email!"</span><span class="tx">);</span>
+        <span class="tx">}</span>
+        <span class="kw">this</span><span class="tx">.email = email;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">setAge</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">age) {</span>
+        <span class="kw">if</span> <span class="tx">(age &lt; </span><span class="nm">18</span> <span class="tx">|| age > </span><span class="nm">120</span><span class="tx">) {</span>
+            <span class="kw">throw new</span> <span class="ty">IllegalArgumentException</span><span class="tx">(</span><span class="st">"Age 18-120 only"</span><span class="tx">);</span>
+        <span class="tx">}</span>
+        <span class="kw">this</span><span class="tx">.age = age;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── Methods — change data only through controlled actions</span>
+    <span class="kw">public void</span> <span class="fn">deposit</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="kw">if</span> <span class="tx">(amount > </span><span class="nm">0</span><span class="tx">) balance += amount;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="ty">String</span><span class="tx">[] args) {</span>
+        <span class="ty">Customer</span> <span class="tx">c = </span><span class="kw">new</span> <span class="ty">Customer</span><span class="tx">(</span><span class="st">"Priya"</span><span class="tx">, </span><span class="st">"priya@gmail.com"</span><span class="tx">, </span><span class="nm">28</span><span class="tx">);</span>
+
+        <span class="cm">// c.email = "hacker";        ← compile error: private!</span>
+        <span class="cm">// c.balance = 999999;        ← compile error: private!</span>
+
+        <span class="tx">c.</span><span class="fn">deposit</span><span class="tx">(</span><span class="nm">5000</span><span class="tx">);</span>             <span class="cm">// ✅ proper way</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(c.</span><span class="fn">getBalance</span><span class="tx">());</span>   <span class="cm">// 5000</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+    </div>
+  </div>
+
+  <h3 class="sub">✅ Benefits</h3>
+  <div class="benefits">
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Security:</strong> Sensitive data can't be accessed directly.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Validation:</strong> All changes pass through your rules.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Control:</strong> You decide what is read-only or writable.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Maintainable:</strong> Easy to change internal logic later.</div></div>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--          SECTION 5 — INHERITANCE                        -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="sec" id="s5">
+  <div class="sec-head">
+    <div class="sec-num n5">05</div>
+    <div class="sec-title">
+      <h2>Inheritance — Pillar 2 of OOP</h2>
+      <p>Reusing code — building new classes on top of existing ones</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is it?</strong>
+      <p>Inheritance lets a NEW class (child) automatically get all the fields and methods of an EXISTING class (parent), and add new ones of its own.</p>
+      <p>You use the <code>extends</code> keyword to say "this child class inherits from that parent class."</p>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <span class="analogy-tag">👨‍👩‍👧 Real-World Analogy — Family Traits</span>
+    <p>You inherit your last name, eye color, and some habits from your parents. But you also have your OWN unique traits. You didn't have to start from scratch — you got many things "for free" from your parents.</p>
+    <p>In code, a <code>SavingsAccount</code> inherits everything from <code>BankAccount</code> (account number, holder, balance, deposit, withdraw) AND adds its own things (interest rate, minimum balance).</p>
+  </div>
+
+  <h3 class="sub">🏦 Real Scenario — Bank Account Hierarchy</h3>
+  <div class="code">
+    <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">Inheritance — Bank accounts</span></div>
+    <div class="code-body"><pre>
+<span class="cm">// ── PARENT class (also called Super class / Base class)</span>
+<span class="kw">public class</span> <span class="ty">BankAccount</span> <span class="tx">{</span>
+    <span class="kw">protected</span> <span class="ty">String</span> <span class="tx">accountNo;</span>
+    <span class="kw">protected</span> <span class="ty">String</span> <span class="tx">holderName;</span>
+    <span class="kw">protected double</span> <span class="tx">balance;</span>
+
+    <span class="kw">public</span> <span class="ty">BankAccount</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">accNo, </span><span class="ty">String</span> <span class="tx">name, </span><span class="kw">double</span> <span class="tx">bal) {</span>
+        <span class="kw">this</span><span class="tx">.accountNo  = accNo;</span>
+        <span class="kw">this</span><span class="tx">.holderName = name;</span>
+        <span class="kw">this</span><span class="tx">.balance    = bal;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">deposit</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) { balance += amount; }</span>
+    <span class="kw">public void</span> <span class="fn">withdraw</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) { balance -= amount; }</span>
+
+    <span class="kw">public void</span> <span class="fn">show</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(accountNo + </span><span class="st">" | "</span> <span class="tx">+ holderName + </span><span class="st">" | ₹"</span> <span class="tx">+ balance);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── CHILD class — SavingsAccount IS-A BankAccount + extras</span>
+<span class="kw">public class</span> <span class="ty">SavingsAccount</span> <span class="kw">extends</span> <span class="ty">BankAccount</span> <span class="tx">{</span>
+    <span class="kw">private double</span> <span class="tx">interestRate;</span>
+
+    <span class="kw">public</span> <span class="ty">SavingsAccount</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">accNo, </span><span class="ty">String</span> <span class="tx">name, </span><span class="kw">double</span> <span class="tx">bal, </span><span class="kw">double</span> <span class="tx">rate) {</span>
+        <span class="kw">super</span><span class="tx">(accNo, name, bal);</span>   <span class="cm">// call parent's constructor</span>
+        <span class="kw">this</span><span class="tx">.interestRate = rate;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">addInterest</span><span class="tx">() {</span>
+        <span class="kw">double</span> <span class="tx">interest = balance * interestRate / </span><span class="nm">100</span><span class="tx">;</span>
+        <span class="tx">balance += interest;</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Interest added: ₹"</span> <span class="tx">+ interest);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── Usage</span>
+<span class="kw">public class</span> <span class="ty">Main</span> <span class="tx">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="ty">String</span><span class="tx">[] args) {</span>
+        <span class="ty">SavingsAccount</span> <span class="tx">acc = </span><span class="kw">new</span> <span class="ty">SavingsAccount</span><span class="tx">(</span><span class="st">"SBI001"</span><span class="tx">, </span><span class="st">"Priya"</span><span class="tx">, </span><span class="nm">50000</span><span class="tx">, </span><span class="nm">5</span><span class="tx">);</span>
+
+        <span class="cm">// inherited methods work automatically</span>
+        <span class="tx">acc.</span><span class="fn">deposit</span><span class="tx">(</span><span class="nm">10000</span><span class="tx">);</span>     <span class="cm">// from parent</span>
+        <span class="tx">acc.</span><span class="fn">addInterest</span><span class="tx">();</span>         <span class="cm">// from child</span>
+        <span class="tx">acc.</span><span class="fn">show</span><span class="tx">();</span>                <span class="cm">// from parent</span>
+        <span class="cm">// SBI001 | Priya | ₹63000.0</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+    </div>
+  </div>
+
+  <h3 class="sub">📊 Types of Inheritance in Java</h3>
+  <table class="tbl">
+    <tr><th>Type</th><th>Description</th><th>Java Supports?</th></tr>
+    <tr><td>Single</td><td>One child, one parent: A → B</td><td>✅ Yes</td></tr>
+    <tr><td>Multilevel</td><td>Chain: A → B → C</td><td>✅ Yes</td></tr>
+    <tr><td>Hierarchical</td><td>Many children share one parent</td><td>✅ Yes</td></tr>
+    <tr><td>Multiple (classes)</td><td>One child, multiple parents</td><td>❌ NO (use interfaces)</td></tr>
+    <tr><td>Multiple (interfaces)</td><td>One class implements many interfaces</td><td>✅ Yes</td></tr>
+  </table>
+
+  <h3 class="sub">✅ Benefits</h3>
+  <div class="benefits">
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Code reuse:</strong> Write common logic once in the parent.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Less duplication:</strong> Don't repeat yourself.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Easy to extend:</strong> Add new child types without changing parent.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Logical structure:</strong> Models real-world relationships.</div></div>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--          SECTION 6 — POLYMORPHISM                       -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="sec" id="s6">
+  <div class="sec-head">
+    <div class="sec-num n6">06</div>
+    <div class="sec-title">
+      <h2>Polymorphism — Pillar 3 of OOP</h2>
+      <p>One name, many forms — same call, different behavior</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is it?</strong>
+      <p>Polymorphism (Greek for "many forms") means ONE method or operation can behave DIFFERENTLY depending on the object it's called on.</p>
+      <p>It has 2 types: <strong>Compile-time (overloading)</strong> and <strong>Runtime (overriding)</strong> — both of which you've already learned!</p>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <span class="analogy-tag">🎙️ Real-World Analogy — "Speak" to Different Beings</span>
+    <p>When you say "speak" to different beings, you get different results:</p>
+    <p>• A baby says "Mama!"<br>
+       • A dog barks "Woof!"<br>
+       • A bird chirps<br>
+       • A teacher gives a lecture</p>
+    <p>Same command, different output. That's polymorphism!</p>
+  </div>
+
+  <h3 class="sub">🛒 Real Scenario — E-Commerce Notification System</h3>
+  <div class="code">
+    <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">Polymorphism — One method, many forms</span></div>
+    <div class="code-body"><pre>
+<span class="cm">// ── PARENT class</span>
+<span class="kw">public class</span> <span class="ty">Notification</span> <span class="tx">{</span>
+    <span class="kw">protected</span> <span class="ty">String</span> <span class="tx">message;</span>
+
+    <span class="kw">public</span> <span class="ty">Notification</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">msg) { </span><span class="kw">this</span><span class="tx">.message = msg; }</span>
+
+    <span class="kw">public void</span> <span class="fn">send</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Sending: "</span> <span class="tx">+ message);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── CHILD classes override send() differently</span>
+<span class="kw">class</span> <span class="ty">EmailNotification</span> <span class="kw">extends</span> <span class="ty">Notification</span> <span class="tx">{</span>
+    <span class="kw">public</span> <span class="ty">EmailNotification</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">m) { </span><span class="kw">super</span><span class="tx">(m); }</span>
+    <span class="tx">@</span><span class="an">Override</span> <span class="kw">public void</span> <span class="fn">send</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"📧 Email: "</span> <span class="tx">+ message);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">class</span> <span class="ty">SMSNotification</span> <span class="kw">extends</span> <span class="ty">Notification</span> <span class="tx">{</span>
+    <span class="kw">public</span> <span class="ty">SMSNotification</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">m) { </span><span class="kw">super</span><span class="tx">(m); }</span>
+    <span class="tx">@</span><span class="an">Override</span> <span class="kw">public void</span> <span class="fn">send</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"📱 SMS: "</span> <span class="tx">+ message);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">class</span> <span class="ty">WhatsAppNotification</span> <span class="kw">extends</span> <span class="ty">Notification</span> <span class="tx">{</span>
+    <span class="kw">public</span> <span class="ty">WhatsAppNotification</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">m) { </span><span class="kw">super</span><span class="tx">(m); }</span>
+    <span class="tx">@</span><span class="an">Override</span> <span class="kw">public void</span> <span class="fn">send</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"💬 WhatsApp: "</span> <span class="tx">+ message);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── Polymorphism in action</span>
+<span class="kw">public class</span> <span class="ty">Main</span> <span class="tx">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="ty">String</span><span class="tx">[] args) {</span>
+
+        <span class="cm">// All stored as parent type — but each one acts differently</span>
+        <span class="ty">Notification</span><span class="tx">[] alerts = {</span>
+            <span class="kw">new</span> <span class="ty">EmailNotification</span><span class="tx">(</span><span class="st">"Order shipped"</span><span class="tx">),</span>
+            <span class="kw">new</span> <span class="ty">SMSNotification</span><span class="tx">(</span><span class="st">"OTP: 123456"</span><span class="tx">),</span>
+            <span class="kw">new</span> <span class="ty">WhatsAppNotification</span><span class="tx">(</span><span class="st">"Order delivered!"</span><span class="tx">)</span>
+        <span class="tx">};</span>
+
+        <span class="kw">for</span> <span class="tx">(</span><span class="ty">Notification</span> <span class="tx">n : alerts) {</span>
+            <span class="tx">n.</span><span class="fn">send</span><span class="tx">();</span>   <span class="cm">// Java picks the right version!</span>
+        <span class="tx">}</span>
+        <span class="cm">/* Output:
+           📧 Email: Order shipped
+           📱 SMS: OTP: 123456
+           💬 WhatsApp: Order delivered! */</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+    </div>
+  </div>
+
+  <h3 class="sub">✅ Benefits</h3>
+  <div class="benefits">
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Flexibility:</strong> Add new types without changing existing code.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Less if/else:</strong> No need to check object type manually.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Cleaner code:</strong> Common loop, different behavior.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Easy to extend:</strong> Add WhatsApp, Push, Slack — no main() changes.</div></div>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--          SECTION 7 — ABSTRACTION                        -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="sec" id="s7">
+  <div class="sec-head">
+    <div class="sec-num n7">07</div>
+    <div class="sec-title">
+      <h2>Abstraction — Pillar 4 of OOP</h2>
+      <p>Hide complexity — show only what matters</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is it?</strong>
+      <p>Abstraction means hiding the COMPLEX details and showing only the SIMPLE, useful parts. You tell the user WHAT something does, but not HOW it does it.</p>
+      <p>In Java, you achieve abstraction using <code>abstract</code> classes and <code>interface</code>s.</p>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <span class="analogy-tag">🚗 Real-World Analogy — Driving a Car</span>
+    <p>When you drive a car, you use the steering wheel, accelerator, and brake. You don't think about:</p>
+    <p>• How the engine combusts fuel<br>
+       • How the wheels turn<br>
+       • How the brake fluid flows</p>
+    <p>The car gives you a SIMPLE interface and HIDES all the engineering. That's abstraction!</p>
+  </div>
+
+  <h3 class="sub">🛠️ Two Ways to Achieve Abstraction</h3>
+  <div class="grid2">
+    <div class="icard a"><h4>1. Abstract Class</h4><p>A class declared with <code>abstract</code> keyword. Can have both regular methods AND abstract methods (no body). Cannot be instantiated directly.</p></div>
+    <div class="icard b"><h4>2. Interface</h4><p>A 100% pure contract — only method signatures, no implementation. Multiple interfaces can be implemented by one class.</p></div>
+  </div>
+
+  <h3 class="sub">🏦 Real Scenario — Payment System Abstraction</h3>
+  <div class="code">
+    <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">Payment.java — Abstract class</span></div>
+    <div class="code-body"><pre>
+<span class="cm">// ── ABSTRACT class — cannot be created directly</span>
+<span class="kw">public abstract class</span> <span class="ty">Payment</span> <span class="tx">{</span>
+    <span class="kw">protected double</span> <span class="tx">amount;</span>
+
+    <span class="kw">public</span> <span class="ty">Payment</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amt) { </span><span class="kw">this</span><span class="tx">.amount = amt; }</span>
+
+    <span class="cm">// ── ABSTRACT method — children MUST implement</span>
+    <span class="kw">public abstract void</span> <span class="fn">processPayment</span><span class="tx">();</span>
+
+    <span class="cm">// ── REGULAR method — shared by all children</span>
+    <span class="kw">public void</span> <span class="fn">printReceipt</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Receipt: ₹"</span> <span class="tx">+ amount);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── Concrete (real) child classes</span>
+<span class="kw">class</span> <span class="ty">CreditCardPayment</span> <span class="kw">extends</span> <span class="ty">Payment</span> <span class="tx">{</span>
+    <span class="kw">public</span> <span class="ty">CreditCardPayment</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amt) { </span><span class="kw">super</span><span class="tx">(amt); }</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">processPayment</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"💳 Charging card for ₹"</span> <span class="tx">+ amount);</span>
+        <span class="cm">// real code (encryption, bank call) is HIDDEN from user</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">class</span> <span class="ty">UPIPayment</span> <span class="kw">extends</span> <span class="ty">Payment</span> <span class="tx">{</span>
+    <span class="kw">public</span> <span class="ty">UPIPayment</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amt) { </span><span class="kw">super</span><span class="tx">(amt); }</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">processPayment</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"💚 UPI transfer of ₹"</span> <span class="tx">+ amount);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── Usage</span>
+<span class="kw">public class</span> <span class="ty">Main</span> <span class="tx">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="ty">String</span><span class="tx">[] args) {</span>
+        <span class="cm">// Payment p = new Payment(100);   ← ERROR! Abstract — can't instantiate</span>
+
+        <span class="ty">Payment</span> <span class="tx">p1 = </span><span class="kw">new</span> <span class="ty">CreditCardPayment</span><span class="tx">(</span><span class="nm">5000</span><span class="tx">);</span>
+        <span class="ty">Payment</span> <span class="tx">p2 = </span><span class="kw">new</span> <span class="ty">UPIPayment</span><span class="tx">(</span><span class="nm">200</span><span class="tx">);</span>
+
+        <span class="tx">p1.</span><span class="fn">processPayment</span><span class="tx">();</span>
+        <span class="tx">p1.</span><span class="fn">printReceipt</span><span class="tx">();</span>
+        <span class="tx">p2.</span><span class="fn">processPayment</span><span class="tx">();</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+    </div>
+  </div>
+
+  <h3 class="sub">🔄 Abstract Class vs Interface — Quick Comparison</h3>
+  <table class="tbl">
+    <tr><th>Feature</th><th>Abstract Class</th><th>Interface</th></tr>
+    <tr><td>Method body allowed?</td><td>Yes (some abstract, some not)</td><td>Only default/static methods (mostly no body)</td></tr>
+    <tr><td>Variables</td><td>Any type</td><td>Only public static final (constants)</td></tr>
+    <tr><td>Multiple inheritance</td><td>No (only 1 abstract class)</td><td>Yes (multiple interfaces OK)</td></tr>
+    <tr><td>Use it when</td><td>Classes are closely related (IS-A)</td><td>Classes share a capability (CAN-DO)</td></tr>
+    <tr><td>Keyword</td><td><code>extends</code></td><td><code>implements</code></td></tr>
+  </table>
+
+  <h3 class="sub">✅ Benefits</h3>
+  <div class="benefits">
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Simplicity:</strong> Users see only what they need.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Security:</strong> Hide sensitive implementation.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Flexibility:</strong> Change inside without breaking outside.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Forces structure:</strong> Children must follow the contract.</div></div>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--          SECTION 8 — super KEYWORD                      -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="sec" id="s8">
+  <div class="sec-head">
+    <div class="sec-num n3">08</div>
+    <div class="sec-title">
+      <h2>The <code>super</code> Keyword</h2>
+      <p>How a child class talks to its parent</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is it?</strong>
+      <p>The <code>super</code> keyword is used inside a CHILD class to refer to its PARENT class. You use it for 3 main things:</p>
+      <ul>
+        <li><code>super(args)</code> — call the parent's CONSTRUCTOR</li>
+        <li><code>super.methodName()</code> — call the parent's METHOD</li>
+        <li><code>super.fieldName</code> — access the parent's FIELD</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <span class="analogy-tag">📞 Real-World Analogy — Calling Mom for Help</span>
+    <p>When you (the child) are cooking and you don't know how to make grandma's special curry, you call your mom (the parent): "Mom, how did you make this?"</p>
+    <p>That call is <code>super.makeCurry()</code> — asking the parent class for its version of a method, then maybe adding your own twist after.</p>
+  </div>
+
+  <h3 class="sub">🛠️ Three Uses of super</h3>
+
+  <h3 class="sub" style="font-size:15px;color:var(--p1);border:none;margin-top:14px;">Use 1: Call Parent's Constructor</h3>
+  <div class="code">
+    <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">super() — call parent constructor</span></div>
+    <div class="code-body"><pre>
+<span class="kw">class</span> <span class="ty">Vehicle</span> <span class="tx">{</span>
+    <span class="ty">String</span> <span class="tx">brand;</span>
+    <span class="kw">public</span> <span class="ty">Vehicle</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">brand) {</span>
+        <span class="kw">this</span><span class="tx">.brand = brand;</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Vehicle "</span> <span class="tx">+ brand + </span><span class="st">" created"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">class</span> <span class="ty">Car</span> <span class="kw">extends</span> <span class="ty">Vehicle</span> <span class="tx">{</span>
+    <span class="kw">int</span> <span class="tx">wheels;</span>
+    <span class="kw">public</span> <span class="ty">Car</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">brand, </span><span class="kw">int</span> <span class="tx">wheels) {</span>
+        <span class="kw">super</span><span class="tx">(brand);</span>     <span class="cm">// ← MUST be first line!</span>
+        <span class="kw">this</span><span class="tx">.wheels = wheels;</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Car has "</span> <span class="tx">+ wheels + </span><span class="st">" wheels"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// new Car("Toyota", 4); prints:
+// Vehicle Toyota created
+// Car has 4 wheels</span></pre>
+    </div>
+  </div>
+
+  <h3 class="sub" style="font-size:15px;color:var(--p1);border:none;margin-top:14px;">Use 2: Call Parent's Method</h3>
+  <div class="code">
+    <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">super.method() — call parent method</span></div>
+    <div class="code-body"><pre>
+<span class="kw">class</span> <span class="ty">Employee</span> <span class="tx">{</span>
+    <span class="kw">public double</span> <span class="fn">calculateSalary</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="nm">30000</span><span class="tx">;</span>   <span class="cm">// basic salary</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">class</span> <span class="ty">Manager</span> <span class="kw">extends</span> <span class="ty">Employee</span> <span class="tx">{</span>
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public double</span> <span class="fn">calculateSalary</span><span class="tx">() {</span>
+        <span class="cm">// First get parent's calculation, then add bonus</span>
+        <span class="kw">double</span> <span class="tx">basic = </span><span class="kw">super</span><span class="tx">.</span><span class="fn">calculateSalary</span><span class="tx">();   </span><span class="cm">// ← parent's version</span>
+        <span class="kw">return</span> <span class="tx">basic + </span><span class="nm">15000</span><span class="tx">;</span>   <span class="cm">// add bonus</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="ty">Manager</span> <span class="tx">m = </span><span class="kw">new</span> <span class="ty">Manager</span><span class="tx">();</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(m.</span><span class="fn">calculateSalary</span><span class="tx">());</span>   <span class="cm">// 45000.0</span></pre>
+    </div>
+  </div>
+
+  <h3 class="sub" style="font-size:15px;color:var(--p1);border:none;margin-top:14px;">Use 3: Access Parent's Field</h3>
+  <div class="code">
+    <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">super.field — access parent field</span></div>
+    <div class="code-body"><pre>
+<span class="kw">class</span> <span class="ty">Animal</span> <span class="tx">{</span>
+    <span class="ty">String</span> <span class="tx">color = </span><span class="st">"brown"</span><span class="tx">;</span>
+<span class="tx">}</span>
+
+<span class="kw">class</span> <span class="ty">Dog</span> <span class="kw">extends</span> <span class="ty">Animal</span> <span class="tx">{</span>
+    <span class="ty">String</span> <span class="tx">color = </span><span class="st">"black"</span><span class="tx">;</span>   <span class="cm">// Dog has its own color</span>
+
+    <span class="kw">public void</span> <span class="fn">showColors</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Dog color  : "</span> <span class="tx">+ color);</span>          <span class="cm">// black</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Parent col : "</span> <span class="tx">+ </span><span class="kw">super</span><span class="tx">.color);</span>    <span class="cm">// brown</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+    </div>
+  </div>
+
+  <h3 class="sub">🏦 Full Real Scenario — Bank Account with super</h3>
+  <div class="code">
+    <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">SavingsAccount uses super</span></div>
+    <div class="code-body"><pre>
+<span class="kw">class</span> <span class="ty">BankAccount</span> <span class="tx">{</span>
+    <span class="kw">protected</span> <span class="ty">String</span> <span class="tx">owner;</span>
+    <span class="kw">protected double</span> <span class="tx">balance;</span>
+
+    <span class="kw">public</span> <span class="ty">BankAccount</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">owner, </span><span class="kw">double</span> <span class="tx">balance) {</span>
+        <span class="kw">this</span><span class="tx">.owner   = owner;</span>
+        <span class="kw">this</span><span class="tx">.balance = balance;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">show</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Owner: "</span> <span class="tx">+ owner + </span><span class="st">" | Balance: ₹"</span> <span class="tx">+ balance);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">class</span> <span class="ty">SavingsAccount</span> <span class="kw">extends</span> <span class="ty">BankAccount</span> <span class="tx">{</span>
+    <span class="kw">private double</span> <span class="tx">interestRate;</span>
+
+    <span class="kw">public</span> <span class="ty">SavingsAccount</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">owner, </span><span class="kw">double</span> <span class="tx">balance, </span><span class="kw">double</span> <span class="tx">rate) {</span>
+        <span class="kw">super</span><span class="tx">(owner, balance);</span>    <span class="cm">// USE 1: parent constructor</span>
+        <span class="kw">this</span><span class="tx">.interestRate = rate;</span>
+    <span class="tx">}</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">show</span><span class="tx">() {</span>
+        <span class="kw">super</span><span class="tx">.</span><span class="fn">show</span><span class="tx">();</span>                  <span class="cm">// USE 2: parent method</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Interest Rate: "</span> <span class="tx">+ interestRate + </span><span class="st">"%"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="ty">SavingsAccount</span> <span class="tx">s = </span><span class="kw">new</span> <span class="ty">SavingsAccount</span><span class="tx">(</span><span class="st">"Priya"</span><span class="tx">, </span><span class="nm">50000</span><span class="tx">, </span><span class="nm">3.5</span><span class="tx">);</span>
+<span class="tx">s.</span><span class="fn">show</span><span class="tx">();</span>
+<span class="cm">/* Output:
+   Owner: Priya | Balance: ₹50000.0
+   Interest Rate: 3.5% */</span></pre>
+    </div>
+  </div>
+
+  <h3 class="sub">✅ Benefits</h3>
+  <div class="benefits">
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Code reuse:</strong> Call parent code without rewriting it.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Build on top:</strong> Extend parent behavior, don't replace it.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Access shadowed fields:</strong> Get parent's value even when child has same name.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Cleaner inheritance:</strong> Child constructor properly initializes parent fields.</div></div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-head"><span class="ex-level med">Intermediate</span><span class="ex-title">Practice 4 — Bonus on Top of Salary</span></div>
+    <div class="ex-body">
+      <p class="ex-q">Create class <code>Employee</code> with method <code>printDetails()</code> that prints name and salary. Create child class <code>Manager</code> that adds <code>teamSize</code>. In Manager, override <code>printDetails()</code> to first call <code>super.printDetails()</code> and then print the team size. Test it.</p>
+      <button class="sol-btn" onclick="toggleSol('sol4')">▶ Show Solution</button>
+      <div class="sol-panel" id="sol4">
+        <div class="code">
+          <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">Solution</span></div>
+          <div class="code-body"><pre>
+<span class="kw">class</span> <span class="ty">Employee</span> <span class="tx">{</span>
+    <span class="kw">protected</span> <span class="ty">String</span> <span class="tx">name;</span>
+    <span class="kw">protected double</span> <span class="tx">salary;</span>
+
+    <span class="kw">public</span> <span class="ty">Employee</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">name, </span><span class="kw">double</span> <span class="tx">salary) {</span>
+        <span class="kw">this</span><span class="tx">.name = name;</span>
+        <span class="kw">this</span><span class="tx">.salary = salary;</span>
+    <span class="tx">}</span>
+    <span class="kw">public void</span> <span class="fn">printDetails</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Name: "</span> <span class="tx">+ name + </span><span class="st">" | Salary: ₹"</span> <span class="tx">+ salary);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">class</span> <span class="ty">Manager</span> <span class="kw">extends</span> <span class="ty">Employee</span> <span class="tx">{</span>
+    <span class="kw">private int</span> <span class="tx">teamSize;</span>
+
+    <span class="kw">public</span> <span class="ty">Manager</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">name, </span><span class="kw">double</span> <span class="tx">salary, </span><span class="kw">int</span> <span class="tx">teamSize) {</span>
+        <span class="kw">super</span><span class="tx">(name, salary);</span>
+        <span class="kw">this</span><span class="tx">.teamSize = teamSize;</span>
+    <span class="tx">}</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">printDetails</span><span class="tx">() {</span>
+        <span class="kw">super</span><span class="tx">.</span><span class="fn">printDetails</span><span class="tx">();</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Team Size: "</span> <span class="tx">+ teamSize);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">Main</span> <span class="tx">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="ty">String</span><span class="tx">[] args) {</span>
+        <span class="ty">Manager</span> <span class="tx">m = </span><span class="kw">new</span> <span class="ty">Manager</span><span class="tx">(</span><span class="st">"Ananya"</span><span class="tx">, </span><span class="nm">80000</span><span class="tx">, </span><span class="nm">8</span><span class="tx">);</span>
+        <span class="tx">m.</span><span class="fn">printDetails</span><span class="tx">();</span>
+        <span class="cm">/* Name: Ananya | Salary: ₹80000.0
+           Team Size: 8 */</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--          SECTION 9 — SHALLOW VS DEEP COPY              -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="sec" id="s9">
+  <div class="sec-head">
+    <div class="sec-num n4">09</div>
+    <div class="sec-title">
+      <h2>Shallow Copy vs Deep Copy</h2>
+      <p>Two ways to duplicate an object — and why the difference matters</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is it?</strong>
+      <p>When an object has fields that are OTHER objects inside it (called "nested objects"), copying it can be done two ways:</p>
+      <ul>
+        <li><strong>Shallow Copy:</strong> Only copies the top-level. Nested objects are SHARED.</li>
+        <li><strong>Deep Copy:</strong> Copies everything — including all nested objects recursively. Truly independent.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <span class="analogy-tag">📦 Real-World Analogy — Photocopying a Folder</span>
+    <p><strong>Shallow Copy</strong> is like making a new folder cover but using THE SAME papers inside. If someone writes on the papers, both folders show the change because they share the papers.</p>
+    <p><strong>Deep Copy</strong> is like making a new folder AND photocopying every paper inside. Now if someone writes on one paper, only that folder shows the change. They are completely independent.</p>
+  </div>
+
+  <h3 class="sub">🆚 Side-by-Side Comparison</h3>
+  <div class="compare">
+    <div class="compare-card bad">
+      <h4>🟡 Shallow Copy</h4>
+      <ul>
+        <li>Copies only primitive fields (int, double, etc.)</li>
+        <li>Nested objects are SHARED (same reference)</li>
+        <li>Change to nested object affects BOTH copies</li>
+        <li>Fast and uses less memory</li>
+        <li>Can cause unexpected bugs</li>
+      </ul>
+    </div>
+    <div class="compare-card good">
+      <h4>🟢 Deep Copy</h4>
+      <ul>
+        <li>Copies everything — primitives AND nested objects</li>
+        <li>Nested objects are NEW copies</li>
+        <li>Changes are completely isolated</li>
+        <li>Slower, uses more memory</li>
+        <li>Safe — no shared state surprises</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sub">🏦 Real Scenario — Customer with Address</h3>
+  <div class="code">
+    <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">Shallow Copy Problem</span></div>
+    <div class="code-body"><pre>
+<span class="kw">class</span> <span class="ty">Address</span> <span class="tx">{</span>
+    <span class="ty">String</span> <span class="tx">city;</span>
+    <span class="ty">String</span> <span class="tx">street;</span>
+
+    <span class="kw">public</span> <span class="ty">Address</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">city, </span><span class="ty">String</span> <span class="tx">street) {</span>
+        <span class="kw">this</span><span class="tx">.city = city;</span>
+        <span class="kw">this</span><span class="tx">.street = street;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">class</span> <span class="ty">Customer</span> <span class="tx">{</span>
+    <span class="ty">String</span> <span class="tx">name;</span>
+    <span class="ty">Address</span> <span class="tx">address;</span>   <span class="cm">// ← nested object!</span>
+
+    <span class="kw">public</span> <span class="ty">Customer</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">name, </span><span class="ty">Address</span> <span class="tx">address) {</span>
+        <span class="kw">this</span><span class="tx">.name = name;</span>
+        <span class="kw">this</span><span class="tx">.address = address;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── SHALLOW COPY — just copies the reference</span>
+    <span class="kw">public</span> <span class="ty">Customer</span><span class="tx">(</span><span class="ty">Customer</span> <span class="tx">other) {</span>
+        <span class="kw">this</span><span class="tx">.name = other.name;</span>
+        <span class="kw">this</span><span class="tx">.address = other.address;   </span><span class="cm">// ← BOTH point to SAME Address!</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">show</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(name + </span><span class="st">" lives in "</span> <span class="tx">+ address.city);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── See the problem:</span>
+<span class="ty">Address</span> <span class="tx">addr = </span><span class="kw">new</span> <span class="ty">Address</span><span class="tx">(</span><span class="st">"Mumbai"</span><span class="tx">, </span><span class="st">"MG Road"</span><span class="tx">);</span>
+<span class="ty">Customer</span> <span class="tx">c1 = </span><span class="kw">new</span> <span class="ty">Customer</span><span class="tx">(</span><span class="st">"Priya"</span><span class="tx">, addr);</span>
+<span class="ty">Customer</span> <span class="tx">c2 = </span><span class="kw">new</span> <span class="ty">Customer</span><span class="tx">(c1);   </span><span class="cm">// shallow copy</span>
+
+<span class="cm">// Change c2's address</span>
+<span class="tx">c2.address.city = </span><span class="st">"Pune"</span><span class="tx">;</span>
+
+<span class="tx">c1.</span><span class="fn">show</span><span class="tx">();</span>   <span class="cm">// Priya lives in Pune     ← OOPS! c1 also changed!</span>
+<span class="tx">c2.</span><span class="fn">show</span><span class="tx">();</span>   <span class="cm">// Priya lives in Pune</span></pre>
+    </div>
+  </div>
+
+  <div class="box prob">
+    <span class="box-icon">⚠️</span>
+    <div class="box-body">
+      <strong>The Problem</strong>
+      <p>Even though we made a "copy" of the customer, changing c2's address also changed c1's address. Why? Because the SAME Address object is shared between them. This is the shallow copy trap!</p>
+    </div>
+  </div>
+
+  <h3 class="sub">✅ Solution — Deep Copy</h3>
+  <div class="code">
+    <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">Deep Copy — true independence</span></div>
+    <div class="code-body"><pre>
+<span class="kw">class</span> <span class="ty">Address</span> <span class="tx">{</span>
+    <span class="ty">String</span> <span class="tx">city, street;</span>
+
+    <span class="kw">public</span> <span class="ty">Address</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">city, </span><span class="ty">String</span> <span class="tx">street) {</span>
+        <span class="kw">this</span><span class="tx">.city = city;</span>
+        <span class="kw">this</span><span class="tx">.street = street;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── Copy constructor for Address</span>
+    <span class="kw">public</span> <span class="ty">Address</span><span class="tx">(</span><span class="ty">Address</span> <span class="tx">other) {</span>
+        <span class="kw">this</span><span class="tx">.city = other.city;</span>
+        <span class="kw">this</span><span class="tx">.street = other.street;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">class</span> <span class="ty">Customer</span> <span class="tx">{</span>
+    <span class="ty">String</span> <span class="tx">name;</span>
+    <span class="ty">Address</span> <span class="tx">address;</span>
+
+    <span class="kw">public</span> <span class="ty">Customer</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">name, </span><span class="ty">Address</span> <span class="tx">address) {</span>
+        <span class="kw">this</span><span class="tx">.name = name;</span>
+        <span class="kw">this</span><span class="tx">.address = address;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── DEEP COPY — also make a fresh copy of nested objects</span>
+    <span class="kw">public</span> <span class="ty">Customer</span><span class="tx">(</span><span class="ty">Customer</span> <span class="tx">other) {</span>
+        <span class="kw">this</span><span class="tx">.name = other.name;</span>
+        <span class="kw">this</span><span class="tx">.address = </span><span class="kw">new</span> <span class="ty">Address</span><span class="tx">(other.address);   </span><span class="cm">// ← fresh Address!</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">show</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(name + </span><span class="st">" lives in "</span> <span class="tx">+ address.city);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── Now it works correctly:</span>
+<span class="ty">Address</span> <span class="tx">addr = </span><span class="kw">new</span> <span class="ty">Address</span><span class="tx">(</span><span class="st">"Mumbai"</span><span class="tx">, </span><span class="st">"MG Road"</span><span class="tx">);</span>
+<span class="ty">Customer</span> <span class="tx">c1 = </span><span class="kw">new</span> <span class="ty">Customer</span><span class="tx">(</span><span class="st">"Priya"</span><span class="tx">, addr);</span>
+<span class="ty">Customer</span> <span class="tx">c2 = </span><span class="kw">new</span> <span class="ty">Customer</span><span class="tx">(c1);   </span><span class="cm">// deep copy</span>
+
+<span class="tx">c2.address.city = </span><span class="st">"Pune"</span><span class="tx">;</span>
+
+<span class="tx">c1.</span><span class="fn">show</span><span class="tx">();</span>   <span class="cm">// Priya lives in Mumbai     ← UNCHANGED! ✅</span>
+<span class="tx">c2.</span><span class="fn">show</span><span class="tx">();</span>   <span class="cm">// Priya lives in Pune</span></pre>
+    </div>
+  </div>
+
+  <h3 class="sub">📊 Quick Decision Guide</h3>
+  <table class="tbl">
+    <tr><th>Situation</th><th>Use</th></tr>
+    <tr><td>Object has only primitives (int, double, String)</td><td>Shallow (no difference)</td></tr>
+    <tr><td>Object has mutable nested objects you might change</td><td>Deep</td></tr>
+    <tr><td>Backup snapshots in banking</td><td>Deep</td></tr>
+    <tr><td>Read-only / immutable nested objects</td><td>Shallow is fine</td></tr>
+    <tr><td>Performance is critical &amp; you won't modify nested objects</td><td>Shallow</td></tr>
+  </table>
+
+  <h3 class="sub">✅ Benefits of Deep Copy</h3>
+  <div class="benefits">
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>True independence:</strong> Changes never leak between copies.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Safe snapshots:</strong> Backups stay intact no matter what.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Predictable code:</strong> No mysterious shared-state bugs.</div></div>
+    <div class="benefit"><span class="benefit-icon">✓</span><div><strong>Easier testing:</strong> Each copy is its own little world.</div></div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-head"><span class="ex-level hard">Advanced</span><span class="ex-title">Practice 5 — Deep Copy an Employee with Department</span></div>
+    <div class="ex-body">
+      <p class="ex-q">Create class <code>Department</code> with <code>name</code> and <code>location</code>. Create class <code>Employee</code> with <code>name</code>, <code>salary</code>, and a <code>Department</code> field. Write a deep copy constructor for Employee. Test it: create an employee, copy it, change the copy's department location, and prove the original is unchanged.</p>
+      <button class="sol-btn" onclick="toggleSol('sol5')">▶ Show Solution</button>
+      <div class="sol-panel" id="sol5">
+        <div class="code">
+          <div class="code-top"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><span class="file-name">Solution — Employee Deep Copy</span></div>
+          <div class="code-body"><pre>
+<span class="kw">class</span> <span class="ty">Department</span> <span class="tx">{</span>
+    <span class="ty">String</span> <span class="tx">name;</span>
+    <span class="ty">String</span> <span class="tx">location;</span>
+
+    <span class="kw">public</span> <span class="ty">Department</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">name, </span><span class="ty">String</span> <span class="tx">location) {</span>
+        <span class="kw">this</span><span class="tx">.name = name;</span>
+        <span class="kw">this</span><span class="tx">.location = location;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Copy constructor for Department</span>
+    <span class="kw">public</span> <span class="ty">Department</span><span class="tx">(</span><span class="ty">Department</span> <span class="tx">other) {</span>
+        <span class="kw">this</span><span class="tx">.name = other.name;</span>
+        <span class="kw">this</span><span class="tx">.location = other.location;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">class</span> <span class="ty">Employee</span> <span class="tx">{</span>
+    <span class="ty">String</span> <span class="tx">name;</span>
+    <span class="kw">double</span> <span class="tx">salary;</span>
+    <span class="ty">Department</span> <span class="tx">department;</span>
+
+    <span class="kw">public</span> <span class="ty">Employee</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">name, </span><span class="kw">double</span> <span class="tx">salary, </span><span class="ty">Department</span> <span class="tx">dept) {</span>
+        <span class="kw">this</span><span class="tx">.name = name;</span>
+        <span class="kw">this</span><span class="tx">.salary = salary;</span>
+        <span class="kw">this</span><span class="tx">.department = dept;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// DEEP copy constructor</span>
+    <span class="kw">public</span> <span class="ty">Employee</span><span class="tx">(</span><span class="ty">Employee</span> <span class="tx">other) {</span>
+        <span class="kw">this</span><span class="tx">.name = other.name;</span>
+        <span class="kw">this</span><span class="tx">.salary = other.salary;</span>
+        <span class="kw">this</span><span class="tx">.department = </span><span class="kw">new</span> <span class="ty">Department</span><span class="tx">(other.department);   </span><span class="cm">// fresh!</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">show</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(name + </span><span class="st">" | ₹"</span> <span class="tx">+ salary +</span>
+            <span class="st">" | "</span> <span class="tx">+ department.name + </span><span class="st">" @ "</span> <span class="tx">+ department.location);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">Main</span> <span class="tx">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="ty">String</span><span class="tx">[] args) {</span>
+        <span class="ty">Department</span> <span class="tx">dept = </span><span class="kw">new</span> <span class="ty">Department</span><span class="tx">(</span><span class="st">"IT"</span><span class="tx">, </span><span class="st">"Bangalore"</span><span class="tx">);</span>
+        <span class="ty">Employee</span> <span class="tx">e1 = </span><span class="kw">new</span> <span class="ty">Employee</span><span class="tx">(</span><span class="st">"Priya"</span><span class="tx">, </span><span class="nm">75000</span><span class="tx">, dept);</span>
+        <span class="ty">Employee</span> <span class="tx">e2 = </span><span class="kw">new</span> <span class="ty">Employee</span><span class="tx">(e1);   </span><span class="cm">// deep copy</span>
+
+        <span class="cm">// Change e2's department location</span>
+        <span class="tx">e2.department.location = </span><span class="st">"Mumbai"</span><span class="tx">;</span>
+
+        <span class="tx">e1.</span><span class="fn">show</span><span class="tx">();</span>   <span class="cm">// Priya | ₹75000 | IT @ Bangalore   ← unchanged ✅</span>
+        <span class="tx">e2.</span><span class="fn">show</span><span class="tx">();</span>   <span class="cm">// Priya | ₹75000 | IT @ Mumbai</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>Java OOP Mastery — Beginner-Friendly Guide</p>
+  <p style="margin-top:6px;">Copy Constructor · Overloading · Overriding · 4 Pillars · super · Shallow vs Deep Copy</p>
+</footer>
+
+<script>
+function toggleSol(id) {
+  const p = document.getElementById(id);
+  const b = p.previousElementSibling;
+  const open = p.classList.contains('open');
+  p.classList.toggle('open');
+  b.textContent = open ? '▶ Show Solution' : '▼ Hide Solution';
+}
+</script>
+</body>
+</html>

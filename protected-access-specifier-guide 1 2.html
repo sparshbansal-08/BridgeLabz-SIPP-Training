@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The protected Access Specifier in Java — A Complete Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:        #0c1117;
+  --ink2:       #1a2233;
+  --paper:      #fcfaf6;
+  --cream:      #f1ede2;
+  --rule:       #e0d9c8;
+  --rule2:      #c8bea4;
+
+  --burgundy:   #7c1d3a;
+  --burgundy-l: #f9eaed;
+  --bottle:     #1f4e3d;
+  --bottle-l:   #e1ede7;
+  --navy:       #1e3a8a;
+  --navy-l:     #e0e7f4;
+  --amber:      #92400e;
+  --amber-l:    #fef0d4;
+  --slate:      #475569;
+  --rust:       #991b1b;
+  --rust-l:     #fbe2e2;
+  --moss:       #4d6b3a;
+  --moss-l:     #e7eed7;
+
+  --display: 'Newsreader', serif;
+  --body:    'Inter', sans-serif;
+  --mono:    'JetBrains Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--body);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ============ COVER ============ */
+.cover {
+  background: var(--ink);
+  color: white;
+  padding: 110px 50px 90px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 6px solid var(--burgundy);
+}
+.cover::before {
+  content: '';
+  position: absolute;
+  top: 40%; right: -50px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(124,29,58,.25) 0%, transparent 70%);
+}
+.cover-inner {
+  max-width: 920px;
+  margin: 0 auto;
+  position: relative;
+}
+.cover-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #cbd5e1;
+  border-top: 1px solid #475569;
+  border-bottom: 1px solid #475569;
+  padding: 8px 16px;
+  margin-bottom: 36px;
+}
+.cover h1 {
+  font-family: var(--display);
+  font-size: clamp(2.6rem, 6vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+.cover h1 em {
+  font-style: italic;
+  color: #f87171;
+  font-weight: 400;
+}
+.cover-sub {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  font-style: italic;
+  color: rgba(255,255,255,0.7);
+  max-width: 640px;
+  line-height: 1.5;
+  margin-bottom: 36px;
+}
+.cover-meta {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.cover-meta div span { color: white; }
+
+/* ============ STICKY NAV ============ */
+.toc-bar {
+  background: rgba(252,250,246,.95);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--rule);
+  padding: 0 50px;
+  overflow-x: auto;
+}
+.toc-inner {
+  max-width: 920px;
+  margin: 0 auto;
+  display: flex;
+  white-space: nowrap;
+}
+.toc-link {
+  padding: 18px 20px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--slate);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+.toc-link:hover, .toc-link.active {
+  color: var(--burgundy);
+  border-bottom-color: var(--burgundy);
+}
+
+/* ============ LAYOUT ============ */
+.wrap {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 50px;
+}
+
+/* ============ SECTIONS ============ */
+.chapter {
+  padding: 80px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.chapter:nth-child(odd of .chapter) {
+  background: var(--cream);
+}
+
+.chapter-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  margin-bottom: 12px;
+}
+.chapter-title {
+  font-family: var(--display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+.chapter-lead {
+  font-family: var(--display);
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--slate);
+  max-width: 700px;
+  line-height: 1.5;
+}
+
+/* ============ DEFINITION BLOCK ============ */
+.def-block {
+  background: white;
+  border-left: 4px solid var(--burgundy);
+  padding: 28px 36px;
+  margin: 36px 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.def-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.def-text {
+  font-family: var(--display);
+  font-size: 1.2rem;
+  line-height: 1.6;
+  font-weight: 400;
+}
+.def-text strong {
+  font-weight: 700;
+  color: var(--burgundy);
+}
+
+/* ============ ACCESS MATRIX ============ */
+.matrix {
+  margin: 40px 0;
+  border: 1px solid var(--rule);
+  background: white;
+  overflow: hidden;
+}
+.matrix table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.matrix th {
+  background: var(--ink);
+  color: white;
+  padding: 14px 18px;
+  text-align: left;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.matrix td {
+  padding: 14px 18px;
+  border-top: 1px solid var(--rule);
+}
+.matrix tr:hover td { background: var(--cream); }
+.yes { color: var(--bottle); font-weight: 700; }
+.no  { color: var(--rust); font-weight: 700; }
+.row-protected td { background: #fef3e4 !important; font-weight: 600; }
+
+/* ============ KEY POINTS ============ */
+.key-points {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin: 32px 0;
+}
+.kp {
+  background: white;
+  border: 1px solid var(--rule);
+  padding: 24px;
+  position: relative;
+}
+.kp::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 40px;
+  height: 3px;
+  background: var(--burgundy);
+}
+.kp-num {
+  font-family: var(--display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--burgundy);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.kp-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+.kp-body {
+  font-size: 0.87rem;
+  color: var(--slate);
+  line-height: 1.55;
+}
+
+/* ============ ANALOGY ============ */
+.analogy {
+  background: var(--navy-l);
+  border-left: 4px solid var(--navy);
+  padding: 24px 32px;
+  margin: 32px 0;
+  font-family: var(--display);
+  font-style: italic;
+}
+.analogy-label {
+  font-family: var(--body);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--navy);
+  font-style: normal;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.analogy p {
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+/* ============ EXAMPLE HEADER ============ */
+.example-header {
+  margin: 60px 0 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--ink);
+  position: relative;
+}
+.example-num {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--burgundy);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.example-title {
+  font-family: var(--display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.example-context {
+  font-size: 0.95rem;
+  color: var(--slate);
+  font-style: italic;
+}
+
+/* ============ COMPARE LAYOUT ============ */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 28px 0 36px;
+}
+.compare-col {
+  border: 1.5px solid;
+  background: white;
+}
+.compare-col.without { border-color: var(--rust); }
+.compare-col.with    { border-color: var(--bottle); }
+
+.compare-head {
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--rule);
+}
+.compare-col.without .compare-head {
+  background: var(--rust-l);
+  border-bottom-color: var(--rust);
+}
+.compare-col.with .compare-head {
+  background: var(--bottle-l);
+  border-bottom-color: var(--bottle);
+}
+.compare-tag {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.compare-col.without .compare-tag { color: var(--rust); }
+.compare-col.with .compare-tag    { color: var(--bottle); }
+.compare-head h4 {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+/* ============ CODE ============ */
+.code-block {
+  background: #0a0f17;
+  margin: 0;
+}
+.code-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px 18px;
+  background: #050a12;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.code-bar-text {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.05em;
+}
+.code-bar-text::before {
+  content: '';
+  display: inline-block;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+.compare-col.without .code-bar-text::before { background: #ef4444; }
+.compare-col.with .code-bar-text::before    { background: #10b981; }
+.code-content {
+  padding: 24px 26px;
+  overflow-x: auto;
+}
+pre {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  line-height: 1.85;
+  color: #e2e8f0;
+}
+.kw  { color: #f9a8d4; font-weight: 500; }
+.cl  { color: #67e8f9; }
+.fn  { color: #a5f3fc; }
+.cm  { color: #64748b; font-style: italic; }
+.st  { color: #86efac; }
+.nm  { color: #fcd34d; }
+.an  { color: #fbb6ce; }
+.err { color: #fca5a5; background: rgba(239,68,68,0.12); padding: 1px 3px; border-radius: 2px; }
+.ok  { color: #86efac; background: rgba(16,185,129,0.12); padding: 1px 3px; border-radius: 2px; }
+
+.compare-summary {
+  padding: 18px 22px;
+  background: white;
+  border-top: 1px solid var(--rule);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+.compare-summary strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.compare-col.without .compare-summary strong { color: var(--rust); }
+.compare-col.with .compare-summary strong    { color: var(--bottle); }
+
+/* ============ DIFF TABLE ============ */
+.diff-table {
+  margin: 32px 0;
+  border: 1px solid var(--rule);
+  background: white;
+}
+.diff-head {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr;
+  background: var(--ink);
+  color: white;
+}
+.diff-head > div {
+  padding: 14px 18px;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.diff-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr;
+  border-top: 1px solid var(--rule);
+}
+.diff-row > div {
+  padding: 14px 18px;
+  font-size: 0.87rem;
+}
+.diff-row > div:first-child {
+  font-weight: 600;
+  background: var(--cream);
+  border-right: 1px solid var(--rule);
+}
+.diff-row > div:nth-child(2) {
+  color: var(--rust);
+  border-right: 1px solid var(--rule);
+}
+.diff-row > div:nth-child(3) {
+  color: var(--bottle);
+}
+
+/* ============ FOLLOW-UP NOTE ============ */
+.fnote {
+  background: white;
+  border: 1px solid var(--rule);
+  padding: 26px 30px;
+  margin: 32px 0;
+  position: relative;
+}
+.fnote::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 24px; bottom: 24px;
+  width: 3px;
+  background: var(--bottle);
+}
+.fnote-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bottle);
+  margin-bottom: 10px;
+}
+.fnote p {
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* ============ RULES LIST ============ */
+.rules-list {
+  margin: 28px 0;
+  background: white;
+  border: 1px solid var(--rule);
+  padding: 32px 36px;
+}
+.rules-list h3 {
+  font-family: var(--display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+.rules-list ol {
+  list-style: none;
+  counter-reset: rule-counter;
+}
+.rules-list li {
+  counter-increment: rule-counter;
+  padding-left: 50px;
+  position: relative;
+  margin-bottom: 14px;
+  font-size: 0.94rem;
+  line-height: 1.6;
+}
+.rules-list li::before {
+  content: counter(rule-counter);
+  position: absolute;
+  left: 0; top: 0;
+  width: 32px;
+  height: 32px;
+  background: var(--burgundy);
+  color: white;
+  border-radius: 50%;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rules-list li strong { color: var(--burgundy); }
+
+/* ============ TAKEAWAY ============ */
+.takeaway {
+  background: var(--ink);
+  color: white;
+  padding: 38px 42px;
+  margin: 50px 0 0;
+}
+.takeaway-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #f87171;
+  margin-bottom: 12px;
+}
+.takeaway-title {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.takeaway p {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.7;
+}
+
+/* ============ CODE INLINE ============ */
+code.inline {
+  font-family: var(--mono);
+  background: var(--cream);
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--burgundy);
+  border: 1px solid var(--rule);
+}
+
+p { margin-bottom: 14px; }
+p:last-child { margin-bottom: 0; }
+
+/* ============ FOOTER ============ */
+footer {
+  background: var(--ink);
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  padding: 50px 30px;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+footer strong {
+  color: white;
+  font-family: var(--display);
+  font-size: 1.2rem;
+  font-style: italic;
+  font-weight: 400;
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* ============ PROGRESS ============ */
+.progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: var(--burgundy);
+  width: 0%;
+  z-index: 200;
+  transition: width 0.1s;
+}
+
+@media (max-width: 760px) {
+  .cover { padding: 70px 28px 60px; }
+  .wrap { padding: 0 28px; }
+  .toc-bar { padding: 0 28px; }
+  .compare-grid { grid-template-columns: 1fr; }
+  .diff-head, .diff-row { grid-template-columns: 1fr; }
+  .diff-row > div { border-right: none !important; border-bottom: 1px solid var(--rule); }
+  .cover-meta { gap: 18px; flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="prog"></div>
+
+<!-- ════════════════════ COVER ════════════════════ -->
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-tag">Java Access Modifiers — Volume III</div>
+    <h1>The <em>protected</em><br>Access Specifier</h1>
+    <p class="cover-sub">An in-depth examination of when, why, and how to use protected — illustrated through three real-world scenarios from financial software.</p>
+    <div class="cover-meta">
+      <div>Topic <span>Access Control</span></div>
+      <div>Domain <span>CreditCard · BankAccount · HR</span></div>
+      <div>Format <span>With vs Without comparison</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ NAV ════════════════════ -->
+<nav class="toc-bar">
+  <div class="toc-inner">
+    <a href="#intro" class="toc-link">Introduction</a>
+    <a href="#access-matrix" class="toc-link">Access Matrix</a>
+    <a href="#example-1" class="toc-link">Example 1 — CreditCard</a>
+    <a href="#example-2" class="toc-link">Example 2 — Bank Account</a>
+    <a href="#example-3" class="toc-link">Example 3 — Employee</a>
+    <a href="#rules" class="toc-link">Rules &amp; Best Practices</a>
+  </div>
+</nav>
+
+<!-- ════════════════════ INTRO ════════════════════ -->
+<section class="chapter" id="intro">
+  <div class="wrap">
+    <div class="chapter-eyebrow">Chapter One</div>
+    <h2 class="chapter-title">What protected Really Means</h2>
+    <p class="chapter-lead">The protected modifier sits between private and public — strict enough to keep outsiders out, lenient enough to let subclasses in.</p>
+
+    <div class="def-block">
+      <div class="def-label">Formal Definition</div>
+      <p class="def-text">A member declared as <strong>protected</strong> in a Java class can be accessed by: (1) the <strong>class itself</strong>, (2) any <strong>subclass</strong>, whether in the same or a different package, and (3) any other class in the <strong>same package</strong>. It cannot be accessed by unrelated classes outside the package.</p>
+    </div>
+
+    <h3 style="font-family:var(--display);font-size:1.4rem;font-weight:700;margin:32px 0 16px;">Java Access Matrix — How protected Fits In</h3>
+
+    <div class="matrix">
+      <table>
+        <thead>
+          <tr>
+            <th>Modifier</th>
+            <th>Same Class</th>
+            <th>Same Package</th>
+            <th>Subclass (other package)</th>
+            <th>Other Classes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code class="inline">private</code></td>
+            <td class="yes">Yes</td>
+            <td class="no">No</td>
+            <td class="no">No</td>
+            <td class="no">No</td>
+          </tr>
+          <tr>
+            <td><code class="inline">(default)</code></td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+            <td class="no">No</td>
+            <td class="no">No</td>
+          </tr>
+          <tr class="row-protected">
+            <td><code class="inline">protected</code></td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+            <td class="no">No</td>
+          </tr>
+          <tr>
+            <td><code class="inline">public</code></td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="analogy">
+      <div class="analogy-label">A Real-World Analogy</div>
+      <p>Think of a family business. The owner has personal documents (private) — only they see them. The business has internal documents (default) — only people working in the same office see them. The family inheritance documents (protected) — only the owner, family members in different cities, and trusted office staff can access them. The public-facing brochures (public) — anyone can read.</p>
+    </div>
+
+    <div class="key-points">
+      <div class="kp">
+        <div class="kp-num">01</div>
+        <div class="kp-title">Subclass-Friendly</div>
+        <div class="kp-body">Allows derived classes to inherit and access fields and methods that should not be exposed to the public.</div>
+      </div>
+      <div class="kp">
+        <div class="kp-num">02</div>
+        <div class="kp-title">Encapsulation Preserved</div>
+        <div class="kp-body">Unrelated classes cannot touch protected members — internal state stays protected from arbitrary code.</div>
+      </div>
+      <div class="kp">
+        <div class="kp-num">03</div>
+        <div class="kp-title">Designed for Inheritance</div>
+        <div class="kp-body">Use protected when you intend the class to be extended and want to share internal API with descendants.</div>
+      </div>
+      <div class="kp">
+        <div class="kp-num">04</div>
+        <div class="kp-title">Stronger Than Default</div>
+        <div class="kp-body">Default access blocks subclasses in other packages — protected explicitly invites them.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ EXAMPLE 1: CREDIT CARD ════════════════════ -->
+<section class="chapter" id="example-1">
+  <div class="wrap">
+    <div class="chapter-eyebrow">Example One — Credit Card Hierarchy</div>
+    <h2 class="chapter-title">The CreditCard Domain</h2>
+    <p class="chapter-lead">A payment platform handles multiple card types — Visa, MasterCard, AmericanExpress. Each shares core logic but applies its own fees and rewards. Where should protected fit in?</p>
+
+    <div class="example-header" id="ex1">
+      <div class="example-num">Scenario</div>
+      <div class="example-title">Building a flexible card hierarchy</div>
+      <div class="example-context">We need <code class="inline">VisaCard</code> and <code class="inline">MasterCard</code> to access the parent <code class="inline">CreditCard</code>'s balance for charging — but outsiders must not touch it directly.</div>
+    </div>
+
+    <div class="compare-grid">
+
+      <!-- WITHOUT -->
+      <div class="compare-col without">
+        <div class="compare-head">
+          <div class="compare-tag">Without protected — using private</div>
+          <h4>Subclasses Cannot Access Parent State</h4>
+        </div>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="code-bar-text">CreditCard.java (Wrong design)</span>
+          </div>
+          <div class="code-content"><pre><span class="kw">public class</span> <span class="cl">CreditCard</span> {
+    <span class="cm">// private blocks subclass access</span>
+    <span class="kw">private</span> <span class="cl">String</span> cardNumber;
+    <span class="kw">private double</span> balance;
+    <span class="kw">private double</span> creditLimit;
+
+    <span class="kw">public</span> <span class="fn">CreditCard</span>(<span class="cl">String</span> num, <span class="kw">double</span> limit) {
+        <span class="kw">this</span>.cardNumber  = num;
+        <span class="kw">this</span>.creditLimit = limit;
+        <span class="kw">this</span>.balance     = <span class="nm">0.0</span>;
+    }
+}
+
+<span class="kw">public class</span> <span class="cl">VisaCard</span> <span class="kw">extends</span> <span class="cl">CreditCard</span> {
+    <span class="kw">public</span> <span class="fn">VisaCard</span>(<span class="cl">String</span> num) {
+        <span class="kw">super</span>(num, <span class="nm">100000</span>);
+    }
+
+    <span class="kw">public void</span> <span class="fn">charge</span>(<span class="kw">double</span> amount) {
+        <span class="cm">// Visa adds 2% surcharge</span>
+        <span class="kw">double</span> fee = amount * <span class="nm">0.02</span>;
+
+        <span class="err">this.balance += amount + fee;</span>
+        <span class="cm">// COMPILE ERROR:</span>
+        <span class="cm">// balance has private access in CreditCard</span>
+
+        <span class="err">if (this.balance > this.creditLimit) {</span>
+        <span class="cm">// COMPILE ERROR — same reason</span>
+    }
+}</pre>
+          </div>
+        </div>
+        <div class="compare-summary">
+          <strong>The Problem</strong>
+          The subclass <code class="inline">VisaCard</code> cannot read or modify the parent's <code class="inline">balance</code> and <code class="inline">creditLimit</code>. The only workaround is to expose public getters and setters — but that defeats encapsulation entirely, allowing any random class to manipulate sensitive card data.
+        </div>
+      </div>
+
+      <!-- WITH -->
+      <div class="compare-col with">
+        <div class="compare-head">
+          <div class="compare-tag">With protected — proper design</div>
+          <h4>Subclasses Access Internal State Safely</h4>
+        </div>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="code-bar-text">CreditCard.java (Correct design)</span>
+          </div>
+          <div class="code-content"><pre><span class="kw">public class</span> <span class="cl">CreditCard</span> {
+    <span class="cm">// protected allows subclass access</span>
+    <span class="kw">protected</span> <span class="cl">String</span> cardNumber;
+    <span class="kw">protected double</span> balance;
+    <span class="kw">protected double</span> creditLimit;
+
+    <span class="kw">public</span> <span class="fn">CreditCard</span>(<span class="cl">String</span> num, <span class="kw">double</span> limit) {
+        <span class="kw">this</span>.cardNumber  = num;
+        <span class="kw">this</span>.creditLimit = limit;
+        <span class="kw">this</span>.balance     = <span class="nm">0.0</span>;
+    }
+
+    <span class="kw">protected boolean</span> <span class="fn">canCharge</span>(<span class="kw">double</span> amount) {
+        <span class="kw">return</span> (balance + amount) &lt;= creditLimit;
+    }
+}
+
+<span class="kw">public class</span> <span class="cl">VisaCard</span> <span class="kw">extends</span> <span class="cl">CreditCard</span> {
+    <span class="kw">public</span> <span class="fn">VisaCard</span>(<span class="cl">String</span> num) {
+        <span class="kw">super</span>(num, <span class="nm">100000</span>);
+    }
+
+    <span class="kw">public void</span> <span class="fn">charge</span>(<span class="kw">double</span> amount) {
+        <span class="kw">double</span> fee = amount * <span class="nm">0.02</span>;
+
+        <span class="ok">if (canCharge(amount + fee)) {</span>
+            <span class="ok">balance += amount + fee;</span>
+            <span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"Charged "</span> + amount);
+        } <span class="kw">else</span> {
+            <span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"Limit exceeded"</span>);
+        }
+    }
+}</pre>
+          </div>
+        </div>
+        <div class="compare-summary">
+          <strong>The Benefit</strong>
+          The subclass can read <code class="inline">balance</code>, update it, and call the parent's helper method <code class="inline">canCharge()</code> — but no unrelated class can. Encapsulation is preserved at the public boundary while inheritance works as intended.
+        </div>
+      </div>
+    </div>
+
+    <div class="diff-table">
+      <div class="diff-head">
+        <div>Aspect</div>
+        <div>private (Without)</div>
+        <div>protected (With)</div>
+      </div>
+      <div class="diff-row">
+        <div>Subclass can read fields</div>
+        <div>No — compile error</div>
+        <div>Yes — direct access</div>
+      </div>
+      <div class="diff-row">
+        <div>Subclass can modify fields</div>
+        <div>No — must use public setter (bad)</div>
+        <div>Yes — but only subclasses can</div>
+      </div>
+      <div class="diff-row">
+        <div>Outside code can access</div>
+        <div>No</div>
+        <div>No — encapsulation preserved</div>
+      </div>
+      <div class="diff-row">
+        <div>Forces extra getter/setter methods</div>
+        <div>Yes (defeating encapsulation)</div>
+        <div>No</div>
+      </div>
+      <div class="diff-row">
+        <div>Inheritance feels natural</div>
+        <div>No — frequent workarounds</div>
+        <div>Yes — designed for this</div>
+      </div>
+    </div>
+
+    <div class="fnote">
+      <div class="fnote-label">Why this works</div>
+      <p>By marking <code class="inline">balance</code> as <code class="inline">protected</code>, you signal a clear design intent: "this field is internal to the inheritance hierarchy." Visa, MasterCard, and AmericanExpress subclasses share access. Code in the marketing module, the email service, or any unrelated class cannot touch it. The compiler enforces this boundary automatically.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ EXAMPLE 2: BANK ACCOUNT ════════════════════ -->
+<section class="chapter" id="example-2">
+  <div class="wrap">
+    <div class="chapter-eyebrow">Example Two — Bank Account Hierarchy</div>
+    <h2 class="chapter-title">Savings vs Current Accounts</h2>
+    <p class="chapter-lead">A bank's <code class="inline">SavingsAccount</code> and <code class="inline">CurrentAccount</code> must both extend a base <code class="inline">BankAccount</code> and access shared transaction history — but only within the inheritance tree.</p>
+
+    <div class="example-header" id="ex2">
+      <div class="example-num">Scenario</div>
+      <div class="example-title">Sharing a transaction log between account types</div>
+      <div class="example-context">Both account types need to record transactions in a shared list — but the list itself should never be exposed to UI code or external services.</div>
+    </div>
+
+    <div class="compare-grid">
+
+      <!-- WITHOUT -->
+      <div class="compare-col without">
+        <div class="compare-head">
+          <div class="compare-tag">Without protected — using default access</div>
+          <h4>Cross-Package Subclasses Are Blocked</h4>
+        </div>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="code-bar-text">com/bank/core/BankAccount.java</span>
+          </div>
+          <div class="code-content"><pre><span class="kw">package</span> com.bank.core;
+<span class="kw">import</span> java.util.<span class="cl">ArrayList</span>;
+<span class="kw">import</span> java.util.<span class="cl">List</span>;
+
+<span class="kw">public class</span> <span class="cl">BankAccount</span> {
+    <span class="cm">// default (package-private) access</span>
+    <span class="cl">String</span> accountNumber;
+    <span class="cl">List</span>&lt;<span class="cl">String</span>&gt; transactionLog = <span class="kw">new</span> <span class="cl">ArrayList</span>&lt;&gt;();
+    <span class="kw">double</span> balance;
+
+    <span class="kw">public</span> <span class="fn">BankAccount</span>(<span class="cl">String</span> num, <span class="kw">double</span> opening) {
+        <span class="kw">this</span>.accountNumber = num;
+        <span class="kw">this</span>.balance       = opening;
+    }
+}
+
+<span class="cm">// In a DIFFERENT package:</span>
+<span class="kw">package</span> com.bank.savings;
+<span class="kw">import</span> com.bank.core.<span class="cl">BankAccount</span>;
+
+<span class="kw">public class</span> <span class="cl">SavingsAccount</span> <span class="kw">extends</span> <span class="cl">BankAccount</span> {
+    <span class="kw">private double</span> interestRate;
+
+    <span class="kw">public</span> <span class="fn">SavingsAccount</span>(<span class="cl">String</span> num, <span class="kw">double</span> opening) {
+        <span class="kw">super</span>(num, opening);
+        <span class="kw">this</span>.interestRate = <span class="nm">3.5</span>;
+    }
+
+    <span class="kw">public void</span> <span class="fn">addInterest</span>() {
+        <span class="err">double interest = balance * interestRate / 100;</span>
+        <span class="cm">// COMPILE ERROR: balance not visible</span>
+        <span class="err">transactionLog.add("Interest credited");</span>
+        <span class="cm">// COMPILE ERROR: transactionLog not visible</span>
+    }
+}</pre>
+          </div>
+        </div>
+        <div class="compare-summary">
+          <strong>The Problem</strong>
+          Default (package-private) access only works within the same package. The moment you place subclasses in different packages — which is standard for modular code — the inheritance breaks. Developers often end up making everything public, which destroys encapsulation.
+        </div>
+      </div>
+
+      <!-- WITH -->
+      <div class="compare-col with">
+        <div class="compare-head">
+          <div class="compare-tag">With protected — cross-package inheritance works</div>
+          <h4>Subclasses Across Packages Inherit Cleanly</h4>
+        </div>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="code-bar-text">com/bank/core/BankAccount.java</span>
+          </div>
+          <div class="code-content"><pre><span class="kw">package</span> com.bank.core;
+<span class="kw">import</span> java.util.<span class="cl">ArrayList</span>;
+<span class="kw">import</span> java.util.<span class="cl">List</span>;
+
+<span class="kw">public class</span> <span class="cl">BankAccount</span> {
+    <span class="kw">protected</span> <span class="cl">String</span> accountNumber;
+    <span class="kw">protected</span> <span class="cl">List</span>&lt;<span class="cl">String</span>&gt; transactionLog = <span class="kw">new</span> <span class="cl">ArrayList</span>&lt;&gt;();
+    <span class="kw">protected double</span> balance;
+
+    <span class="kw">public</span> <span class="fn">BankAccount</span>(<span class="cl">String</span> num, <span class="kw">double</span> opening) {
+        <span class="kw">this</span>.accountNumber = num;
+        <span class="kw">this</span>.balance       = opening;
+    }
+
+    <span class="kw">protected void</span> <span class="fn">recordTransaction</span>(<span class="cl">String</span> entry) {
+        transactionLog.<span class="fn">add</span>(entry);
+    }
+}
+
+<span class="cm">// In a DIFFERENT package:</span>
+<span class="kw">package</span> com.bank.savings;
+<span class="kw">import</span> com.bank.core.<span class="cl">BankAccount</span>;
+
+<span class="kw">public class</span> <span class="cl">SavingsAccount</span> <span class="kw">extends</span> <span class="cl">BankAccount</span> {
+    <span class="kw">private double</span> interestRate;
+
+    <span class="kw">public</span> <span class="fn">SavingsAccount</span>(<span class="cl">String</span> num, <span class="kw">double</span> opening) {
+        <span class="kw">super</span>(num, opening);
+        <span class="kw">this</span>.interestRate = <span class="nm">3.5</span>;
+    }
+
+    <span class="kw">public void</span> <span class="fn">addInterest</span>() {
+        <span class="ok">double interest = balance * interestRate / 100;</span>
+        <span class="ok">balance += interest;</span>
+        <span class="ok">recordTransaction("Interest: " + interest);</span>
+        <span class="cm">// All accesses succeed</span>
+    }
+}</pre>
+          </div>
+        </div>
+        <div class="compare-summary">
+          <strong>The Benefit</strong>
+          Even though <code class="inline">SavingsAccount</code> lives in a different package, it can still access protected fields and methods of <code class="inline">BankAccount</code>. The bank's marketing service, UI module, and external partners still cannot — encapsulation holds.
+        </div>
+      </div>
+    </div>
+
+    <div class="diff-table">
+      <div class="diff-head">
+        <div>Aspect</div>
+        <div>default (Without)</div>
+        <div>protected (With)</div>
+      </div>
+      <div class="diff-row">
+        <div>Same-package subclass</div>
+        <div>Works</div>
+        <div>Works</div>
+      </div>
+      <div class="diff-row">
+        <div>Different-package subclass</div>
+        <div>Blocked — compile error</div>
+        <div>Works — inheritance fully supported</div>
+      </div>
+      <div class="diff-row">
+        <div>Same-package non-subclass</div>
+        <div>Has access (sometimes unwanted)</div>
+        <div>Has access</div>
+      </div>
+      <div class="diff-row">
+        <div>Modular project structure</div>
+        <div>Hard to maintain</div>
+        <div>Designed for it</div>
+      </div>
+      <div class="diff-row">
+        <div>Forces public exposure of internals</div>
+        <div>Often yes (developer workaround)</div>
+        <div>No</div>
+      </div>
+    </div>
+
+    <div class="fnote">
+      <div class="fnote-label">A common mistake</div>
+      <p>Developers often use default access thinking "it's almost like protected." It is not. Default blocks cross-package subclasses, while protected explicitly permits them. In real-world enterprise code where modules are split into many packages, this distinction matters enormously.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ EXAMPLE 3: EMPLOYEE ════════════════════ -->
+<section class="chapter" id="example-3">
+  <div class="wrap">
+    <div class="chapter-eyebrow">Example Three — HR System</div>
+    <h2 class="chapter-title">Employee, Manager, and Intern</h2>
+    <p class="chapter-lead">An HR application has a base <code class="inline">Employee</code> class. Specialised types — <code class="inline">Manager</code>, <code class="inline">Intern</code>, <code class="inline">Contractor</code> — extend it. Where should salary calculation logic live?</p>
+
+    <div class="example-header" id="ex3">
+      <div class="example-num">Scenario</div>
+      <div class="example-title">Base salary calculation as a protected helper</div>
+      <div class="example-context">All employee types need to call a shared salary computation method. Outsiders (PayrollReport, EmailService) should not invoke this internal calculation directly.</div>
+    </div>
+
+    <div class="compare-grid">
+
+      <!-- WITHOUT -->
+      <div class="compare-col without">
+        <div class="compare-head">
+          <div class="compare-tag">Without protected — public method exposes internals</div>
+          <h4>Anyone Can Call Internal Logic</h4>
+        </div>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="code-bar-text">Employee.java (public exposes too much)</span>
+          </div>
+          <div class="code-content"><pre><span class="kw">public class</span> <span class="cl">Employee</span> {
+    <span class="kw">protected double</span> basicSalary;
+
+    <span class="kw">public</span> <span class="fn">Employee</span>(<span class="kw">double</span> basic) {
+        <span class="kw">this</span>.basicSalary = basic;
+    }
+
+    <span class="cm">// Internal helper made public so subclasses can use it</span>
+    <span class="kw">public double</span> <span class="fn">computeNet</span>(<span class="kw">double</span> tax) {
+        <span class="kw">return</span> basicSalary - (basicSalary * tax);
+    }
+}
+
+<span class="kw">public class</span> <span class="cl">Manager</span> <span class="kw">extends</span> <span class="cl">Employee</span> {
+    <span class="kw">public</span> <span class="fn">Manager</span>(<span class="kw">double</span> basic) { <span class="kw">super</span>(basic); }
+
+    <span class="kw">public double</span> <span class="fn">totalSalary</span>() {
+        <span class="kw">return</span> <span class="fn">computeNet</span>(<span class="nm">0.20</span>) + <span class="nm">15000</span>;
+    }
+}
+
+<span class="cm">// PROBLEM: any code can now call computeNet()</span>
+<span class="kw">public class</span> <span class="cl">PayrollReport</span> {
+    <span class="kw">public void</span> <span class="fn">generate</span>() {
+        <span class="cl">Manager</span> m = <span class="kw">new</span> <span class="cl">Manager</span>(<span class="nm">80000</span>);
+
+        <span class="err">double leaked = m.computeNet(0.05);</span>
+        <span class="cm">// Outside code uses internal tax logic!</span>
+        <span class="cm">// Wrong tax rate applied — silent bug.</span>
+    }
+}</pre>
+          </div>
+        </div>
+        <div class="compare-summary">
+          <strong>The Problem</strong>
+          Making <code class="inline">computeNet()</code> public lets any class invoke it with arbitrary parameters. A reporting service might pass the wrong tax rate, an export module might bypass approval checks. The internal salary logic leaks into the public API surface.
+        </div>
+      </div>
+
+      <!-- WITH -->
+      <div class="compare-col with">
+        <div class="compare-head">
+          <div class="compare-tag">With protected — keep internal logic internal</div>
+          <h4>Only Subclasses Can Use the Helper</h4>
+        </div>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="code-bar-text">Employee.java (protected helper)</span>
+          </div>
+          <div class="code-content"><pre><span class="kw">public class</span> <span class="cl">Employee</span> {
+    <span class="kw">protected double</span> basicSalary;
+
+    <span class="kw">public</span> <span class="fn">Employee</span>(<span class="kw">double</span> basic) {
+        <span class="kw">this</span>.basicSalary = basic;
+    }
+
+    <span class="cm">// Internal helper for subclasses only</span>
+    <span class="kw">protected double</span> <span class="fn">computeNet</span>(<span class="kw">double</span> tax) {
+        <span class="kw">return</span> basicSalary - (basicSalary * tax);
+    }
+
+    <span class="cm">// Public API — controlled</span>
+    <span class="kw">public double</span> <span class="fn">getMonthlySalary</span>() {
+        <span class="kw">return</span> <span class="fn">computeNet</span>(<span class="nm">0.18</span>);
+    }
+}
+
+<span class="kw">public class</span> <span class="cl">Manager</span> <span class="kw">extends</span> <span class="cl">Employee</span> {
+    <span class="kw">public</span> <span class="fn">Manager</span>(<span class="kw">double</span> basic) { <span class="kw">super</span>(basic); }
+
+    <span class="kw">public double</span> <span class="fn">getMonthlySalary</span>() {
+        <span class="ok">return computeNet(0.20) + 15000;</span>
+        <span class="cm">// Subclass uses protected helper</span>
+    }
+}
+
+<span class="kw">public class</span> <span class="cl">PayrollReport</span> {
+    <span class="kw">public void</span> <span class="fn">generate</span>() {
+        <span class="cl">Manager</span> m = <span class="kw">new</span> <span class="cl">Manager</span>(<span class="nm">80000</span>);
+
+        <span class="err">double leaked = m.computeNet(0.05);</span>
+        <span class="cm">// COMPILE ERROR — protected blocks this</span>
+
+        <span class="ok">double salary = m.getMonthlySalary();</span>
+        <span class="cm">// Only the public API is reachable</span>
+    }
+}</pre>
+          </div>
+        </div>
+        <div class="compare-summary">
+          <strong>The Benefit</strong>
+          <code class="inline">computeNet()</code> is reusable for subclasses but unreachable from <code class="inline">PayrollReport</code>. The class exposes a deliberate public surface (<code class="inline">getMonthlySalary()</code>) while keeping internals safe from misuse.
+        </div>
+      </div>
+    </div>
+
+    <div class="diff-table">
+      <div class="diff-head">
+        <div>Aspect</div>
+        <div>public (Without)</div>
+        <div>protected (With)</div>
+      </div>
+      <div class="diff-row">
+        <div>Subclass can use helper method</div>
+        <div>Yes</div>
+        <div>Yes</div>
+      </div>
+      <div class="diff-row">
+        <div>Outsider can call helper</div>
+        <div>Yes — leaks internal logic</div>
+        <div>No — controlled</div>
+      </div>
+      <div class="diff-row">
+        <div>Public API surface size</div>
+        <div>Bloated with internals</div>
+        <div>Minimal and intentional</div>
+      </div>
+      <div class="diff-row">
+        <div>Risk of misuse</div>
+        <div>High — anyone can pass wrong values</div>
+        <div>Low — only subclass authors</div>
+      </div>
+      <div class="diff-row">
+        <div>Future refactoring</div>
+        <div>Hard — public API is contract</div>
+        <div>Easy — protected can change</div>
+      </div>
+    </div>
+
+    <div class="fnote">
+      <div class="fnote-label">The encapsulation insight</div>
+      <p>protected methods are part of the inheritance contract, not the public contract. You can change their signature, behaviour, or remove them when refactoring, as long as your subclasses adapt. Public methods, once published, are nearly impossible to change without breaking external consumers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ RULES ════════════════════ -->
+<section class="chapter" id="rules">
+  <div class="wrap">
+    <div class="chapter-eyebrow">Chapter Four</div>
+    <h2 class="chapter-title">Rules, Best Practices, and Common Mistakes</h2>
+    <p class="chapter-lead">A consolidated set of guidelines for using protected effectively in real Java codebases.</p>
+
+    <div class="rules-list">
+      <h3>When to Choose protected</h3>
+      <ol>
+        <li><strong>Designing for inheritance.</strong> When a class is intended to be extended and the children need internal access. If your class is <code class="inline">final</code> or sealed, protected serves no purpose.</li>
+        <li><strong>Cross-package subclasses.</strong> When subclasses live in different packages — protected is the only modifier (besides public) that supports this scenario.</li>
+        <li><strong>Sharing helper methods.</strong> Methods that subclasses must call but external code must not — protected gives precisely this scope.</li>
+        <li><strong>Exposing parent state to children.</strong> Fields that need direct access in subclass methods, where forcing getters/setters would be needlessly verbose.</li>
+        <li><strong>Template Method pattern.</strong> When a base class defines an algorithm skeleton and lets subclasses override specific steps marked as protected.</li>
+      </ol>
+    </div>
+
+    <div class="rules-list">
+      <h3>When NOT to Use protected</h3>
+      <ol>
+        <li><strong>Anything genuinely external.</strong> If outside code must use the method, mark it public.</li>
+        <li><strong>Pure internal state.</strong> If no subclass ever needs it, keep it private. Default to private and relax only when needed.</li>
+        <li><strong>Final classes.</strong> A class that cannot be extended has no subclasses, so protected behaves like default — confusing readers.</li>
+        <li><strong>Configuration constants.</strong> Use public static final or place in a constants class — protected adds no value here.</li>
+        <li><strong>To avoid writing setters.</strong> If you find yourself making fields protected just so subclasses can write to them freely, reconsider — you may be missing a proper method abstraction.</li>
+      </ol>
+    </div>
+
+    <div class="rules-list">
+      <h3>Common Mistakes Developers Make</h3>
+      <ol>
+        <li><strong>Confusing protected with package-private.</strong> Default access only works within the same package. protected adds cross-package subclass access on top of that.</li>
+        <li><strong>Marking everything protected by default.</strong> This expands the inheritance contract and locks you in. Start private; promote to protected only when a subclass needs it.</li>
+        <li><strong>Using protected on static methods of singletons.</strong> Static methods don't participate in inheritance the same way — protected static is rarely meaningful and often signals a design issue.</li>
+        <li><strong>Accessing protected members across unrelated classes in the same package.</strong> While technically allowed, this couples your code in ways that are easy to miss when refactoring.</li>
+        <li><strong>Forgetting that protected fields can be modified by any subclass.</strong> If you mark a field protected, every subclass author can change it freely — design accordingly.</li>
+      </ol>
+    </div>
+
+    <div class="takeaway">
+      <div class="takeaway-label">Final Word</div>
+      <div class="takeaway-title">Protected is a deliberate design choice, not a default.</div>
+      <p>Reach for it when you have a genuine inheritance relationship and want to share internal API with descendants. In every other case, prefer private for true encapsulation, default for tight package-level cohesion, or public for explicit contracts. The clearest Java code uses each access modifier with intention — not by habit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ FOOTER ════════════════════ -->
+<footer>
+  <strong>The protected Access Specifier</strong>
+  A Java Access Modifiers Guide · CreditCard · BankAccount · Employee Examples
+</footer>
+
+<script>
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('prog').style.width = pct + '%';
+});
+
+const sections = document.querySelectorAll('.chapter');
+const links = document.querySelectorAll('.toc-link');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector('.toc-link[href="#' + e.target.id + '"]');
+      if (a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

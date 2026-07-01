@@ -1,0 +1,1078 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Neo4j Basics Course — Complete Beginner Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
+:root{
+  --bg:#fff;--bg2:#f7f9fc;--bg3:#eef2f8;--border:#e2e8f0;--border2:#cbd5e1;
+  --text:#0f172a;--t2:#475569;--t3:#94a3b8;
+  --accent:#1e40af;--accent2:#0e7490;
+  --blue:#1e40af;--green:#15803d;--orange:#c2410c;--purple:#6d28d9;
+  --teal:#0e7490;--red:#b91c1c;--amber:#b45309;--pink:#be185d;
+  --dark:#0f172a;--dark2:#1e293b;--dark3:#334155;--dtext:#e2e8f0;
+  --sw:256px;--readw:760px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);
+  font-size:15px;line-height:1.7;display:flex;-webkit-font-smoothing:antialiased}
+/* SIDEBAR */
+.sidebar{width:var(--sw);min-height:100vh;background:var(--bg2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;padding-bottom:32px}
+.sidebar::-webkit-scrollbar{width:3px}.sidebar::-webkit-scrollbar-thumb{background:var(--border2)}
+.sb-top{padding:20px 18px 16px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.sb-top h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--accent);letter-spacing:-.2px}
+.sb-top p{font-size:11px;color:var(--t3);margin-top:4px;font-weight:500}
+.nav-sec{padding:14px 18px 6px;font-size:9px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:var(--t3)}
+.ni{display:block;padding:8px 18px;font-size:12.5px;font-weight:500;color:var(--t2);
+  text-decoration:none;border-left:2px solid transparent;transition:all .12s;line-height:1.35}
+.ni:hover{background:var(--bg3);color:var(--text)}
+.ni.active{background:#eff4ff;color:var(--accent);border-left-color:var(--accent);font-weight:600}
+.ni-sub{font-size:9.5px;color:var(--t3);display:block;margin-bottom:1px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+/* PROGRESS */
+.pbar{position:fixed;top:0;left:var(--sw);right:0;height:2px;background:var(--border);z-index:200}
+.pbar-f{height:2px;background:var(--accent);transition:width .3s}
+/* MAIN */
+.main{margin-left:var(--sw);flex:1;min-width:0}
+/* HERO — restrained, professional */
+.hero{background:var(--bg2);border-bottom:1px solid var(--border);padding:40px 48px 34px}
+.hero-inner{max-width:var(--readw);margin:0 auto}
+.phase-badge{display:inline-block;background:#eff4ff;border:1px solid #c7d7fb;color:var(--accent);
+  font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 12px;border-radius:5px;margin-bottom:16px}
+.hero h1{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;line-height:1.15;
+  margin-bottom:12px;color:var(--text);letter-spacing:-.5px}
+.hero p{font-size:15px;color:var(--t2);line-height:1.65;margin-bottom:18px;max-width:680px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:7px}
+.hero-chip{background:#fff;border:1px solid var(--border);color:var(--t2);
+  font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:5px}
+/* CONTENT — capped reading width */
+.content{padding:8px 48px 60px}
+.content > section{max-width:var(--readw);margin:0 auto}
+section{padding:32px 0 28px;border-bottom:1px solid var(--border)}
+section:last-child{border-bottom:none}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:6px}
+h2{font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:var(--text);
+  margin-bottom:14px;letter-spacing:-.3px}
+h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);
+  margin:20px 0 8px;padding-left:11px;border-left:3px solid var(--accent)}
+h4{font-family:'Syne',sans-serif;font-size:13.5px;font-weight:800;color:var(--accent);margin:16px 0 6px}
+p{color:var(--t2);margin-bottom:11px;font-size:15px;line-height:1.7}
+p strong{color:var(--text);font-weight:600}
+ul,ol{padding-left:22px;margin-bottom:11px}
+li{color:var(--t2);margin-bottom:6px;line-height:1.65;font-size:15px}
+li strong{color:var(--text);font-weight:600}
+code{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:var(--bg3);
+  color:var(--orange);padding:2px 6px;border-radius:4px;border:1px solid var(--border)}
+/* CODE BLOCK */
+.cb{background:var(--dark);border-radius:8px;margin:14px 0;overflow:hidden;border:1px solid var(--dark2)}
+.cbh{display:flex;justify-content:space-between;align-items:center;padding:8px 15px;
+  background:var(--dark2);border-bottom:1px solid var(--dark3)}
+.cf{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#94a3b8;font-weight:500}
+.bd{font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;padding:2px 7px;border-radius:4px}
+.bj{background:rgba(194,65,12,.22);color:#fb923c}
+pre{padding:15px 18px;overflow-x:auto;font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;line-height:1.7;color:var(--dtext);white-space:pre}
+pre::-webkit-scrollbar{height:4px}pre::-webkit-scrollbar-thumb{background:var(--dark3)}
+pre code{font-family:inherit;font-size:inherit;background:transparent;color:inherit;padding:0;border:none}
+pre .kw{color:#c084fc}pre .an{color:#fbbf24}pre .cl{color:#67e8f9}
+pre .fn{color:#86efac}pre .st{color:#86efac}pre .cm{color:#64748b;font-style:italic}
+pre .tg{color:#f87171}pre .nb{color:#f87171}pre .num{color:#fb923c}
+/* WHY BOX — refined */
+.why-box{border-radius:8px;margin:14px 0;overflow:hidden;border:1px solid var(--border)}
+.why-row{display:grid;grid-template-columns:130px 1fr;border-bottom:1px solid var(--border)}
+.why-row:last-child{border-bottom:none}
+.why-label{padding:12px 14px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:center;
+  justify-content:center;text-align:center;line-height:1.35}
+.why-val{padding:12px 16px;font-size:14px;color:var(--t2);border-left:1px solid var(--border);line-height:1.6}
+.why-val strong{color:var(--text)}
+.wl-what{background:#eff4ff;color:var(--blue)}
+.wl-prob{background:#fef2f2;color:var(--red)}
+.wl-why{background:#f0fdf4;color:var(--green)}
+.wl-how{background:#f5f3ff;color:var(--purple)}
+.wl-real{background:#fff7ed;color:var(--orange)}
+.wl-inter{background:#fefce8;color:var(--amber)}
+.wl-mand{background:#ecfeff;color:var(--teal)}
+/* NOTES */
+.note{border-radius:6px;padding:12px 16px;margin:12px 0;font-size:14px;border-left:3px solid;line-height:1.6}
+.note strong{margin-right:4px;font-weight:700}
+.nblue{background:#eff4ff;border-color:var(--blue);color:#1e3a8a}
+.ngreen{background:#f0fdf4;border-color:var(--green);color:#14532d}
+.norange{background:#fff7ed;border-color:var(--orange);color:#9a3412}
+.nred{background:#fef2f2;border-color:var(--red);color:#991b1b}
+.nteal{background:#ecfeff;border-color:var(--teal);color:#155e75}
+.npurple{background:#f5f3ff;border-color:var(--purple);color:#5b21b6}
+/* TABLE — clean */
+.tw{overflow-x:auto;margin:14px 0;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead{background:var(--bg3)}
+th{padding:9px 14px;text-align:left;font-size:10px;font-weight:700;letter-spacing:.5px;
+  text-transform:uppercase;color:var(--t2);border-bottom:1px solid var(--border)}
+td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--t2);vertical-align:top;line-height:1.55}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:var(--bg2)}
+td code{font-size:12px}
+/* FLOW STEPS */
+.flow-steps{margin:14px 0}
+.fs-item{display:flex;gap:14px;margin-bottom:14px;align-items:flex-start}
+.fs-num{width:26px;height:26px;border-radius:6px;background:var(--accent);color:#fff;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:800;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;margin-top:1px}
+.fs-body{flex:1}
+.fs-title{font-weight:700;color:var(--text);font-size:14.5px;margin-bottom:3px}
+.fs-desc{font-size:14px;color:var(--t2);line-height:1.6}
+.fs-desc code{font-size:12.5px}
+/* ARCH */
+.arch{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px;margin:14px 0}
+.arch-title{font-family:'Syne',sans-serif;font-size:10.5px;font-weight:800;letter-spacing:.5px;
+  text-transform:uppercase;color:var(--accent);margin-bottom:14px;text-align:center}
+.arch-row{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:5px 0}
+.arch-box,.abox{border-radius:7px;padding:9px 14px;font-size:12.5px;font-weight:700;text-align:center;
+  min-width:104px;line-height:1.35;font-family:'Syne',sans-serif;border:1px solid}
+.arch-box small,.abox small{display:block;font-size:10px;font-weight:500;margin-top:3px;opacity:.85}
+.ab-blue{background:#eff4ff;border-color:#c7d7fb;color:var(--blue)}
+.ab-green{background:#f0fdf4;border-color:#bbf7d0;color:var(--green)}
+.ab-red{background:#fef2f2;border-color:#fecaca;color:var(--red)}
+.ab-teal{background:#ecfeff;border-color:#a5f3fc;color:var(--teal)}
+.ab-purple{background:#f5f3ff;border-color:#ddd6fe;color:var(--purple)}
+.ab-amber{background:#fefce8;border-color:#fde68a;color:var(--amber)}
+.ab-pink{background:#fdf2f8;border-color:#fbcfe8;color:var(--pink)}
+.arch-arr,.arch-arr-v{color:var(--t3);font-weight:700}
+.arch-arr-v{font-size:13px;text-align:center;margin:3px 0;display:block;letter-spacing:.3px}
+/* PROS CONS */
+.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:14px 0}
+.pros-box,.cons-box{border-radius:8px;padding:14px 16px;border:1px solid}
+.pros-box{background:#f0fdf4;border-color:#bbf7d0}.cons-box{background:#fef2f2;border-color:#fecaca}
+.pc-title{font-family:'Syne',sans-serif;font-size:11.5px;font-weight:800;margin-bottom:9px;text-transform:uppercase;letter-spacing:.4px}
+.pros-box .pc-title{color:var(--green)}.cons-box .pc-title{color:var(--red)}
+.pros-box ul,.cons-box ul{padding-left:18px;margin:0}
+.pros-box li,.cons-box li{font-size:13.5px;margin-bottom:6px;line-height:1.55}
+/* IQ */
+.iq-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:14px 0}
+.iq-title{font-family:'Syne',sans-serif;font-size:10.5px;font-weight:800;text-transform:uppercase;
+  letter-spacing:.5px;color:var(--amber);margin-bottom:12px}
+.iq-item{margin-bottom:13px;padding-bottom:13px;border-bottom:1px solid var(--border)}
+.iq-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.iq-q{font-weight:700;color:var(--text);font-size:14px;margin-bottom:4px}
+.iq-a{color:var(--t2);font-size:14px;line-height:1.65}
+@media(max-width:900px){
+  :root{--sw:0px}.sidebar{display:none}
+  .hero{padding:24px 20px}.hero h1{font-size:24px}
+  .content{padding:8px 20px 40px}
+  .pros-cons{grid-template-columns:1fr}
+  .why-row{grid-template-columns:100px 1fr}
+}
+/* ALIASES for older guide structure (sidebar-header / nav-item / nav-num) */
+.sidebar-header{padding:20px 18px 16px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.sidebar-header h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--accent);letter-spacing:-.2px}
+.sidebar-header p{font-size:11px;color:var(--t3);margin-top:4px;font-weight:500}
+.nav-item{display:block;padding:8px 18px;font-size:12.5px;font-weight:500;color:var(--t2);
+  text-decoration:none;border-left:2px solid transparent;transition:all .12s;line-height:1.35}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:#eff4ff;color:var(--accent);border-left-color:var(--accent);font-weight:600}
+.nav-num{font-size:9.5px;color:var(--t3);display:block;margin-bottom:1px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+/* ALIASES for Java Interview guide structure */
+.htag{display:inline-block;background:#eff4ff;border:1px solid #c7d7fb;color:var(--accent);
+  font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 12px;border-radius:5px;margin-bottom:16px}
+.ni span{font-size:9.5px;color:var(--t3);display:block;margin-bottom:1px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+.ni.active span{color:var(--accent)}
+/* Q&A blocks (Java Interview guide) */
+.qa-block{background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:14px 16px;margin:12px 0}
+.qa-q{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.qa-q-badge{flex-shrink:0;width:22px;height:22px;border-radius:5px;background:var(--accent);
+  color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center}
+.qa-q-text{font-weight:700;color:var(--text);font-size:14.5px;line-height:1.5;padding-top:1px}
+.qa-a{padding-left:32px;border-top:1px solid var(--border);padding-top:10px;margin-top:2px}
+.qa-a p{color:var(--t2);font-size:14px;line-height:1.65;margin-bottom:8px}
+.qa-a p:last-child{margin-bottom:0}
+.qa-a strong{color:var(--text)}
+.qa-a ol,.qa-a ul{padding-left:20px;margin-bottom:8px}
+.qa-a li{font-size:14px;line-height:1.6;margin-bottom:5px}
+
+.sshot-box{background:var(--bg3);border:1px dashed var(--border2);border-radius:8px;padding:13px 17px;margin:13px 0}
+.sshot-title{font-family:'Syne',sans-serif;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--teal);margin-bottom:5px}
+.sshot-desc{font-size:13.5px;color:var(--t2);line-height:1.65}
+</style></head><body>
+<div class="sidebar"><div class="sb-top"><h3>Neo4j Basics</h3><p>Complete Beginner Course</p></div>
+<div class="nav-sec">Navigation</div><a href="#s-intro" class="ni"><span class="ni-sub">INTRODUCTION</span>Introduction to Neo4j</a>
+<a href="#s-graph" class="ni"><span class="ni-sub">GRAPH BASICS</span>Graph Database Basics</a>
+<a href="#s-setup" class="ni"><span class="ni-sub">SETUP</span>Toolchain Setup</a>
+<a href="#s-browser" class="ni"><span class="ni-sub">BROWSER</span>Neo4j Browser and Aura</a>
+<a href="#s-cypher" class="ni"><span class="ni-sub">CYPHER</span>Cypher Query Language</a>
+<a href="#s-nodes" class="ni"><span class="ni-sub">NODES & RELS</span>Nodes, Relationships, Properties</a>
+<a href="#s-create" class="ni"><span class="ni-sub">CREATE & QUERY</span>Creating and Querying Graphs</a>
+<a href="#s-structure" class="ni"><span class="ni-sub">STRUCTURE</span>Project Structure</a>
+<a href="#s-testing" class="ni"><span class="ni-sub">TESTING</span>Testing Queries</a>
+<a href="#s-usecases" class="ni"><span class="ni-sub">USE CASES</span>Real-World Use Cases</a>
+<a href="#s-labs" class="ni"><span class="ni-sub">LABS</span>Browser and CLI Labs</a>
+<a href="#s-indexes" class="ni"><span class="ni-sub">INDEXES</span>Indexes and Constraints</a>
+<a href="#s-import" class="ni"><span class="ni-sub">IMPORT</span>Importing Data — CSV and JSON</a>
+<a href="#s-advanced" class="ni"><span class="ni-sub">ADVANCED CYPHER</span>Advanced Cypher Features</a>
+<a href="#s-performance" class="ni"><span class="ni-sub">PERFORMANCE</span>Performance Tuning Basics</a>
+<a href="#s-integration" class="ni"><span class="ni-sub">INTEGRATION</span>Integration — Java and Python</a>
+<a href="#s-troubleshoot" class="ni"><span class="ni-sub">TROUBLESHOOT</span>Troubleshooting and Pitfalls</a>
+<a href="#s-capstone" class="ni"><span class="ni-sub">CAPSTONE</span>Capstone Project</a>
+<a href="#s-glossary" class="ni"><span class="ni-sub">GLOSSARY</span>Glossary of Terms</a>
+<a href="#s-cheatsheet" class="ni"><span class="ni-sub">CHEAT SHEET</span>Cypher Cheat Sheet</a>
+<a href="#s-roadmap" class="ni"><span class="ni-sub">ROADMAP</span>Further Learning Roadmap</a>
+</div>
+<div class="pbar"><div class="pbar-f" id="pf" style="width:0%"></div></div>
+<div class="main"><div class="hero"><div class="hero-inner">
+<div class="phase-badge">Beginner Friendly — No Prior Database Knowledge Needed</div>
+<h1>Neo4j Basics Course<br>for Complete Beginners</h1>
+<p>A complete, step-by-step guide to Neo4j — from graph database concepts through Cypher queries, setup, labs, use cases, integration, and a capstone project. Every term is defined before use. Every query is copy-pasteable. No emojis. Professional, clear, and easy to read.</p>
+<div class="hero-chips">
+<span class="hero-chip">21 Sections</span>
+<span class="hero-chip">Copy-pasteable Cypher</span>
+<span class="hero-chip">Screenshot guides</span>
+<span class="hero-chip">Hands-on labs</span>
+<span class="hero-chip">Troubleshooting</span>
+<span class="hero-chip">Glossary and cheat sheet</span>
+<span class="hero-chip">India-specific notes</span>
+</div>
+</div></div>
+<div class="content"><section id="s-intro"><div class="sec-label">INTRODUCTION</div><h2>Introduction to Neo4j</h2>
+<div class="why-box"><div class="why-row"><div class="why-label wl-what">What is Neo4j?</div><div class="why-val">Neo4j is a <strong>graph database</strong> — a system that stores data as connected points rather than rows in a table. The name comes from <em>Neo</em> (new) and <em>4j</em> (for Java, because it runs on the JVM). It is the world's most widely deployed graph database.</div></div><div class="why-row"><div class="why-label wl-why">Why is it different?</div><div class="why-val">Traditional databases (MySQL, PostgreSQL) store data in tables. Neo4j stores data as a network of nodes (things) and relationships (connections). Connections are first-class citizens — they have their own storage and properties.</div></div><div class="why-row"><div class="why-label wl-how">Plain analogy</div><div class="why-val">Imagine a city map. The cities are nodes. The roads connecting them are relationships. The name of a city or the length of a road are properties. Neo4j is built specifically to work with maps like this — fast, no matter how many connections exist.</div></div><div class="why-row"><div class="why-label wl-real">Where is it used?</div><div class="why-val">Fraud detection (banks), recommendation engines (Netflix, Amazon), knowledge graphs (Google), social networks (LinkedIn), logistics (shipping routes), healthcare (drug interactions), cybersecurity (attack path analysis).</div></div></div>
+<div class="note npurple"><strong>Beginner:</strong> You do not need to know SQL, graph theory, or any programming language to start. This course starts from zero and explains every term.</div>
+<div class="tw"><table><thead><tr><th>Term</th><th>Plain Meaning</th></tr></thead><tbody><tr><td>Node</td><td>A point in the graph — a thing (person, product, city)</td></tr><tr><td>Relationship</td><td>A connection between two nodes (KNOWS, BOUGHT, LOCATED_IN)</td></tr><tr><td>Property</td><td>A key-value pair attached to a node or relationship (name: 'Alice', since: 2020)</td></tr><tr><td>Label</td><td>A tag on a node that says what type it is (Person, Product, City)</td></tr><tr><td>Cypher</td><td>Neo4j's query language — like SQL but for graphs</td></tr><tr><td>Graph</td><td>A set of nodes connected by relationships</td></tr><tr><td>JVM</td><td>Java Virtual Machine — the runtime Neo4j runs on</td></tr><tr><td>ACID</td><td>Atomicity, Consistency, Isolation, Durability — database safety guarantees Neo4j provides</td></tr></tbody></table></div>
+<div class="note nblue"><strong>India:</strong> Neo4j is used at Flipkart (product recommendations), Razorpay (fraud detection), Wipro and TCS (knowledge graphs), and Infosys (supply chain). Graph databases are a growing skill in Indian tech.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Neo4j stores data as nodes and relationships in a graph. This makes it naturally fast for connected data — things that are slow in traditional databases (joins across many tables) are instant in Neo4j.</div>
+</section>
+<section id="s-graph"><div class="sec-label">GRAPH BASICS</div><h2>Graph Database Basics</h2>
+<p>Before touching Neo4j, you need to understand what a graph database is and how it compares to a relational database (like MySQL).</p>
+<div class="tw"><table><thead><tr><th>Concept</th><th>Relational Database (MySQL)</th><th>Graph Database (Neo4j)</th></tr></thead><tbody><tr><td>Data unit</td><td>Row in a table</td><td>Node</td></tr><tr><td>Connection</td><td>Foreign key + JOIN query</td><td>Relationship (stored directly)</td></tr><tr><td>Schema</td><td>Fixed table structure</td><td>Flexible — add properties any time</td></tr><tr><td>Query language</td><td>SQL</td><td>Cypher</td></tr><tr><td>Best for</td><td>Structured, tabular data</td><td>Highly connected data</td></tr><tr><td>Performance for connections</td><td>Slows down with many JOINs</td><td>Stays fast — relationships are direct pointers</td></tr><tr><td>Example question</td><td>Who bought what product?</td><td>Who is connected to whom through how many steps?</td></tr></tbody></table></div>
+<h3>Visual: Relational vs Graph</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0"><div><div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;overflow:hidden"><div style="background:var(--red);color:#fff;padding:8px 14px;font-family:Syne,sans-serif;font-size:12px;font-weight:800">RELATIONAL — 3 JOINs to find friends of friends</div><div class="cb"><div class="cbh"><span class="cf">SQL example</span><span class="bd bj">SHELL</span></div><pre><code>SELECT u2.name FROM users u1\nJOIN friendships f1 ON u1.id = f1.user_id\nJOIN users u2 ON f1.friend_id = u2.id\nWHERE u1.name = 'Alice'\n-- Gets slower with every JOIN level</code></pre></div>
+</div></div><div><div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;overflow:hidden"><div style="background:var(--green);color:#fff;padding:8px 14px;font-family:Syne,sans-serif;font-size:12px;font-weight:800">GRAPH — 1 Cypher query, any depth</div><div class="cb"><div class="cbh"><span class="cf">Cypher example</span><span class="bd bj">CYPHER</span></div><pre><code>MATCH (alice:Person {{name:'Alice'}})-[:KNOWS]->(friend)\nRETURN friend.name\n-- Same speed whether 1 hop or 10 hops</code></pre></div>
+</div></div></div>
+<h3>The Property Graph Model</h3><div class="why-box"><div class="why-row"><div class="why-label wl-what">Node</div><div class="why-val">A node represents a thing — a Person, Product, City, Movie. It can have one or more labels and any number of properties.</div></div><div class="why-row"><div class="why-label wl-how">Relationship</div><div class="why-val">A relationship connects two nodes. It always has a direction (from → to) and a type (KNOWS, BOUGHT, LIVES_IN). It can also have properties (since: 2020, weight: 0.8).</div></div><div class="why-row"><div class="why-label wl-why">Label</div><div class="why-val">A label is a tag on a node that says what type it is — like a category. A node can have multiple labels: a node can be both a Person and an Employee.</div></div><div class="why-row"><div class="why-label wl-real">Property</div><div class="why-val">A property is a key-value pair stored on a node or relationship. Examples: name: 'Alice', age: 30, since: 2020. Values can be strings, numbers, booleans, or lists.</div></div></div>
+<div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:16px 0"><div style="font-family:Syne,sans-serif;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--accent);text-align:center;margin-bottom:16px">Property Graph — Nodes, Relationships, Labels, Properties</div><div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:4px 0"><div style="display:flex;flex-direction:column;align-items:center"><div style="background:#eff4ff;border:2px solid #93c5fd;color:#1e40af;border-radius:8px;padding:10px 16px;text-align:center;font-family:Syne,sans-serif;font-size:13px;font-weight:700;min-width:120px;display:inline-block;line-height:1.3">Person<div style="font-size:11px;font-weight:400;opacity:.8;margin-top:3px">name: Alice, age: 30</div></div></div><div style="display:flex;flex-direction:column;align-items:center"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-size:10px;color:var(--t3);margin-bottom:2px">KNOWS</div><div style="font-size:18px;color:var(--t3)">&#8594;</div></div></div><div style="display:flex;flex-direction:column;align-items:center"><div style="background:#eff4ff;border:2px solid #93c5fd;color:#1e40af;border-radius:8px;padding:10px 16px;text-align:center;font-family:Syne,sans-serif;font-size:13px;font-weight:700;min-width:120px;display:inline-block;line-height:1.3">Person<div style="font-size:11px;font-weight:400;opacity:.8;margin-top:3px">name: Bob, age: 25</div></div></div></div>
+<div style="text-align:center;margin:3px 0;color:var(--t3)"><div style="font-size:10px;color:var(--t3);margin-bottom:1px"></div><div style="font-size:20px;line-height:1">&#8595;</div></div>
+<div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:4px 0"><div style="display:flex;flex-direction:column;align-items:center"><div style="background:#eff4ff;border:2px solid #93c5fd;color:#1e40af;border-radius:8px;padding:10px 16px;text-align:center;font-family:Syne,sans-serif;font-size:13px;font-weight:700;min-width:120px;display:inline-block;line-height:1.3">Person<div style="font-size:11px;font-weight:400;opacity:.8;margin-top:3px">name: Carol, age: 28</div></div></div></div>
+<div style="text-align:center;margin-top:10px;font-size:13px;color:var(--t2)">Alice KNOWS Bob. Bob KNOWS Carol. Alice is 2 hops from Carol.</div><div style="font-size:12px;color:var(--t3);text-align:center;margin-top:10px;font-style:italic">Every node has a label (Person). Every relationship has a type (KNOWS). Both can have properties.</div></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Nodes = things. Relationships = connections. Labels = types. Properties = data on nodes or relationships. Together they form a Property Graph — Neo4j's data model.</div>
+</section>
+<section id="s-setup"><div class="sec-label">SETUP</div><h2>Toolchain Setup</h2>
+<div class="note norange"><strong>Important:</strong> You have three options: Neo4j Desktop (local, offline), Neo4j Aura Free (cloud, no install), or Neo4j Community Server (advanced). For beginners, start with Aura Free — no installation needed.</div>
+<div class="tw"><table><thead><tr><th>Option</th><th>Install needed?</th><th>Cost</th><th>Best for</th></tr></thead><tbody><tr><td>Neo4j Aura Free</td><td>No — browser only</td><td>Free forever</td><td>Beginners, quick start, India slow internet</td></tr><tr><td>Neo4j Desktop</td><td>Yes — 500 MB download</td><td>Free</td><td>Offline work, full control, India limited internet after first install</td></tr><tr><td>Neo4j Community Server</td><td>Yes — advanced</td><td>Free</td><td>Developers who need CLI control</td></tr></tbody></table></div>
+<h3>Option A — Neo4j Aura Free (Recommended for Beginners)</h3><div class="tw"><table><thead><tr><th>Step</th><th>Action</th><th>What Happens</th></tr></thead><tbody><tr><td>1</td><td>Open https://neo4j.com/cloud/aura-free</td><td>The sign-up page opens</td></tr><tr><td>2</td><td>Click 'Start for free' — sign up with Google or email</td><td>Account created</td></tr><tr><td>3</td><td>Click 'Create a Free instance'</td><td>A free database is provisioned in the cloud</td></tr><tr><td>4</td><td>Copy the password shown — it will not be shown again</td><td>Save it in a text file</td></tr><tr><td>5</td><td>Wait 1-2 minutes for the instance to start</td><td>Status shows 'Running'</td></tr><tr><td>6</td><td>Click 'Open with Neo4j Browser' or 'Connect'</td><td>Browser opens, connected to your database</td></tr></tbody></table></div>
+<div class="sshot-box"><div class="sshot-title">Aura Free — Create Instance</div><div class="sshot-desc">Neo4j Aura website: Dashboard shows 'Create a new instance' button. After clicking, a dialog shows instance name, region selector, and a 'Create free database' button. Status bar shows 'Creating...' then 'Running'. Password is shown once — copy it immediately.</div></div>
+<div class="sshot-box"><div class="sshot-title">Aura Free — Connected</div><div class="sshot-desc">Neo4j Browser open in the browser tab. Top left shows a green dot with the database name. The prompt shows: neo4j$  — ready for queries. On the right panel, 'Database Information' shows labels, relationship types, and property keys.</div></div>
+<h3>Option B — Neo4j Desktop (Offline / Local)</h3><div class="tw"><table><thead><tr><th>Step</th><th>Action</th></tr></thead><tbody><tr><td>1</td><td>Download Neo4j Desktop from https://neo4j.com/download</td></tr><tr><td>2</td><td>Install and open. Sign in or use offline mode.</td></tr><tr><td>3</td><td>Click 'New Project' → 'Add' → 'Local DBMS'</td></tr><tr><td>4</td><td>Set a name and password. Click 'Create'.</td></tr><tr><td>5</td><td>Click 'Start' to start the database</td></tr><tr><td>6</td><td>Click 'Open' → 'Neo4j Browser' to open the query interface</td></tr></tbody></table></div>
+<div class="sshot-box"><div class="sshot-title">Neo4j Desktop — Start Database</div><div class="sshot-desc">Neo4j Desktop application: Left panel shows 'My Project'. Center panel shows the database with a green 'Running' indicator. 'Open' button is visible. The Neo4j version (5.x) is shown next to the database name.</div></div>
+<div class="note nblue"><strong>India:</strong> Neo4j Desktop requires a one-time 500 MB download. After installation, it works completely offline — no internet needed. If you have a slow connection, download Neo4j Desktop once and use it for all labs. Aura Free requires internet for every session.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Aura Free = no install, cloud-hosted, free forever. Desktop = local install, works offline. Both use Neo4j Browser as the query interface. Start with Aura Free unless internet is limited.</div>
+</section>
+<section id="s-browser"><div class="sec-label">BROWSER</div><h2>Neo4j Browser and Aura</h2>
+<p>Neo4j Browser is the web-based interface for writing and running Cypher queries. It shows results as both a graph view (nodes and connections) and a table view (rows and columns).</p>
+<div class="tw"><table><thead><tr><th>Area</th><th>What It Does</th></tr></thead><tbody><tr><td>Query bar (top)</td><td>Type Cypher queries here and press Ctrl+Enter or the play button to run</td></tr><tr><td>Result panel</td><td>Shows the result as a graph, table, text, or code view — click tabs to switch</td></tr><tr><td>Left sidebar — Database</td><td>Shows all labels, relationship types, and property keys in the current database</td></tr><tr><td>Left sidebar — Favourites</td><td>Save frequently used queries</td></tr><tr><td>Left sidebar — Settings</td><td>Change font size, result view, theme</td></tr><tr><td>Command history</td><td>Press Up arrow in query bar to see previous queries</td></tr></tbody></table></div>
+<div class="sshot-box"><div class="sshot-title">Neo4j Browser Interface</div><div class="sshot-desc">Neo4j Browser: Top bar has the Cypher query input. Below it are result 'frames' — each query result shows in its own frame. The Graph view shows circles (nodes) connected by lines (relationships). Clicking a node shows its properties in a panel below.</div></div>
+<div class="sshot-box"><div class="sshot-title">Graph View vs Table View</div><div class="sshot-desc">Neo4j Browser result panel: Tabs at the top of each result frame show 'Graph', 'Table', 'Text', 'Code'. Graph tab shows the visual network. Table tab shows results as rows and columns — useful when you need to see all properties at once.</div></div>
+<div class="cb"><div class="cbh"><span class="cf">First query — run this to verify connection</span><span class="bd bj">CYPHER</span></div><pre><code>// Type this in the query bar and press Ctrl+Enter:
+RETURN "Hello, Neo4j!" AS message
+
+// Expected output (Table view):
+// message
+// "Hello, Neo4j!"</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Load the built-in movie dataset</span><span class="bd bj">CYPHER</span></div><pre><code>:play movie-graph
+// This opens a guide in Browser. Click the ">>" button to run each step.
+// After running, your database has ~170 nodes and ~250 relationships about movies.
+// It is the standard Neo4j learning dataset.
+
+// Verify it loaded:
+MATCH (n) RETURN count(n) AS totalNodes
+// Expected: 171</code></pre></div>
+<div class="sshot-box"><div class="sshot-title">Movie Dataset Loaded</div><div class="sshot-desc">Neo4j Browser: After running :play movie-graph and completing all steps, the graph view shows a network of movie and person nodes. Clicking a node shows properties: name, born, title, released. The left sidebar shows labels: Movie, Person.</div></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Neo4j Browser is the query interface — type Cypher, run with Ctrl+Enter, see results as graph or table. Load the movie dataset with :play movie-graph to have sample data immediately.</div>
+</section>
+<section id="s-cypher"><div class="sec-label">CYPHER</div><h2>Cypher Query Language</h2>
+<p>Cypher is Neo4j's query language. It is designed to look like ASCII art — the way you write a query looks like a picture of what you are searching for.</p>
+<div class="why-box"><div class="why-row"><div class="why-label wl-what">MATCH</div><div class="why-val">Find patterns in the graph. Like SELECT in SQL. Most queries start with MATCH.</div></div><div class="why-row"><div class="why-label wl-how">WHERE</div><div class="why-val">Filter results by a condition. Like WHERE in SQL.</div></div><div class="why-row"><div class="why-label wl-why">RETURN</div><div class="why-val">Specify what to return. Every query must end with RETURN (or another output clause).</div></div><div class="why-row"><div class="why-label wl-real">CREATE</div><div class="why-val">Create nodes and relationships.</div></div><div class="why-row"><div class="why-label wl-mand">MERGE</div><div class="why-val">Create if not exists, match if it does. Prevents duplicates.</div></div><div class="why-row"><div class="why-label wl-what">SET</div><div class="why-val">Add or update properties.</div></div><div class="why-row"><div class="why-label wl-prob">DELETE</div><div class="why-val">Remove nodes or relationships.</div></div></div>
+<h3>Cypher Pattern Syntax — The Core Idea</h3><div class="note ngreen"><strong>Key:</strong> In Cypher, a node is written as <code>()</code> and a relationship is written as <code>-[:TYPE]-></code>. You draw what you want to find.</div>
+<div class="cb"><div class="cbh"><span class="cf">Cypher pattern syntax explained</span><span class="bd bj">CYPHER</span></div><pre><code>// A node: (variable:Label {property: value})
+(alice:Person {name: "Alice"})
+
+// A relationship: -[:TYPE]->
+[:KNOWS]
+
+// A pattern (node-relationship-node):
+(alice:Person)-[:KNOWS]->(bob:Person)
+
+// Full query:
+MATCH (alice:Person {name: "Alice"})-[:KNOWS]->(friend:Person)
+RETURN friend.name
+
+// Reading it like a sentence:
+// "Find Alice (a Person), follow KNOWS relationships,
+//  and return the names of everyone she knows."</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">The 6 core clauses with examples</span><span class="bd bj">CYPHER</span></div><pre><code>// 1. MATCH — find patterns
+MATCH (p:Person) RETURN p.name
+
+// 2. WHERE — filter
+MATCH (p:Person) WHERE p.age > 25 RETURN p.name
+
+// 3. CREATE — create data
+CREATE (p:Person {name: "Priya", age: 28})
+
+// 4. MERGE — create or match
+MERGE (p:Person {name: "Raj"})
+ON CREATE SET p.age = 30
+ON MATCH  SET p.age = 31
+
+// 5. SET — update properties
+MATCH (p:Person {name: "Priya"})
+SET p.city = "Mumbai"
+
+// 6. DELETE — remove data
+MATCH (p:Person {name: "Temp"})
+DELETE p
+// Note: use DETACH DELETE to remove a node AND its relationships</code></pre></div>
+<div class="tw"><table><thead><tr><th>Cypher Clause</th><th>SQL Equivalent</th><th>What It Does</th></tr></thead><tbody><tr><td>MATCH</td><td>SELECT / FROM</td><td>Find patterns in the graph</td></tr><tr><td>WHERE</td><td>WHERE</td><td>Filter results</td></tr><tr><td>RETURN</td><td>SELECT columns</td><td>Choose what to output</td></tr><tr><td>CREATE</td><td>INSERT</td><td>Add new nodes/relationships</td></tr><tr><td>MERGE</td><td>INSERT OR UPDATE</td><td>Create if not exists</td></tr><tr><td>SET</td><td>UPDATE SET</td><td>Modify properties</td></tr><tr><td>DELETE</td><td>DELETE</td><td>Remove nodes or relationships</td></tr><tr><td>WITH</td><td>Subquery / CTE</td><td>Pass results to the next part of the query</td></tr><tr><td>ORDER BY</td><td>ORDER BY</td><td>Sort results</td></tr><tr><td>LIMIT</td><td>LIMIT</td><td>Restrict number of results</td></tr><tr><td>SKIP</td><td>OFFSET</td><td>Skip a number of results</td></tr></tbody></table></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Cypher uses visual patterns: (node)-[:RELATIONSHIP]->(node). MATCH finds, CREATE adds, MERGE is safe upsert, RETURN outputs. It reads like English when written well.</div>
+</section>
+<section id="s-nodes"><div class="sec-label">NODES & RELS</div><h2>Nodes, Relationships, Properties</h2>
+<p>Every piece of data in Neo4j is either a node, a relationship, or a property on one of those. This section covers each in depth with examples.</p>
+<h3>Nodes in Detail</h3><div class="cb"><div class="cbh"><span class="cf">Creating nodes</span><span class="bd bj">CYPHER</span></div><pre><code>// Create a node with one label:
+CREATE (:Person {name: "Alice", age: 30})
+
+// Create a node with multiple labels:
+CREATE (:Person:Employee {name: "Bob", department: "Engineering"})
+
+// Create and return the new node:
+CREATE (p:Product {id: 1, name: "Laptop", price: 55000})
+RETURN p
+
+// Query result:
+// p: {id: 1, name: "Laptop", price: 55000}</code></pre></div>
+<h3>Relationships in Detail</h3><div class="note ngreen"><strong>Key:</strong> Relationships always have a direction in Neo4j. (Alice)-[:KNOWS]->(Bob) means Alice knows Bob. You can query without direction using -[:KNOWS]- (no arrow) to match both directions.</div>
+<div class="cb"><div class="cbh"><span class="cf">Creating relationships</span><span class="bd bj">CYPHER</span></div><pre><code>// First create the nodes:
+CREATE (alice:Person {name: "Alice"})
+CREATE (bob:Person   {name: "Bob"})
+
+// Then create the relationship:
+MATCH (a:Person {name: "Alice"}), (b:Person {name: "Bob"})
+CREATE (a)-[:KNOWS {since: 2020}]->(b)
+
+// Create nodes AND relationships in one query:
+CREATE (priya:Person {name: "Priya"})-[:WORKS_AT {since: 2022}]->(company:Company {name: "TechCorp"})
+
+// Verify:
+MATCH (p:Person)-[r:WORKS_AT]->(c:Company)
+RETURN p.name, r.since, c.name
+// p.name: Priya | r.since: 2022 | c.name: TechCorp</code></pre></div>
+<h3>Properties in Detail</h3><div class="tw"><table><thead><tr><th>Property Type</th><th>Cypher Example</th><th>Notes</th></tr></thead><tbody><tr><td>String</td><td>name: 'Alice'</td><td>Use single or double quotes</td></tr><tr><td>Integer</td><td>age: 30</td><td>Whole number</td></tr><tr><td>Float</td><td>price: 55000.50</td><td>Decimal number</td></tr><tr><td>Boolean</td><td>active: true</td><td>true or false (lowercase)</td></tr><tr><td>List</td><td>tags: ['scala', 'java']</td><td>Array of values</td></tr><tr><td>Date</td><td>joined: date('2024-01-15')</td><td>Use date() function</td></tr></tbody></table></div>
+<div class="cb"><div class="cbh"><span class="cf">Setting and updating properties</span><span class="bd bj">CYPHER</span></div><pre><code>// Add a new property:
+MATCH (p:Person {name: "Alice"})
+SET p.city = "Mumbai"
+
+// Update multiple properties at once:
+MATCH (p:Person {name: "Alice"})
+SET p += {age: 31, active: true}
+// += adds/updates without removing existing properties
+
+// Remove a property (set to null):
+MATCH (p:Person {name: "Alice"})
+REMOVE p.city
+
+// Remove a label:
+MATCH (p:Person:Employee {name: "Bob"})
+REMOVE p:Employee</code></pre></div>
+<div class="sshot-box"><div class="sshot-title">Graph View — Nodes and Relationships</div><div class="sshot-desc">Neo4j Browser: After creating Alice and Bob with KNOWS relationship, the graph view shows two circles labelled 'Alice' and 'Bob' connected by an arrow labelled 'KNOWS'. Clicking on the arrow shows the relationship properties (since: 2020) in the detail panel below.</div></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Nodes have labels and properties. Relationships have a type, direction, and optional properties. Properties are key-value pairs. Use SET to add/update, REMOVE to delete a property.</div>
+</section>
+<section id="s-create"><div class="sec-label">CREATE & QUERY</div><h2>Creating and Querying Graphs</h2>
+<p>This section is hands-on. You will create a small e-commerce graph and query it in multiple ways.</p>
+<h3>Build a Sample E-Commerce Graph</h3><div class="cb"><div class="cbh"><span class="cf">Create the sample graph — run in Browser</span><span class="bd bj">CYPHER</span></div><pre><code>// Create customers:
+CREATE (alice:Customer {name: "Alice", city: "Mumbai", tier: "Gold"})
+CREATE (raj:Customer   {name: "Raj",   city: "Delhi",  tier: "Silver"})
+CREATE (priya:Customer {name: "Priya", city: "Bangalore", tier: "Gold"})
+
+// Create products:
+CREATE (laptop:Product  {id: 1, name: "Laptop",   price: 55000, category: "Electronics"})
+CREATE (phone:Product   {id: 2, name: "Phone",    price: 22000, category: "Electronics"})
+CREATE (book:Product    {id: 3, name: "Scala Book", price: 899, category: "Books"})
+
+// Create BOUGHT relationships:
+MATCH (a:Customer {name: "Alice"}), (l:Product {name: "Laptop"})
+CREATE (a)-[:BOUGHT {date: "2024-01-10", quantity: 1}]->(l)
+
+MATCH (a:Customer {name: "Alice"}), (b:Product {name: "Scala Book"})
+CREATE (a)-[:BOUGHT {date: "2024-01-15", quantity: 2}]->(b)
+
+MATCH (r:Customer {name: "Raj"}), (p:Product {name: "Phone"})
+CREATE (r)-[:BOUGHT {date: "2024-02-01", quantity: 1}]->(p)
+
+MATCH (p:Customer {name: "Priya"}), (l:Product {name: "Laptop"})
+CREATE (p)-[:BOUGHT {date: "2024-02-10", quantity: 1}]->(l)
+
+// Create REVIEWED:
+MATCH (a:Customer {name: "Alice"}), (l:Product {name: "Laptop"})
+CREATE (a)-[:REVIEWED {rating: 5, comment: "Excellent!"}]->(l)</code></pre></div>
+<h3>Querying the Graph</h3><div class="cb"><div class="cbh"><span class="cf">10 essential queries</span><span class="bd bj">CYPHER</span></div><pre><code>// 1. All customers:
+MATCH (c:Customer) RETURN c.name, c.city
+
+// 2. What did Alice buy?
+MATCH (c:Customer {name: "Alice"})-[:BOUGHT]->(p:Product)
+RETURN p.name, p.price
+// p.name: Laptop | p.price: 55000
+// p.name: Scala Book | p.price: 899
+
+// 3. Who bought the Laptop?
+MATCH (c:Customer)-[:BOUGHT]->(p:Product {name: "Laptop"})
+RETURN c.name
+// Alice, Priya
+
+// 4. Customers who spent more than 20000:
+MATCH (c:Customer)-[b:BOUGHT]->(p:Product)
+WHERE p.price > 20000
+RETURN c.name, p.name, p.price
+
+// 5. Total spend per customer:
+MATCH (c:Customer)-[b:BOUGHT]->(p:Product)
+RETURN c.name, sum(p.price * b.quantity) AS totalSpend
+ORDER BY totalSpend DESC
+
+// 6. Products not yet bought:
+MATCH (p:Product)
+WHERE NOT (p)<-[:BOUGHT]-()
+RETURN p.name
+
+// 7. Gold tier customers only:
+MATCH (c:Customer {tier: "Gold"})
+RETURN c.name, c.city
+
+// 8. Count nodes by label:
+MATCH (n)
+RETURN labels(n) AS label, count(n) AS count
+
+// 9. Average product price by category:
+MATCH (p:Product)
+RETURN p.category, avg(p.price) AS avgPrice, count(p) AS productCount
+
+// 10. Full graph overview:
+MATCH (n)-[r]->(m)
+RETURN n, r, m</code></pre></div>
+<div class="sshot-box"><div class="sshot-title">E-Commerce Graph in Browser</div><div class="sshot-desc">Neo4j Browser: The graph view shows circles for Customer nodes (blue) and Product nodes (orange). Arrows labelled BOUGHT and REVIEWED connect them. Alice has two outgoing BOUGHT arrows. The Laptop node has two incoming BOUGHT arrows from Alice and Priya.</div></div>
+<div class="sshot-box"><div class="sshot-title">Query Result — Table View</div><div class="sshot-desc">Neo4j Browser: After running query 5 (total spend per customer), the Table view shows three rows: Alice 55899, Priya 55000, Raj 22000. Column headers are 'c.name' and 'totalSpend'. Results are sorted descending by totalSpend.</div></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> CREATE builds the graph. MATCH+(pattern) finds it. Use WHERE to filter, ORDER BY to sort, LIMIT to restrict, and aggregation functions (sum, avg, count) to calculate.</div>
+</section>
+<section id="s-structure"><div class="sec-label">STRUCTURE</div><h2>Project Structure</h2>
+<p>When building real applications with Neo4j, you organise your files in a standard structure. This section shows the typical layout for a Neo4j project.</p>
+<div class="cb"><div class="cbh"><span class="cf">Project File Tree</span><span class="bd bj">STRUCTURE</span></div><pre><code>my-neo4j-project/
+  data/
+    import/
+      customers.csv        Raw customer data for import
+      products.csv         Raw product data for import
+      purchases.csv        Raw purchase relationship data
+  queries/
+    setup.cypher           Create constraints, indexes, initial data
+    queries.cypher         All business queries
+    cleanup.cypher         Delete all test data
+  scripts/
+    import.py              Python script to load data via driver
+    api.py                 Python REST API using neo4j-driver
+  requirements.txt         Python dependencies
+  README.md                Setup and run instructions
+  .env                     NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
+  .gitignore               Exclude .env and neo4j data folders</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">queries/setup.cypher — standard setup file</span><span class="bd bj">CYPHER</span></div><pre><code>// 1. Create constraints (run once on new database):
+CREATE CONSTRAINT customer_id IF NOT EXISTS
+FOR (c:Customer) REQUIRE c.id IS UNIQUE;
+
+CREATE CONSTRAINT product_id IF NOT EXISTS
+FOR (p:Product) REQUIRE p.id IS UNIQUE;
+
+// 2. Create indexes for fast lookup:
+CREATE INDEX customer_city IF NOT EXISTS
+FOR (c:Customer) ON (c.city);
+
+// 3. Verify setup:
+SHOW CONSTRAINTS;
+SHOW INDEXES;</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">.env — environment variables (never commit to Git)</span><span class="bd bj">CONFIG</span></div><pre><code>NEO4J_URI=neo4j+s://xxxx.databases.neo4j.io
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=your-password-here</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">queries/cleanup.cypher — teardown</span><span class="bd bj">CYPHER</span></div><pre><code>// Delete ALL nodes and relationships (use carefully!):
+MATCH (n) DETACH DELETE n;
+
+// Delete only test data:
+MATCH (n:TestNode) DETACH DELETE n;
+
+// Verify cleanup:
+MATCH (n) RETURN count(n) AS remaining;
+// Expected: 0</code></pre></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Organise projects with separate folders for data, queries, and scripts. Store credentials in .env (never in code). Keep setup, queries, and cleanup in separate .cypher files.</div>
+</section>
+<section id="s-testing"><div class="sec-label">TESTING</div><h2>Testing Queries</h2>
+<p>Testing a Neo4j system means verifying that your queries return exactly the expected results. This section shows a simple but complete verification approach.</p>
+<div class="cb"><div class="cbh"><span class="cf">Verification query pattern</span><span class="bd bj">CYPHER</span></div><pre><code>// Pattern: setup → query → assert expected result
+
+// Step 1: Create known test data
+CREATE (:TestCustomer {name: "TestAlice", city: "TestCity"})-[:BOUGHT]->(:TestProduct {name: "TestItem", price: 100})
+
+// Step 2: Run the query you want to test
+MATCH (c:TestCustomer)-[:BOUGHT]->(p:TestProduct)
+RETURN c.name, p.price
+// Expected output:
+// c.name: TestAlice | p.price: 100
+
+// Step 3: Assert the count is correct
+MATCH (c:TestCustomer)-[:BOUGHT]->(p:TestProduct)
+RETURN count(*) AS purchaseCount
+// Expected: 1
+
+// Step 4: Teardown test data
+MATCH (n:TestCustomer) DETACH DELETE n
+MATCH (n:TestProduct)  DETACH DELETE n</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Useful verification queries</span><span class="bd bj">CYPHER</span></div><pre><code>// Count all nodes:
+MATCH (n) RETURN count(n)
+
+// Count by label:
+MATCH (n:Customer) RETURN count(n) AS customers
+
+// Check a specific relationship exists:
+MATCH (c:Customer {name: "Alice"})-[:BOUGHT]->(p:Product {name: "Laptop"})
+RETURN count(*) AS exists
+// 1 = relationship exists, 0 = does not exist
+
+// See all node labels and their counts:
+CALL db.labels() YIELD label
+CALL apoc.cypher.run("MATCH (n:" + label + ") RETURN count(n) as count", {})
+YIELD value RETURN label, value.count AS count
+
+// Simpler version (Neo4j 5+):
+MATCH (n)
+RETURN labels(n)[0] AS label, count(n) AS count
+ORDER BY count DESC</code></pre></div>
+<div style="border:2px solid var(--accent);border-radius:10px;margin:16px 0;overflow:hidden"><div style="background:var(--accent);color:#fff;padding:10px 18px;font-family:Syne,sans-serif;font-size:13px;font-weight:800">LAB — Verification Lab</div><div style="padding:16px 18px"><p><strong>Objective:</strong> Create test data, verify it, then clean up.</p><p><strong>Steps:</strong></p><ol style='color:var(--t2);font-size:14px;line-height:2'><li>Create: <code>CREATE (:VerifyTest {id: 99, name: 'Test'})</code></li><li>Verify: <code>MATCH (n:VerifyTest) RETURN count(n)</code> — expect 1</li><li>Update: <code>MATCH (n:VerifyTest {id: 99}) SET n.status = 'checked'</code></li><li>Confirm: <code>MATCH (n:VerifyTest) RETURN n.status</code> — expect 'checked'</li><li>Clean up: <code>MATCH (n:VerifyTest) DETACH DELETE n</code></li><li>Confirm clean: <code>MATCH (n:VerifyTest) RETURN count(n)</code> — expect 0</li></ol></div></div>
+<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:12px 0"><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">count(n:VerifyTest) returns 1 after create</span></div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">n.status returns 'checked' after set</span></div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">count(n:VerifyTest) returns 0 after delete</span></div></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Always verify queries by checking counts and specific values. Use TestXxx labels for test data. Clean up with DETACH DELETE after testing. The result count must match the expected count.</div>
+</section>
+<section id="s-usecases"><div class="sec-label">USE CASES</div><h2>Real-World Use Cases</h2>
+<p>Graph databases shine in specific scenarios where connected data matters. Here are the most common real-world uses with concrete Cypher examples.</p>
+<h3>Use Case 1 — Recommendation Engine</h3><div class="why-box"><div class="why-row"><div class="why-label wl-prob">The problem</div><div class="why-val">An e-commerce site needs to recommend products. 'People who bought X also bought Y' requires finding users similar to the current user and seeing what they bought. In SQL, this is 3+ JOINs. In Neo4j, it is one pattern.</div></div></div>
+<div class="cb"><div class="cbh"><span class="cf">Collaborative filtering — products Alice has not bought but similar customers have</span><span class="bd bj">CYPHER</span></div><pre><code>// "Customers like Alice also bought:"
+MATCH (alice:Customer {name: "Alice"})-[:BOUGHT]->(p1:Product)<-[:BOUGHT]-(similar:Customer)
+MATCH (similar)-[:BOUGHT]->(p2:Product)
+WHERE NOT (alice)-[:BOUGHT]->(p2)
+  AND p2 <> p1
+RETURN p2.name, count(similar) AS frequency
+ORDER BY frequency DESC
+LIMIT 5</code></pre></div>
+<h3>Use Case 2 — Fraud Detection</h3><div class="why-box"><div class="why-row"><div class="why-label wl-prob">The problem</div><div class="why-val">A bank wants to detect fraud rings — multiple accounts sharing the same phone, address, or device, connected in a circle. In a table database, finding this requires expensive self-joins. In a graph, it is a pattern match.</div></div></div>
+<div class="cb"><div class="cbh"><span class="cf">Find shared identity across accounts</span><span class="bd bj">CYPHER</span></div><pre><code>// Accounts sharing the same phone number:
+MATCH (a1:Account)-[:HAS_PHONE]->(ph:Phone)<-[:HAS_PHONE]-(a2:Account)
+WHERE a1 <> a2
+RETURN a1.id, a2.id, ph.number AS sharedPhone
+
+// Find fraud rings (cycles of length 3+):
+MATCH path = (a1:Account)-[:TRANSFERRED_TO*2..5]->(a1)
+RETURN path, length(path) AS ringSize
+ORDER BY ringSize</code></pre></div>
+<h3>Use Case 3 — Knowledge Graph</h3><div class="cb"><div class="cbh"><span class="cf">Knowledge graph query — find connections between entities</span><span class="bd bj">CYPHER</span></div><pre><code>// Who directed movies that Tom Hanks acted in?
+MATCH (tom:Person {name: "Tom Hanks"})-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(dir:Person)
+RETURN dir.name, m.title
+
+// 2-degree connection: movies Tom Hanks and another actor both appeared in:
+MATCH (tom:Person {name: "Tom Hanks"})-[:ACTED_IN]->(m:Movie)<-[:ACTED_IN]-(coactor:Person)
+RETURN m.title, coactor.name
+ORDER BY m.title</code></pre></div>
+<h3>Use Case 4 — Shortest Path (Supply Chain / Logistics)</h3><div class="cb"><div class="cbh"><span class="cf">Find shortest path between two cities</span><span class="bd bj">CYPHER</span></div><pre><code>// Find the shortest route from Mumbai to Chennai:
+MATCH path = shortestPath(
+  (mumbai:City {name: "Mumbai"})-[:ROAD_TO*]-(chennai:City {name: "Chennai"})
+)
+RETURN path, length(path) AS hops
+
+// Find all paths up to 4 hops:
+MATCH path = (mumbai:City {name: "Mumbai"})-[:ROAD_TO*1..4]->(end:City)
+RETURN end.name, length(path) AS hops
+ORDER BY hops</code></pre></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Neo4j excels at recommendations (similar users), fraud detection (shared entities), knowledge graphs (multi-hop reasoning), and shortest path (routing). These are slow or impossible in relational databases.</div>
+</section>
+<section id="s-labs"><div class="sec-label">LABS</div><h2>Browser and CLI Labs</h2>
+<div style="border:2px solid var(--accent);border-radius:10px;margin:16px 0;overflow:hidden"><div style="background:var(--accent);color:#fff;padding:10px 18px;font-family:Syne,sans-serif;font-size:13px;font-weight:800">LAB — Lab 1 — Movie Graph Exploration</div><div style="padding:16px 18px"><p><strong>Overview:</strong> Use the built-in movie dataset to explore core Cypher queries.</p><p><strong>Prerequisites:</strong> Neo4j Browser open, movie dataset loaded (:play movie-graph).</p></div></div>
+<div class="cb"><div class="cbh"><span class="cf">Movie lab queries</span><span class="bd bj">CYPHER</span></div><pre><code>// 1. How many movies are in the database?
+MATCH (m:Movie) RETURN count(m) AS movieCount
+// Expected: ~38
+
+// 2. List all movies released after 2000:
+MATCH (m:Movie) WHERE m.released > 2000 RETURN m.title, m.released ORDER BY m.released
+
+// 3. Who acted in The Matrix?
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie {title: "The Matrix"})
+RETURN p.name
+
+// 4. Tom Hanks filmography:
+MATCH (tom:Person {name: "Tom Hanks"})-[:ACTED_IN]->(m:Movie)
+RETURN m.title, m.released ORDER BY m.released
+
+// 5. Co-actors of Tom Hanks:
+MATCH (tom:Person {name: "Tom Hanks"})-[:ACTED_IN]->(m:Movie)<-[:ACTED_IN]-(coactor:Person)
+RETURN coactor.name, count(m) AS sharedMovies
+ORDER BY sharedMovies DESC LIMIT 10
+
+// 6. Kevin Bacon 6-degrees of separation:
+MATCH path = shortestPath(
+  (kevin:Person {name: "Kevin Bacon"})-[*]-(tom:Person {name: "Tom Hanks"})
+)
+RETURN path, length(path)</code></pre></div>
+<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:12px 0"><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">movieCount returns a positive number</span></div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">The Matrix actors are listed</span></div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">Tom Hanks filmography shows at least 5 movies</span></div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">Shortest path between Kevin Bacon and Tom Hanks is found</span></div></div>
+<div style="border:2px solid var(--accent);border-radius:10px;margin:16px 0;overflow:hidden"><div style="background:var(--accent);color:#fff;padding:10px 18px;font-family:Syne,sans-serif;font-size:13px;font-weight:800">LAB — Lab 2 — Build a Social Network Graph</div><div style="padding:16px 18px"><p><strong>Overview:</strong> Create a small social network and run graph-specific queries.</p></div></div>
+<div class="cb"><div class="cbh"><span class="cf">Social network lab</span><span class="bd bj">CYPHER</span></div><pre><code>// Create the social network:
+CREATE (a:User {name: "Alice",  followers: 1200})
+CREATE (b:User {name: "Bob",    followers:  800})
+CREATE (c:User {name: "Carol",  followers:  450})
+CREATE (d:User {name: "David",  followers:  200})
+
+MATCH (a:User {name: "Alice"}),  (b:User {name: "Bob"})
+CREATE (a)-[:FOLLOWS]->(b)
+MATCH (b:User {name: "Bob"}),    (c:User {name: "Carol"})
+CREATE (b)-[:FOLLOWS]->(c)
+MATCH (a:User {name: "Alice"}),  (d:User {name: "David"})
+CREATE (a)-[:FOLLOWS]->(d)
+MATCH (c:User {name: "Carol"}),  (d:User {name: "David"})
+CREATE (c)-[:FOLLOWS]->(d)
+
+// Who does Alice follow?
+MATCH (a:User {name: "Alice"})-[:FOLLOWS]->(u)
+RETURN u.name
+
+// 2-degree connections (friends of friends Alice does not follow yet):
+MATCH (a:User {name: "Alice"})-[:FOLLOWS*2]->(suggestion:User)
+WHERE NOT (a)-[:FOLLOWS]->(suggestion)
+  AND suggestion.name <> "Alice"
+RETURN DISTINCT suggestion.name AS recommended
+
+// Teardown:
+MATCH (n:User) DETACH DELETE n</code></pre></div>
+<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:12px 0"><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">Social network created successfully</span></div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">Direct follows returned correctly</span></div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">2-degree suggestions do not include Alice or direct follows</span></div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">Teardown confirms 0 User nodes remain</span></div></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Labs follow the pattern: create data → query → verify output → teardown. The movie dataset is built in and ready to use. Always run the teardown query after each lab.</div>
+</section>
+<section id="s-indexes"><div class="sec-label">INDEXES</div><h2>Indexes and Constraints</h2>
+<p>Indexes make queries faster. Constraints enforce data rules. Both are essential for production Neo4j systems.</p>
+<div class="why-box"><div class="why-row"><div class="why-label wl-what">What is an index?</div><div class="why-val">An index is a lookup structure that makes finding nodes by a property value fast. Without an index, Neo4j scans every node. With an index, it jumps directly to matches.</div></div><div class="why-row"><div class="why-label wl-why">What is a constraint?</div><div class="why-val">A constraint is a rule that all data must follow. The most common is a uniqueness constraint: no two Customer nodes can have the same id. Neo4j automatically creates an index for every constraint.</div></div><div class="why-row"><div class="why-label wl-how">When to add them?</div><div class="why-val">Add a uniqueness constraint for every property you use as an ID. Add a regular index for every property you filter on in WHERE clauses.</div></div></div>
+<div class="cb"><div class="cbh"><span class="cf">Creating indexes and constraints</span><span class="bd bj">CYPHER</span></div><pre><code>// Uniqueness constraint (also creates an index automatically):
+CREATE CONSTRAINT customer_id IF NOT EXISTS
+FOR (c:Customer) REQUIRE c.id IS UNIQUE;
+
+// Node property index (for fast WHERE filtering):
+CREATE INDEX customer_city IF NOT EXISTS
+FOR (c:Customer) ON (c.city);
+
+// Composite index (two properties together):
+CREATE INDEX product_category_price IF NOT EXISTS
+FOR (p:Product) ON (p.category, p.price);
+
+// Full-text search index:
+CREATE FULLTEXT INDEX productSearch IF NOT EXISTS
+FOR (n:Product) ON EACH [n.name, n.description];
+
+// Use full-text search:
+CALL db.index.fulltext.queryNodes("productSearch", "laptop")
+YIELD node RETURN node.name
+
+// View all constraints:
+SHOW CONSTRAINTS;
+
+// View all indexes:
+SHOW INDEXES;
+
+// Drop an index:
+DROP INDEX customer_city IF EXISTS;</code></pre></div>
+<div class="sshot-box"><div class="sshot-title">SHOW INDEXES Output</div><div class="sshot-desc">Neo4j Browser: After running SHOW INDEXES, a table appears showing columns: Name, Type, Labelsortypes, Properties, State. Indexes with State=ONLINE are ready to use. A constraint shows Type=UNIQUENESS.</div></div>
+<div class="note ngreen"><strong>Key:</strong> Always create a uniqueness constraint on your ID property before loading large datasets. This prevents duplicate nodes and makes MERGE operations fast.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Constraints prevent bad data (uniqueness). Indexes speed up queries (lookup). Always add constraints for ID properties and indexes for frequently filtered properties. Run SHOW INDEXES to verify.</div>
+</section>
+<section id="s-import"><div class="sec-label">IMPORT</div><h2>Importing Data — CSV and JSON</h2>
+<p>Real applications load data from CSV files, APIs, or databases. Neo4j has built-in CSV import support and the LOAD CSV clause.</p>
+<h3>CSV Import with LOAD CSV</h3><div class="cb"><div class="cbh"><span class="cf">Sample customers.csv</span><span class="bd bj">CSV</span></div><pre><code>id,name,city,tier
+1,Alice,Mumbai,Gold
+2,Raj,Delhi,Silver
+3,Priya,Bangalore,Gold
+4,Dev,Chennai,Bronze</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Import customers from CSV</span><span class="bd bj">CYPHER</span></div><pre><code>// Place the CSV file in the Neo4j import folder, or use a URL.
+// For Neo4j Aura: use a public URL or upload via the console.
+
+// Load from URL (public CSV):
+LOAD CSV WITH HEADERS FROM
+  "https://raw.githubusercontent.com/example/data/customers.csv"
+  AS row
+MERGE (c:Customer {id: toInteger(row.id)})
+ON CREATE SET
+  c.name = row.name,
+  c.city = row.city,
+  c.tier = row.tier
+RETURN count(*) AS imported
+// Expected: 4
+
+// Local file (Neo4j Desktop — file goes in <neo4j-home>/import/):
+LOAD CSV WITH HEADERS FROM "file:///customers.csv" AS row
+MERGE (c:Customer {id: toInteger(row.id)})
+ON CREATE SET c.name = row.name, c.city = row.city
+RETURN count(*) AS imported</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Import relationships from CSV</span><span class="bd bj">CYPHER</span></div><pre><code>// purchases.csv:
+// customer_id,product_id,date,quantity
+// 1,101,2024-01-10,1
+// 2,102,2024-02-01,2
+
+LOAD CSV WITH HEADERS FROM "file:///purchases.csv" AS row
+MATCH (c:Customer {id: toInteger(row.customer_id)})
+MATCH (p:Product  {id: toInteger(row.product_id)})
+MERGE (c)-[:BOUGHT {date: row.date, quantity: toInteger(row.quantity)}]->(p)
+RETURN count(*) AS relationships
+// Expected: 2</code></pre></div>
+<h3>Large CSV Import — Batched (Using CALL IN TRANSACTIONS)</h3><div class="note ngreen"><strong>Key:</strong> For files over 100,000 rows, use CALL IN TRANSACTIONS to import in batches. This prevents memory issues and commits progressively.</div>
+<div class="cb"><div class="cbh"><span class="cf">Batched import for large files</span><span class="bd bj">CYPHER</span></div><pre><code>LOAD CSV WITH HEADERS FROM "file:///large-data.csv" AS row
+CALL {
+  WITH row
+  MERGE (c:Customer {id: toInteger(row.id)})
+  ON CREATE SET c.name = row.name
+} IN TRANSACTIONS OF 1000 ROWS
+RETURN count(*) AS imported</code></pre></div>
+<div class="sshot-box"><div class="sshot-title">LOAD CSV Running</div><div class="sshot-desc">Neo4j Browser: After running LOAD CSV, the result shows 'imported: 4'. The Database Information panel on the left now shows 'Customer' as a label with a count of 4. No error messages are shown.</div></div>
+<div class="note nblue"><strong>India:</strong> For large imports on slow internet, download the CSV locally and use file:/// URL. The import runs entirely locally — no internet bandwidth used after setup.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> LOAD CSV imports from file or URL. Use MERGE (not CREATE) to avoid duplicates. For large files, use CALL IN TRANSACTIONS to batch commits. Always verify count(*) after import.</div>
+</section>
+<section id="s-advanced"><div class="sec-label">ADVANCED CYPHER</div><h2>Advanced Cypher Features</h2>
+<p>This section covers Cypher patterns that go beyond simple MATCH/RETURN. These are used in real applications.</p>
+<div class="cb"><div class="cbh"><span class="cf">WITH — passing intermediate results</span><span class="bd bj">CYPHER</span></div><pre><code>// WITH passes results between query stages:
+MATCH (c:Customer)-[:BOUGHT]->(p:Product)
+WITH c, count(p) AS purchaseCount, sum(p.price) AS totalSpent
+WHERE purchaseCount >= 2
+RETURN c.name, purchaseCount, totalSpent
+ORDER BY totalSpent DESC
+// Only returns customers with 2+ purchases</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">OPTIONAL MATCH — like a LEFT JOIN</span><span class="bd bj">CYPHER</span></div><pre><code>// OPTIONAL MATCH returns null instead of omitting rows when no match:
+MATCH (c:Customer)
+OPTIONAL MATCH (c)-[:BOUGHT]->(p:Product)
+RETURN c.name, p.name
+// Customers with no purchases appear with p.name = null
+// Regular MATCH would omit them entirely</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Variable-length paths — traversal</span><span class="bd bj">CYPHER</span></div><pre><code>// Find all people connected within 3 hops:
+MATCH (alice:Person {name: "Alice"})-[:KNOWS*1..3]->(person:Person)
+RETURN DISTINCT person.name
+
+// shortestPath:
+MATCH path = shortestPath(
+  (a:Person {name: "Alice"})-[*]-(b:Person {name: "Bob"})
+)
+RETURN length(path), [node IN nodes(path) | node.name] AS route
+
+// All shortest paths:
+MATCH path = allShortestPaths(
+  (a:Person {name: "Alice"})-[*]-(b:Person {name: "Bob"})
+)
+RETURN path</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">UNWIND — expand lists into rows</span><span class="bd bj">CYPHER</span></div><pre><code>// UNWIND converts a list into individual rows:
+WITH ["Alice", "Bob", "Carol"] AS names
+UNWIND names AS name
+MERGE (:Person {name: name})
+RETURN name
+// Creates 3 Person nodes from the list
+
+// Useful for JSON import:
+WITH [  {name: "Laptop", price: 55000},
+        {name: "Phone",  price: 22000}] AS products
+UNWIND products AS product
+MERGE (p:Product {name: product.name})
+ON CREATE SET p.price = product.price</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Aggregation functions</span><span class="bd bj">CYPHER</span></div><pre><code>MATCH (c:Customer)-[:BOUGHT]->(p:Product)
+RETURN
+  count(*) AS totalPurchases,
+  count(DISTINCT c) AS uniqueCustomers,
+  sum(p.price) AS totalRevenue,
+  avg(p.price) AS avgPrice,
+  min(p.price) AS cheapest,
+  max(p.price) AS mostExpensive,
+  collect(DISTINCT p.category) AS categories</code></pre></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> WITH chains query stages. OPTIONAL MATCH is a LEFT JOIN. Variable-length paths use *n..m. UNWIND expands lists. collect() aggregates values into a list. These patterns appear in every real application.</div>
+</section>
+<section id="s-performance"><div class="sec-label">PERFORMANCE</div><h2>Performance Tuning Basics</h2>
+<p>This section explains how to identify and fix slow queries in Neo4j.</p>
+<div class="cb"><div class="cbh"><span class="cf">EXPLAIN and PROFILE — understand query execution</span><span class="bd bj">CYPHER</span></div><pre><code>// EXPLAIN: shows the query plan without running the query:
+EXPLAIN
+MATCH (c:Customer {city: "Mumbai"})-[:BOUGHT]->(p:Product)
+RETURN c.name, p.name
+// Look for: NodeByLabelScan vs NodeIndexSeek
+// NodeIndexSeek = fast (using index)
+// NodeByLabelScan = slow (scanning all nodes)
+
+// PROFILE: runs the query AND shows actual row counts:
+PROFILE
+MATCH (c:Customer {city: "Mumbai"})-[:BOUGHT]->(p:Product)
+RETURN c.name, p.name
+// Look for high "DB Hits" — these indicate slow operations</code></pre></div>
+<div class="tw"><table><thead><tr><th>Slow symptom</th><th>Cause</th><th>Fix</th></tr></thead><tbody><tr><td>NodeByLabelScan in EXPLAIN</td><td>No index for the property in WHERE clause</td><td>CREATE INDEX for that property</td></tr><tr><td>High DB Hits in PROFILE</td><td>Query touches too many unnecessary nodes</td><td>Anchor on the most specific node first</td></tr><tr><td>Query hangs on large graph</td><td>Missing LIMIT on variable-length path</td><td>Add maxHops: -[:KNOWS*1..5]- instead of -[:KNOWS*]-</td></tr><tr><td>Slow MERGE on import</td><td>No uniqueness constraint on the MERGE key</td><td>CREATE CONSTRAINT before importing</td></tr><tr><td>cartesian product warning</td><td>MATCH two unrelated patterns — creates all combinations</td><td>Always start from a specific node, not two open patterns</td></tr></tbody></table></div>
+<div class="note npurple"><strong>Tip:</strong> Always run EXPLAIN before running a slow query. If you see NodeByLabelScan, create an index. If you see Eager or CartesianProduct, refactor the query.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Use EXPLAIN to see the plan. Use PROFILE to see actual performance. NodeIndexSeek is fast. NodeByLabelScan is slow — fix with CREATE INDEX. Always LIMIT variable-length paths.</div>
+</section>
+<section id="s-integration"><div class="sec-label">INTEGRATION</div><h2>Integration — Java and Python</h2>
+<p>In real applications, you connect Neo4j from a programming language using an official driver. Neo4j provides drivers for Java, Python, JavaScript, .NET, and Go.</p>
+<h3>Python Integration</h3><div class="cb"><div class="cbh"><span class="cf">Install the Python driver</span><span class="bd bj">SHELL</span></div><pre><code>pip install neo4j
+
+# Verify:
+python -c "from neo4j import GraphDatabase; print('Driver OK')"</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Python — connect and run queries</span><span class="bd bj">PYTHON</span></div><pre><code>from neo4j import GraphDatabase
+
+URI      = "neo4j+s://xxxx.databases.neo4j.io"  # Aura URI
+USER     = "neo4j"
+PASSWORD = "your-password"
+
+# Create driver (reuse this instance — do not create per query)
+driver = GraphDatabase.driver(URI, auth=(USER, PASSWORD))
+
+def get_all_customers(driver):
+    with driver.session() as session:
+        result = session.run("MATCH (c:Customer) RETURN c.name AS name, c.city AS city")
+        return [{"name": row["name"], "city": row["city"]} for row in result]
+
+def create_customer(driver, name, city, tier):
+    with driver.session() as session:
+        result = session.run(
+            """
+            MERGE (c:Customer {name: $name})
+            ON CREATE SET c.city = $city, c.tier = $tier
+            RETURN c.name AS name
+            """,
+            name=name, city=city, tier=tier
+        )
+        return result.single()["name"]
+
+# Use the driver:
+customers = get_all_customers(driver)
+for c in customers:
+    print(f"{c['name']} — {c['city']}")
+
+new = create_customer(driver, "Dev", "Pune", "Silver")
+print(f"Created: {new}")
+
+# Always close when done:
+driver.close()</code></pre></div>
+<h3>Java Integration</h3><div class="cb"><div class="cbh"><span class="cf">Maven dependency (pom.xml)</span><span class="bd bj">CONFIG</span></div><pre><code><dependency>
+    <groupId>org.neo4j.driver</groupId>
+    <artifactId>neo4j-java-driver</artifactId>
+    <version>5.20.0</version>
+</dependency></code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Java — connect and query</span><span class="bd bj">JAVA</span></div><pre><code>import org.neo4j.driver.*;
+import org.neo4j.driver.Record;
+
+public class Neo4jExample {
+    public static void main(String[] args) {
+        String uri  = "neo4j+s://xxxx.databases.neo4j.io";
+        String user = "neo4j";
+        String pass = "your-password";
+
+        try (Driver driver = GraphDatabase.driver(uri, AuthTokens.basic(user, pass));
+             Session session = driver.session()) {
+
+            // Run a query:
+            var result = session.run(
+                "MATCH (c:Customer) RETURN c.name AS name LIMIT 5"
+            );
+
+            while (result.hasNext()) {
+                Record row = result.next();
+                System.out.println(row.get("name").asString());
+            }
+
+            // Parameterized create:
+            session.run(
+                "MERGE (c:Customer {name: $name}) ON CREATE SET c.city = $city",
+                Values.parameters("name", "Alice", "city", "Mumbai")
+            );
+
+            System.out.println("Done");
+        }
+    }
+}</code></pre></div>
+<div class="note ngreen"><strong>Key:</strong> Always use parameterized queries ($ prefix) — never concatenate user input into a Cypher string. This prevents Cypher injection attacks and improves query plan caching.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Python and Java drivers connect to Neo4j via URI + credentials. Always use parameterized queries. Reuse the Driver instance — do not create one per query. Close the driver when done.</div>
+</section>
+<section id="s-troubleshoot"><div class="sec-label">TROUBLESHOOT</div><h2>Troubleshooting and Pitfalls</h2>
+<p>This section covers the most common errors beginners encounter with exact fixes.</p>
+<div style="border-radius:10px;margin:14px 0;border:2px solid #fca5a5;overflow:hidden"><div style="background:#dc2626;color:#fff;padding:11px 16px;font-family:JetBrains Mono,monospace;font-size:12.5px;font-weight:700;line-height:1.5">Neo.ClientError.Schema.ConstraintValidationFailed</div><div style="padding:14px 16px;background:#fff9f9"><p style="font-size:14px;color:var(--t2);margin-bottom:8px"><strong style="color:var(--text)">Cause:</strong> You tried to create a node that violates a uniqueness constraint — a node with that id or name already exists.</p><div class="note ngreen"><strong>Fix:</strong> Use MERGE instead of CREATE. MERGE creates the node only if it does not exist; if it does exist, it matches it instead.</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:2px solid #fca5a5;overflow:hidden"><div style="background:#dc2626;color:#fff;padding:11px 16px;font-family:JetBrains Mono,monospace;font-size:12.5px;font-weight:700;line-height:1.5">Neo.ClientError.Statement.SyntaxError</div><div style="padding:14px 16px;background:#fff9f9"><p style="font-size:14px;color:var(--t2);margin-bottom:8px"><strong style="color:var(--text)">Cause:</strong> Your Cypher query has a syntax mistake — wrong keyword, missing bracket, or incorrect case.</p><div class="note ngreen"><strong>Fix:</strong> Read the error message carefully — it shows the exact line and position. Common mistakes: MATCH without RETURN, missing parentheses (), wrong relationship direction.</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:2px solid #fca5a5;overflow:hidden"><div style="background:#dc2626;color:#fff;padding:11px 16px;font-family:JetBrains Mono,monospace;font-size:12.5px;font-weight:700;line-height:1.5">This node (id=X) still has relationships — use DETACH DELETE</div><div style="padding:14px 16px;background:#fff9f9"><p style="font-size:14px;color:var(--t2);margin-bottom:8px"><strong style="color:var(--text)">Cause:</strong> You tried to DELETE a node that still has relationships. Neo4j prevents orphan relationships.</p><div class="note ngreen"><strong>Fix:</strong> Use DETACH DELETE instead of DELETE. DETACH DELETE removes the node AND all its relationships: MATCH (n:Customer {name: 'Alice'}) DETACH DELETE n</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:2px solid #fca5a5;overflow:hidden"><div style="background:#dc2626;color:#fff;padding:11px 16px;font-family:JetBrains Mono,monospace;font-size:12.5px;font-weight:700;line-height:1.5">ServiceUnavailable: Could not connect to Aura</div><div style="padding:14px 16px;background:#fff9f9"><p style="font-size:14px;color:var(--t2);margin-bottom:8px"><strong style="color:var(--text)">Cause:</strong> Neo4j Aura instance is paused (free instances pause after 3 days of inactivity) or your internet is down.</p><div class="note ngreen"><strong>Fix:</strong> Log in to console.neo4j.io, find your instance, and click Resume. Wait 1-2 minutes. If internet is the issue, switch to Neo4j Desktop for offline work.</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:2px solid #fca5a5;overflow:hidden"><div style="background:#dc2626;color:#fff;padding:11px 16px;font-family:JetBrains Mono,monospace;font-size:12.5px;font-weight:700;line-height:1.5">Cannot merge with non-existent property key in MERGE</div><div style="padding:14px 16px;background:#fff9f9"><p style="font-size:14px;color:var(--t2);margin-bottom:8px"><strong style="color:var(--text)">Cause:</strong> MERGE requires the property used in the pattern to already be indexed or constrained. Without it, Neo4j scans all nodes.</p><div class="note ngreen"><strong>Fix:</strong> Create a uniqueness constraint before running MERGE: CREATE CONSTRAINT c_id FOR (c:Customer) REQUIRE c.id IS UNIQUE</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:2px solid #fca5a5;overflow:hidden"><div style="background:#dc2626;color:#fff;padding:11px 16px;font-family:JetBrains Mono,monospace;font-size:12.5px;font-weight:700;line-height:1.5">Query timeout — query takes too long</div><div style="padding:14px 16px;background:#fff9f9"><p style="font-size:14px;color:var(--t2);margin-bottom:8px"><strong style="color:var(--text)">Cause:</strong> A query with no upper bound on a variable-length path scans too many nodes.</p><div class="note ngreen"><strong>Fix:</strong> Add a max hops limit: change -[:KNOWS*]- to -[:KNOWS*1..5]-. Also check EXPLAIN for NodeByLabelScan — create an index if found.</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:2px solid #fca5a5;overflow:hidden"><div style="background:#dc2626;color:#fff;padding:11px 16px;font-family:JetBrains Mono,monospace;font-size:12.5px;font-weight:700;line-height:1.5">Authentication failed — wrong password</div><div style="padding:14px 16px;background:#fff9f9"><p style="font-size:14px;color:var(--t2);margin-bottom:8px"><strong style="color:var(--text)">Cause:</strong> The password entered is wrong. Aura passwords are shown once at creation.</p><div class="note ngreen"><strong>Fix:</strong> Reset: in Aura console, go to your instance → Security → Reset credentials. For Desktop: stop the database, go to settings, change password.</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:2px solid #fca5a5;overflow:hidden"><div style="background:#dc2626;color:#fff;padding:11px 16px;font-family:JetBrains Mono,monospace;font-size:12.5px;font-weight:700;line-height:1.5">LOAD CSV returns 0 rows — file not found</div><div style="padding:14px 16px;background:#fff9f9"><p style="font-size:14px;color:var(--t2);margin-bottom:8px"><strong style="color:var(--text)">Cause:</strong> The file path is wrong. Local imports must use file:///filename.csv and the file must be in Neo4j's import directory.</p><div class="note ngreen"><strong>Fix:</strong> For Neo4j Desktop: place the file in the import folder (shown in Desktop under the database settings). For Aura: use a public URL (GitHub raw, Google Drive public link).</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:2px solid #fca5a5;overflow:hidden"><div style="background:#dc2626;color:#fff;padding:11px 16px;font-family:JetBrains Mono,monospace;font-size:12.5px;font-weight:700;line-height:1.5">duplicate nodes created after multiple imports</div><div style="padding:14px 16px;background:#fff9f9"><p style="font-size:14px;color:var(--t2);margin-bottom:8px"><strong style="color:var(--text)">Cause:</strong> CREATE was used instead of MERGE during import. Every import run creates new nodes.</p><div class="note ngreen"><strong>Fix:</strong> Change CREATE to MERGE in your import query. Add a uniqueness constraint first to make MERGE fast.</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:2px solid #fca5a5;overflow:hidden"><div style="background:#dc2626;color:#fff;padding:11px 16px;font-family:JetBrains Mono,monospace;font-size:12.5px;font-weight:700;line-height:1.5">Node property returns null in Python driver</div><div style="padding:14px 16px;background:#fff9f9"><p style="font-size:14px;color:var(--t2);margin-bottom:8px"><strong style="color:var(--text)">Cause:</strong> The property name in the query ('name') does not match the result key used in Python (row['Name'] vs row['name']).</p><div class="note ngreen"><strong>Fix:</strong> Cypher is case-sensitive for property names and aliases. Verify: RETURN c.name AS name — then use row['name'] (lowercase) in Python.</div></div></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> The most common issues: use MERGE not CREATE to avoid duplicates, use DETACH DELETE not DELETE for nodes with relationships, add upper bounds to variable-length paths, and resume paused Aura instances.</div>
+</section>
+<section id="s-capstone"><div class="sec-label">CAPSTONE</div><h2>Capstone Project — E-Learning Knowledge Graph</h2>
+<div style="border:2px solid var(--accent);border-radius:10px;margin:16px 0;overflow:hidden"><div style="background:var(--accent);color:#fff;padding:10px 18px;font-family:Syne,sans-serif;font-size:13px;font-weight:800">LAB — Capstone — E-Learning Knowledge Graph</div><div style="padding:16px 18px"><p><strong>Overview:</strong> Build a knowledge graph for an e-learning platform.</p><p><strong>Domain:</strong> Courses, topics, students, and skill paths.</p><p><strong>You will use:</strong> Constraints, indexes, MERGE, CSV import, advanced Cypher, and Python integration.</p></div></div>
+<div class="cb"><div class="cbh"><span class="cf">Project Structure</span><span class="bd bj">STRUCTURE</span></div><pre><code>elearning-graph/
+  queries/
+    setup.cypher       Constraints and indexes
+    load-data.cypher   MERGE all courses, topics, students
+    queries.cypher     All business queries
+    cleanup.cypher     DETACH DELETE all nodes
+  data/
+    courses.csv
+    students.csv
+    enrollments.csv
+  app.py               Python queries
+  README.md</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">setup.cypher</span><span class="bd bj">CYPHER</span></div><pre><code>CREATE CONSTRAINT course_id  IF NOT EXISTS FOR (c:Course)   REQUIRE c.id IS UNIQUE;
+CREATE CONSTRAINT student_id IF NOT EXISTS FOR (s:Student)  REQUIRE s.id IS UNIQUE;
+CREATE CONSTRAINT topic_name IF NOT EXISTS FOR (t:Topic)    REQUIRE t.name IS UNIQUE;
+CREATE INDEX course_level IF NOT EXISTS FOR (c:Course) ON (c.level);
+SHOW CONSTRAINTS;</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">load-data.cypher</span><span class="bd bj">CYPHER</span></div><pre><code>// Courses:
+MERGE (c1:Course {id: 1, title: "Python Basics",  level: "Beginner", duration_hrs: 10})
+MERGE (c2:Course {id: 2, title: "Neo4j Basics",   level: "Beginner", duration_hrs: 8})
+MERGE (c3:Course {id: 3, title: "Data Science",   level: "Advanced", duration_hrs: 20})
+
+// Topics:
+MERGE (t1:Topic {name: "Python"})
+MERGE (t2:Topic {name: "Graph Databases"})
+MERGE (t3:Topic {name: "Machine Learning"})
+
+// Course covers Topic:
+MATCH (c:Course {id: 1}), (t:Topic {name: "Python"})          CREATE (c)-[:COVERS]->(t)
+MATCH (c:Course {id: 2}), (t:Topic {name: "Graph Databases"}) CREATE (c)-[:COVERS]->(t)
+MATCH (c:Course {id: 3}), (t:Topic {name: "Machine Learning"}) CREATE (c)-[:COVERS]->(t)
+
+// Prerequisite relationship:
+MATCH (a:Course {id: 1}), (b:Course {id: 3}) CREATE (b)-[:REQUIRES]->(a)
+
+// Students:
+MERGE (s1:Student {id: 1, name: "Priya", city: "Mumbai"})
+MERGE (s2:Student {id: 2, name: "Raj",   city: "Delhi"})
+
+// Enrollments:
+MATCH (s:Student {id: 1}), (c:Course {id: 1})
+MERGE (s)-[:ENROLLED_IN {date: "2024-01-01", progress: 80}]->(c)
+MATCH (s:Student {id: 1}), (c:Course {id: 2})
+MERGE (s)-[:ENROLLED_IN {date: "2024-02-01", progress: 45}]->(c)
+MATCH (s:Student {id: 2}), (c:Course {id: 3})
+MERGE (s)-[:ENROLLED_IN {date: "2024-01-15", progress: 60}]->(c)</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Business queries — queries.cypher</span><span class="bd bj">CYPHER</span></div><pre><code>// 1. What courses is Priya enrolled in?
+MATCH (s:Student {name: "Priya"})-[e:ENROLLED_IN]->(c:Course)
+RETURN c.title, e.progress ORDER BY e.progress DESC
+
+// 2. What are the prerequisites for Data Science?
+MATCH (ds:Course {title: "Data Science"})-[:REQUIRES*]->(pre:Course)
+RETURN pre.title
+
+// 3. Recommend courses Priya has not enrolled in:
+MATCH (s:Student {name: "Priya"})-[:ENROLLED_IN]->(enrolled:Course)
+MATCH (all:Course)
+WHERE NOT (s)-[:ENROLLED_IN]->(all)
+RETURN all.title AS recommended
+
+// 4. Students who share a course:
+MATCH (s1:Student)-[:ENROLLED_IN]->(c:Course)<-[:ENROLLED_IN]-(s2:Student)
+WHERE s1.id < s2.id
+RETURN s1.name, s2.name, c.title AS sharedCourse
+
+// 5. Most popular topics:
+MATCH (c:Course)-[:COVERS]->(t:Topic)
+MATCH (s:Student)-[:ENROLLED_IN]->(c)
+RETURN t.name, count(DISTINCT s) AS students
+ORDER BY students DESC</code></pre></div>
+<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:12px 0"><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">SHOW CONSTRAINTS returns 3 constraints — all ONLINE</span></div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">Course, Topic, and Student nodes created (count check passes)</span></div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">Prerequisite chain for Data Science returns Python Basics</span></div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">Priya's enrolled courses return Python Basics and Neo4j Basics</span></div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">Recommendation query returns Data Science for Priya</span></div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">Shared course query returns Priya and Raj if enrolled in same course</span></div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">Cleanup query: MATCH (n) DETACH DELETE n returns 0 remaining nodes</span></div></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> The capstone project uses every concept: constraints, MERGE, relationships, variable paths, recommendations, and prerequisite traversal. Completing it demonstrates production-ready Neo4j skill.</div>
+</section>
+<section id="s-glossary"><div class="sec-label">GLOSSARY</div><h2>Glossary of Terms</h2>
+<div class="tw"><table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>ACID</td><td>Atomicity, Consistency, Isolation, Durability — Neo4j's safety guarantees</td></tr><tr><td>Anchor node</td><td>The most specific node in a MATCH pattern — Neo4j starts scanning from here</td></tr><tr><td>Aura</td><td>Neo4j's cloud database service — free tier available at console.neo4j.io</td></tr><tr><td>Cartesian product</td><td>A query that accidentally matches every node against every other node — usually a mistake</td></tr><tr><td>Constraint</td><td>A rule enforced by the database — most common is uniqueness</td></tr><tr><td>Cypher</td><td>Neo4j's declarative query language — patterns describe what to find</td></tr><tr><td>DETACH DELETE</td><td>Remove a node and all its relationships in one command</td></tr><tr><td>Graph</td><td>A set of nodes connected by relationships</td></tr><tr><td>Index</td><td>A lookup structure that makes finding nodes by property value fast</td></tr><tr><td>Label</td><td>A tag on a node that says what type it is (Person, Product, City)</td></tr><tr><td>MERGE</td><td>Create a node/relationship if it does not exist; match if it does</td></tr><tr><td>Node</td><td>A point in the graph — represents a thing or entity</td></tr><tr><td>Optional match</td><td>Like LEFT JOIN — returns null instead of omitting when no match</td></tr><tr><td>Path</td><td>A sequence of nodes and relationships traversed in a query</td></tr><tr><td>Property</td><td>A key-value pair on a node or relationship</td></tr><tr><td>Property graph</td><td>Neo4j's data model — nodes, relationships, labels, and properties</td></tr><tr><td>Relationship</td><td>A directed, typed connection between two nodes</td></tr><tr><td>Shortest path</td><td>The path with fewest hops between two nodes — found with shortestPath()</td></tr><tr><td>UNWIND</td><td>Expands a list into individual rows for processing</td></tr><tr><td>Variable-length path</td><td>A relationship pattern that traverses a variable number of hops: -[:KNOWS*1..5]-</td></tr><tr><td>WITH</td><td>Passes intermediate results between query stages — like a subquery separator</td></tr><tr><td>NodeByLabelScan</td><td>A slow query plan — Neo4j scans all nodes with a label — fix by adding an index</td></tr><tr><td>NodeIndexSeek</td><td>A fast query plan — Neo4j uses an index to find matching nodes directly</td></tr><tr><td>LOAD CSV</td><td>Cypher clause that imports data from a CSV file line by line</td></tr></tbody></table></div>
+</section>
+<section id="s-cheatsheet"><div class="sec-label">CHEAT SHEET</div><h2>Cypher Cheat Sheet</h2>
+<div class="cb"><div class="cbh"><span class="cf">Neo4j / Cypher Cheat Sheet</span><span class="bd bj">CYPHER</span></div><pre><code>// ── NODES ──────────────────────────────────────────────────────
+(n)                       // any node
+(n:Person)                // node with label Person
+(n:Person {name: "Alice"}) // node with label and property
+
+// ── RELATIONSHIPS ───────────────────────────────────────────────
+-[:KNOWS]->               // directed relationship
+-[:KNOWS]-                // undirected (match both directions)
+-[:KNOWS*1..3]->          // variable length: 1 to 3 hops
+-[:KNOWS {since: 2020}]-> // relationship with property
+
+// ── MATCH ───────────────────────────────────────────────────────
+MATCH (n:Person) RETURN n
+MATCH (n:Person) WHERE n.age > 25 RETURN n.name
+MATCH (a)-[:KNOWS]->(b) RETURN a.name, b.name
+OPTIONAL MATCH (n:Person)-[:BOUGHT]->(p) RETURN n, p
+
+// ── CREATE ──────────────────────────────────────────────────────
+CREATE (n:Person {name: "Alice", age: 30})
+CREATE (a)-[:KNOWS {since: 2020}]->(b)
+
+// ── MERGE ───────────────────────────────────────────────────────
+MERGE (n:Person {name: "Alice"})
+ON CREATE SET n.age = 30
+ON MATCH  SET n.lastSeen = date()
+
+// ── SET / REMOVE ────────────────────────────────────────────────
+SET n.city = "Mumbai"
+SET n += {age: 31, active: true}   // add without removing others
+REMOVE n.city                      // delete a property
+REMOVE n:Employee                  // remove a label
+
+// ── DELETE ──────────────────────────────────────────────────────
+DELETE n                           // error if node has relationships
+DETACH DELETE n                    // removes node + all relationships
+
+// ── AGGREGATION ─────────────────────────────────────────────────
+count(*), count(n)
+sum(n.price), avg(n.price)
+min(n.price), max(n.price)
+collect(n.name)                    // all values as a list
+
+// ── WITH ────────────────────────────────────────────────────────
+MATCH (c:Customer)-[:BOUGHT]->(p)
+WITH c, count(p) AS purchases
+WHERE purchases > 1
+RETURN c.name, purchases
+
+// ── PATHS ───────────────────────────────────────────────────────
+shortestPath((a)-[*]-(b))
+allShortestPaths((a)-[*]-(b))
+length(path)
+nodes(path)
+relationships(path)
+
+// ── LOAD CSV ────────────────────────────────────────────────────
+LOAD CSV WITH HEADERS FROM "file:///data.csv" AS row
+MERGE (n:Label {id: toInteger(row.id)})
+SET n.name = row.name
+
+// ── INDEXES AND CONSTRAINTS ─────────────────────────────────────
+CREATE CONSTRAINT c_id FOR (c:Customer) REQUIRE c.id IS UNIQUE
+CREATE INDEX c_city FOR (c:Customer) ON (c.city)
+SHOW CONSTRAINTS
+SHOW INDEXES
+DROP INDEX c_city IF EXISTS
+
+// ── EXPLAIN AND PROFILE ─────────────────────────────────────────
+EXPLAIN MATCH ...
+PROFILE MATCH ...
+
+// ── USEFUL COMMANDS ─────────────────────────────────────────────
+:play movie-graph          // load movie dataset in Browser
+:clear                     // clear all result frames
+:help                      // open Browser help
+MATCH (n) DETACH DELETE n  // delete everything (use carefully!)
+CALL db.labels()           // list all labels
+CALL db.relationshipTypes() // list all relationship types</code></pre></div>
+</section>
+<section id="s-roadmap"><div class="sec-label">ROADMAP</div><h2>Further Learning Roadmap</h2>
+<p>After completing this course, here is the recommended learning path.</p>
+<div class="tw"><table><thead><tr><th>Phase</th><th>Topics</th><th>Resources</th></tr></thead><tbody><tr><td>Phase 1 — This course</td><td>Nodes, Cypher, CRUD, labs, capstone</td><td>This document + neo4j.com/docs</td></tr><tr><td>Phase 2 — Graph Data Science</td><td>GDS library, PageRank, community detection</td><td>neo4j.com/docs/graph-data-science</td></tr><tr><td>Phase 3 — APOC Procedures</td><td>Extended procedures, import, export, triggers</td><td>neo4j.com/labs/apoc</td></tr><tr><td>Phase 4 — Graph Data Modeling</td><td>Model design patterns, schema design</td><td>neo4j.com/developer/data-modeling</td></tr><tr><td>Phase 5 — Production Deployment</td><td>Clustering, backups, monitoring, security</td><td>neo4j.com/docs/operations-manual</td></tr><tr><td>Phase 6 — Vector Search (Neo4j 5.13+)</td><td>Store embeddings, similarity search for AI</td><td>neo4j.com/docs/cypher-manual/current/indexes</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Resource</th><th>What It Covers</th><th>Cost</th></tr></thead><tbody><tr><td>neo4j.com/docs</td><td>Complete official reference documentation</td><td>Free</td></tr><tr><td>neo4j.com/graphacademy</td><td>Free online courses with certificates</td><td>Free</td></tr><tr><td>sandbox.neo4j.com</td><td>Pre-loaded Neo4j databases for practice</td><td>Free</td></tr><tr><td>scastie.neo4j.com — N/A use sandbox</td><td>Browser-based Neo4j sandbox</td><td>Free</td></tr><tr><td>neo4j.com/labs/apoc</td><td>APOC extended functions library</td><td>Free</td></tr><tr><td>YouTube: Neo4j channel</td><td>Tutorial videos, conference talks</td><td>Free</td></tr></tbody></table></div>
+<div class="note nblue"><strong>India:</strong> Neo4j GraphAcademy (graphacademy.neo4j.com) offers free certification courses. The certificates are recognised and strengthen your CV. Courses work on 2G/3G internet because they use small video segments. Neo4j Sandbox instances work online with no local install — use them if storage is limited.</div>
+<div class="note nblue"><strong>India:</strong> All Neo4j tools in this course are free. Neo4j Desktop works completely offline after installation. Neo4j Aura Free provides a permanent free cloud database. The official documentation at neo4j.com/docs can be saved as PDF for offline reading.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Path: graph modeling → GDS library → APOC → production deployment → vector search for AI. All core tools are free. GraphAcademy provides free certifications that strengthen your profile.</div>
+</section>
+</div></div>
+<script>const links=document.querySelectorAll('.ni');const secs=document.querySelectorAll('section');const pf=document.getElementById('pf');
+function mark(id){links.forEach(n=>n.classList.toggle('active',n.getAttribute('href')==='#s-'+id));const idx=[...secs].findIndex(s=>s.id==='s-'+id);if(pf)pf.style.width=Math.round((idx+1)/secs.length*100)+'%';}
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)mark(e.target.id.replace('s-',''));});},{rootMargin:'-20% 0px -65% 0px'});
+secs.forEach(s=>obs.observe(s));links.forEach(n=>n.addEventListener('click',e=>{e.preventDefault();const id=n.getAttribute('href').replace('#s-','');const el=document.getElementById('s-'+id);if(el){el.scrollIntoView({behavior:'smooth'});mark(id);}}));</script></body></html>

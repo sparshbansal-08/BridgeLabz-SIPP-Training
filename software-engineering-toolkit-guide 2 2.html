@@ -1,0 +1,2032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Software Engineering Toolkit — Complete Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0c1117;--ink2:#1a2233;--paper:#faf9f5;--cream:#f0ede4;--rule:#ddd6c6;
+  --burgundy:#7c1d3a;--burgundy-l:#f9eaed;--forest:#1a4d2e;--forest-l:#e4f0e8;
+  --navy:#1e3a8a;--navy-l:#dfe8f7;--amber:#92400e;--amber-l:#fef3d9;
+  --slate:#475569;--muted:#64748b;
+  --display:'Playfair Display',Georgia,serif;
+  --body:'Source Sans 3','Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono','Consolas',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;scroll-padding-top:56px;}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);font-size:15.5px;line-height:1.72;}
+
+/* ---------- PROGRESS BAR ---------- */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--burgundy);width:0%;z-index:200;transition:width .08s;}
+
+/* ---------- COVER ---------- */
+.cover{background:var(--ink);color:white;padding:90px 48px 70px;position:relative;overflow:hidden;border-bottom:5px solid var(--burgundy);}
+.cover::after{content:'';position:absolute;top:-80px;right:-80px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(124,29,58,.18),transparent 70%);}
+.cover-inner{max-width:960px;margin:0 auto;position:relative;z-index:1;}
+.cover-tag{display:inline-block;font-family:var(--mono);font-size:.68rem;letter-spacing:.35em;text-transform:uppercase;color:#94a3b8;border:1px solid #334155;padding:6px 16px;margin-bottom:30px;}
+.cover h1{font-family:var(--display);font-size:clamp(2.2rem,5.5vw,3.6rem);font-weight:800;line-height:1.08;margin-bottom:20px;}
+.cover h1 em{font-style:italic;color:#f87171;font-weight:400;}
+.cover-sub{font-family:var(--display);font-size:1.15rem;font-style:italic;color:rgba(255,255,255,.62);max-width:650px;line-height:1.5;margin-bottom:32px;}
+.cover-pills{display:flex;gap:10px;flex-wrap:wrap;}
+.cover-pill{font-family:var(--mono);font-size:.7rem;padding:5px 14px;border:1px solid #475569;border-radius:20px;color:#94a3b8;}
+
+/* ---------- STICKY NAV ---------- */
+.nav{background:rgba(250,249,245,.92);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--rule);overflow-x:auto;}
+.nav-inner{max-width:960px;margin:0 auto;display:flex;padding:0 48px;white-space:nowrap;gap:0;}
+.nav a{padding:14px 13px;font-size:.76rem;font-weight:500;color:var(--slate);text-decoration:none;border-bottom:2px solid transparent;transition:.15s;flex-shrink:0;}
+.nav a:hover,.nav a.active{color:var(--burgundy);border-bottom-color:var(--burgundy);}
+
+.wrap{max-width:960px;margin:0 auto;padding:0 48px;}
+
+/* ---------- CHAPTER ---------- */
+.chapter{padding:64px 0;border-bottom:1px solid var(--rule);}
+.chapter:nth-child(even){background:var(--cream);}
+.ch-eyebrow{font-family:var(--mono);font-size:.66rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--burgundy);margin-bottom:6px;}
+.ch-num{font-family:var(--display);font-size:4rem;font-weight:800;line-height:1;color:var(--rule);margin-bottom:6px;}
+.ch-title{font-family:var(--display);font-size:clamp(1.7rem,3.5vw,2.3rem);font-weight:700;line-height:1.15;margin-bottom:14px;}
+.ch-lead{font-family:var(--display);font-size:1.05rem;font-style:italic;color:var(--muted);max-width:720px;line-height:1.5;margin-bottom:28px;}
+
+/* ---------- SECTION HEADINGS ---------- */
+h3{font-family:var(--display);font-size:1.35rem;font-weight:700;margin:32px 0 14px;color:var(--ink);border-left:4px solid var(--burgundy);padding-left:14px;}
+h4{font-family:var(--body);font-size:1.05rem;font-weight:700;margin:24px 0 10px;color:var(--ink2);}
+h5{font-family:var(--mono);font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:20px 0 8px;}
+p{margin-bottom:13px;}
+p:last-child{margin-bottom:0;}
+.spacer{height:24px;}
+
+/* ---------- CALLOUTS ---------- */
+.callout{display:flex;gap:14px;padding:16px 20px;margin:20px 0;font-size:.92rem;border-radius:4px;}
+.callout p{font-size:.9rem;line-height:1.6;margin-bottom:6px;}
+.callout p:last-child{margin-bottom:0;}
+.callout strong{display:block;margin-bottom:4px;font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;}
+.info{background:var(--navy-l);border-left:4px solid var(--navy);}
+.info strong{color:var(--navy);}
+.warn{background:var(--amber-l);border-left:4px solid var(--amber);}
+.warn strong{color:var(--amber);}
+.good{background:var(--forest-l);border-left:4px solid var(--forest);}
+.good strong{color:var(--forest);}
+.danger{background:var(--burgundy-l);border-left:4px solid var(--burgundy);}
+.danger strong{color:var(--burgundy);}
+
+/* ---------- CODE ---------- */
+.code-wrap{background:#080d16;border-radius:6px;overflow:hidden;margin:18px 0;}
+.code-bar{display:flex;align-items:center;padding:8px 18px;background:#040810;border-bottom:1px solid rgba(255,255,255,.04);}
+.code-bar-text{font-family:var(--mono);font-size:.68rem;color:rgba(255,255,255,.35);letter-spacing:.04em;}
+.code-body{padding:20px 22px;overflow-x:auto;}
+pre{font-family:var(--mono);font-size:.78rem;line-height:1.85;color:#e2e8f0;white-space:pre-wrap;word-wrap:break-word;}
+.kw{color:#f9a8d4;}.cl{color:#67e8f9;}.fn{color:#a5f3fc;}.cm{color:#546178;font-style:italic;}.st{color:#86efac;}.nm{color:#fcd34d;}.an{color:#fbb6ce;}.op{color:#94a3b8;}
+
+code.il{font-family:var(--mono);background:var(--cream);padding:1px 7px;border-radius:3px;font-size:.84em;color:var(--burgundy);border:1px solid var(--rule);}
+
+/* ---------- TABLE ---------- */
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.88rem;}
+th{background:var(--ink);color:white;padding:11px 14px;text-align:left;font-size:.74rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+td{padding:11px 14px;border-top:1px solid var(--rule);vertical-align:top;}
+tr:nth-child(even) td{background:var(--cream);}
+
+/* ---------- REAL-WORLD BOX ---------- */
+.realworld{background:white;border:1.5px solid var(--rule);border-radius:8px;padding:22px 26px;margin:20px 0;position:relative;overflow:hidden;}
+.realworld::before{content:'REAL-WORLD SCENARIO';position:absolute;top:0;right:0;font-family:var(--mono);font-size:.6rem;font-weight:600;letter-spacing:.2em;color:var(--forest);background:var(--forest-l);padding:4px 14px;border-radius:0 0 0 6px;}
+.realworld h4{font-size:1rem;margin-top:14px;margin-bottom:8px;}
+.realworld p{font-size:.92rem;color:var(--slate);}
+
+/* ---------- EXERCISE ---------- */
+.exercise{background:white;border:1.5px solid var(--navy);border-radius:8px;margin:20px 0;overflow:hidden;}
+.exercise-head{background:var(--navy-l);padding:12px 20px;display:flex;align-items:center;gap:10px;cursor:pointer;}
+.exercise-head .tag{font-family:var(--mono);font-size:.66rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--navy);background:white;padding:2px 10px;border-radius:3px;}
+.exercise-head .title{font-size:.95rem;font-weight:600;color:var(--navy);}
+.exercise-body{padding:18px 20px;font-size:.92rem;}
+.exercise-body p{margin-bottom:8px;}
+
+/* ---------- SOLUTION TOGGLE ---------- */
+details{margin:14px 0;border:1px solid var(--rule);border-radius:6px;overflow:hidden;}
+details summary{padding:12px 18px;font-size:.88rem;font-weight:600;cursor:pointer;background:var(--cream);color:var(--ink);user-select:none;}
+details summary:hover{background:#e8e4d8;}
+details[open] summary{border-bottom:1px solid var(--rule);}
+details .sol{padding:16px 18px;}
+
+/* ---------- COMPARISON ---------- */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:20px 0;}
+.compare-box{border:1.5px solid var(--rule);border-radius:8px;overflow:hidden;}
+.compare-box.bad{border-color:#fca5a5;}
+.compare-box.ok{border-color:#86efac;}
+.compare-head{padding:10px 16px;font-family:var(--mono);font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;}
+.compare-box.bad .compare-head{background:#fef2f2;color:#991b1b;}
+.compare-box.ok .compare-head{background:#f0fdf4;color:#166534;}
+.compare-body{padding:14px 16px;}
+@media(max-width:700px){.compare{grid-template-columns:1fr;}}
+
+/* ---------- FOOTER ---------- */
+footer{background:var(--ink);color:rgba(255,255,255,.45);text-align:center;padding:48px 30px;font-family:var(--mono);font-size:.76rem;}
+footer strong{color:white;font-family:var(--display);font-size:1.2rem;font-style:italic;font-weight:400;display:block;margin-bottom:6px;}
+
+@media(max-width:760px){
+  .cover{padding:60px 24px 50px;}.wrap{padding:0 24px;}.nav-inner{padding:0 24px;}
+  .ch-num{font-size:3rem;}.compare{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+
+<!-- ===== COVER ===== -->
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-tag">Comprehensive Training Reference</div>
+    <h1>Software Engineering <em>Toolkit</em></h1>
+    <p class="cover-sub">Design Principles, SOLID, UML, TDD, JUnit, Mockito, and Code Quality Tools — explained from fundamentals with real-world examples, step-by-step setup, and practice exercises.</p>
+    <div class="cover-pills">
+      <span class="cover-pill">Design Principles</span>
+      <span class="cover-pill">SOLID</span>
+      <span class="cover-pill">UML</span>
+      <span class="cover-pill">TDD</span>
+      <span class="cover-pill">JUnit 5</span>
+      <span class="cover-pill">Mockito</span>
+      <span class="cover-pill">PMD</span>
+      <span class="cover-pill">Checkstyle</span>
+      <span class="cover-pill">SonarQube</span>
+      <span class="cover-pill">JaCoCo</span>
+      <span class="cover-pill">SpotBugs</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav class="nav" id="topnav">
+  <div class="nav-inner">
+    <a href="#ch1">Design Principles</a>
+    <a href="#ch2">SOLID</a>
+    <a href="#ch3">UML</a>
+    <a href="#ch4">TDD</a>
+    <a href="#ch5">JUnit 5</a>
+    <a href="#ch6">Mockito</a>
+    <a href="#ch7">PMD</a>
+    <a href="#ch8">Checkstyle</a>
+    <a href="#ch9">SonarQube</a>
+    <a href="#ch10">JaCoCo</a>
+    <a href="#ch11">SpotBugs</a>
+  </div>
+</nav>
+
+<!-- ============================================================
+     CHAPTER 1 — DESIGN PRINCIPLES
+     ============================================================ -->
+<section class="chapter" id="ch1">
+<div class="wrap">
+  <div class="ch-eyebrow">Chapter 1 of 11</div>
+  <div class="ch-num">01</div>
+  <h2 class="ch-title">Design Principles</h2>
+  <p class="ch-lead">The foundational rules that separate code that works from code that lasts. Every senior engineer applies these instinctively, and every team benefits when juniors learn them early.</p>
+
+  <h3>What are design principles?</h3>
+  <p>Design principles are time-tested guidelines for writing software that is easy to understand, easy to change, and resistant to bugs. They are not rules enforced by a compiler; they are wisdom accumulated over decades of software failures and successes. Think of them as the "grammar" of good code: you can write a sentence without grammar, but nobody will want to read your book.</p>
+
+  <h3>Why do we need them?</h3>
+  <p>Without design principles, code degrades quickly as a project grows. A 500-line program might work fine with messy code. A 50,000-line enterprise system will collapse under its own weight if every developer writes code however they please. Design principles solve three real problems:</p>
+  <p><strong>1. Maintainability:</strong> You will read code 10 times more often than you write it. Principles make code readable and predictable so that a new team member can understand it in hours, not weeks.</p>
+  <p><strong>2. Flexibility:</strong> Business requirements change constantly. Well-designed code can accommodate a new payment gateway, a new report format, or a new user role without rewriting half the system.</p>
+  <p><strong>3. Reliability:</strong> Code that follows principles has fewer hidden dependencies and fewer surprise side effects, which means fewer production bugs at 2 AM.</p>
+
+  <div class="realworld">
+    <h4>Banking application scenario</h4>
+    <p>A bank builds a loan approval system. Initially, it supports only home loans. Six months later, the business asks for car loans, education loans, and personal loans. If the original code put all loan logic in one giant class, adding each new type means editing that class, risking bugs in home loans while adding car loans. With proper design principles (particularly abstraction and separation of concerns), each loan type is its own class, and adding a new one requires zero changes to existing code.</p>
+  </div>
+
+  <h3>The core principles</h3>
+
+  <h4>1. DRY (Do not Repeat Yourself)</h4>
+  <p>Every piece of knowledge should exist in exactly one place. When you copy-paste code, you create two places that must be updated when requirements change. Miss one, and you have a bug.</p>
+
+  <div class="compare">
+    <div class="compare-box bad">
+      <div class="compare-head">Violating DRY</div>
+      <div class="compare-body">
+        <div class="code-wrap" style="margin:0;">
+          <div class="code-body"><pre><span class="cm">// Discount logic copied in 3 places</span>
+<span class="kw">public double</span> <span class="fn">calculateCartTotal</span>() {
+    <span class="kw">double</span> discount = <span class="nm">0</span>;
+    <span class="kw">if</span> (customer.isPremium()) {
+        discount = total * <span class="nm">0.10</span>;
+    }
+    <span class="kw">return</span> total - discount;
+}
+
+<span class="kw">public double</span> <span class="fn">calculateInvoiceTotal</span>() {
+    <span class="kw">double</span> discount = <span class="nm">0</span>;
+    <span class="kw">if</span> (customer.isPremium()) {
+        discount = total * <span class="nm">0.10</span>;  <span class="cm">// same logic!</span>
+    }
+    <span class="kw">return</span> total - discount;
+}</pre></div>
+        </div>
+      </div>
+    </div>
+    <div class="compare-box ok">
+      <div class="compare-head">Following DRY</div>
+      <div class="compare-body">
+        <div class="code-wrap" style="margin:0;">
+          <div class="code-body"><pre><span class="cm">// Single source of truth</span>
+<span class="kw">public double</span> <span class="fn">applyDiscount</span>(
+        <span class="kw">double</span> total,
+        <span class="cl">Customer</span> customer) {
+    <span class="kw">if</span> (customer.isPremium()) {
+        <span class="kw">return</span> total * <span class="nm">0.90</span>;
+    }
+    <span class="kw">return</span> total;
+}
+
+<span class="cm">// Both methods call the shared one</span>
+<span class="kw">public double</span> <span class="fn">calculateCartTotal</span>() {
+    <span class="kw">return</span> <span class="fn">applyDiscount</span>(total, customer);
+}
+<span class="kw">public double</span> <span class="fn">calculateInvoiceTotal</span>() {
+    <span class="kw">return</span> <span class="fn">applyDiscount</span>(total, customer);
+}</pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4>2. KISS (Keep It Simple, Stupid)</h4>
+  <p>The simplest solution that works is usually the best. Over-engineering is as dangerous as under-engineering. A junior developer who writes a Strategy pattern with a Factory for a feature that has only one possible implementation has added complexity that nobody needs.</p>
+
+  <div class="compare">
+    <div class="compare-box bad">
+      <div class="compare-head">Over-engineered</div>
+      <div class="compare-body">
+        <div class="code-wrap" style="margin:0;">
+          <div class="code-body"><pre><span class="cm">// For a simple "is user adult?" check:</span>
+<span class="kw">interface</span> <span class="cl">AgeValidator</span> { ... }
+<span class="kw">class</span> <span class="cl">AdultAgeValidator</span>
+    <span class="kw">implements</span> <span class="cl">AgeValidator</span> { ... }
+<span class="kw">class</span> <span class="cl">AgeValidatorFactory</span> { ... }
+<span class="kw">class</span> <span class="cl">AgeValidationService</span> { ... }
+<span class="cm">// 4 classes for one if-statement</span></pre></div>
+        </div>
+      </div>
+    </div>
+    <div class="compare-box ok">
+      <div class="compare-head">KISS approach</div>
+      <div class="compare-body">
+        <div class="code-wrap" style="margin:0;">
+          <div class="code-body"><pre><span class="kw">public boolean</span> <span class="fn">isAdult</span>(<span class="kw">int</span> age) {
+    <span class="kw">return</span> age >= <span class="nm">18</span>;
+}
+<span class="cm">// Done. If you need more validators</span>
+<span class="cm">// later, refactor then. Not now.</span></pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4>3. YAGNI (You Aren't Gonna Need It)</h4>
+  <p>Do not build features "just in case." Every line of code you write today must be justified by a requirement that exists today. If the business has not asked for multi-currency support, do not build it. You are guessing about the future, and you are usually wrong.</p>
+
+  <h4>4. Separation of Concerns</h4>
+  <p>Each class, each method, each module should handle one responsibility. Your controller handles HTTP requests. Your service handles business logic. Your repository handles database access. When a billing bug appears, you know to look in the billing service, not in the HTTP controller or the database layer.</p>
+
+  <div class="realworld">
+    <h4>E-commerce project scenario</h4>
+    <p>An online store has a checkout flow. If the order validation, payment processing, inventory update, email notification, and invoice generation are all in one 800-line method, debugging a payment failure means reading all 800 lines. With separation of concerns, each of those is a separate service class. The payment team owns PaymentService, the inventory team owns InventoryService, and each can be tested, debugged, and deployed independently.</p>
+  </div>
+
+  <h4>5. Favour Composition over Inheritance</h4>
+  <p>Instead of creating deep inheritance hierarchies (Animal extends LivingThing, Dog extends Animal, GuideDog extends Dog), build objects by combining smaller, reusable components. A Dog "has-a" WalkBehaviour and "has-a" BarkBehaviour. This is more flexible because you can swap behaviours at runtime without changing the class hierarchy.</p>
+
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">Composition example</span></div>
+    <div class="code-body"><pre><span class="cm">// Instead of: class EmailNotifier extends Notifier extends CommunicationService</span>
+<span class="cm">// Use composition:</span>
+
+<span class="kw">class</span> <span class="cl">NotificationService</span> {
+    <span class="kw">private final</span> <span class="cl">MessageFormatter</span> formatter;    <span class="cm">// has-a</span>
+    <span class="kw">private final</span> <span class="cl">DeliveryChannel</span> channel;        <span class="cm">// has-a</span>
+    <span class="kw">private final</span> <span class="cl">RecipientResolver</span> resolver;    <span class="cm">// has-a</span>
+
+    <span class="kw">public void</span> <span class="fn">send</span>(<span class="cl">Notification</span> n) {
+        <span class="cl">String</span> message = formatter.<span class="fn">format</span>(n);
+        <span class="cl">List</span>&lt;<span class="cl">String</span>&gt; recipients = resolver.<span class="fn">resolve</span>(n);
+        channel.<span class="fn">deliver</span>(message, recipients);
+    }
+}
+<span class="cm">// Now you can swap EmailChannel for SMSChannel or SlackChannel</span>
+<span class="cm">// without touching NotificationService at all.</span></pre></div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 1</span>
+      <span class="title">Identify the violated principle</span>
+    </div>
+    <div class="exercise-body">
+      <p>A developer wrote a UserService class that validates user input, saves users to the database, sends a welcome email, generates a PDF report of all users, and logs analytics events. Which principle is violated and how would you fix it?</p>
+      <details><summary>View solution</summary><div class="sol">
+        <p><strong>Violated:</strong> Separation of Concerns. The UserService is doing five completely unrelated jobs.</p>
+        <p><strong>Fix:</strong> Extract into separate classes: <code class="il">UserValidator</code> (validates input), <code class="il">UserRepository</code> (database), <code class="il">WelcomeEmailService</code> (emails), <code class="il">UserReportService</code> (PDF), <code class="il">AnalyticsService</code> (logging). The UserService becomes a thin orchestrator that calls each of these in sequence.</p>
+      </div></details>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 2</span>
+      <span class="title">Refactor duplicate logic</span>
+    </div>
+    <div class="exercise-body">
+      <p>You have three methods in an OrderService: <code class="il">calculateSubtotal()</code>, <code class="il">calculateTaxAmount()</code>, and <code class="il">calculateShippingCost()</code>. Each one starts by fetching the order from the database and checking if it is null. The null check and database fetch code is identical in all three. How do you apply DRY?</p>
+      <details><summary>View solution</summary><div class="sol">
+        <p><strong>Fix:</strong> Extract a private helper method:</p>
+        <div class="code-wrap"><div class="code-body"><pre><span class="kw">private</span> <span class="cl">Order</span> <span class="fn">getOrderOrThrow</span>(<span class="cl">Long</span> orderId) {
+    <span class="cl">Order</span> order = orderRepository.<span class="fn">findById</span>(orderId);
+    <span class="kw">if</span> (order == <span class="kw">null</span>) {
+        <span class="kw">throw new</span> <span class="cl">OrderNotFoundException</span>(orderId);
+    }
+    <span class="kw">return</span> order;
+}
+
+<span class="kw">public double</span> <span class="fn">calculateSubtotal</span>(<span class="cl">Long</span> orderId) {
+    <span class="cl">Order</span> order = <span class="fn">getOrderOrThrow</span>(orderId);
+    <span class="cm">// ... subtotal logic only</span>
+}</pre></div></div>
+        <p>Now the fetch + null check lives in one place. If the logic changes (for example, soft-deleted orders should also throw), you change one method.</p>
+      </div></details>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 3</span>
+      <span class="title">Composition vs. inheritance</span>
+    </div>
+    <div class="exercise-body">
+      <p>You are building a reporting system. Currently: <code class="il">Report extends BaseDocument extends Printable</code>. The business asks for reports that can be exported as PDF, Excel, and CSV. With inheritance, you would need PdfReport, ExcelReport, CsvReport — and if you also have Invoice and Receipt, that becomes 9 classes. Redesign this using composition.</p>
+      <details><summary>View solution</summary><div class="sol">
+        <div class="code-wrap"><div class="code-body"><pre><span class="kw">interface</span> <span class="cl">ExportStrategy</span> {
+    <span class="kw">byte</span>[] <span class="fn">export</span>(<span class="cl">DocumentData</span> data);
+}
+
+<span class="kw">class</span> <span class="cl">PdfExporter</span> <span class="kw">implements</span> <span class="cl">ExportStrategy</span> { <span class="cm">/* ... */</span> }
+<span class="kw">class</span> <span class="cl">ExcelExporter</span> <span class="kw">implements</span> <span class="cl">ExportStrategy</span> { <span class="cm">/* ... */</span> }
+<span class="kw">class</span> <span class="cl">CsvExporter</span> <span class="kw">implements</span> <span class="cl">ExportStrategy</span> { <span class="cm">/* ... */</span> }
+
+<span class="kw">class</span> <span class="cl">Report</span> {
+    <span class="kw">private</span> <span class="cl">ExportStrategy</span> exporter; <span class="cm">// injected</span>
+    <span class="kw">public byte</span>[] <span class="fn">export</span>() {
+        <span class="kw">return</span> exporter.<span class="fn">export</span>(<span class="kw">this</span>.data);
+    }
+}
+<span class="cm">// 3 exporters + 3 document types = 6 classes, not 9.</span>
+<span class="cm">// Adding a new format = 1 new class, zero changes to existing.</span></pre></div></div>
+      </div></details>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============================================================
+     CHAPTER 2 — SOLID
+     ============================================================ -->
+<section class="chapter" id="ch2">
+<div class="wrap">
+  <div class="ch-eyebrow">Chapter 2 of 11</div>
+  <div class="ch-num">02</div>
+  <h2 class="ch-title">SOLID Principles</h2>
+  <p class="ch-lead">Five principles introduced by Robert C. Martin (Uncle Bob) that form the backbone of object-oriented design. Master these, and your code will be flexible, testable, and resilient to change.</p>
+
+  <h3>What is SOLID?</h3>
+  <p>SOLID is an acronym for five design principles. Each letter stands for one principle. Together, they guide you to write classes that are small, focused, and easy to extend without breaking existing functionality. These are not theoretical concepts; they are practical techniques used in every serious Java project from banking systems to e-commerce platforms.</p>
+
+  <h3>Why do we need SOLID?</h3>
+  <p>Without SOLID, codebases develop three diseases: <strong>Rigidity</strong> (hard to change because every change cascades), <strong>Fragility</strong> (one change breaks something unrelated), and <strong>Immobility</strong> (impossible to reuse code in another project because everything is tangled). SOLID cures all three.</p>
+
+  <!-- ---- S ---- -->
+  <h3>S - Single Responsibility Principle (SRP)</h3>
+  <p><strong>Definition:</strong> A class should have only one reason to change. In practical terms, each class should do exactly one job.</p>
+  <p><strong>Why it matters:</strong> If a class handles both invoice calculation and PDF generation, and the PDF library changes, you must edit and retest a class that also contains financial logic. That is unnecessary risk.</p>
+
+  <div class="realworld">
+    <h4>Hospital management system</h4>
+    <p>A PatientService class initially handles patient registration, appointment booking, medical history retrieval, and billing. When the billing rules change (new insurance regulations), the developer edits PatientService and accidentally breaks the appointment booking logic. With SRP, these are four separate classes: PatientRegistration, AppointmentService, MedicalHistoryService, and BillingService. Billing changes cannot affect appointments.</p>
+  </div>
+
+  <div class="compare">
+    <div class="compare-box bad">
+      <div class="compare-head">Violates SRP</div>
+      <div class="compare-body">
+        <div class="code-wrap" style="margin:0;"><div class="code-body"><pre><span class="kw">class</span> <span class="cl">Employee</span> {
+    <span class="kw">public double</span> <span class="fn">calculatePay</span>() { <span class="cm">/*...*/</span> }
+    <span class="kw">public void</span> <span class="fn">saveToDatabase</span>() { <span class="cm">/*...*/</span> }
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">generateReport</span>() { <span class="cm">/*...*/</span> }
+}
+<span class="cm">// 3 reasons to change: pay rules,</span>
+<span class="cm">// database schema, report format</span></pre></div></div>
+      </div>
+    </div>
+    <div class="compare-box ok">
+      <div class="compare-head">Follows SRP</div>
+      <div class="compare-body">
+        <div class="code-wrap" style="margin:0;"><div class="code-body"><pre><span class="kw">class</span> <span class="cl">PayCalculator</span> {
+    <span class="kw">public double</span> <span class="fn">calculate</span>(<span class="cl">Employee</span> e) {...}
+}
+<span class="kw">class</span> <span class="cl">EmployeeRepository</span> {
+    <span class="kw">public void</span> <span class="fn">save</span>(<span class="cl">Employee</span> e) {...}
+}
+<span class="kw">class</span> <span class="cl">EmployeeReportGenerator</span> {
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">generate</span>(<span class="cl">Employee</span> e) {...}
+}
+<span class="cm">// Each class: 1 reason to change</span></pre></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---- O ---- -->
+  <h3>O - Open/Closed Principle (OCP)</h3>
+  <p><strong>Definition:</strong> Software entities should be open for extension but closed for modification. You should be able to add new behaviour without changing existing, tested code.</p>
+  <p><strong>Why it matters:</strong> Every time you modify a working class, you risk introducing bugs in production. OCP says: add new code, do not touch old code.</p>
+
+  <div class="realworld">
+    <h4>Payment gateway in an e-commerce platform</h4>
+    <p>The platform starts with Razorpay. Later, the business wants PayPal and Stripe. If the checkout code has <code class="il">if (gateway == "razorpay") {...} else if (gateway == "paypal") {...}</code>, every new gateway means editing this chain and retesting everything. With OCP, you define a <code class="il">PaymentGateway</code> interface and each provider implements it. Adding UPI support means creating one new class. Zero edits to existing code.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">OCP example — Payment system</span></div>
+    <div class="code-body"><pre><span class="cm">// Step 1: Define the contract</span>
+<span class="kw">interface</span> <span class="cl">PaymentGateway</span> {
+    <span class="cl">PaymentResult</span> <span class="fn">processPayment</span>(<span class="cl">Order</span> order);
+}
+
+<span class="cm">// Step 2: Implement each gateway separately</span>
+<span class="kw">class</span> <span class="cl">RazorpayGateway</span> <span class="kw">implements</span> <span class="cl">PaymentGateway</span> {
+    <span class="kw">public</span> <span class="cl">PaymentResult</span> <span class="fn">processPayment</span>(<span class="cl">Order</span> order) {
+        <span class="cm">// Razorpay-specific logic</span>
+    }
+}
+
+<span class="kw">class</span> <span class="cl">StripeGateway</span> <span class="kw">implements</span> <span class="cl">PaymentGateway</span> {
+    <span class="kw">public</span> <span class="cl">PaymentResult</span> <span class="fn">processPayment</span>(<span class="cl">Order</span> order) {
+        <span class="cm">// Stripe-specific logic</span>
+    }
+}
+
+<span class="cm">// Step 3: Checkout service depends on the interface</span>
+<span class="kw">class</span> <span class="cl">CheckoutService</span> {
+    <span class="kw">private final</span> <span class="cl">PaymentGateway</span> gateway;   <span class="cm">// injected</span>
+
+    <span class="kw">public void</span> <span class="fn">checkout</span>(<span class="cl">Order</span> order) {
+        <span class="cl">PaymentResult</span> result = gateway.<span class="fn">processPayment</span>(order);
+        <span class="cm">// works with ANY gateway — no if-else chain</span>
+    }
+}
+
+<span class="cm">// Adding UPI? Create UpiGateway implements PaymentGateway.</span>
+<span class="cm">// CheckoutService is never modified.</span></pre></div>
+  </div>
+
+  <!-- ---- L ---- -->
+  <h3>L - Liskov Substitution Principle (LSP)</h3>
+  <p><strong>Definition:</strong> Subtypes must be substitutable for their base types without breaking the program. If your code works with a parent class reference, it must also work correctly with any child class.</p>
+  <p><strong>Why it matters:</strong> If a subclass changes the expected behaviour, every piece of code that uses the parent type could break silently.</p>
+
+  <div class="compare">
+    <div class="compare-box bad">
+      <div class="compare-head">Violates LSP</div>
+      <div class="compare-body">
+        <div class="code-wrap" style="margin:0;"><div class="code-body"><pre><span class="kw">class</span> <span class="cl">Bird</span> {
+    <span class="kw">public void</span> <span class="fn">fly</span>() {
+        System.out.<span class="fn">println</span>(<span class="st">"Flying"</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="cl">Penguin</span> <span class="kw">extends</span> <span class="cl">Bird</span> {
+    <span class="kw">public void</span> <span class="fn">fly</span>() {
+        <span class="kw">throw new</span> <span class="cl">UnsupportedOperationException</span>();
+        <span class="cm">// Penguin cannot fly. Code that</span>
+        <span class="cm">// calls bird.fly() will crash.</span>
+    }
+}</pre></div></div>
+      </div>
+    </div>
+    <div class="compare-box ok">
+      <div class="compare-head">Follows LSP</div>
+      <div class="compare-body">
+        <div class="code-wrap" style="margin:0;"><div class="code-body"><pre><span class="kw">interface</span> <span class="cl">Bird</span> {
+    <span class="kw">void</span> <span class="fn">eat</span>();
+}
+<span class="kw">interface</span> <span class="cl">Flyable</span> <span class="kw">extends</span> <span class="cl">Bird</span> {
+    <span class="kw">void</span> <span class="fn">fly</span>();
+}
+
+<span class="kw">class</span> <span class="cl">Sparrow</span> <span class="kw">implements</span> <span class="cl">Flyable</span> {
+    <span class="kw">public void</span> <span class="fn">eat</span>() { <span class="cm">/*...*/</span> }
+    <span class="kw">public void</span> <span class="fn">fly</span>() { <span class="cm">/*...*/</span> }
+}
+<span class="kw">class</span> <span class="cl">Penguin</span> <span class="kw">implements</span> <span class="cl">Bird</span> {
+    <span class="kw">public void</span> <span class="fn">eat</span>() { <span class="cm">/*...*/</span> }
+    <span class="cm">// No fly() — correct!</span>
+}</pre></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---- I ---- -->
+  <h3>I - Interface Segregation Principle (ISP)</h3>
+  <p><strong>Definition:</strong> No client should be forced to depend on methods it does not use. Split large interfaces into smaller, specific ones.</p>
+
+  <div class="realworld">
+    <h4>Telecom billing system</h4>
+    <p>A giant <code class="il">TelecomService</code> interface has 20 methods: voice call billing, SMS billing, data billing, roaming, international, postpaid, prepaid. A prepaid-only module is forced to implement postpaid methods it will never use. With ISP, you split into <code class="il">VoiceBilling</code>, <code class="il">SmsBilling</code>, <code class="il">DataBilling</code> interfaces. Each module implements only what it needs.</p>
+  </div>
+
+  <div class="compare">
+    <div class="compare-box bad">
+      <div class="compare-head">Fat interface</div>
+      <div class="compare-body">
+        <div class="code-wrap" style="margin:0;"><div class="code-body"><pre><span class="kw">interface</span> <span class="cl">Machine</span> {
+    <span class="kw">void</span> <span class="fn">print</span>();
+    <span class="kw">void</span> <span class="fn">scan</span>();
+    <span class="kw">void</span> <span class="fn">fax</span>();
+}
+
+<span class="cm">// Simple printer forced to implement</span>
+<span class="cm">// scan() and fax() — throws exceptions</span>
+<span class="kw">class</span> <span class="cl">BasicPrinter</span> <span class="kw">implements</span> <span class="cl">Machine</span> {
+    <span class="kw">public void</span> <span class="fn">print</span>() { <span class="cm">/* ok */</span> }
+    <span class="kw">public void</span> <span class="fn">scan</span>()  { <span class="kw">throw</span>...; }
+    <span class="kw">public void</span> <span class="fn">fax</span>()   { <span class="kw">throw</span>...; }
+}</pre></div></div>
+      </div>
+    </div>
+    <div class="compare-box ok">
+      <div class="compare-head">Segregated interfaces</div>
+      <div class="compare-body">
+        <div class="code-wrap" style="margin:0;"><div class="code-body"><pre><span class="kw">interface</span> <span class="cl">Printer</span>  { <span class="kw">void</span> <span class="fn">print</span>(); }
+<span class="kw">interface</span> <span class="cl">Scanner</span>  { <span class="kw">void</span> <span class="fn">scan</span>(); }
+<span class="kw">interface</span> <span class="cl">Fax</span>      { <span class="kw">void</span> <span class="fn">fax</span>(); }
+
+<span class="kw">class</span> <span class="cl">BasicPrinter</span>
+    <span class="kw">implements</span> <span class="cl">Printer</span> {
+    <span class="kw">public void</span> <span class="fn">print</span>() { <span class="cm">/* ok */</span> }
+    <span class="cm">// No scan. No fax. Clean.</span>
+}
+
+<span class="kw">class</span> <span class="cl">AllInOne</span>
+    <span class="kw">implements</span> <span class="cl">Printer</span>, <span class="cl">Scanner</span>, <span class="cl">Fax</span> {
+    <span class="cm">// Implements all three</span>
+}</pre></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---- D ---- -->
+  <h3>D - Dependency Inversion Principle (DIP)</h3>
+  <p><strong>Definition:</strong> High-level modules should not depend on low-level modules. Both should depend on abstractions (interfaces). In simple terms, your business logic should not know whether it is talking to MySQL, PostgreSQL, or a mock database. It talks to an interface.</p>
+
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">DIP example — Notification system</span></div>
+    <div class="code-body"><pre><span class="cm">// BAD: High-level depends on low-level</span>
+<span class="kw">class</span> <span class="cl">OrderService</span> {
+    <span class="kw">private</span> <span class="cl">GmailSender</span> sender = <span class="kw">new</span> <span class="cl">GmailSender</span>();
+    <span class="cm">// Tightly coupled to Gmail. Cannot swap to SMS or Slack.</span>
+}
+
+<span class="cm">// GOOD: Both depend on abstraction</span>
+<span class="kw">interface</span> <span class="cl">NotificationSender</span> {
+    <span class="kw">void</span> <span class="fn">send</span>(<span class="cl">String</span> to, <span class="cl">String</span> message);
+}
+
+<span class="kw">class</span> <span class="cl">GmailSender</span> <span class="kw">implements</span> <span class="cl">NotificationSender</span> { <span class="cm">/*...*/</span> }
+<span class="kw">class</span> <span class="cl">SmsSender</span>   <span class="kw">implements</span> <span class="cl">NotificationSender</span> { <span class="cm">/*...*/</span> }
+
+<span class="kw">class</span> <span class="cl">OrderService</span> {
+    <span class="kw">private final</span> <span class="cl">NotificationSender</span> sender;  <span class="cm">// injected</span>
+
+    <span class="kw">public</span> <span class="cl">OrderService</span>(<span class="cl">NotificationSender</span> sender) {
+        <span class="kw">this</span>.sender = sender;
+    }
+    <span class="cm">// Works with Gmail, SMS, Slack — whatever is injected</span>
+}</pre></div>
+  </div>
+
+  <div class="callout info">
+    <span class="callout-icon">i</span>
+    <div class="callout-body">
+      <strong>Spring Boot connection</strong>
+      <p>If you use Spring Boot, dependency injection via <code class="il">@Autowired</code> or constructor injection is the framework's built-in way of implementing DIP. Spring creates the concrete class and injects it into your service. You program to the interface; Spring provides the implementation.</p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 1</span>
+      <span class="title">Identify SOLID violations</span>
+    </div>
+    <div class="exercise-body">
+      <p>A class <code class="il">ReportManager</code> does the following: fetches data from MySQL, applies business rules to filter the data, converts results to PDF, and emails the PDF to managers. Which SOLID principles does it violate?</p>
+      <details><summary>View solution</summary><div class="sol">
+        <p><strong>SRP:</strong> Four responsibilities in one class (data access, business logic, PDF generation, email sending).</p>
+        <p><strong>OCP:</strong> If you need Excel output instead of PDF, you must modify ReportManager.</p>
+        <p><strong>DIP:</strong> Direct dependency on MySQL (should use a Repository interface) and direct dependency on email (should use a NotificationSender interface).</p>
+        <p><strong>Fix:</strong> Split into DataRepository (interface), ReportFilter (business logic), ReportExporter (interface with PdfExporter, ExcelExporter implementations), ReportNotifier (interface). ReportManager becomes a thin orchestrator calling these four.</p>
+      </div></details>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 2</span>
+      <span class="title">Apply OCP to a discount system</span>
+    </div>
+    <div class="exercise-body">
+      <p>An online store calculates discounts with a big if-else chain: <code class="il">if (type == "FESTIVAL") ... else if (type == "LOYALTY") ... else if (type == "BULK") ...</code>. Refactor this to follow OCP so that adding a new discount type requires zero changes to existing code.</p>
+      <details><summary>View solution</summary><div class="sol">
+        <div class="code-wrap"><div class="code-body"><pre><span class="kw">interface</span> <span class="cl">DiscountStrategy</span> {
+    <span class="kw">double</span> <span class="fn">apply</span>(<span class="cl">Order</span> order);
+}
+
+<span class="kw">class</span> <span class="cl">FestivalDiscount</span> <span class="kw">implements</span> <span class="cl">DiscountStrategy</span> {
+    <span class="kw">public double</span> <span class="fn">apply</span>(<span class="cl">Order</span> order) {
+        <span class="kw">return</span> order.<span class="fn">getTotal</span>() * <span class="nm">0.20</span>; <span class="cm">// 20% off</span>
+    }
+}
+
+<span class="kw">class</span> <span class="cl">LoyaltyDiscount</span> <span class="kw">implements</span> <span class="cl">DiscountStrategy</span> {
+    <span class="kw">public double</span> <span class="fn">apply</span>(<span class="cl">Order</span> order) {
+        <span class="kw">return</span> order.<span class="fn">getTotal</span>() * <span class="nm">0.05</span>; <span class="cm">// 5% off</span>
+    }
+}
+
+<span class="kw">class</span> <span class="cl">OrderService</span> {
+    <span class="kw">private final</span> <span class="cl">DiscountStrategy</span> discount; <span class="cm">// injected</span>
+
+    <span class="kw">public double</span> <span class="fn">finalPrice</span>(<span class="cl">Order</span> order) {
+        <span class="kw">return</span> order.<span class="fn">getTotal</span>() - discount.<span class="fn">apply</span>(order);
+    }
+}
+<span class="cm">// New discount? Create a new class. OrderService untouched.</span></pre></div></div>
+      </div></details>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 3</span>
+      <span class="title">Fix an LSP violation</span>
+    </div>
+    <div class="exercise-body">
+      <p>A <code class="il">Rectangle</code> class has <code class="il">setWidth()</code> and <code class="il">setHeight()</code>. A <code class="il">Square</code> extends Rectangle and overrides both methods to keep width and height equal. Code that sets width=5 and height=10 on a Rectangle reference expects area=50, but when the object is actually a Square, the area is 100. How do you fix this LSP violation?</p>
+      <details><summary>View solution</summary><div class="sol">
+        <p>Make Rectangle and Square separate classes that both implement a <code class="il">Shape</code> interface with a <code class="il">getArea()</code> method. Do not extend Rectangle from Square or vice versa. They have different constraints (Square enforces equal sides), so one cannot substitute for the other.</p>
+        <div class="code-wrap"><div class="code-body"><pre><span class="kw">interface</span> <span class="cl">Shape</span> {
+    <span class="kw">double</span> <span class="fn">getArea</span>();
+}
+
+<span class="kw">class</span> <span class="cl">Rectangle</span> <span class="kw">implements</span> <span class="cl">Shape</span> {
+    <span class="kw">private double</span> width, height;
+    <span class="kw">public double</span> <span class="fn">getArea</span>() { <span class="kw">return</span> width * height; }
+}
+
+<span class="kw">class</span> <span class="cl">Square</span> <span class="kw">implements</span> <span class="cl">Shape</span> {
+    <span class="kw">private double</span> side;
+    <span class="kw">public double</span> <span class="fn">getArea</span>() { <span class="kw">return</span> side * side; }
+}</pre></div></div>
+      </div></details>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============================================================
+     CHAPTER 3 — UML BASICS
+     ============================================================ -->
+<section class="chapter" id="ch3">
+<div class="wrap">
+  <div class="ch-eyebrow">Chapter 3 of 11</div>
+  <div class="ch-num">03</div>
+  <h2 class="ch-title">UML Basics</h2>
+  <p class="ch-lead">Unified Modelling Language is the visual language of software design. Before writing code, architects draw UML diagrams the same way building architects draw blueprints before laying bricks.</p>
+
+  <h3>What is UML?</h3>
+  <p>UML (Unified Modelling Language) is a standardised way to draw diagrams that represent the structure and behaviour of a software system. It is not a programming language; it is a visual notation that helps developers, architects, and business stakeholders communicate about how a system works without ambiguity.</p>
+
+  <h3>Why do we need UML?</h3>
+  <p>Imagine a team of 15 developers building an insurance claims system. Without diagrams, each developer has a different mental picture of how the system works. One thinks the ClaimValidator calls the PaymentService directly; another thinks it goes through an ApprovalWorkflow first. UML gives everyone a shared, unambiguous picture. It is used in design meetings, code reviews, onboarding documents, and system documentation.</p>
+
+  <div class="realworld">
+    <h4>Banking project onboarding</h4>
+    <p>A new developer joins a banking project. Instead of reading 200 source files to understand the system, they are given three UML diagrams: a class diagram showing all the domain classes and their relationships, a sequence diagram showing how a fund transfer flows from the REST controller through validation, debit, credit, and notification, and a use case diagram showing all the features available to customers, tellers, and managers. In one hour, the new developer understands the architecture. Without UML, this would take a week of reading code.</p>
+  </div>
+
+  <h3>The three most useful UML diagrams</h3>
+
+  <h4>1. Class diagram (shows structure)</h4>
+  <p>A class diagram shows the classes in your system, their attributes (fields), their methods, and the relationships between them. Each class is drawn as a box with three sections: class name, attributes, and methods.</p>
+
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">Class diagram notation (text representation)</span></div>
+    <div class="code-body"><pre><span class="cm">+-----------------------------------+</span>
+<span class="cm">|          &lt;&lt;interface&gt;&gt;            |</span>
+<span class="cm">|          PaymentGateway           |</span>
+<span class="cm">+-----------------------------------+</span>
+<span class="cm">| + processPayment(order): Result   |</span>
+<span class="cm">| + refund(transactionId): boolean  |</span>
+<span class="cm">+-----------------------------------+</span>
+<span class="cm">            ^              ^</span>
+<span class="cm">            |              |</span>
+<span class="cm">      implements      implements</span>
+<span class="cm">            |              |</span>
+<span class="cm">+-----------------+  +-----------------+</span>
+<span class="cm">| RazorpayGateway |  | StripeGateway   |</span>
+<span class="cm">+-----------------+  +-----------------+</span>
+<span class="cm">| - apiKey: String|  | - secretKey: Str|</span>
+<span class="cm">+-----------------+  +-----------------+</span>
+<span class="cm">| + processPayment|  | + processPayment|</span>
+<span class="cm">| + refund        |  | + refund        |</span>
+<span class="cm">+-----------------+  +-----------------+</span></pre></div>
+  </div>
+
+  <p><strong>Key relationships in class diagrams:</strong></p>
+  <table>
+    <thead><tr><th>Relationship</th><th>Symbol</th><th>Meaning</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td>Association</td><td>Solid line</td><td>Class A uses Class B</td><td>Student -- Course</td></tr>
+      <tr><td>Aggregation</td><td>Open diamond</td><td>Class A "has" Class B (B can exist alone)</td><td>Department has Employees</td></tr>
+      <tr><td>Composition</td><td>Filled diamond</td><td>Class A "owns" Class B (B dies with A)</td><td>House owns Rooms</td></tr>
+      <tr><td>Inheritance</td><td>Open arrow</td><td>Class B extends Class A</td><td>Dog extends Animal</td></tr>
+      <tr><td>Implementation</td><td>Dashed open arrow</td><td>Class implements Interface</td><td>RazorpayGateway implements PaymentGateway</td></tr>
+      <tr><td>Dependency</td><td>Dashed arrow</td><td>Class A temporarily uses Class B</td><td>OrderService uses EmailSender</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Visibility markers:</strong> <code class="il">+</code> means public, <code class="il">-</code> means private, <code class="il">#</code> means protected, <code class="il">~</code> means package-private.</p>
+
+  <h4>2. Sequence diagram (shows behaviour over time)</h4>
+  <p>A sequence diagram shows how objects interact over time, reading from top to bottom. Each vertical line represents an object. Horizontal arrows represent method calls. This is the most useful diagram for understanding a feature's flow.</p>
+
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">Sequence diagram — Fund Transfer flow</span></div>
+    <div class="code-body"><pre><span class="cm">User        Controller      TransferService     AccountRepo       NotificationService</span>
+<span class="cm"> |              |                  |                  |                    |</span>
+<span class="cm"> |--transfer()->|                  |                  |                    |</span>
+<span class="cm"> |              |--validate()----->|                  |                    |</span>
+<span class="cm"> |              |                  |--findById()----->|                    |</span>
+<span class="cm"> |              |                  |<--Account--------|                    |</span>
+<span class="cm"> |              |                  |--debit()-------->|                    |</span>
+<span class="cm"> |              |                  |--credit()------->|                    |</span>
+<span class="cm"> |              |                  |--sendNotif()------------------------->|</span>
+<span class="cm"> |              |<--result----------|                  |                    |</span>
+<span class="cm"> |<-200 OK------|                  |                  |                    |</span></pre></div>
+  </div>
+
+  <h4>3. Use case diagram (shows what the system does)</h4>
+  <p>A use case diagram shows the system's features and which actors (users, external systems) use them. It is drawn during requirements gathering to ensure developers and business people agree on what the system should do.</p>
+
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">Use case diagram — Library management system</span></div>
+    <div class="code-body"><pre><span class="cm">Actors:                   Use Cases (inside system boundary):</span>
+<span class="cm">                          +------------------------------------------+</span>
+<span class="cm">  Student ------>          |   ( Search Books )                       |</span>
+<span class="cm">  Student ------>          |   ( Borrow Book )                        |</span>
+<span class="cm">  Student ------>          |   ( Return Book )                        |</span>
+<span class="cm">  Student ------>          |   ( View Borrowing History )             |</span>
+<span class="cm">                          |                                          |</span>
+<span class="cm">  Librarian --->           |   ( Add New Book )                       |</span>
+<span class="cm">  Librarian --->           |   ( Remove Book )                        |</span>
+<span class="cm">  Librarian --->           |   ( Generate Overdue Report )            |</span>
+<span class="cm">                          |                                          |</span>
+<span class="cm">  Admin ------->           |   ( Manage Users )                       |</span>
+<span class="cm">  Admin ------->           |   ( System Configuration )               |</span>
+<span class="cm">                          +------------------------------------------+</span></pre></div>
+  </div>
+
+  <h3>How to draw UML in practice</h3>
+  <p>You do not need expensive tools. Here are practical options:</p>
+  <table>
+    <thead><tr><th>Tool</th><th>Type</th><th>Best for</th></tr></thead>
+    <tbody>
+      <tr><td>draw.io (diagrams.net)</td><td>Free, browser-based</td><td>Quick diagrams, team collaboration</td></tr>
+      <tr><td>PlantUML</td><td>Free, text-based</td><td>Version-controlled diagrams (code-to-diagram)</td></tr>
+      <tr><td>Lucidchart</td><td>Paid, browser-based</td><td>Enterprise teams, polished output</td></tr>
+      <tr><td>IntelliJ UML plugin</td><td>Built into IDE</td><td>Auto-generate class diagrams from code</td></tr>
+      <tr><td>Pen and whiteboard</td><td>Free</td><td>Design meetings, brainstorming</td></tr>
+    </tbody>
+  </table>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 1</span>
+      <span class="title">Draw a class diagram</span>
+    </div>
+    <div class="exercise-body">
+      <p>Draw a class diagram for an online food ordering system with these classes: Customer, Order, OrderItem, MenuItem, Restaurant, DeliveryDriver. Show the relationships: a Customer places many Orders, each Order contains multiple OrderItems, each OrderItem references one MenuItem, a Restaurant has many MenuItems, and a DeliveryDriver is assigned to an Order.</p>
+      <details><summary>View solution</summary><div class="sol">
+        <p>Customer 1 ---* Order (one-to-many: a customer has many orders)</p>
+        <p>Order 1 ---* OrderItem (composition: items die with the order)</p>
+        <p>OrderItem * ---1 MenuItem (many-to-one: each item refers to a menu item)</p>
+        <p>Restaurant 1 ---* MenuItem (composition: menu items belong to restaurant)</p>
+        <p>Order * ---1 DeliveryDriver (many-to-one: driver handles many orders)</p>
+        <p>Customer has: name, email, phone, address. Order has: orderId, totalAmount, status, orderDate. MenuItem has: name, price, category.</p>
+      </div></details>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 2</span>
+      <span class="title">Draw a sequence diagram</span>
+    </div>
+    <div class="exercise-body">
+      <p>Draw a sequence diagram for the following scenario: A user clicks "Place Order" on a website. The OrderController receives the request, calls OrderService.createOrder(), which calls InventoryService.checkStock() (returns true), then calls PaymentService.charge() (returns success), then calls OrderRepository.save(), then calls EmailService.sendConfirmation(). Show the flow with return values.</p>
+      <details><summary>View solution</summary><div class="sol">
+        <div class="code-wrap"><div class="code-body"><pre><span class="cm">User      Controller     OrderService    InventoryService   PaymentService   OrderRepo   EmailService</span>
+<span class="cm"> |            |               |                |                |              |             |</span>
+<span class="cm"> |--POST----->|               |                |                |              |             |</span>
+<span class="cm"> |            |--createOrder-->|                |                |              |             |</span>
+<span class="cm"> |            |               |--checkStock()-->|                |              |             |</span>
+<span class="cm"> |            |               |<---true---------|                |              |             |</span>
+<span class="cm"> |            |               |--charge()----------------------->|              |             |</span>
+<span class="cm"> |            |               |<---success----------------------|              |             |</span>
+<span class="cm"> |            |               |--save()---------------------------------------->|             |</span>
+<span class="cm"> |            |               |<---orderId------------------------------------|             |</span>
+<span class="cm"> |            |               |--sendConfirmation()---------------------------------------->|</span>
+<span class="cm"> |            |<--Order--------|                |                |              |             |</span>
+<span class="cm"> |<--201------|               |                |                |              |             |</span></pre></div></div>
+      </div></details>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============================================================
+     CHAPTER 4 — TDD
+     ============================================================ -->
+<section class="chapter" id="ch4">
+<div class="wrap">
+  <div class="ch-eyebrow">Chapter 4 of 11</div>
+  <div class="ch-num">04</div>
+  <h2 class="ch-title">Test-Driven Development (TDD)</h2>
+  <p class="ch-lead">Write the test first, watch it fail, write the minimum code to pass, then refactor. This counterintuitive cycle produces cleaner, more reliable code than writing tests after the fact.</p>
+
+  <h3>What is TDD?</h3>
+  <p>Test-Driven Development is a development methodology where you write a failing test before writing any production code. The cycle has three steps, often called Red-Green-Refactor:</p>
+  <p><strong>Red:</strong> Write a test for a feature that does not exist yet. Run it. It fails (red). This proves the test is meaningful, it is actually checking something.</p>
+  <p><strong>Green:</strong> Write the simplest possible code to make the test pass. Do not optimise, do not handle edge cases yet. Just make the red test turn green.</p>
+  <p><strong>Refactor:</strong> Now clean up the code. Remove duplication, improve naming, extract methods. Run the tests again to confirm nothing broke. The tests are your safety net during refactoring.</p>
+
+  <h3>Why do we need TDD?</h3>
+  <p>Most developers write code first and tests later (or never). The problem: when you write tests after the code, you unconsciously write tests that confirm what you already built, not tests that verify what the business actually needs. TDD forces you to think about requirements and edge cases before writing any implementation.</p>
+
+  <div class="realworld">
+    <h4>Insurance premium calculator</h4>
+    <p>A team needs to build a premium calculator for health insurance. The business rules are complex: age-based rates, smoker surcharge, pre-existing condition loading, family discount. With TDD, each business rule becomes a test first: "A 30-year-old non-smoker with no conditions should pay Rs. 5,000/month." Then the developer writes code to pass that test. Then: "A 30-year-old smoker should pay Rs. 7,500/month." Each rule is verified before moving to the next. When the code is complete, there is a comprehensive test suite that acts as living documentation of every business rule.</p>
+  </div>
+
+  <h3>Step-by-step TDD example</h3>
+  <p>Scenario: Build a <code class="il">StringCalculator</code> that adds numbers from a comma-separated string.</p>
+
+  <h4>Cycle 1: Empty string returns 0</h4>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">RED — Write the failing test first</span></div>
+    <div class="code-body"><pre><span class="an">@Test</span>
+<span class="kw">void</span> <span class="fn">shouldReturnZeroForEmptyString</span>() {
+    <span class="cl">StringCalculator</span> calc = <span class="kw">new</span> <span class="cl">StringCalculator</span>();
+    assertEquals(<span class="nm">0</span>, calc.<span class="fn">add</span>(<span class="st">""</span>));
+}
+<span class="cm">// This will NOT compile yet — StringCalculator does not exist.</span></pre></div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">GREEN — Write minimum code to pass</span></div>
+    <div class="code-body"><pre><span class="kw">public class</span> <span class="cl">StringCalculator</span> {
+    <span class="kw">public int</span> <span class="fn">add</span>(<span class="cl">String</span> numbers) {
+        <span class="kw">return</span> <span class="nm">0</span>;  <span class="cm">// simplest code that passes</span>
+    }
+}</pre></div>
+  </div>
+
+  <h4>Cycle 2: Single number returns that number</h4>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">RED</span></div>
+    <div class="code-body"><pre><span class="an">@Test</span>
+<span class="kw">void</span> <span class="fn">shouldReturnNumberForSingleInput</span>() {
+    assertEquals(<span class="nm">5</span>, calc.<span class="fn">add</span>(<span class="st">"5"</span>));
+}
+<span class="cm">// FAILS: returns 0 instead of 5</span></pre></div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">GREEN</span></div>
+    <div class="code-body"><pre><span class="kw">public int</span> <span class="fn">add</span>(<span class="cl">String</span> numbers) {
+    <span class="kw">if</span> (numbers.<span class="fn">isEmpty</span>()) <span class="kw">return</span> <span class="nm">0</span>;
+    <span class="kw">return</span> <span class="cl">Integer</span>.<span class="fn">parseInt</span>(numbers);
+}</pre></div>
+  </div>
+
+  <h4>Cycle 3: Two numbers separated by comma</h4>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">RED, then GREEN</span></div>
+    <div class="code-body"><pre><span class="an">@Test</span>
+<span class="kw">void</span> <span class="fn">shouldReturnSumOfTwoNumbers</span>() {
+    assertEquals(<span class="nm">8</span>, calc.<span class="fn">add</span>(<span class="st">"3,5"</span>));
+}
+
+<span class="cm">// GREEN — updated implementation:</span>
+<span class="kw">public int</span> <span class="fn">add</span>(<span class="cl">String</span> numbers) {
+    <span class="kw">if</span> (numbers.<span class="fn">isEmpty</span>()) <span class="kw">return</span> <span class="nm">0</span>;
+    <span class="cl">String</span>[] parts = numbers.<span class="fn">split</span>(<span class="st">","</span>);
+    <span class="kw">int</span> sum = <span class="nm">0</span>;
+    <span class="kw">for</span> (<span class="cl">String</span> part : parts) {
+        sum += <span class="cl">Integer</span>.<span class="fn">parseInt</span>(part.<span class="fn">trim</span>());
+    }
+    <span class="kw">return</span> sum;
+}
+<span class="cm">// All 3 tests pass. REFACTOR if needed, then move to next cycle.</span></pre></div>
+  </div>
+
+  <div class="callout good">
+    <span class="callout-icon">i</span>
+    <div class="callout-body">
+      <strong>Key TDD rule</strong>
+      <p>Never write production code without a failing test. If all your tests pass, you cannot write production code, only refactor. This discipline ensures 100% of your code is covered by tests.</p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 1</span>
+      <span class="title">TDD a password validator</span>
+    </div>
+    <div class="exercise-body">
+      <p>Using TDD (write test first, then code), build a <code class="il">PasswordValidator</code> with these rules: minimum 8 characters, at least one uppercase letter, at least one digit, at least one special character. Write one test per rule, make each pass before writing the next test.</p>
+      <details><summary>View solution</summary><div class="sol">
+        <div class="code-wrap"><div class="code-body"><pre><span class="cm">// Test 1: too short</span>
+<span class="an">@Test</span>
+<span class="kw">void</span> <span class="fn">rejectPasswordShorterThan8</span>() {
+    assertFalse(validator.<span class="fn">isValid</span>(<span class="st">"Ab1!"</span>));  <span class="cm">// 4 chars</span>
+}
+
+<span class="cm">// Test 2: no uppercase</span>
+<span class="an">@Test</span>
+<span class="kw">void</span> <span class="fn">rejectPasswordWithoutUppercase</span>() {
+    assertFalse(validator.<span class="fn">isValid</span>(<span class="st">"abcdefg1!"</span>));
+}
+
+<span class="cm">// Test 3: no digit</span>
+<span class="an">@Test</span>
+<span class="kw">void</span> <span class="fn">rejectPasswordWithoutDigit</span>() {
+    assertFalse(validator.<span class="fn">isValid</span>(<span class="st">"Abcdefgh!"</span>));
+}
+
+<span class="cm">// Test 4: no special char</span>
+<span class="an">@Test</span>
+<span class="kw">void</span> <span class="fn">rejectPasswordWithoutSpecialChar</span>() {
+    assertFalse(validator.<span class="fn">isValid</span>(<span class="st">"Abcdefg1"</span>));
+}
+
+<span class="cm">// Test 5: valid password</span>
+<span class="an">@Test</span>
+<span class="kw">void</span> <span class="fn">acceptValidPassword</span>() {
+    assertTrue(validator.<span class="fn">isValid</span>(<span class="st">"Abcdefg1!"</span>));
+}
+
+<span class="cm">// Implementation built incrementally:</span>
+<span class="kw">public boolean</span> <span class="fn">isValid</span>(<span class="cl">String</span> pw) {
+    <span class="kw">if</span> (pw.<span class="fn">length</span>() < <span class="nm">8</span>) <span class="kw">return false</span>;
+    <span class="kw">if</span> (!pw.<span class="fn">matches</span>(<span class="st">".*[A-Z].*"</span>)) <span class="kw">return false</span>;
+    <span class="kw">if</span> (!pw.<span class="fn">matches</span>(<span class="st">".*[0-9].*"</span>)) <span class="kw">return false</span>;
+    <span class="kw">if</span> (!pw.<span class="fn">matches</span>(<span class="st">".*[!@#$%^&*].*"</span>)) <span class="kw">return false</span>;
+    <span class="kw">return true</span>;
+}</pre></div></div>
+      </div></details>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============================================================
+     CHAPTER 5 — JUnit 5
+     ============================================================ -->
+<section class="chapter" id="ch5">
+<div class="wrap">
+  <div class="ch-eyebrow">Chapter 5 of 11</div>
+  <div class="ch-num">05</div>
+  <h2 class="ch-title">JUnit 5</h2>
+  <p class="ch-lead">The standard testing framework for Java. Every professional Java project uses JUnit. It is the tool that turns TDD from theory into practice.</p>
+
+  <h3>What is JUnit?</h3>
+  <p>JUnit is a framework that lets you write small, automated test methods that verify your code works correctly. You write a test method, call your code inside it, and use assertions to check that the result matches your expectation. If the assertion fails, JUnit reports the test as failed with a clear message showing expected vs. actual values.</p>
+
+  <h3>Why do we need JUnit?</h3>
+  <p>Without JUnit, the only way to verify your code is to run the application manually and click through every feature after every change. In a large project with 500 features, manual testing after every code change would take days. With JUnit, you write tests once, and they run in seconds. A team of 20 developers making changes every hour can run 2,000 tests in under a minute to confirm nothing is broken.</p>
+
+  <h3>Setup: Add to pom.xml</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">pom.xml</span></div>
+    <div class="code-body"><pre><span class="op">&lt;dependency&gt;</span>
+    <span class="op">&lt;groupId&gt;</span>org.junit.jupiter<span class="op">&lt;/groupId&gt;</span>
+    <span class="op">&lt;artifactId&gt;</span>junit-jupiter<span class="op">&lt;/artifactId&gt;</span>
+    <span class="op">&lt;version&gt;</span><span class="nm">5.10.2</span><span class="op">&lt;/version&gt;</span>
+    <span class="op">&lt;scope&gt;</span>test<span class="op">&lt;/scope&gt;</span>
+<span class="op">&lt;/dependency&gt;</span></pre></div>
+  </div>
+
+  <h3>Core annotations and assertions</h3>
+  <table>
+    <thead><tr><th>Annotation</th><th>Purpose</th><th>When to use</th></tr></thead>
+    <tbody>
+      <tr><td><code class="il">@Test</code></td><td>Marks a method as a test</td><td>Every test method</td></tr>
+      <tr><td><code class="il">@BeforeEach</code></td><td>Runs before each test method</td><td>Setting up test objects</td></tr>
+      <tr><td><code class="il">@AfterEach</code></td><td>Runs after each test method</td><td>Cleanup resources</td></tr>
+      <tr><td><code class="il">@BeforeAll</code></td><td>Runs once before all tests (static)</td><td>Expensive setup (DB connection)</td></tr>
+      <tr><td><code class="il">@DisplayName</code></td><td>Custom readable name for the test</td><td>Making test reports clear</td></tr>
+      <tr><td><code class="il">@Disabled</code></td><td>Skips a test</td><td>Temporarily disabling a broken test</td></tr>
+      <tr><td><code class="il">@ParameterizedTest</code></td><td>Run same test with different inputs</td><td>Testing multiple scenarios</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Example 1: Testing a BankAccount class</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">BankAccount.java — the class we want to test</span></div>
+    <div class="code-body"><pre><span class="kw">public class</span> <span class="cl">BankAccount</span> {
+    <span class="kw">private double</span> balance;
+
+    <span class="kw">public</span> <span class="cl">BankAccount</span>(<span class="kw">double</span> initialBalance) {
+        <span class="kw">if</span> (initialBalance < <span class="nm">0</span>) <span class="kw">throw new</span> <span class="cl">IllegalArgumentException</span>(<span class="st">"Negative balance"</span>);
+        <span class="kw">this</span>.balance = initialBalance;
+    }
+
+    <span class="kw">public void</span> <span class="fn">deposit</span>(<span class="kw">double</span> amount) {
+        <span class="kw">if</span> (amount <= <span class="nm">0</span>) <span class="kw">throw new</span> <span class="cl">IllegalArgumentException</span>(<span class="st">"Deposit must be positive"</span>);
+        balance += amount;
+    }
+
+    <span class="kw">public void</span> <span class="fn">withdraw</span>(<span class="kw">double</span> amount) {
+        <span class="kw">if</span> (amount > balance) <span class="kw">throw new</span> <span class="cl">InsufficientFundsException</span>(<span class="st">"Not enough balance"</span>);
+        balance -= amount;
+    }
+
+    <span class="kw">public double</span> <span class="fn">getBalance</span>() { <span class="kw">return</span> balance; }
+}</pre></div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">BankAccountTest.java — comprehensive tests</span></div>
+    <div class="code-body"><pre><span class="kw">import static</span> org.junit.jupiter.api.Assertions.*;
+
+<span class="kw">class</span> <span class="cl">BankAccountTest</span> {
+
+    <span class="kw">private</span> <span class="cl">BankAccount</span> account;
+
+    <span class="an">@BeforeEach</span>
+    <span class="kw">void</span> <span class="fn">setUp</span>() {
+        account = <span class="kw">new</span> <span class="cl">BankAccount</span>(<span class="nm">1000.0</span>);
+    }
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"New account has correct initial balance"</span>)
+    <span class="kw">void</span> <span class="fn">initialBalance</span>() {
+        assertEquals(<span class="nm">1000.0</span>, account.<span class="fn">getBalance</span>());
+    }
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Deposit increases balance"</span>)
+    <span class="kw">void</span> <span class="fn">depositIncreasesBalance</span>() {
+        account.<span class="fn">deposit</span>(<span class="nm">500.0</span>);
+        assertEquals(<span class="nm">1500.0</span>, account.<span class="fn">getBalance</span>());
+    }
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Withdraw decreases balance"</span>)
+    <span class="kw">void</span> <span class="fn">withdrawDecreasesBalance</span>() {
+        account.<span class="fn">withdraw</span>(<span class="nm">300.0</span>);
+        assertEquals(<span class="nm">700.0</span>, account.<span class="fn">getBalance</span>());
+    }
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Withdraw more than balance throws exception"</span>)
+    <span class="kw">void</span> <span class="fn">withdrawExceedingBalanceThrows</span>() {
+        assertThrows(<span class="cl">InsufficientFundsException</span>.<span class="kw">class</span>, () -> {
+            account.<span class="fn">withdraw</span>(<span class="nm">5000.0</span>);
+        });
+    }
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Negative initial balance throws exception"</span>)
+    <span class="kw">void</span> <span class="fn">negativeInitialBalanceThrows</span>() {
+        assertThrows(<span class="cl">IllegalArgumentException</span>.<span class="kw">class</span>, () -> {
+            <span class="kw">new</span> <span class="cl">BankAccount</span>(-<span class="nm">100</span>);
+        });
+    }
+
+    <span class="an">@ParameterizedTest</span>
+    <span class="an">@ValueSource</span>(doubles = {<span class="nm">100</span>, <span class="nm">200</span>, <span class="nm">500</span>, <span class="nm">999.99</span>})
+    <span class="an">@DisplayName</span>(<span class="st">"Multiple valid deposits"</span>)
+    <span class="kw">void</span> <span class="fn">multipleDeposits</span>(<span class="kw">double</span> amount) {
+        account.<span class="fn">deposit</span>(amount);
+        assertEquals(<span class="nm">1000.0</span> + amount, account.<span class="fn">getBalance</span>());
+    }
+}</pre></div>
+  </div>
+
+  <h3>Example 2: Testing a GradeCalculator</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">GradeCalculatorTest.java</span></div>
+    <div class="code-body"><pre><span class="kw">class</span> <span class="cl">GradeCalculatorTest</span> {
+
+    <span class="kw">private</span> <span class="cl">GradeCalculator</span> calculator = <span class="kw">new</span> <span class="cl">GradeCalculator</span>();
+
+    <span class="an">@ParameterizedTest</span>
+    <span class="an">@CsvSource</span>({
+        <span class="st">"90, A"</span>,
+        <span class="st">"80, B"</span>,
+        <span class="st">"70, C"</span>,
+        <span class="st">"60, D"</span>,
+        <span class="st">"50, F"</span>
+    })
+    <span class="an">@DisplayName</span>(<span class="st">"Grade is assigned based on marks"</span>)
+    <span class="kw">void</span> <span class="fn">gradeForMarks</span>(<span class="kw">int</span> marks, <span class="cl">String</span> expectedGrade) {
+        assertEquals(expectedGrade, calculator.<span class="fn">getGrade</span>(marks));
+    }
+
+    <span class="an">@Test</span>
+    <span class="kw">void</span> <span class="fn">negativeMarksThrowException</span>() {
+        assertThrows(<span class="cl">IllegalArgumentException</span>.<span class="kw">class</span>,
+            () -> calculator.<span class="fn">getGrade</span>(-<span class="nm">5</span>));
+    }
+}</pre></div>
+  </div>
+
+  <h3>How to run tests</h3>
+  <p><strong>In IntelliJ:</strong> Right-click the test file and select "Run". Green bar means all pass. Red bar shows failures with exact line numbers and expected vs. actual values.</p>
+  <p><strong>From terminal:</strong> Run <code class="il">mvn test</code> from the project root. Maven discovers all test classes automatically (files ending in "Test.java" in the src/test/java folder).</p>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 1</span>
+      <span class="title">Write tests for a ShoppingCart</span>
+    </div>
+    <div class="exercise-body">
+      <p>Write JUnit 5 tests for a ShoppingCart class that has: <code class="il">addItem(String name, double price)</code>, <code class="il">removeItem(String name)</code>, <code class="il">getTotal()</code>, <code class="il">getItemCount()</code>. Write at least 5 tests: add one item, add multiple items, remove an item, get total, and removing a non-existent item throws an exception.</p>
+      <details><summary>View solution</summary><div class="sol">
+        <div class="code-wrap"><div class="code-body"><pre><span class="kw">class</span> <span class="cl">ShoppingCartTest</span> {
+    <span class="kw">private</span> <span class="cl">ShoppingCart</span> cart;
+
+    <span class="an">@BeforeEach</span>
+    <span class="kw">void</span> <span class="fn">setUp</span>() { cart = <span class="kw">new</span> <span class="cl">ShoppingCart</span>(); }
+
+    <span class="an">@Test</span> <span class="kw">void</span> <span class="fn">newCartIsEmpty</span>() {
+        assertEquals(<span class="nm">0</span>, cart.<span class="fn">getItemCount</span>());
+        assertEquals(<span class="nm">0.0</span>, cart.<span class="fn">getTotal</span>());
+    }
+
+    <span class="an">@Test</span> <span class="kw">void</span> <span class="fn">addOneItem</span>() {
+        cart.<span class="fn">addItem</span>(<span class="st">"Laptop"</span>, <span class="nm">50000</span>);
+        assertEquals(<span class="nm">1</span>, cart.<span class="fn">getItemCount</span>());
+        assertEquals(<span class="nm">50000.0</span>, cart.<span class="fn">getTotal</span>());
+    }
+
+    <span class="an">@Test</span> <span class="kw">void</span> <span class="fn">addMultipleItems</span>() {
+        cart.<span class="fn">addItem</span>(<span class="st">"Mouse"</span>, <span class="nm">500</span>);
+        cart.<span class="fn">addItem</span>(<span class="st">"Keyboard"</span>, <span class="nm">1500</span>);
+        assertEquals(<span class="nm">2</span>, cart.<span class="fn">getItemCount</span>());
+        assertEquals(<span class="nm">2000.0</span>, cart.<span class="fn">getTotal</span>());
+    }
+
+    <span class="an">@Test</span> <span class="kw">void</span> <span class="fn">removeItem</span>() {
+        cart.<span class="fn">addItem</span>(<span class="st">"Phone"</span>, <span class="nm">20000</span>);
+        cart.<span class="fn">removeItem</span>(<span class="st">"Phone"</span>);
+        assertEquals(<span class="nm">0</span>, cart.<span class="fn">getItemCount</span>());
+    }
+
+    <span class="an">@Test</span> <span class="kw">void</span> <span class="fn">removeNonExistentThrows</span>() {
+        assertThrows(<span class="cl">ItemNotFoundException</span>.<span class="kw">class</span>,
+            () -> cart.<span class="fn">removeItem</span>(<span class="st">"Ghost"</span>));
+    }
+}</pre></div></div>
+      </div></details>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============================================================
+     CHAPTER 6 — MOCKITO
+     ============================================================ -->
+<section class="chapter" id="ch6">
+<div class="wrap">
+  <div class="ch-eyebrow">Chapter 6 of 11</div>
+  <div class="ch-num">06</div>
+  <h2 class="ch-title">Mockito</h2>
+  <p class="ch-lead">When your class depends on a database, an external API, or another service, Mockito lets you create fake versions of those dependencies so you can test your class in complete isolation.</p>
+
+  <h3>What is Mockito?</h3>
+  <p>Mockito is a Java mocking framework. A "mock" is a fake object that pretends to be a real dependency. You tell the mock what to return when a specific method is called, and then you verify that your class interacted with the mock correctly.</p>
+
+  <h3>Why do we need Mockito?</h3>
+  <p>Imagine testing an OrderService that calls a PaymentGateway (which charges real credit cards) and a DatabaseRepository (which needs a running database). Without mocking, your test would charge a real credit card and require a database server running. With Mockito, you create fake versions of PaymentGateway and DatabaseRepository that return predefined responses. Your test runs in milliseconds, charges no cards, and needs no database.</p>
+
+  <div class="realworld">
+    <h4>Microservices project</h4>
+    <p>A team builds a flight booking service that depends on three external services: SeatAvailability API, PricingEngine API, and PaymentGateway API. During development, the Pricing team has not deployed their API yet. Without Mockito, the booking team cannot test their code. With Mockito, they mock the PricingEngine to return a fixed price and continue testing the booking flow end to end. When the real PricingEngine is ready, they replace the mock with integration tests.</p>
+  </div>
+
+  <h3>Setup: Add to pom.xml</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">pom.xml</span></div>
+    <div class="code-body"><pre><span class="op">&lt;dependency&gt;</span>
+    <span class="op">&lt;groupId&gt;</span>org.mockito<span class="op">&lt;/groupId&gt;</span>
+    <span class="op">&lt;artifactId&gt;</span>mockito-junit-jupiter<span class="op">&lt;/artifactId&gt;</span>
+    <span class="op">&lt;version&gt;</span><span class="nm">5.11.0</span><span class="op">&lt;/version&gt;</span>
+    <span class="op">&lt;scope&gt;</span>test<span class="op">&lt;/scope&gt;</span>
+<span class="op">&lt;/dependency&gt;</span></pre></div>
+  </div>
+
+  <h3>Core Mockito methods</h3>
+  <table>
+    <thead><tr><th>Method</th><th>Purpose</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code class="il">mock(Class)</code></td><td>Creates a fake object</td><td><code class="il">mock(UserRepository.class)</code></td></tr>
+      <tr><td><code class="il">when().thenReturn()</code></td><td>Tell mock what to return</td><td><code class="il">when(repo.findById(1)).thenReturn(user)</code></td></tr>
+      <tr><td><code class="il">when().thenThrow()</code></td><td>Tell mock to throw exception</td><td><code class="il">when(api.call()).thenThrow(new TimeoutException())</code></td></tr>
+      <tr><td><code class="il">verify()</code></td><td>Check if a method was called</td><td><code class="il">verify(emailService).send(any())</code></td></tr>
+      <tr><td><code class="il">verify(times(n))</code></td><td>Check method was called n times</td><td><code class="il">verify(repo, times(1)).save(any())</code></td></tr>
+      <tr><td><code class="il">@Mock</code></td><td>Annotation to create mock (with @ExtendWith)</td><td>Cleaner than manual mock()</td></tr>
+      <tr><td><code class="il">@InjectMocks</code></td><td>Injects mocks into the class under test</td><td>Auto-wires mocks into constructor</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Example 1: Testing OrderService with mocked dependencies</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">OrderServiceTest.java</span></div>
+    <div class="code-body"><pre><span class="an">@ExtendWith</span>(<span class="cl">MockitoExtension</span>.<span class="kw">class</span>)
+<span class="kw">class</span> <span class="cl">OrderServiceTest</span> {
+
+    <span class="an">@Mock</span>  <span class="cl">OrderRepository</span> orderRepo;
+    <span class="an">@Mock</span>  <span class="cl">PaymentGateway</span> paymentGateway;
+    <span class="an">@Mock</span>  <span class="cl">EmailService</span> emailService;
+
+    <span class="an">@InjectMocks</span>  <span class="cl">OrderService</span> orderService;
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Successful order: payment charged, order saved, email sent"</span>)
+    <span class="kw">void</span> <span class="fn">successfulOrderFlow</span>() {
+        <span class="cm">// ARRANGE — tell mocks what to return</span>
+        <span class="cl">Order</span> order = <span class="kw">new</span> <span class="cl">Order</span>(<span class="st">"ORD-001"</span>, <span class="nm">5000.0</span>);
+        <span class="fn">when</span>(paymentGateway.<span class="fn">charge</span>(order))
+            .<span class="fn">thenReturn</span>(<span class="kw">new</span> <span class="cl">PaymentResult</span>(<span class="kw">true</span>, <span class="st">"TXN-123"</span>));
+        <span class="fn">when</span>(orderRepo.<span class="fn">save</span>(order))
+            .<span class="fn">thenReturn</span>(order);
+
+        <span class="cm">// ACT — call the method being tested</span>
+        <span class="cl">OrderResult</span> result = orderService.<span class="fn">placeOrder</span>(order);
+
+        <span class="cm">// ASSERT — verify the result</span>
+        assertTrue(result.<span class="fn">isSuccess</span>());
+        assertEquals(<span class="st">"TXN-123"</span>, result.<span class="fn">getTransactionId</span>());
+
+        <span class="cm">// VERIFY — confirm interactions happened</span>
+        verify(paymentGateway, times(<span class="nm">1</span>)).<span class="fn">charge</span>(order);
+        verify(orderRepo, times(<span class="nm">1</span>)).<span class="fn">save</span>(order);
+        verify(emailService, times(<span class="nm">1</span>)).<span class="fn">sendConfirmation</span>(order);
+    }
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Payment failure: order NOT saved, email NOT sent"</span>)
+    <span class="kw">void</span> <span class="fn">paymentFailure</span>() {
+        <span class="cl">Order</span> order = <span class="kw">new</span> <span class="cl">Order</span>(<span class="st">"ORD-002"</span>, <span class="nm">3000.0</span>);
+        <span class="fn">when</span>(paymentGateway.<span class="fn">charge</span>(order))
+            .<span class="fn">thenReturn</span>(<span class="kw">new</span> <span class="cl">PaymentResult</span>(<span class="kw">false</span>, <span class="kw">null</span>));
+
+        <span class="cl">OrderResult</span> result = orderService.<span class="fn">placeOrder</span>(order);
+
+        assertFalse(result.<span class="fn">isSuccess</span>());
+        verify(orderRepo, never()).<span class="fn">save</span>(any());    <span class="cm">// never saved!</span>
+        verify(emailService, never()).<span class="fn">sendConfirmation</span>(any()); <span class="cm">// no email!</span>
+    }
+}</pre></div>
+  </div>
+
+  <h3>Example 2: Testing with exception scenarios</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">UserServiceTest.java — testing error handling</span></div>
+    <div class="code-body"><pre><span class="an">@Test</span>
+<span class="an">@DisplayName</span>(<span class="st">"Database timeout is handled gracefully"</span>)
+<span class="kw">void</span> <span class="fn">handleDatabaseTimeout</span>() {
+    <span class="fn">when</span>(userRepo.<span class="fn">findByEmail</span>(<span class="st">"test@mail.com"</span>))
+        .<span class="fn">thenThrow</span>(<span class="kw">new</span> <span class="cl">DatabaseTimeoutException</span>(<span class="st">"Connection timed out"</span>));
+
+    <span class="cl">ServiceResponse</span> response = userService.<span class="fn">getUser</span>(<span class="st">"test@mail.com"</span>);
+
+    assertFalse(response.<span class="fn">isSuccess</span>());
+    assertEquals(<span class="st">"Service temporarily unavailable"</span>, response.<span class="fn">getMessage</span>());
+    <span class="cm">// The service should handle the timeout, not crash</span>
+}</pre></div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 1</span>
+      <span class="title">Mock a NotificationService</span>
+    </div>
+    <div class="exercise-body">
+      <p>You have a <code class="il">RegistrationService</code> that depends on <code class="il">UserRepository</code> and <code class="il">NotificationService</code>. When a user registers, the service saves the user and sends a welcome notification. Write a test that: (1) mocks both dependencies, (2) verifies the user is saved, (3) verifies the notification is sent with the correct email address, and (4) tests the scenario where saving fails (throws exception) and the notification is never sent.</p>
+      <details><summary>View solution</summary><div class="sol">
+        <div class="code-wrap"><div class="code-body"><pre><span class="an">@ExtendWith</span>(<span class="cl">MockitoExtension</span>.<span class="kw">class</span>)
+<span class="kw">class</span> <span class="cl">RegistrationServiceTest</span> {
+    <span class="an">@Mock</span> <span class="cl">UserRepository</span> userRepo;
+    <span class="an">@Mock</span> <span class="cl">NotificationService</span> notifier;
+    <span class="an">@InjectMocks</span> <span class="cl">RegistrationService</span> regService;
+
+    <span class="an">@Test</span> <span class="kw">void</span> <span class="fn">successfulRegistration</span>() {
+        <span class="cl">User</span> user = <span class="kw">new</span> <span class="cl">User</span>(<span class="st">"alice@mail.com"</span>);
+        <span class="fn">when</span>(userRepo.<span class="fn">save</span>(user)).<span class="fn">thenReturn</span>(user);
+
+        regService.<span class="fn">register</span>(user);
+
+        verify(userRepo).<span class="fn">save</span>(user);
+        verify(notifier).<span class="fn">sendWelcome</span>(<span class="st">"alice@mail.com"</span>);
+    }
+
+    <span class="an">@Test</span> <span class="kw">void</span> <span class="fn">saveFails_noNotification</span>() {
+        <span class="cl">User</span> user = <span class="kw">new</span> <span class="cl">User</span>(<span class="st">"bob@mail.com"</span>);
+        <span class="fn">when</span>(userRepo.<span class="fn">save</span>(user))
+            .<span class="fn">thenThrow</span>(<span class="kw">new</span> <span class="cl">RuntimeException</span>(<span class="st">"DB down"</span>));
+
+        assertThrows(<span class="cl">RuntimeException</span>.<span class="kw">class</span>,
+            () -> regService.<span class="fn">register</span>(user));
+
+        verify(notifier, never()).<span class="fn">sendWelcome</span>(anyString());
+    }
+}</pre></div></div>
+      </div></details>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============================================================
+     CHAPTER 7 — PMD
+     ============================================================ -->
+<section class="chapter" id="ch7">
+<div class="wrap">
+  <div class="ch-eyebrow">Chapter 7 of 11</div>
+  <div class="ch-num">07</div>
+  <h2 class="ch-title">PMD</h2>
+  <p class="ch-lead">A static code analysis tool that scans your source code for common programming mistakes, unused variables, empty catch blocks, overcomplicated expressions, and code smells, all without running your program.</p>
+
+  <h3>What is PMD?</h3>
+  <p>PMD is an open-source static analysis tool for Java (and other languages). "Static analysis" means it reads your source code directly, without executing it. PMD checks your code against a library of predefined rules and reports violations. Think of it as a spell-checker for your code: it catches issues that compile successfully but are likely to cause bugs, confusion, or maintenance headaches.</p>
+
+  <h3>Why do we need PMD?</h3>
+  <p>Code reviews catch many issues, but humans miss things, especially in a large codebase. PMD automates the detection of common mistakes that even experienced developers overlook. It runs in seconds and catches issues like: unused variables that waste memory, empty catch blocks that silently swallow errors, overly complex methods that are hard to test, and duplicate code that violates DRY.</p>
+
+  <div class="realworld">
+    <h4>Enterprise banking project</h4>
+    <p>A banking team has 200+ Java files. During a production incident, they discover that a critical error in the loan calculator was being silently swallowed by an empty catch block: <code class="il">catch (Exception e) {}</code>. The error had existed for 3 months. After this incident, the team adds PMD to their build pipeline. PMD would have flagged that empty catch block on the very first commit. Now, every pull request is automatically scanned before it can be merged.</p>
+  </div>
+
+  <h3>How to set up PMD</h3>
+  <h4>Option 1: Maven plugin (recommended)</h4>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">pom.xml — add to build/plugins section</span></div>
+    <div class="code-body"><pre><span class="op">&lt;plugin&gt;</span>
+    <span class="op">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="op">&lt;/groupId&gt;</span>
+    <span class="op">&lt;artifactId&gt;</span>maven-pmd-plugin<span class="op">&lt;/artifactId&gt;</span>
+    <span class="op">&lt;version&gt;</span><span class="nm">3.21.2</span><span class="op">&lt;/version&gt;</span>
+    <span class="op">&lt;configuration&gt;</span>
+        <span class="op">&lt;rulesets&gt;</span>
+            <span class="op">&lt;ruleset&gt;</span>/category/java/bestpractices.xml<span class="op">&lt;/ruleset&gt;</span>
+            <span class="op">&lt;ruleset&gt;</span>/category/java/errorprone.xml<span class="op">&lt;/ruleset&gt;</span>
+            <span class="op">&lt;ruleset&gt;</span>/category/java/codestyle.xml<span class="op">&lt;/ruleset&gt;</span>
+        <span class="op">&lt;/rulesets&gt;</span>
+        <span class="op">&lt;failOnViolation&gt;</span>true<span class="op">&lt;/failOnViolation&gt;</span>
+        <span class="op">&lt;printFailingErrors&gt;</span>true<span class="op">&lt;/printFailingErrors&gt;</span>
+    <span class="op">&lt;/configuration&gt;</span>
+<span class="op">&lt;/plugin&gt;</span></pre></div>
+  </div>
+
+  <h4>Run PMD</h4>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">Terminal</span></div>
+    <div class="code-body"><pre>mvn pmd:pmd
+<span class="cm"># Report generated at: target/pmd.xml and target/site/pmd.html</span>
+
+mvn pmd:check
+<span class="cm"># Fails the build if violations found (use in CI/CD pipeline)</span></pre></div>
+  </div>
+
+  <h3>Common PMD rules and what they catch</h3>
+  <table>
+    <thead><tr><th>Rule</th><th>Category</th><th>What it catches</th></tr></thead>
+    <tbody>
+      <tr><td>EmptyCatchBlock</td><td>Error Prone</td><td><code class="il">catch (Exception e) {}</code> — silently swallowing errors</td></tr>
+      <tr><td>UnusedLocalVariable</td><td>Best Practices</td><td>Variables declared but never read</td></tr>
+      <tr><td>UnusedPrivateMethod</td><td>Best Practices</td><td>Private methods that are never called</td></tr>
+      <tr><td>CyclomaticComplexity</td><td>Design</td><td>Methods with too many if/else/switch branches</td></tr>
+      <tr><td>LooseCoupling</td><td>Best Practices</td><td>Using <code class="il">ArrayList</code> instead of <code class="il">List</code> in declarations</td></tr>
+      <tr><td>AvoidDuplicateLiterals</td><td>Error Prone</td><td>Same string repeated many times (should be a constant)</td></tr>
+      <tr><td>UnnecessaryReturn</td><td>Code Style</td><td>Unnecessary return statement at end of void method</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Example: What PMD flags in bad code</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">Code with PMD violations</span></div>
+    <div class="code-body"><pre><span class="kw">public class</span> <span class="cl">OrderProcessor</span> {
+
+    <span class="kw">public void</span> <span class="fn">process</span>(<span class="cl">Order</span> order) {
+        <span class="kw">int</span> temp = <span class="nm">42</span>;               <span class="cm">// PMD: UnusedLocalVariable</span>
+
+        <span class="kw">try</span> {
+            <span class="kw">double</span> total = order.<span class="fn">getTotal</span>();
+        } <span class="kw">catch</span> (<span class="cl">Exception</span> e) {
+                                      <span class="cm">// PMD: EmptyCatchBlock !!!</span>
+        }
+
+        <span class="kw">if</span> (order.<span class="fn">getStatus</span>().<span class="fn">equals</span>(<span class="st">"PENDING"</span>)) {
+            <span class="cm">// ...</span>
+        } <span class="kw">else if</span> (order.<span class="fn">getStatus</span>().<span class="fn">equals</span>(<span class="st">"APPROVED"</span>)) {
+            <span class="cm">// ...</span>
+        } <span class="kw">else if</span> (order.<span class="fn">getStatus</span>().<span class="fn">equals</span>(<span class="st">"SHIPPED"</span>)) {
+            <span class="cm">// ...</span>
+        } <span class="kw">else if</span> (order.<span class="fn">getStatus</span>().<span class="fn">equals</span>(<span class="st">"DELIVERED"</span>)) {
+            <span class="cm">// ...</span>
+        }                             <span class="cm">// PMD: CyclomaticComplexity</span>
+    }
+
+    <span class="kw">private void</span> <span class="fn">unusedHelper</span>() {  <span class="cm">// PMD: UnusedPrivateMethod</span>
+        System.out.<span class="fn">println</span>(<span class="st">"Never called"</span>);
+    }
+}</pre></div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 1</span>
+      <span class="title">Fix PMD violations</span>
+    </div>
+    <div class="exercise-body">
+      <p>Take the OrderProcessor code above and fix all four PMD violations: remove the unused variable, add proper error handling in the catch block, reduce cyclomatic complexity (hint: use a Map or switch), and remove or use the unused private method.</p>
+      <details><summary>View solution</summary><div class="sol">
+        <div class="code-wrap"><div class="code-body"><pre><span class="kw">public class</span> <span class="cl">OrderProcessor</span> {
+
+    <span class="kw">private final</span> <span class="cl">Map</span>&lt;<span class="cl">String</span>, <span class="cl">Consumer</span>&lt;<span class="cl">Order</span>&gt;&gt; handlers = <span class="cl">Map</span>.<span class="fn">of</span>(
+        <span class="st">"PENDING"</span>,   <span class="kw">this</span>::<span class="fn">handlePending</span>,
+        <span class="st">"APPROVED"</span>,  <span class="kw">this</span>::<span class="fn">handleApproved</span>,
+        <span class="st">"SHIPPED"</span>,   <span class="kw">this</span>::<span class="fn">handleShipped</span>,
+        <span class="st">"DELIVERED"</span>, <span class="kw">this</span>::<span class="fn">handleDelivered</span>
+    );
+
+    <span class="kw">public void</span> <span class="fn">process</span>(<span class="cl">Order</span> order) {
+        <span class="cm">// No unused variable</span>
+        <span class="kw">try</span> {
+            <span class="kw">double</span> total = order.<span class="fn">getTotal</span>();
+        } <span class="kw">catch</span> (<span class="cl">Exception</span> e) {
+            log.<span class="fn">error</span>(<span class="st">"Failed to get total: {}"</span>, e.<span class="fn">getMessage</span>());
+            <span class="kw">throw</span> e;  <span class="cm">// re-throw or handle properly</span>
+        }
+
+        <span class="cm">// Low complexity: Map lookup replaces 4 if-else branches</span>
+        <span class="cl">Consumer</span>&lt;<span class="cl">Order</span>&gt; handler = handlers.<span class="fn">get</span>(order.<span class="fn">getStatus</span>());
+        <span class="kw">if</span> (handler != <span class="kw">null</span>) handler.<span class="fn">accept</span>(order);
+    }
+    <span class="cm">// No unused private methods</span>
+}</pre></div></div>
+      </div></details>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============================================================
+     CHAPTER 8 — CHECKSTYLE
+     ============================================================ -->
+<section class="chapter" id="ch8">
+<div class="wrap">
+  <div class="ch-eyebrow">Chapter 8 of 11</div>
+  <div class="ch-num">08</div>
+  <h2 class="ch-title">Checkstyle</h2>
+  <p class="ch-lead">While PMD checks for coding mistakes, Checkstyle enforces coding standards: naming conventions, formatting, Javadoc requirements, and consistent style across your entire team.</p>
+
+  <h3>What is Checkstyle?</h3>
+  <p>Checkstyle is a development tool that verifies your Java code adheres to a defined coding standard. It checks things like: are class names in PascalCase? Are method names in camelCase? Are there Javadoc comments on public methods? Is the maximum line length under 120 characters? Is indentation consistent? It does not find bugs; it enforces style consistency.</p>
+
+  <h3>Why do we need Checkstyle?</h3>
+  <p>When 20 developers work on the same project, each has their own style: some use tabs, some use spaces; some write long methods, some write short ones; some add Javadoc, some do not. Code reviews become painful arguments about style instead of logic. Checkstyle automates style enforcement, ending these debates. The tool becomes the authority. Everyone follows the same rules, and code reviews focus on design and logic.</p>
+
+  <div class="realworld">
+    <h4>Onboarding at a financial services company</h4>
+    <p>A new developer joins a team of 15. Without Checkstyle, they would need to read a 30-page coding style document and memorise all the rules. With Checkstyle configured in the project, the new developer simply writes code, runs the build, and Checkstyle tells them exactly what to fix: "Line 42: Method name 'ProcessOrder' should start with a lowercase letter." The developer learns the team's conventions by doing, not by reading a document.</p>
+  </div>
+
+  <h3>How to set up Checkstyle</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">pom.xml</span></div>
+    <div class="code-body"><pre><span class="op">&lt;plugin&gt;</span>
+    <span class="op">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="op">&lt;/groupId&gt;</span>
+    <span class="op">&lt;artifactId&gt;</span>maven-checkstyle-plugin<span class="op">&lt;/artifactId&gt;</span>
+    <span class="op">&lt;version&gt;</span><span class="nm">3.3.1</span><span class="op">&lt;/version&gt;</span>
+    <span class="op">&lt;configuration&gt;</span>
+        <span class="op">&lt;configLocation&gt;</span>checkstyle.xml<span class="op">&lt;/configLocation&gt;</span>
+        <span class="op">&lt;consoleOutput&gt;</span>true<span class="op">&lt;/consoleOutput&gt;</span>
+        <span class="op">&lt;failOnViolation&gt;</span>true<span class="op">&lt;/failOnViolation&gt;</span>
+    <span class="op">&lt;/configuration&gt;</span>
+<span class="op">&lt;/plugin&gt;</span></pre></div>
+  </div>
+
+  <h4>Create a checkstyle.xml configuration file</h4>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">checkstyle.xml — place in project root</span></div>
+    <div class="code-body"><pre><span class="op">&lt;?xml version="1.0"?&gt;</span>
+<span class="op">&lt;!DOCTYPE module PUBLIC</span>
+    <span class="st">"-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"</span>
+    <span class="st">"https://checkstyle.org/dtds/configuration_1_3.dtd"</span><span class="op">&gt;</span>
+
+<span class="op">&lt;module name="Checker"&gt;</span>
+  <span class="op">&lt;module name="TreeWalker"&gt;</span>
+
+    <span class="cm">&lt;!-- Naming conventions --&gt;</span>
+    <span class="op">&lt;module name="TypeName"/&gt;</span>         <span class="cm">&lt;!-- Classes: PascalCase --&gt;</span>
+    <span class="op">&lt;module name="MethodName"/&gt;</span>       <span class="cm">&lt;!-- Methods: camelCase --&gt;</span>
+    <span class="op">&lt;module name="LocalVariableName"/&gt;</span><span class="cm">&lt;!-- Variables: camelCase --&gt;</span>
+    <span class="op">&lt;module name="ConstantName"/&gt;</span>     <span class="cm">&lt;!-- Constants: UPPER_CASE --&gt;</span>
+
+    <span class="cm">&lt;!-- Code quality --&gt;</span>
+    <span class="op">&lt;module name="MethodLength"&gt;</span>
+      <span class="op">&lt;property name="max" value="50"/&gt;</span>  <span class="cm">&lt;!-- Max 50 lines per method --&gt;</span>
+    <span class="op">&lt;/module&gt;</span>
+    <span class="op">&lt;module name="ParameterNumber"&gt;</span>
+      <span class="op">&lt;property name="max" value="5"/&gt;</span>   <span class="cm">&lt;!-- Max 5 params per method --&gt;</span>
+    <span class="op">&lt;/module&gt;</span>
+
+    <span class="cm">&lt;!-- Javadoc --&gt;</span>
+    <span class="op">&lt;module name="JavadocMethod"/&gt;</span>     <span class="cm">&lt;!-- Public methods need Javadoc --&gt;</span>
+
+  <span class="op">&lt;/module&gt;</span>
+
+  <span class="cm">&lt;!-- File-level checks --&gt;</span>
+  <span class="op">&lt;module name="FileLength"&gt;</span>
+    <span class="op">&lt;property name="max" value="500"/&gt;</span>  <span class="cm">&lt;!-- Max 500 lines per file --&gt;</span>
+  <span class="op">&lt;/module&gt;</span>
+  <span class="op">&lt;module name="FileTabCharacter"/&gt;</span>   <span class="cm">&lt;!-- No tabs, use spaces --&gt;</span>
+<span class="op">&lt;/module&gt;</span></pre></div>
+  </div>
+
+  <h4>Run Checkstyle</h4>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">Terminal</span></div>
+    <div class="code-body"><pre>mvn checkstyle:check
+<span class="cm"># Output example:</span>
+<span class="cm"># [ERROR] src/main/java/OrderService.java:15: Method name 'ProcessOrder' must match pattern '^[a-z][a-zA-Z0-9]*$'</span>
+<span class="cm"># [ERROR] src/main/java/OrderService.java:42: Method length is 85 lines (max allowed is 50)</span></pre></div>
+  </div>
+
+  <div class="callout info">
+    <span class="callout-icon">i</span>
+    <div class="callout-body">
+      <strong>PMD vs. Checkstyle</strong>
+      <p>PMD detects potential bugs and code smells (empty catch blocks, unused variables, complexity). Checkstyle enforces style and formatting (naming, line length, Javadoc). Use both together in your CI/CD pipeline for comprehensive code quality.</p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 1</span>
+      <span class="title">Spot Checkstyle violations</span>
+    </div>
+    <div class="exercise-body">
+      <p>How many Checkstyle violations are in this class?</p>
+      <div class="code-wrap"><div class="code-body"><pre><span class="kw">public class</span> <span class="cl">order_processor</span> {
+    <span class="kw">private</span> <span class="cl">String</span> ORDER_STATUS = <span class="st">"pending"</span>;
+    <span class="kw">public void</span> <span class="fn">ProcessOrder</span>(<span class="cl">String</span> a, <span class="cl">String</span> b, <span class="cl">String</span> c,
+                             <span class="cl">String</span> d, <span class="cl">String</span> e, <span class="cl">String</span> f) {
+       <span class="cm">// 80 lines of code ...</span>
+    }
+}</pre></div></div>
+      <details><summary>View solution</summary><div class="sol">
+        <p><strong>1. TypeName:</strong> Class name <code class="il">order_processor</code> should be <code class="il">OrderProcessor</code> (PascalCase).</p>
+        <p><strong>2. ConstantName / LocalVariableName:</strong> Non-final field <code class="il">ORDER_STATUS</code> should be <code class="il">orderStatus</code> (camelCase). UPPER_CASE is only for <code class="il">static final</code> constants.</p>
+        <p><strong>3. MethodName:</strong> <code class="il">ProcessOrder</code> should be <code class="il">processOrder</code> (start with lowercase).</p>
+        <p><strong>4. ParameterNumber:</strong> 6 parameters exceeds the max of 5. Use a parameter object instead.</p>
+        <p><strong>5. MethodLength:</strong> 80 lines exceeds max of 50. Split into smaller methods.</p>
+        <p><strong>6. JavadocMethod:</strong> Public method missing Javadoc comment.</p>
+        <p>Total: 6 violations.</p>
+      </div></details>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============================================================
+     CHAPTER 9 — SONARQUBE
+     ============================================================ -->
+<section class="chapter" id="ch9">
+<div class="wrap">
+  <div class="ch-eyebrow">Chapter 9 of 11</div>
+  <div class="ch-num">09</div>
+  <h2 class="ch-title">SonarQube</h2>
+  <p class="ch-lead">The all-in-one code quality platform. While PMD and Checkstyle are individual tools, SonarQube is a server that aggregates all code quality metrics into a web dashboard with trends, quality gates, and team-wide visibility.</p>
+
+  <h3>What is SonarQube?</h3>
+  <p>SonarQube is a self-hosted (or cloud-hosted) platform that continuously inspects code quality. It scans your project and provides a web-based dashboard showing: bugs (logic errors), vulnerabilities (security weaknesses), code smells (maintainability issues), duplications (copy-pasted code), and code coverage (percentage of code tested). It combines the capabilities of PMD, Checkstyle, SpotBugs, and more into a single, unified view.</p>
+
+  <h3>Why do we need SonarQube?</h3>
+  <p>PMD and Checkstyle produce text reports that developers look at once and forget. SonarQube provides a persistent dashboard that tracks quality over time. Managers can see if quality is improving or degrading sprint over sprint. It also provides "Quality Gates" — automated pass/fail checks that can block a deployment if code quality drops below a threshold.</p>
+
+  <div class="realworld">
+    <h4>Insurance company release management</h4>
+    <p>An insurance company has a rule: no production deployment if SonarQube shows more than 0 critical bugs, less than 80% code coverage on new code, or any security vulnerabilities. When a developer pushes code, the CI/CD pipeline runs SonarQube analysis. If the quality gate fails, the deployment is automatically blocked. The team lead gets a notification with the specific issues. This has reduced production bugs by 60% in one year.</p>
+  </div>
+
+  <h3>How to set up SonarQube</h3>
+
+  <h4>Step 1: Install SonarQube server</h4>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">Terminal — using Docker (easiest approach)</span></div>
+    <div class="code-body"><pre><span class="cm"># Pull and run SonarQube Community Edition</span>
+docker run -d --name sonarqube -p <span class="nm">9000</span>:<span class="nm">9000</span> sonarqube:community
+
+<span class="cm"># Open browser: http://localhost:9000</span>
+<span class="cm"># Default login: admin / admin</span>
+<span class="cm"># You will be asked to change the password on first login</span></pre></div>
+  </div>
+
+  <h4>Step 2: Create a project token</h4>
+  <p>In the SonarQube web UI: go to "My Account" (top right), then "Security" tab, then "Generate Token". Give it a name like "daily-report-agent" and copy the token.</p>
+
+  <h4>Step 3: Add SonarQube plugin to your project</h4>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">pom.xml — add to properties and plugins</span></div>
+    <div class="code-body"><pre><span class="op">&lt;properties&gt;</span>
+    <span class="op">&lt;sonar.host.url&gt;</span>http://localhost:9000<span class="op">&lt;/sonar.host.url&gt;</span>
+    <span class="op">&lt;sonar.token&gt;</span>your_token_here<span class="op">&lt;/sonar.token&gt;</span>
+<span class="op">&lt;/properties&gt;</span></pre></div>
+  </div>
+
+  <h4>Step 4: Run analysis</h4>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">Terminal</span></div>
+    <div class="code-body"><pre>mvn clean verify sonar:sonar
+<span class="cm"># This compiles, runs tests, and sends results to SonarQube</span>
+<span class="cm"># Open http://localhost:9000 to see the dashboard</span></pre></div>
+  </div>
+
+  <h3>Understanding the SonarQube dashboard</h3>
+  <table>
+    <thead><tr><th>Metric</th><th>What it measures</th><th>Good threshold</th></tr></thead>
+    <tbody>
+      <tr><td>Bugs</td><td>Code that is demonstrably wrong (null pointer, logic errors)</td><td>0 in new code</td></tr>
+      <tr><td>Vulnerabilities</td><td>Security weaknesses (SQL injection, hardcoded passwords)</td><td>0</td></tr>
+      <tr><td>Code Smells</td><td>Maintainability issues (long methods, complexity)</td><td>Low and decreasing</td></tr>
+      <tr><td>Coverage</td><td>Percentage of code exercised by unit tests</td><td>80% or higher for new code</td></tr>
+      <tr><td>Duplications</td><td>Percentage of code that is copy-pasted</td><td>Less than 3%</td></tr>
+      <tr><td>Technical Debt</td><td>Estimated time to fix all issues</td><td>Decreasing over time</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Quality Gates</h3>
+  <p>A quality gate is an automated pass/fail check. The default SonarQube quality gate ("Sonar Way") requires: zero new bugs, zero new vulnerabilities, less than 3% duplication on new code, and 80%+ coverage on new code. If any condition fails, the quality gate status is "Failed" and your CI/CD pipeline can block the deployment.</p>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 1</span>
+      <span class="title">Interpret a SonarQube report</span>
+    </div>
+    <div class="exercise-body">
+      <p>A project's SonarQube dashboard shows: 3 Bugs, 1 Vulnerability, 47 Code Smells, 62% Coverage, 8% Duplications, 4 days Technical Debt. The quality gate is Failed. Which metrics need improvement to pass the default quality gate? What would you prioritize fixing first?</p>
+      <details><summary>View solution</summary><div class="sol">
+        <p><strong>Failing metrics:</strong> Bugs (should be 0), Vulnerability (should be 0), Coverage (should be 80%+), Duplications (should be under 3%).</p>
+        <p><strong>Priority order:</strong> (1) Fix the 1 Vulnerability first — security issues are highest risk. (2) Fix the 3 Bugs next — these are confirmed errors. (3) Increase coverage from 62% to 80% by writing tests for uncovered code. (4) Reduce duplications from 8% to under 3% by extracting shared code into utility methods. Code smells are lowest priority since they do not affect the quality gate directly.</p>
+      </div></details>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============================================================
+     CHAPTER 10 — JACOCO
+     ============================================================ -->
+<section class="chapter" id="ch10">
+<div class="wrap">
+  <div class="ch-eyebrow">Chapter 10 of 11</div>
+  <div class="ch-num">10</div>
+  <h2 class="ch-title">JaCoCo</h2>
+  <p class="ch-lead">JaCoCo (Java Code Coverage) measures exactly which lines, branches, and methods of your code are executed during testing. It answers the question: "How much of my code is actually tested?"</p>
+
+  <h3>What is JaCoCo?</h3>
+  <p>JaCoCo is a free Java code coverage library. When you run your tests, JaCoCo instruments your code (adds tracking to every line), then generates a detailed report showing which lines were executed (green), which were not (red), and which branches were partially covered (yellow). The result is a percentage: "Your project has 78% code coverage."</p>
+
+  <h3>Why do we need JaCoCo?</h3>
+  <p>Having 200 tests means nothing if those tests only cover 40% of your code. The remaining 60% is untested and could contain bugs. JaCoCo tells you exactly which code paths are untested so you know where to focus your testing effort. It also integrates with SonarQube to feed coverage data into the quality dashboard.</p>
+
+  <div class="realworld">
+    <h4>Telecom billing module</h4>
+    <p>A telecom company has a billing module with 50 test cases. Everyone assumes it is well tested. JaCoCo reveals that coverage is only 35% — the tests cover normal billing scenarios but completely miss: international roaming charges, plan upgrades mid-cycle, proration logic, and error handling for failed payments. These untested paths are exactly where production bugs keep appearing. The team uses JaCoCo to prioritize writing tests for the uncovered 65%, and production bugs in billing drop dramatically.</p>
+  </div>
+
+  <h3>How to set up JaCoCo</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">pom.xml — add to build/plugins</span></div>
+    <div class="code-body"><pre><span class="op">&lt;plugin&gt;</span>
+    <span class="op">&lt;groupId&gt;</span>org.jacoco<span class="op">&lt;/groupId&gt;</span>
+    <span class="op">&lt;artifactId&gt;</span>jacoco-maven-plugin<span class="op">&lt;/artifactId&gt;</span>
+    <span class="op">&lt;version&gt;</span><span class="nm">0.8.12</span><span class="op">&lt;/version&gt;</span>
+    <span class="op">&lt;executions&gt;</span>
+        <span class="op">&lt;execution&gt;</span>
+            <span class="op">&lt;id&gt;</span>prepare-agent<span class="op">&lt;/id&gt;</span>
+            <span class="op">&lt;goals&gt;&lt;goal&gt;</span>prepare-agent<span class="op">&lt;/goal&gt;&lt;/goals&gt;</span>
+        <span class="op">&lt;/execution&gt;</span>
+        <span class="op">&lt;execution&gt;</span>
+            <span class="op">&lt;id&gt;</span>report<span class="op">&lt;/id&gt;</span>
+            <span class="op">&lt;phase&gt;</span>test<span class="op">&lt;/phase&gt;</span>
+            <span class="op">&lt;goals&gt;&lt;goal&gt;</span>report<span class="op">&lt;/goal&gt;&lt;/goals&gt;</span>
+        <span class="op">&lt;/execution&gt;</span>
+        <span class="op">&lt;execution&gt;</span>
+            <span class="op">&lt;id&gt;</span>check<span class="op">&lt;/id&gt;</span>
+            <span class="op">&lt;goals&gt;&lt;goal&gt;</span>check<span class="op">&lt;/goal&gt;&lt;/goals&gt;</span>
+            <span class="op">&lt;configuration&gt;</span>
+                <span class="op">&lt;rules&gt;&lt;rule&gt;</span>
+                    <span class="op">&lt;element&gt;</span>BUNDLE<span class="op">&lt;/element&gt;</span>
+                    <span class="op">&lt;limits&gt;&lt;limit&gt;</span>
+                        <span class="op">&lt;counter&gt;</span>LINE<span class="op">&lt;/counter&gt;</span>
+                        <span class="op">&lt;value&gt;</span>COVEREDRATIO<span class="op">&lt;/value&gt;</span>
+                        <span class="op">&lt;minimum&gt;</span><span class="nm">0.80</span><span class="op">&lt;/minimum&gt;</span>
+                    <span class="op">&lt;/limit&gt;&lt;/limits&gt;</span>
+                <span class="op">&lt;/rule&gt;&lt;/rules&gt;</span>
+            <span class="op">&lt;/configuration&gt;</span>
+        <span class="op">&lt;/execution&gt;</span>
+    <span class="op">&lt;/executions&gt;</span>
+<span class="op">&lt;/plugin&gt;</span></pre></div>
+  </div>
+
+  <h4>Run JaCoCo</h4>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">Terminal</span></div>
+    <div class="code-body"><pre>mvn clean test
+<span class="cm"># JaCoCo report generated at: target/site/jacoco/index.html</span>
+<span class="cm"># Open this file in your browser to see the visual report</span></pre></div>
+  </div>
+
+  <h3>Understanding the JaCoCo report</h3>
+  <p>The HTML report is colour-coded:</p>
+  <table>
+    <thead><tr><th>Colour</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td style="background:#c6efce;">Green</td><td>Line was fully executed during tests</td></tr>
+      <tr><td style="background:#ffc7ce;">Red</td><td>Line was never executed (not tested at all)</td></tr>
+      <tr><td style="background:#ffeb9c;">Yellow</td><td>Branch partially covered (e.g., only the "if" was tested, not the "else")</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Coverage types</h3>
+  <table>
+    <thead><tr><th>Type</th><th>What it measures</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td>Line coverage</td><td>% of code lines executed</td><td>85% = 85 of 100 lines were run</td></tr>
+      <tr><td>Branch coverage</td><td>% of if/else branches taken</td><td>if-else: both branches = 100%, only if = 50%</td></tr>
+      <tr><td>Method coverage</td><td>% of methods called at least once</td><td>10 of 12 methods called = 83%</td></tr>
+      <tr><td>Class coverage</td><td>% of classes with at least one method tested</td><td>All 8 classes touched = 100%</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Example: Seeing JaCoCo in action</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">DiscountService.java</span></div>
+    <div class="code-body"><pre><span class="kw">public double</span> <span class="fn">calculateDiscount</span>(<span class="cl">Customer</span> customer, <span class="kw">double</span> total) {
+    <span class="kw">if</span> (total > <span class="nm">10000</span>) {                    <span class="cm">// GREEN if tested</span>
+        <span class="kw">if</span> (customer.<span class="fn">isPremium</span>()) {           <span class="cm">// YELLOW if only one branch tested</span>
+            <span class="kw">return</span> total * <span class="nm">0.15</span>;              <span class="cm">// GREEN if tested</span>
+        } <span class="kw">else</span> {
+            <span class="kw">return</span> total * <span class="nm">0.05</span>;              <span class="cm">// RED if not tested</span>
+        }
+    }
+    <span class="kw">return</span> <span class="nm">0</span>;                               <span class="cm">// RED if not tested</span>
+}</pre></div>
+  </div>
+  <p>If your test only checks a premium customer with total over 10,000, the "else" branch and the "total under 10,000" path will be red. You need additional tests for those paths to reach 100% coverage.</p>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 1</span>
+      <span class="title">Identify missing test cases for full coverage</span>
+    </div>
+    <div class="exercise-body">
+      <p>Given this method and one test that calls <code class="il">calculateShipping(150, "METRO")</code>, what additional tests are needed for 100% branch coverage?</p>
+      <div class="code-wrap"><div class="code-body"><pre><span class="kw">public double</span> <span class="fn">calculateShipping</span>(<span class="kw">double</span> weight, <span class="cl">String</span> zone) {
+    <span class="kw">if</span> (weight > <span class="nm">100</span>) {
+        <span class="kw">if</span> (<span class="st">"METRO"</span>.<span class="fn">equals</span>(zone)) {
+            <span class="kw">return</span> weight * <span class="nm">5.0</span>;
+        } <span class="kw">else</span> {
+            <span class="kw">return</span> weight * <span class="nm">8.0</span>;
+        }
+    } <span class="kw">else</span> {
+        <span class="kw">return</span> weight * <span class="nm">3.0</span>;
+    }
+}</pre></div></div>
+      <details><summary>View solution</summary><div class="sol">
+        <p>The existing test covers: weight > 100 AND zone = METRO. You need two more tests:</p>
+        <p><strong>Test 2:</strong> <code class="il">calculateShipping(150, "RURAL")</code> — covers the else branch (zone is not METRO)</p>
+        <p><strong>Test 3:</strong> <code class="il">calculateShipping(50, "METRO")</code> — covers the outer else branch (weight is not over 100)</p>
+        <p>With all three tests, every branch (if/else) is covered = 100% branch coverage.</p>
+      </div></details>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============================================================
+     CHAPTER 11 — SPOTBUGS
+     ============================================================ -->
+<section class="chapter" id="ch11">
+<div class="wrap">
+  <div class="ch-eyebrow">Chapter 11 of 11</div>
+  <div class="ch-num">11</div>
+  <h2 class="ch-title">SpotBugs</h2>
+  <p class="ch-lead">SpotBugs analyses your compiled bytecode (not source code) to find real bugs that other tools miss: null pointer dereferences, infinite loops, resource leaks, incorrect synchronisation, and more.</p>
+
+  <h3>What is SpotBugs?</h3>
+  <p>SpotBugs is the successor to FindBugs. Unlike PMD (which analyses source code), SpotBugs analyses compiled <code class="il">.class</code> files (Java bytecode). This gives it a deeper understanding of how your code actually behaves at runtime. It can detect bugs that are invisible in source code but become apparent in bytecode, such as incorrect equality comparisons, potential null pointer exceptions, and resource leaks.</p>
+
+  <h3>Why do we need SpotBugs?</h3>
+  <p>PMD and Checkstyle look at source code patterns. SpotBugs looks at execution patterns. Some bugs only reveal themselves at the bytecode level. For example, comparing two Integer objects with <code class="il">==</code> instead of <code class="il">.equals()</code> works for values between -128 and 127 (due to Integer caching) but fails for 128 and above. This is invisible to source-level tools but SpotBugs catches it because it understands Java's type system at the bytecode level.</p>
+
+  <div class="realworld">
+    <h4>E-commerce platform production bug</h4>
+    <p>An e-commerce platform had a bug where orders above Rs. 12,700 were being charged incorrectly. The root cause: a developer compared two Integer objects using <code class="il">==</code> instead of <code class="il">.equals()</code>. For order quantities 1 to 127, the comparison worked (Integer caching). For quantity 128+, it failed silently and the discount was not applied. PMD did not catch this because the source code looks correct. SpotBugs would have flagged it immediately as a "RC_REF_COMPARISON_BAD_PRACTICE" bug.</p>
+  </div>
+
+  <h3>How to set up SpotBugs</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">pom.xml</span></div>
+    <div class="code-body"><pre><span class="op">&lt;plugin&gt;</span>
+    <span class="op">&lt;groupId&gt;</span>com.github.spotbugs<span class="op">&lt;/groupId&gt;</span>
+    <span class="op">&lt;artifactId&gt;</span>spotbugs-maven-plugin<span class="op">&lt;/artifactId&gt;</span>
+    <span class="op">&lt;version&gt;</span><span class="nm">4.8.4.0</span><span class="op">&lt;/version&gt;</span>
+    <span class="op">&lt;configuration&gt;</span>
+        <span class="op">&lt;effort&gt;</span>Max<span class="op">&lt;/effort&gt;</span>          <span class="cm">&lt;!-- Max analysis depth --&gt;</span>
+        <span class="op">&lt;threshold&gt;</span>Medium<span class="op">&lt;/threshold&gt;</span> <span class="cm">&lt;!-- Report Medium+ severity --&gt;</span>
+        <span class="op">&lt;failOnError&gt;</span>true<span class="op">&lt;/failOnError&gt;</span>
+    <span class="op">&lt;/configuration&gt;</span>
+<span class="op">&lt;/plugin&gt;</span></pre></div>
+  </div>
+
+  <h4>Run SpotBugs</h4>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">Terminal</span></div>
+    <div class="code-body"><pre>mvn compile spotbugs:check
+<span class="cm"># Must compile first (SpotBugs needs .class files)</span>
+
+mvn spotbugs:gui
+<span class="cm"># Opens a visual GUI showing all bugs with explanations</span></pre></div>
+  </div>
+
+  <h3>Common bug patterns SpotBugs catches</h3>
+  <table>
+    <thead><tr><th>Bug Pattern</th><th>Category</th><th>What it catches</th></tr></thead>
+    <tbody>
+      <tr><td>NP_NULL_ON_SOME_PATH</td><td>Correctness</td><td>Possible null pointer dereference</td></tr>
+      <tr><td>RC_REF_COMPARISON</td><td>Correctness</td><td>Comparing objects with == instead of .equals()</td></tr>
+      <tr><td>OBL_UNSATISFIED_OBLIGATION</td><td>Resource Leak</td><td>Stream/connection opened but not closed in finally</td></tr>
+      <tr><td>EI_EXPOSE_REP</td><td>Security</td><td>Returning a mutable internal field (caller can modify your state)</td></tr>
+      <tr><td>SE_BAD_FIELD</td><td>Serialization</td><td>Non-serializable field in a serializable class</td></tr>
+      <tr><td>SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE</td><td>Security</td><td>Potential SQL injection vulnerability</td></tr>
+      <tr><td>DM_BOXED_PRIMITIVE_FOR_COMPARE</td><td>Performance</td><td>Using boxed primitives where primitives would be faster</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Example: Bugs SpotBugs catches that PMD misses</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">Code with hidden bugs</span></div>
+    <div class="code-body"><pre><span class="kw">public class</span> <span class="cl">InvoiceService</span> {
+
+    <span class="cm">// BUG 1: Null pointer risk</span>
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">getCustomerName</span>(<span class="cl">Long</span> invoiceId) {
+        <span class="cl">Invoice</span> invoice = repo.<span class="fn">findById</span>(invoiceId);
+        <span class="kw">return</span> invoice.<span class="fn">getCustomer</span>().<span class="fn">getName</span>();
+        <span class="cm">// SpotBugs: NP_NULL_ON_SOME_PATH</span>
+        <span class="cm">// repo.findById may return null</span>
+    }
+
+    <span class="cm">// BUG 2: Integer comparison</span>
+    <span class="kw">public boolean</span> <span class="fn">isSameQuantity</span>(<span class="cl">Integer</span> a, <span class="cl">Integer</span> b) {
+        <span class="kw">return</span> a == b;
+        <span class="cm">// SpotBugs: RC_REF_COMPARISON</span>
+        <span class="cm">// Works for -128..127, fails for 128+</span>
+    }
+
+    <span class="cm">// BUG 3: Resource leak</span>
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">readReport</span>(<span class="cl">String</span> path) <span class="kw">throws</span> <span class="cl">IOException</span> {
+        <span class="cl">FileReader</span> reader = <span class="kw">new</span> <span class="cl">FileReader</span>(path);
+        <span class="kw">return new</span> <span class="cl">BufferedReader</span>(reader).<span class="fn">readLine</span>();
+        <span class="cm">// SpotBugs: OBL_UNSATISFIED_OBLIGATION</span>
+        <span class="cm">// FileReader never closed if exception occurs</span>
+    }
+}</pre></div>
+  </div>
+
+  <h3>Fixed versions</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-bar-text">Bugs fixed</span></div>
+    <div class="code-body"><pre><span class="cm">// FIX 1: Null check</span>
+<span class="kw">public</span> <span class="cl">String</span> <span class="fn">getCustomerName</span>(<span class="cl">Long</span> invoiceId) {
+    <span class="kw">return</span> repo.<span class="fn">findById</span>(invoiceId)
+        .<span class="fn">map</span>(<span class="cl">Invoice</span>::getCustomer)
+        .<span class="fn">map</span>(<span class="cl">Customer</span>::getName)
+        .<span class="fn">orElse</span>(<span class="st">"Unknown"</span>);
+}
+
+<span class="cm">// FIX 2: Use .equals()</span>
+<span class="kw">public boolean</span> <span class="fn">isSameQuantity</span>(<span class="cl">Integer</span> a, <span class="cl">Integer</span> b) {
+    <span class="kw">return</span> <span class="cl">Objects</span>.<span class="fn">equals</span>(a, b);
+}
+
+<span class="cm">// FIX 3: try-with-resources</span>
+<span class="kw">public</span> <span class="cl">String</span> <span class="fn">readReport</span>(<span class="cl">String</span> path) <span class="kw">throws</span> <span class="cl">IOException</span> {
+    <span class="kw">try</span> (<span class="cl">BufferedReader</span> reader = <span class="kw">new</span> <span class="cl">BufferedReader</span>(
+            <span class="kw">new</span> <span class="cl">FileReader</span>(path))) {
+        <span class="kw">return</span> reader.<span class="fn">readLine</span>();
+    }
+}</pre></div>
+  </div>
+
+  <h3>How all 5 tools work together</h3>
+  <table>
+    <thead><tr><th>Tool</th><th>Analyses</th><th>Catches</th><th>Best for</th></tr></thead>
+    <tbody>
+      <tr><td>PMD</td><td>Source code</td><td>Code smells, unused code, complexity</td><td>Preventing bad patterns</td></tr>
+      <tr><td>Checkstyle</td><td>Source code</td><td>Style violations, naming, formatting</td><td>Team consistency</td></tr>
+      <tr><td>SpotBugs</td><td>Bytecode</td><td>Real bugs, null pointers, resource leaks</td><td>Finding hidden bugs</td></tr>
+      <tr><td>JaCoCo</td><td>Test execution</td><td>Untested code paths</td><td>Measuring test coverage</td></tr>
+      <tr><td>SonarQube</td><td>All of the above</td><td>Everything, with dashboard and trends</td><td>Team-wide quality management</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout good">
+    <span class="callout-icon">i</span>
+    <div class="callout-body">
+      <strong>Recommended CI/CD pipeline order</strong>
+      <p>In your build pipeline, run them in this order: (1) Checkstyle — fast, catches style issues. (2) PMD — fast, catches code smells. (3) Compile — must compile before SpotBugs. (4) Tests + JaCoCo — runs tests and measures coverage. (5) SpotBugs — analyses bytecode for bugs. (6) SonarQube — aggregates all results into dashboard. If any tool fails, the pipeline stops early, saving time.</p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-head">
+      <span class="tag">Practice 1</span>
+      <span class="title">Identify SpotBugs patterns</span>
+    </div>
+    <div class="exercise-body">
+      <p>For each code snippet, identify the SpotBugs bug pattern and write the fixed version:</p>
+      <p><strong>Snippet A:</strong></p>
+      <div class="code-wrap"><div class="code-body"><pre><span class="kw">public</span> <span class="cl">Date</span> <span class="fn">getCreatedDate</span>() {
+    <span class="kw">return this</span>.createdDate;  <span class="cm">// Date is mutable</span>
+}</pre></div></div>
+      <p><strong>Snippet B:</strong></p>
+      <div class="code-wrap"><div class="code-body"><pre><span class="cl">String</span> query = <span class="st">"SELECT * FROM users WHERE name = '"</span> + name + <span class="st">"'"</span>;
+statement.<span class="fn">execute</span>(query);</pre></div></div>
+      <details><summary>View solution</summary><div class="sol">
+        <p><strong>Snippet A — EI_EXPOSE_REP:</strong> Returns a reference to a mutable internal Date field. The caller can modify it, breaking encapsulation.</p>
+        <div class="code-wrap"><div class="code-body"><pre><span class="kw">public</span> <span class="cl">Date</span> <span class="fn">getCreatedDate</span>() {
+    <span class="kw">return new</span> <span class="cl">Date</span>(<span class="kw">this</span>.createdDate.<span class="fn">getTime</span>()); <span class="cm">// defensive copy</span>
+}
+<span class="cm">// Even better: use java.time.LocalDate (immutable)</span></pre></div></div>
+        <p><strong>Snippet B — SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE:</strong> String concatenation in SQL query = SQL injection vulnerability.</p>
+        <div class="code-wrap"><div class="code-body"><pre><span class="cl">PreparedStatement</span> stmt = connection
+    .<span class="fn">prepareStatement</span>(<span class="st">"SELECT * FROM users WHERE name = ?"</span>);
+stmt.<span class="fn">setString</span>(<span class="nm">1</span>, name);  <span class="cm">// safe: parameterized query</span>
+stmt.<span class="fn">executeQuery</span>();</pre></div></div>
+      </div></details>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <strong>Software Engineering Toolkit — Complete Reference Guide</strong>
+  Design Principles &bull; SOLID &bull; UML &bull; TDD &bull; JUnit 5 &bull; Mockito &bull; PMD &bull; Checkstyle &bull; SonarQube &bull; JaCoCo &bull; SpotBugs
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  document.getElementById('prog').style.width=((h.scrollTop/(h.scrollHeight-h.clientHeight))*100)+'%';
+});
+const secs=document.querySelectorAll('.chapter');
+const links=document.querySelectorAll('.nav a');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const a=document.querySelector('.nav a[href="#'+e.target.id+'"]');
+      if(a)a.classList.add('active');
+    }
+  });
+},{rootMargin:'-40% 0px -55% 0px'});
+secs.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

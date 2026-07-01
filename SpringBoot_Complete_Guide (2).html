@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spring Boot Complete Guide — Validation, REST, DTO, JPA, Diagrams</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f8f6f1;--paper:#fff;--ink:#1e1b18;--muted:#6b6560;
+  --line:#e0dbd4;--soft:#ede8e0;
+  --green:#2d6a4f;--green-lt:#d8f0e6;
+  --navy:#1e3a5f;--navy-lt:#ddeaf6;
+  --rust:#9b3922;--rust-lt:#fbe8e3;
+  --amber:#8a6000;--amber-lt:#fef3cd;
+  --plum:#5a2a6a;--plum-lt:#f0e8f8;
+  --teal:#1a6060;--teal-lt:#d4efef;
+  --olive:#4a5a00;--olive-lt:#edf2d0;
+  --code-bg:#1a1e2e;--code-fg:#e2dfd8;
+  --kw:#c792ea;--tp:#82aaff;--fn:#ffcb6b;--st:#c3e88d;
+  --cm:#697098;--an:#f78c6c;--nm:#fab387;--tag:#89ddff;--att:#80cbc4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--ink);font-size:15.5px;line-height:1.8}
+#prog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--navy),var(--green),var(--rust),var(--plum));z-index:999;transition:width .1s}
+.nav{position:sticky;top:0;background:rgba(248,246,241,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:100;padding:9px 0}
+.nav-in{max-width:1060px;margin:0 auto;padding:0 18px;display:flex;flex-wrap:wrap;gap:3px 10px;align-items:center}
+.nav .logo{font-family:'Lora',serif;font-style:italic;font-size:14px;color:var(--ink);margin-right:auto}
+.nav a{color:var(--muted);text-decoration:none;font-size:10.5px;font-weight:600;padding:3px 0;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.nav a:hover,.nav a.on{color:var(--green);border-bottom-color:var(--green)}
+.hero{background:var(--paper);border-bottom:1px solid var(--line);padding:46px 20px 34px;text-align:center}
+.hero-in{max-width:760px;margin:0 auto}
+.eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:12px}
+.hero h1{font-family:'Lora',serif;font-size:32px;font-weight:600;line-height:1.18;margin-bottom:12px}
+.hero h1 em{color:var(--green);font-style:italic;font-weight:400}
+.hero-sub{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.65}
+.pills{display:flex;justify-content:center;flex-wrap:wrap;gap:6px}
+.pill{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;border:1.5px solid}
+.pill.n{color:var(--navy);border-color:var(--navy);background:var(--navy-lt)}
+.pill.g{color:var(--green);border-color:var(--green);background:var(--green-lt)}
+.pill.r{color:var(--rust);border-color:var(--rust);background:var(--rust-lt)}
+.pill.p{color:var(--plum);border-color:var(--plum);background:var(--plum-lt)}
+.pill.a{color:var(--amber);border-color:var(--amber);background:var(--amber-lt)}
+.pill.t{color:var(--teal);border-color:var(--teal);background:var(--teal-lt)}
+.page{max-width:900px;margin:0 auto;padding:0 20px 60px}
+.sec{padding:42px 0 16px;border-bottom:1px solid var(--soft)}.sec:last-of-type{border-bottom:none}
+.sec-label{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;margin-bottom:7px}
+.sec h2{font-family:'Lora',serif;font-size:24px;font-weight:600;line-height:1.22;margin-bottom:11px}
+.sec h3{font-family:'Lora',serif;font-size:18px;font-weight:500;margin:22px 0 9px;color:var(--navy)}
+.sec h3.g{color:var(--green)}.sec h3.r{color:var(--rust)}.sec h3.p{color:var(--plum)}.sec h3.t{color:var(--teal)}.sec h3.a{color:var(--amber)}
+.sec h4{font-weight:700;font-size:14px;margin:13px 0 6px}
+.sec p{margin-bottom:11px;line-height:1.75}.sec p:last-child{margin-bottom:0}
+.sec ul,.sec ol{margin:8px 0 11px 20px}.sec li{margin-bottom:5px;line-height:1.65}
+code.il{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--soft);color:var(--rust);padding:2px 5px;border-radius:3px}
+.box{border-radius:6px;padding:13px 16px;margin:11px 0;border:1px solid}
+.box.green{background:var(--green-lt);border-color:#90c8a0}.box.green h4{color:var(--green)}
+.box.navy{background:var(--navy-lt);border-color:#90acd0}.box.navy h4{color:var(--navy)}
+.box.rust{background:var(--rust-lt);border-color:#e8b0a0}.box.rust h4{color:var(--rust)}
+.box.amber{background:var(--amber-lt);border-color:#d4b070}.box.amber h4{color:var(--amber)}
+.box.plum{background:var(--plum-lt);border-color:#c090d8}.box.plum h4{color:var(--plum)}
+.box.teal{background:var(--teal-lt);border-color:#80c0c0}.box.teal h4{color:var(--teal)}
+.box h4{font-size:11.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:7px}
+.box p,.box li{font-size:14px;line-height:1.6;margin-bottom:5px}.box ul{margin-left:16px}.box p:last-child{margin-bottom:0}
+.box code{font-family:'JetBrains Mono',monospace;font-size:11.5px;padding:1px 4px;border-radius:2px;background:rgba(0,0,0,.08)}
+.cw{margin:10px 0;border-radius:5px;overflow:hidden;border:1px solid #2a2f45}
+.cbar{background:#252a3d;color:#9ca3b8;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:10.5px;display:flex;justify-content:space-between;border-bottom:1px solid #1a1e2e;gap:8px}
+.cfile{font-weight:500;color:#c4cadd;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.clang{font-size:9px;text-transform:uppercase;letter-spacing:1px;flex-shrink:0}
+.cbody{background:var(--code-bg);color:var(--code-fg);padding:13px 15px;overflow-x:auto}
+.cbody pre{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.65;white-space:pre}
+.kw{color:var(--kw)}.tp{color:var(--tp)}.fn{color:var(--fn)}.st{color:var(--st)}.cm{color:var(--cm);font-style:italic}.an{color:var(--an)}.nm{color:var(--nm)}.tag{color:var(--tag)}.att{color:var(--att)}
+.wr{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:10px 0}@media(max-width:580px){.wr{grid-template-columns:1fr}}
+.wr-box{border-radius:5px;overflow:hidden;border:1px solid var(--line)}
+.wr-lbl{padding:6px 12px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.wr-lbl.wrong{background:var(--rust-lt);color:var(--rust)}.wr-lbl.right{background:var(--green-lt);color:var(--green)}
+.wr-body{padding:10px 12px;font-size:13px;line-height:1.55;color:var(--ink)}
+.wr-body code{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--rust);background:var(--soft);padding:1px 4px;border-radius:2px}.wr-body ul{margin-left:14px}.wr-body li{margin-bottom:3px}
+.outcome{border-radius:5px;padding:10px 14px;margin:8px 0;font-size:13.5px;line-height:1.55;border:1px solid}
+.outcome.bad{background:var(--rust-lt);border-color:#e8b0a0;color:#6b2010}.outcome.good{background:var(--green-lt);border-color:#90c8a0;color:#1a4a30}
+.outcome strong{display:block;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+.outcome code{font-family:'JetBrains Mono',monospace;font-size:11.5px;padding:1px 4px;border-radius:2px;background:rgba(0,0,0,.08)}
+.tw{overflow-x:auto;margin:12px 0}.tw table{width:100%;border-collapse:collapse;background:var(--paper);border:1px solid var(--line);font-size:13px}
+.tw th{background:var(--soft);text-align:left;padding:8px 10px;font-weight:600;border-bottom:1px solid var(--line)}
+.tw td{padding:8px 10px;border-bottom:1px solid var(--soft);vertical-align:top;line-height:1.5}.tw tr:last-child td{border-bottom:none}
+.tw code{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--rust);background:var(--soft);padding:1px 4px;border-radius:2px}
+.tw td.good{color:var(--green);font-weight:600}.tw td.bad{color:var(--rust);font-weight:600}
+.eg-label{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;padding:3px 9px;border-radius:3px;margin:12px 0 6px}
+.eg1{background:var(--teal)}.eg2{background:var(--navy)}.eg3{background:var(--plum)}.eg4{background:var(--rust)}.eg5{background:var(--amber)}.eg6{background:var(--olive,#4a5a00)}
+.summary{background:linear-gradient(135deg,var(--navy-lt),#c8d8f0);border:1px solid #90acd0;border-radius:6px;padding:16px 20px;margin:18px 0 0}
+.summary h4{font-family:'Lora',serif;font-style:italic;font-size:16px;color:var(--navy);margin:0 0 9px}
+.summary li{margin-bottom:5px;font-size:14px}.summary ul{margin-left:17px}
+footer{background:var(--paper);border-top:1px solid var(--line);padding:22px;text-align:center;color:var(--muted);font-size:13px}
+footer strong{display:block;font-family:'Lora',serif;font-style:italic;font-size:15px;color:var(--ink);margin-bottom:3px}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav class="nav"><div class="nav-in">
+  <span class="logo">Spring Boot Complete Guide</span>
+  <a href="#validation">Validation</a><a href="#rest">MVC to REST</a>
+  <a href="#dto">DTO</a><a href="#differences">JPA vs Spring</a>
+  <a href="#mvc-flow">MVC Flow</a><a href="#rest-flow">REST Flow</a>
+  <a href="#exception">Exceptions</a><a href="#starters">Starters</a>
+  <a href="#repos">Repositories</a><a href="#extras">Extras</a>
+</div></nav>
+<div class="hero"><div class="hero-in">
+  <div class="eyebrow">Complete Beginner Guide — All Concepts, Diagrams, Examples</div>
+  <h1>Spring Boot<br><em>Complete Real-World Guide</em></h1>
+  <p class="hero-sub">Validation, REST API conversion, DTO, JPA vs Hibernate, Spring vs Spring Boot, MVC and REST flow diagrams, global exception handling — everything in one document with 5–6 examples per topic.</p>
+  <div class="pills">
+    <span class="pill n">Validation</span><span class="pill g">REST API</span>
+    <span class="pill r">DTO</span><span class="pill p">JPA / Hibernate</span>
+    <span class="pill a">Spring Boot</span><span class="pill t">Flow Diagrams</span>
+  </div>
+</div></div>
+<div class="page">
+
+<!-- ══ SECTION 1: VALIDATION ══ -->
+<section class="sec" id="validation">
+<div class="sec-label" style="color:var(--navy)">Section 1</div>
+<h2>Spring MVC Validation with Thymeleaf</h2>
+<p>Validation means checking that data entered by the user is correct before saving it to the database. Without validation, a user could submit an empty name, a fake email like "abc", or an age of -5. Validation stops bad data at the door.</p>
+<div class="box rust"><h4>What happens if you do NOT use validation</h4>
+<p>Without validation, bad data is saved directly into the database. A user submits an empty name — your database gets a blank row. A user submits "not-an-email" for the email field — your email sending code crashes. SQL injection is possible if you concatenate user input into queries. The app becomes unreliable and insecure.</p></div>
+
+<h3>Step 1 — Add the validation dependency</h3>
+<div class="cw"><div class="cbar"><span class="cfile">pom.xml — add this one dependency</span><span class="clang">xml</span></div>
+<div class="cbody"><pre><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-validation<span class="tag">&lt;/artifactId&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span>
+
+<span class="cm">&lt;!-- This gives you: @NotBlank @Email @Min @Max @Size @Pattern etc. --&gt;</span></pre></div></div>
+
+<h3>All common validation annotations</h3>
+<div class="tw"><table>
+<thead><tr><th>Annotation</th><th>What it checks</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>@NotBlank</code></td><td>String must not be null or empty or just spaces</td><td>Name, username, title</td></tr>
+<tr><td><code>@NotNull</code></td><td>Field must not be null (works on any type)</td><td>Date, enum, object reference</td></tr>
+<tr><td><code>@Email</code></td><td>Must be a valid email format (x@y.z)</td><td>user@example.com</td></tr>
+<tr><td><code>@Size(min,max)</code></td><td>String or collection length must be in range</td><td>Password 8–20 chars</td></tr>
+<tr><td><code>@Min(value)</code></td><td>Number must be >= value</td><td>Age >= 18</td></tr>
+<tr><td><code>@Max(value)</code></td><td>Number must be <= value</td><td>Rating <= 5</td></tr>
+<tr><td><code>@Pattern(regexp)</code></td><td>String must match a regular expression</td><td>Phone number format</td></tr>
+<tr><td><code>@Positive</code></td><td>Number must be > 0</td><td>Price, quantity</td></tr>
+<tr><td><code>@Future</code></td><td>Date must be in the future</td><td>Appointment date</td></tr>
+<tr><td><code>@Past</code></td><td>Date must be in the past</td><td>Date of birth</td></tr>
+</tbody></table></div>
+
+<div class="eg-label eg1">Example 1 — Employee entity with validation annotations</div>
+<div class="cw"><div class="cbar"><span class="cfile">model/Employee.java</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="an">@Entity</span>
+<span class="kw">public class</span> <span class="tp">Employee</span> {
+
+    <span class="an">@Id</span> <span class="an">@GeneratedValue</span>(strategy = <span class="tp">GenerationType</span>.<span class="an">IDENTITY</span>)
+    <span class="kw">private</span> <span class="tp">Long</span> id;
+
+    <span class="an">@NotBlank</span>(message = <span class="st">"Name is required"</span>)
+    <span class="an">@Size</span>(min = <span class="nm">2</span>, max = <span class="nm">60</span>, message = <span class="st">"Name must be 2 to 60 characters"</span>)
+    <span class="kw">private</span> <span class="tp">String</span> name;
+
+    <span class="an">@NotBlank</span>(message = <span class="st">"Email is required"</span>)
+    <span class="an">@Email</span>(message = <span class="st">"Please enter a valid email address"</span>)
+    <span class="kw">private</span> <span class="tp">String</span> email;
+
+    <span class="an">@Min</span>(value = <span class="nm">18</span>, message = <span class="st">"Age must be at least 18"</span>)
+    <span class="an">@Max</span>(value = <span class="nm">65</span>, message = <span class="st">"Age must not exceed 65"</span>)
+    <span class="kw">private int</span> age;
+
+    <span class="an">@NotBlank</span>(message = <span class="st">"Department is required"</span>)
+    <span class="kw">private</span> <span class="tp">String</span> department;
+
+    <span class="an">@Positive</span>(message = <span class="st">"Salary must be a positive number"</span>)
+    <span class="kw">private</span> <span class="tp">BigDecimal</span> salary;
+
+    <span class="kw">public</span> <span class="fn">Employee</span>() {}
+    <span class="cm">// getters and setters ...</span>
+}</pre></div></div>
+
+<div class="eg-label eg2">Example 2 — Controller using @Valid and BindingResult</div>
+<div class="cw"><div class="cbar"><span class="cfile">controller/EmployeeController.java</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="an">@Controller</span>
+<span class="an">@RequestMapping</span>(<span class="st">"/employees"</span>)
+<span class="kw">public class</span> <span class="tp">EmployeeController</span> {
+
+    <span class="an">@Autowired</span>
+    <span class="kw">private</span> <span class="tp">EmployeeService</span> employeeService;
+
+    <span class="cm">// GET /employees/new → show blank form</span>
+    <span class="an">@GetMapping</span>(<span class="st">"/new"</span>)
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">showForm</span>(<span class="tp">Model</span> model) {
+        model.<span class="fn">addAttribute</span>(<span class="st">"employee"</span>, <span class="kw">new</span> <span class="tp">Employee</span>());
+        <span class="kw">return</span> <span class="st">"employees/form"</span>;
+    }
+
+    <span class="cm">// POST /employees/save → validate then save</span>
+    <span class="an">@PostMapping</span>(<span class="st">"/save"</span>)
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">saveEmployee</span>(
+            <span class="an">@Valid</span> <span class="an">@ModelAttribute</span>(<span class="st">"employee"</span>) <span class="tp">Employee</span> employee,
+            <span class="cm">// @Valid: triggers all annotations (@NotBlank, @Email, @Min etc.)</span>
+            <span class="tp">BindingResult</span> result,
+            <span class="cm">// BindingResult: captures all validation errors</span>
+            <span class="cm">// MUST come immediately after the object being validated</span>
+            <span class="tp">Model</span> model) {
+
+        <span class="kw">if</span> (result.<span class="fn">hasErrors</span>()) {
+            <span class="cm">// Validation failed — re-show the form with error messages</span>
+            <span class="cm">// The employee object retains what the user typed</span>
+            <span class="kw">return</span> <span class="st">"employees/form"</span>;
+        }
+
+        <span class="cm">// All validations passed — save to database</span>
+        employeeService.<span class="fn">save</span>(employee);
+        <span class="kw">return</span> <span class="st">"redirect:/employees"</span>;
+    }
+}</pre></div></div>
+
+<div class="eg-label eg3">Example 3 — Thymeleaf form showing validation errors</div>
+<div class="cw"><div class="cbar"><span class="cfile">templates/employees/form.html</span><span class="clang">html</span></div>
+<div class="cbody"><pre><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="att">xmlns:th</span>=<span class="st">"http://www.thymeleaf.org"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+<span class="cm">&lt;!-- Error summary at the top — shown only if there are errors --&gt;</span>
+<span class="tag">&lt;div</span> <span class="att">th:if</span>=<span class="st">"${#fields.hasAnyErrors()}"</span>
+     <span class="att">style</span>=<span class="st">"background:#fee;border:1px solid red;padding:10px;margin:10px 0"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;p</span> <span class="att">style</span>=<span class="st">"color:red;font-weight:bold"</span><span class="tag">&gt;</span>Please fix the errors below:<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="tag">&lt;form</span> <span class="att">th:action</span>=<span class="st">"@{/employees/save}"</span>
+      <span class="att">th:object</span>=<span class="st">"${employee}"</span>
+      <span class="att">method</span>=<span class="st">"post"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;div&gt;</span>
+    <span class="tag">&lt;label&gt;</span>Name:<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;input</span> <span class="att">type</span>=<span class="st">"text"</span> <span class="att">th:field</span>=<span class="st">"*{name}"</span>
+           <span class="att">th:classappend</span>=<span class="st">"${#fields.hasErrors('name')} ? 'error-border'"</span><span class="tag">/&gt;</span>
+    <span class="cm">&lt;!-- th:errors shows the message from @NotBlank or @Size --&gt;</span>
+    <span class="tag">&lt;span</span> <span class="att">th:errors</span>=<span class="st">"*{name}"</span> <span class="att">style</span>=<span class="st">"color:red"</span><span class="tag">&gt;&lt;/span&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="tag">&lt;div&gt;</span>
+    <span class="tag">&lt;label&gt;</span>Email:<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;input</span> <span class="att">type</span>=<span class="st">"email"</span> <span class="att">th:field</span>=<span class="st">"*{email}"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;span</span> <span class="att">th:errors</span>=<span class="st">"*{email}"</span> <span class="att">style</span>=<span class="st">"color:red"</span><span class="tag">&gt;&lt;/span&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="tag">&lt;div&gt;</span>
+    <span class="tag">&lt;label&gt;</span>Age:<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;input</span> <span class="att">type</span>=<span class="st">"number"</span> <span class="att">th:field</span>=<span class="st">"*{age}"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;span</span> <span class="att">th:errors</span>=<span class="st">"*{age}"</span> <span class="att">style</span>=<span class="st">"color:red"</span><span class="tag">&gt;&lt;/span&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="tag">&lt;button</span> <span class="att">type</span>=<span class="st">"submit"</span><span class="tag">&gt;</span>Save Employee<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span>
+<span class="tag">&lt;/body&gt;&lt;/html&gt;</span></pre></div></div>
+
+<div class="eg-label eg4">Example 4 — Custom validation annotation (phone number)</div>
+<div class="cw"><div class="cbar"><span class="cfile">validation/ValidPhone.java + PhoneValidator.java</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="cm">// Step 1: define the annotation</span>
+<span class="an">@Documented</span>
+<span class="an">@Constraint</span>(validatedBy = <span class="tp">PhoneValidator</span>.<span class="kw">class</span>)
+<span class="an">@Target</span>(<span class="tp">ElementType</span>.<span class="an">FIELD</span>)
+<span class="an">@Retention</span>(<span class="tp">RetentionPolicy</span>.<span class="an">RUNTIME</span>)
+<span class="kw">public</span> <span class="an">@interface</span> <span class="tp">ValidPhone</span> {
+    <span class="tp">String</span> <span class="fn">message</span>() <span class="kw">default</span> <span class="st">"Invalid phone number"</span>;
+    <span class="tp">Class</span>&lt;?&gt;[] <span class="fn">groups</span>() <span class="kw">default</span> {};
+    <span class="tp">Class</span>&lt;? <span class="kw">extends</span> <span class="tp">Payload</span>&gt;[] <span class="fn">payload</span>() <span class="kw">default</span> {};
+}
+
+<span class="cm">// Step 2: implement the validator logic</span>
+<span class="kw">public class</span> <span class="tp">PhoneValidator</span> <span class="kw">implements</span> <span class="tp">ConstraintValidator</span>&lt;<span class="tp">ValidPhone</span>, <span class="tp">String</span>&gt; {
+    <span class="an">@Override</span>
+    <span class="kw">public boolean</span> <span class="fn">isValid</span>(<span class="tp">String</span> phone, <span class="tp">ConstraintValidatorContext</span> ctx) {
+        <span class="kw">if</span> (phone == <span class="kw">null</span>) <span class="kw">return true</span>; <span class="cm">// use @NotNull for null check</span>
+        <span class="kw">return</span> phone.<span class="fn">matches</span>(<span class="st">"^[6-9]\\d{9}$"</span>);
+        <span class="cm">// 10-digit Indian mobile: starts with 6-9, followed by 9 digits</span>
+    }
+}
+
+<span class="cm">// Step 3: use it like any other annotation</span>
+<span class="an">@ValidPhone</span>(message = <span class="st">"Enter a valid 10-digit Indian mobile number"</span>)
+<span class="kw">private</span> <span class="tp">String</span> phone;</pre></div></div>
+
+<div class="eg-label eg5">Example 5 — Cross-field validation (password confirm must match)</div>
+<div class="cw"><div class="cbar"><span class="cfile">dto/RegistrationForm.java — cross-field validation</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="cm">// Cross-field: password and confirmPassword must match</span>
+<span class="an">@PasswordMatch</span>(message = <span class="st">"Passwords do not match"</span>)
+<span class="kw">public class</span> <span class="tp">RegistrationForm</span> {
+
+    <span class="an">@NotBlank</span>(message = <span class="st">"Username is required"</span>)
+    <span class="kw">private</span> <span class="tp">String</span> username;
+
+    <span class="an">@Size</span>(min = <span class="nm">8</span>, message = <span class="st">"Password must be at least 8 characters"</span>)
+    <span class="kw">private</span> <span class="tp">String</span> password;
+
+    <span class="kw">private</span> <span class="tp">String</span> confirmPassword;
+}
+
+<span class="cm">// The @PasswordMatch class-level validator:</span>
+<span class="kw">public class</span> <span class="tp">PasswordMatchValidator</span>
+    <span class="kw">implements</span> <span class="tp">ConstraintValidator</span>&lt;<span class="tp">PasswordMatch</span>, <span class="tp">RegistrationForm</span>&gt; {
+    <span class="an">@Override</span>
+    <span class="kw">public boolean</span> <span class="fn">isValid</span>(<span class="tp">RegistrationForm</span> form, <span class="tp">ConstraintValidatorContext</span> ctx) {
+        <span class="kw">return</span> form.<span class="fn">getPassword</span>().<span class="fn">equals</span>(form.<span class="fn">getConfirmPassword</span>());
+    }
+}</pre></div></div>
+
+<div class="eg-label eg6">Example 6 — Service-level validation (business rule)</div>
+<div class="cw"><div class="cbar"><span class="cfile">service/EmployeeService.java — business validation</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="an">@Service</span>
+<span class="kw">public class</span> <span class="tp">EmployeeService</span> {
+
+    <span class="an">@Autowired</span>
+    <span class="kw">private</span> <span class="tp">EmployeeRepository</span> repo;
+
+    <span class="kw">public</span> <span class="tp">Employee</span> <span class="fn">save</span>(<span class="tp">Employee</span> employee) {
+        <span class="cm">// Business rule: email must be unique — cannot check this with @Email annotation</span>
+        <span class="kw">if</span> (repo.<span class="fn">existsByEmail</span>(employee.<span class="fn">getEmail</span>())) {
+            <span class="kw">throw new</span> <span class="tp">DuplicateEmailException</span>(
+                <span class="st">"An employee with email '"</span> + employee.<span class="fn">getEmail</span>() + <span class="st">"' already exists"</span>);
+        }
+        <span class="cm">// Business rule: department must exist in the allowed list</span>
+        <span class="tp">List</span>&lt;<span class="tp">String</span>&gt; allowedDepts = <span class="tp">List</span>.<span class="fn">of</span>(<span class="st">"Engineering"</span>, <span class="st">"HR"</span>, <span class="st">"Finance"</span>);
+        <span class="kw">if</span> (!allowedDepts.<span class="fn">contains</span>(employee.<span class="fn">getDepartment</span>())) {
+            <span class="kw">throw new</span> <span class="tp">InvalidDepartmentException</span>(<span class="st">"Invalid department"</span>);
+        }
+        <span class="kw">return</span> repo.<span class="fn">save</span>(employee);
+    }
+}</pre></div></div>
+</section>
+
+<!-- ══ SECTION 2: MVC TO REST ══ -->
+<section class="sec" id="rest">
+<div class="sec-label" style="color:var(--green)">Section 2</div>
+<h2>Converting Spring MVC to REST API</h2>
+<p>In Spring MVC with Thymeleaf, your controller returns an HTML page name. In a REST API, the controller returns data (JSON or XML) instead of a page. A mobile app or another service calls your URL and receives structured data — not an HTML page it cannot render.</p>
+<div class="tw"><table>
+<thead><tr><th>Feature</th><th>Spring MVC (Thymeleaf)</th><th>REST API</th></tr></thead>
+<tbody>
+<tr><td>Response type</td><td>HTML page (String template name)</td><td>JSON / XML data</td></tr>
+<tr><td>Annotation</td><td><code>@Controller</code></td><td><code>@RestController</code></td></tr>
+<tr><td>Client</td><td>Browser</td><td>Mobile app, other service, Postman</td></tr>
+<tr><td>Form submission</td><td>HTML form POST</td><td>JSON body in request</td></tr>
+<tr><td>Error handling</td><td>Redirect to error view</td><td>JSON error response with HTTP status</td></tr>
+</tbody></table></div>
+
+<div class="eg-label eg1">Example 1 — Return entity directly (simplest, not recommended for production)</div>
+<div class="cw"><div class="cbar"><span class="cfile">controller/EmployeeRestController.java</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="an">@RestController</span>
+<span class="cm">// @RestController = @Controller + @ResponseBody on every method</span>
+<span class="cm">// Every method returns JSON automatically — no template name</span>
+<span class="an">@RequestMapping</span>(<span class="st">"/api/employees"</span>)
+<span class="kw">public class</span> <span class="tp">EmployeeRestController</span> {
+
+    <span class="an">@Autowired</span>
+    <span class="kw">private</span> <span class="tp">EmployeeService</span> service;
+
+    <span class="cm">// GET /api/employees → returns JSON array of all employees</span>
+    <span class="an">@GetMapping</span>
+    <span class="kw">public</span> <span class="tp">List</span>&lt;<span class="tp">Employee</span>&gt; <span class="fn">getAll</span>() {
+        <span class="kw">return</span> service.<span class="fn">findAll</span>();
+        <span class="cm">// Returns: [{id:1, name:"Ravi", email:"ravi@x.com", ...}, ...]</span>
+        <span class="cm">// HTTP status: 200 OK (default)</span>
+        <span class="cm">// Problem: exposes ALL fields including passwordHash, sensitive data</span>
+        <span class="cm">// Use DTO (Example 4) to control what is exposed</span>
+    }
+
+    <span class="cm">// GET /api/employees/5 → returns one employee</span>
+    <span class="an">@GetMapping</span>(<span class="st">"/{id}"</span>)
+    <span class="kw">public</span> <span class="tp">Employee</span> <span class="fn">getById</span>(<span class="an">@PathVariable</span> <span class="tp">Long</span> id) {
+        <span class="kw">return</span> service.<span class="fn">findById</span>(id);
+    }
+}</pre></div></div>
+
+<div class="eg-label eg2">Example 2 — Return ResponseEntity (full control over HTTP response)</div>
+<div class="cw"><div class="cbar"><span class="cfile">Using ResponseEntity for proper HTTP status codes</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="an">@GetMapping</span>(<span class="st">"/{id}"</span>)
+<span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">Employee</span>&gt; <span class="fn">getById</span>(<span class="an">@PathVariable</span> <span class="tp">Long</span> id) {
+    <span class="kw">return</span> service.<span class="fn">findById</span>(id)
+        .<span class="fn">map</span>(emp -> <span class="tp">ResponseEntity</span>.<span class="fn">ok</span>(emp))
+        <span class="cm">// .ok() sets HTTP 200 OK</span>
+        .<span class="fn">orElse</span>(<span class="tp">ResponseEntity</span>.<span class="fn">notFound</span>().<span class="fn">build</span>());
+        <span class="cm">// .notFound() sets HTTP 404 Not Found</span>
+}
+
+<span class="an">@PostMapping</span>
+<span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">Employee</span>&gt; <span class="fn">create</span>(<span class="an">@RequestBody</span> <span class="an">@Valid</span> <span class="tp">Employee</span> emp) {
+    <span class="tp">Employee</span> saved = service.<span class="fn">save</span>(emp);
+    <span class="kw">return</span> <span class="tp">ResponseEntity</span>
+        .<span class="fn">status</span>(<span class="tp">HttpStatus</span>.<span class="an">CREATED</span>)   <span class="cm">// HTTP 201 Created</span>
+        .<span class="fn">body</span>(saved);
+}
+
+<span class="an">@DeleteMapping</span>(<span class="st">"/{id}"</span>)
+<span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">Void</span>&gt; <span class="fn">delete</span>(<span class="an">@PathVariable</span> <span class="tp">Long</span> id) {
+    service.<span class="fn">delete</span>(id);
+    <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">noContent</span>().<span class="fn">build</span>();
+    <span class="cm">// HTTP 204 No Content — success, nothing to return</span>
+}
+
+<span class="cm">// HTTP status cheat sheet:
+// 200 OK          → successful GET or PUT
+// 201 Created     → successful POST (new resource created)
+// 204 No Content  → successful DELETE
+// 400 Bad Request → validation failed
+// 404 Not Found   → resource does not exist
+// 500 Server Error → unexpected exception</span></pre></div></div>
+
+<div class="eg-label eg3">Example 3 — POST with validation in REST API</div>
+<div class="cw"><div class="cbar"><span class="cfile">@RequestBody + @Valid + error response</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="an">@PostMapping</span>
+<span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;?&gt; <span class="fn">createEmployee</span>(
+        <span class="an">@RequestBody</span> <span class="an">@Valid</span> <span class="tp">EmployeeDTO</span> dto,
+        <span class="cm">// @RequestBody: parse incoming JSON into EmployeeDTO object</span>
+        <span class="cm">// @Valid: run all validation annotations on EmployeeDTO</span>
+        <span class="tp">BindingResult</span> result) {
+
+    <span class="kw">if</span> (result.<span class="fn">hasErrors</span>()) {
+        <span class="cm">// Build a map of field → error message</span>
+        <span class="tp">Map</span>&lt;<span class="tp">String</span>, <span class="tp">String</span>&gt; errors = <span class="kw">new</span> <span class="tp">HashMap</span>&lt;&gt;();
+        result.<span class="fn">getFieldErrors</span>().<span class="fn">forEach</span>(err ->
+            errors.<span class="fn">put</span>(err.<span class="fn">getField</span>(), err.<span class="fn">getDefaultMessage</span>()));
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">badRequest</span>().<span class="fn">body</span>(errors);
+        <span class="cm">// Returns HTTP 400 with: {"name":"Name is required","email":"..."}</span>
+    }
+
+    <span class="tp">Employee</span> saved = service.<span class="fn">save</span>(mapper.<span class="fn">toEntity</span>(dto));
+    <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">status</span>(<span class="nm">201</span>).<span class="fn">body</span>(mapper.<span class="fn">toDTO</span>(saved));
+}
+
+<span class="cm">// Postman request body (JSON):
+// {
+//   "name": "",          ← fails @NotBlank
+//   "email": "notvalid", ← fails @Email
+//   "age": 15            ← fails @Min(18)
+// }
+//
+// Response: HTTP 400
+// {
+//   "name": "Name is required",
+//   "email": "Please enter a valid email address",
+//   "age": "Age must be at least 18"
+// }</span></pre></div></div>
+</section>
+
+<!-- ══ SECTION 3: DTO ══ -->
+<section class="sec" id="dto">
+<div class="sec-label" style="color:var(--rust)">Section 3</div>
+<h2>DTO — Data Transfer Object</h2>
+<p>A DTO is a plain Java class that carries only the data you want to send to or receive from the outside world. It is NOT a database entity — it has no <code class="il">@Entity</code> or <code class="il">@Id</code>. Think of it as a "custom view" of your data.</p>
+<div class="box amber"><h4>The problem without DTO</h4>
+<p>Your entity class has every field including <code>passwordHash</code>, <code>createdAt</code>, Hibernate proxy objects, and internal audit fields. If you return the entity directly from a REST API, the JSON includes all of these — exposing sensitive data, causing circular reference errors (Employee → Department → employees → Employee...), and leaking internal implementation details.</p></div>
+
+<div class="tw"><table>
+<thead><tr><th>Without DTO</th><th>With DTO</th></tr></thead>
+<tbody>
+<tr><td class="bad">Exposes all entity fields including sensitive ones</td><td class="good">Shows only the fields you choose</td></tr>
+<tr><td class="bad">Circular reference errors with bidirectional relationships</td><td class="good">Flat structure — no circular references</td></tr>
+<tr><td class="bad">API breaks when you change the entity</td><td class="good">API stays stable even if the entity changes</td></tr>
+<tr><td class="bad">Validation annotations mix with persistence concerns</td><td class="good">Separate validation rules for API vs database</td></tr>
+<tr><td class="bad">Cannot combine data from multiple entities</td><td class="good">Can include data from any source</td></tr>
+</tbody></table></div>
+
+<div class="eg-label eg4">Example 4 — Manual mapping: Entity → DTO → Entity</div>
+<div class="cw"><div class="cbar"><span class="cfile">dto/EmployeeDTO.java + EmployeeMapper.java (manual)</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="cm">// EmployeeDTO.java — only fields the API client needs</span>
+<span class="kw">public class</span> <span class="tp">EmployeeDTO</span> {
+
+    <span class="kw">private</span> <span class="tp">Long</span>   id;
+
+    <span class="an">@NotBlank</span>(message = <span class="st">"Name is required"</span>)
+    <span class="kw">private</span> <span class="tp">String</span> name;
+
+    <span class="an">@Email</span>
+    <span class="kw">private</span> <span class="tp">String</span> email;
+
+    <span class="an">@Min</span>(<span class="nm">18</span>) <span class="an">@Max</span>(<span class="nm">65</span>)
+    <span class="kw">private int</span>    age;
+
+    <span class="kw">private</span> <span class="tp">String</span> departmentName; <span class="cm">// flattened from Employee.department.name</span>
+
+    <span class="cm">// NO passwordHash, NO Hibernate fields, NO sensitive data</span>
+    <span class="cm">// getters setters ...</span>
+}
+
+<span class="cm">// EmployeeMapper.java — manual conversion methods</span>
+<span class="an">@Component</span>
+<span class="kw">public class</span> <span class="tp">EmployeeMapper</span> {
+
+    <span class="cm">// Entity → DTO (used when returning data to client)</span>
+    <span class="kw">public</span> <span class="tp">EmployeeDTO</span> <span class="fn">toDTO</span>(<span class="tp">Employee</span> emp) {
+        <span class="tp">EmployeeDTO</span> dto = <span class="kw">new</span> <span class="tp">EmployeeDTO</span>();
+        dto.<span class="fn">setId</span>(emp.<span class="fn">getId</span>());
+        dto.<span class="fn">setName</span>(emp.<span class="fn">getName</span>());
+        dto.<span class="fn">setEmail</span>(emp.<span class="fn">getEmail</span>());
+        dto.<span class="fn">setAge</span>(emp.<span class="fn">getAge</span>());
+        <span class="kw">if</span> (emp.<span class="fn">getDepartment</span>() != <span class="kw">null</span>) {
+            dto.<span class="fn">setDepartmentName</span>(emp.<span class="fn">getDepartment</span>().<span class="fn">getName</span>());
+        }
+        <span class="kw">return</span> dto;
+    }
+
+    <span class="cm">// DTO → Entity (used when saving data from client)</span>
+    <span class="kw">public</span> <span class="tp">Employee</span> <span class="fn">toEntity</span>(<span class="tp">EmployeeDTO</span> dto) {
+        <span class="tp">Employee</span> emp = <span class="kw">new</span> <span class="tp">Employee</span>();
+        emp.<span class="fn">setName</span>(dto.<span class="fn">getName</span>());
+        emp.<span class="fn">setEmail</span>(dto.<span class="fn">getEmail</span>());
+        emp.<span class="fn">setAge</span>(dto.<span class="fn">getAge</span>());
+        <span class="cm">// departmentName → Department lookup happens in service layer</span>
+        <span class="kw">return</span> emp;
+    }
+}</pre></div></div>
+
+<div class="eg-label eg5">Example 5 — MapStruct (auto-generates mapper code)</div>
+<div class="cw"><div class="cbar"><span class="cfile">pom.xml + EmployeeMapper.java with MapStruct</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="cm">// pom.xml — add MapStruct dependency</span>
+<span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>org.mapstruct<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>mapstruct<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>1.5.5.Final<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span>
+
+<span class="cm">// EmployeeMapper.java — only an interface, MapStruct generates the implementation</span>
+<span class="an">@Mapper</span>(componentModel = <span class="st">"spring"</span>)
+<span class="cm">// componentModel="spring" → Spring manages the mapper as a @Bean</span>
+<span class="kw">public interface</span> <span class="tp">EmployeeMapper</span> {
+
+    <span class="an">@Mapping</span>(source = <span class="st">"department.name"</span>, target = <span class="st">"departmentName"</span>)
+    <span class="cm">// Maps Employee.department.name → EmployeeDTO.departmentName</span>
+    <span class="tp">EmployeeDTO</span> <span class="fn">toDTO</span>(<span class="tp">Employee</span> employee);
+
+    <span class="an">@Mapping</span>(target = <span class="st">"department"</span>, ignore = <span class="kw">true</span>)
+    <span class="cm">// Ignore the department object when mapping from DTO (set it in service)</span>
+    <span class="tp">Employee</span> <span class="fn">toEntity</span>(<span class="tp">EmployeeDTO</span> dto);
+
+    <span class="tp">List</span>&lt;<span class="tp">EmployeeDTO</span>&gt; <span class="fn">toDTOList</span>(<span class="tp">List</span>&lt;<span class="tp">Employee</span>&gt; employees);
+    <span class="cm">// MapStruct generates the loop automatically</span>
+}
+
+<span class="cm">// In the controller — inject and use the mapper</span>
+<span class="an">@Autowired</span>
+<span class="kw">private</span> <span class="tp">EmployeeMapper</span> mapper;
+
+<span class="an">@GetMapping</span>
+<span class="kw">public</span> <span class="tp">List</span>&lt;<span class="tp">EmployeeDTO</span>&gt; <span class="fn">getAll</span>() {
+    <span class="kw">return</span> mapper.<span class="fn">toDTOList</span>(service.<span class="fn">findAll</span>());
+    <span class="cm">// MapStruct generated code runs here — fast and compile-time safe</span>
+}</pre></div></div>
+
+<div class="eg-label eg6">Example 6 — Complete REST controller with DTO, validation and mapping</div>
+<div class="cw"><div class="cbar"><span class="cfile">Complete EmployeeRestController.java</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="an">@RestController</span>
+<span class="an">@RequestMapping</span>(<span class="st">"/api/employees"</span>)
+<span class="kw">public class</span> <span class="tp">EmployeeRestController</span> {
+
+    <span class="an">@Autowired</span> <span class="kw">private</span> <span class="tp">EmployeeService</span> service;
+    <span class="an">@Autowired</span> <span class="kw">private</span> <span class="tp">EmployeeMapper</span>  mapper;
+
+    <span class="an">@GetMapping</span>
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">List</span>&lt;<span class="tp">EmployeeDTO</span>&gt;&gt; <span class="fn">getAll</span>() {
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">ok</span>(mapper.<span class="fn">toDTOList</span>(service.<span class="fn">findAll</span>()));
+    }
+
+    <span class="an">@GetMapping</span>(<span class="st">"/{id}"</span>)
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">EmployeeDTO</span>&gt; <span class="fn">getById</span>(<span class="an">@PathVariable</span> <span class="tp">Long</span> id) {
+        <span class="tp">Employee</span> emp = service.<span class="fn">findById</span>(id);
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">ok</span>(mapper.<span class="fn">toDTO</span>(emp));
+    }
+
+    <span class="an">@PostMapping</span>
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">EmployeeDTO</span>&gt; <span class="fn">create</span>(
+            <span class="an">@RequestBody</span> <span class="an">@Valid</span> <span class="tp">EmployeeDTO</span> dto) {
+        <span class="tp">Employee</span> emp    = mapper.<span class="fn">toEntity</span>(dto);
+        <span class="tp">Employee</span> saved  = service.<span class="fn">save</span>(emp);
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">status</span>(<span class="tp">HttpStatus</span>.<span class="an">CREATED</span>).<span class="fn">body</span>(mapper.<span class="fn">toDTO</span>(saved));
+    }
+
+    <span class="an">@PutMapping</span>(<span class="st">"/{id}"</span>)
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">EmployeeDTO</span>&gt; <span class="fn">update</span>(
+            <span class="an">@PathVariable</span> <span class="tp">Long</span> id,
+            <span class="an">@RequestBody</span> <span class="an">@Valid</span> <span class="tp">EmployeeDTO</span> dto) {
+        <span class="tp">Employee</span> updated = service.<span class="fn">update</span>(id, mapper.<span class="fn">toEntity</span>(dto));
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">ok</span>(mapper.<span class="fn">toDTO</span>(updated));
+    }
+
+    <span class="an">@DeleteMapping</span>(<span class="st">"/{id}"</span>)
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">Void</span>&gt; <span class="fn">delete</span>(<span class="an">@PathVariable</span> <span class="tp">Long</span> id) {
+        service.<span class="fn">delete</span>(id);
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">noContent</span>().<span class="fn">build</span>();
+    }
+}</pre></div></div>
+</section>
+
+<!-- ══ SECTION 4: DIFFERENCES ══ -->
+<section class="sec" id="differences">
+<div class="sec-label" style="color:var(--plum)">Section 4</div>
+<h2>Key Differences — JPA vs Hibernate and Spring vs Spring Boot</h2>
+
+<h3>JPA vs Hibernate</h3>
+<div class="tw"><table>
+<thead><tr><th>Feature</th><th>JPA</th><th>Hibernate</th></tr></thead>
+<tbody>
+<tr><td>Type</td><td>Specification (set of rules and interfaces)</td><td>Implementation (actual working code)</td></tr>
+<tr><td>Created by</td><td>Jakarta EE (formerly Java EE)</td><td>Red Hat / community</td></tr>
+<tr><td>Can run by itself?</td><td>No — it is just rules, no executable code</td><td>Yes — it runs the SQL</td></tr>
+<tr><td>Package</td><td><code>jakarta.persistence.*</code></td><td><code>org.hibernate.*</code></td></tr>
+<tr><td>Analogy</td><td>The building code (rules every builder follows)</td><td>The construction company (does the actual building)</td></tr>
+<tr><td>Who uses it?</td><td>You write JPA annotations (@Entity, @Id)</td><td>Hibernate reads those annotations and does the SQL</td></tr>
+<tr><td>Switch providers?</td><td>Yes — write JPA code once, switch to EclipseLink/OpenJPA</td><td>No — Hibernate-specific code is not portable</td></tr>
+</tbody></table></div>
+<div class="box navy"><h4>Simple explanation</h4><p>JPA is like a job description: "To be an ORM you must support @Entity, findById(), save()..." Hibernate is the employee who does the job. Spring Data JPA is the manager who makes the employee's job even easier by handling transactions, repositories, and boilerplate automatically.</p></div>
+
+<h3 class="p">Spring vs Spring Boot</h3>
+<div class="tw"><table>
+<thead><tr><th>Feature</th><th>Spring Framework</th><th>Spring Boot</th></tr></thead>
+<tbody>
+<tr><td>Setup</td><td>Manual configuration XML or Java config</td><td>Auto-configuration — starts with sensible defaults</td></tr>
+<tr><td>Server</td><td>Deploy WAR to Tomcat separately</td><td>Embedded Tomcat — run as a plain JAR</td></tr>
+<tr><td>Dependencies</td><td>Pick every dependency version manually</td><td>Starter POMs manage compatible versions</td></tr>
+<tr><td>Time to start</td><td>Hours of boilerplate setup</td><td>Minutes — use start.spring.io</td></tr>
+<tr><td>application.properties</td><td>Does not exist — configure in XML/Java</td><td>Single file configures everything</td></tr>
+<tr><td>Purpose</td><td>Maximum control and flexibility</td><td>Developer productivity and fast startup</td></tr>
+<tr><td>Relation</td><td>The full framework</td><td>An opinionated wrapper around Spring Framework</td></tr>
+</tbody></table></div>
+<div class="box amber"><h4>Simple explanation</h4><p>Spring Framework is like buying raw ingredients and cooking everything from scratch. Spring Boot is like a meal kit — the ingredients are pre-portioned, the oven is pre-heated, and the recipe has sensible defaults. You still get full control if you want it, but the common cases just work out of the box.</p></div>
+</section>
+
+<!-- ══ SECTION 5: MVC FLOW DIAGRAM ══ -->
+<section class="sec" id="mvc-flow">
+<div class="sec-label" style="color:var(--teal)">Section 5</div>
+<h2>Complete Spring Boot + Thymeleaf MVC Flow</h2>
+<p>This diagram shows every step a request takes from the browser to the database and back, with all the Spring components involved.</p>
+
+<!-- MVC FLOW SVG DIAGRAM -->
+<div style="background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px;margin:14px 0;overflow-x:auto">
+<svg width="100%" viewBox="0 0 720 680" style="min-width:560px">
+<defs>
+  <marker id="arr1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#1e3a5f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+<!-- Title -->
+<text x="360" y="24" text-anchor="middle" font-family="'Lora',serif" font-size="16" font-weight="600" fill="#1e1b18">Spring Boot + Thymeleaf MVC Flow</text>
+
+<!-- BROWSER -->
+<rect x="280" y="40" width="160" height="52" rx="8" fill="#ddeaf6" stroke="#1e3a5f" stroke-width="1.2"/>
+<text x="360" y="62" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600" fill="#1e3a5f">Browser</text>
+<text x="360" y="80" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#6b6560">GET /employees/new</text>
+
+<!-- Arrow down to DispatcherServlet -->
+<line x1="360" y1="92" x2="360" y2="120" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr1)"/>
+<text x="374" y="110" font-family="sans-serif" font-size="10" fill="#6b6560">HTTP Request</text>
+
+<!-- DISPATCHERSERVLET -->
+<rect x="220" y="120" width="280" height="52" rx="8" fill="#534AB7" stroke="#3a35a0" stroke-width="1.2"/>
+<text x="360" y="142" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600" fill="#fff">DispatcherServlet</text>
+<text x="360" y="160" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#ddd">Front controller — routes all requests</text>
+
+<!-- Arrow down to Security -->
+<line x1="360" y1="172" x2="360" y2="200" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr1)"/>
+
+<!-- SPRING SECURITY (optional) -->
+<rect x="260" y="200" width="200" height="44" rx="6" fill="#5a2a6a" stroke="#4a1a5a" stroke-width="1.2"/>
+<text x="360" y="219" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">Spring Security</text>
+<text x="360" y="235" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#ddd">auth check (optional)</text>
+
+<!-- Arrow down to controller -->
+<line x1="360" y1="244" x2="360" y2="272" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr1)"/>
+
+<!-- CONTROLLER -->
+<rect x="200" y="272" width="320" height="52" rx="8" fill="#1a6060" stroke="#0f4040" stroke-width="1.2"/>
+<text x="360" y="293" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600" fill="#fff">@Controller — EmployeeController</text>
+<text x="360" y="311" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#ddd">@GetMapping("/new")  Model model</text>
+
+<!-- Arrow right to Service -->
+<line x1="520" y1="298" x2="578" y2="298" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr1)"/>
+<text x="549" y="291" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#6b6560">calls</text>
+
+<!-- SERVICE (right column) -->
+<rect x="578" y="272" width="120" height="52" rx="8" fill="#2d6a4f" stroke="#1a4a30" stroke-width="1.2"/>
+<text x="638" y="293" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">@Service</text>
+<text x="638" y="311" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#ddd">business logic</text>
+
+<!-- Arrow down from Service to Repository -->
+<line x1="638" y1="324" x2="638" y2="352" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr1)"/>
+
+<!-- REPOSITORY (right column) -->
+<rect x="578" y="352" width="120" height="52" rx="8" fill="#8a6000" stroke="#6a4600" stroke-width="1.2"/>
+<text x="638" y="373" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">JpaRepository</text>
+<text x="638" y="391" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#ddd">data access</text>
+
+<!-- Arrow down from Repo to DB -->
+<line x1="638" y1="404" x2="638" y2="432" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr1)"/>
+
+<!-- DATABASE (right column) -->
+<rect x="578" y="432" width="120" height="44" rx="8" fill="#9b3922" stroke="#7a2810" stroke-width="1.2"/>
+<text x="638" y="451" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">MySQL DB</text>
+<text x="638" y="467" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#ddd">stores data</text>
+
+<!-- Return arrow from DB back to Repo -->
+<path d="M578 454 Q540 454 540 390 Q540 298 520 298" fill="none" stroke="#2d6a4f" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arr2)"/>
+<text x="526" y="360" font-family="sans-serif" font-size="10" fill="#2d6a4f">return data</text>
+
+<!-- Arrow from Controller down to Model -->
+<line x1="360" y1="324" x2="360" y2="360" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr1)"/>
+
+<!-- MODEL (center) -->
+<rect x="250" y="360" width="220" height="44" rx="8" fill="#ddeaf6" stroke="#1e3a5f" stroke-width="1.2"/>
+<text x="360" y="379" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#1e3a5f">Model</text>
+<text x="360" y="395" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#6b6560">model.addAttribute("employees", list)</text>
+
+<!-- Arrow down to ViewResolver -->
+<line x1="360" y1="404" x2="360" y2="432" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr1)"/>
+
+<!-- VIEWRESOLVER -->
+<rect x="240" y="432" width="240" height="44" rx="8" fill="#534AB7" stroke="#3a35a0" stroke-width="1.2"/>
+<text x="360" y="451" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">ViewResolver</text>
+<text x="360" y="467" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#ddd">resolves "employees/list" → .html file</text>
+
+<!-- Arrow down to Thymeleaf -->
+<line x1="360" y1="476" x2="360" y2="504" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr1)"/>
+
+<!-- THYMELEAF -->
+<rect x="220" y="504" width="280" height="52" rx="8" fill="#1a6060" stroke="#0f4040" stroke-width="1.2"/>
+<text x="360" y="526" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600" fill="#fff">Thymeleaf Template Engine</text>
+<text x="360" y="544" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#ddd">merges model data into HTML template</text>
+
+<!-- Arrow down to Browser response -->
+<line x1="360" y1="556" x2="360" y2="584" stroke="#2d6a4f" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+<!-- RESPONSE -->
+<rect x="280" y="584" width="160" height="44" rx="8" fill="#d8f0e6" stroke="#2d6a4f" stroke-width="1.2"/>
+<text x="360" y="603" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#2d6a4f">Browser</text>
+<text x="360" y="619" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#6b6560">renders HTML page</text>
+
+<!-- Left label column -->
+<text x="14" y="150" font-family="sans-serif" font-size="10" fill="#534AB7" font-weight="600">SPRING</text>
+<text x="14" y="163" font-family="sans-serif" font-size="10" fill="#534AB7" font-weight="600">SECURITY</text>
+<text x="14" y="220" font-family="sans-serif" font-size="10" fill="#534AB7" font-weight="600">FILTER</text>
+<text x="14" y="298" font-family="sans-serif" font-size="10" fill="#1a6060" font-weight="600">WEB</text>
+<text x="14" y="311" font-family="sans-serif" font-size="10" fill="#1a6060" font-weight="600">LAYER</text>
+<text x="14" y="390" font-family="sans-serif" font-size="10" fill="#8a6000" font-weight="600">DATA</text>
+<text x="14" y="403" font-family="sans-serif" font-size="10" fill="#8a6000" font-weight="600">LAYER</text>
+<text x="14" y="530" font-family="sans-serif" font-size="10" fill="#1a6060" font-weight="600">VIEW</text>
+<text x="14" y="543" font-family="sans-serif" font-size="10" fill="#1a6060" font-weight="600">LAYER</text>
+
+<!-- Right annotation -->
+<text x="640" y="144" font-family="sans-serif" font-size="10" fill="#9b3922">returns String</text>
+<text x="640" y="157" font-family="sans-serif" font-size="10" fill="#9b3922">"employees/list"</text>
+</svg>
+</div>
+
+<div class="cw"><div class="cbar"><span class="cfile">Complete Spring MVC flow — step by step in code</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="cm">// 1. Browser: GET /employees</span>
+<span class="cm">// 2. DispatcherServlet receives the request</span>
+<span class="cm">// 3. Spring Security checks if user is authenticated</span>
+<span class="cm">// 4. HandlerMapping finds EmployeeController.listAll()</span>
+<span class="cm">// 5. Controller calls service, gets data, puts in Model</span>
+<span class="cm">// 6. Controller returns the string "employees/list"</span>
+<span class="cm">// 7. ViewResolver maps that to /templates/employees/list.html</span>
+<span class="cm">// 8. Thymeleaf renders the HTML with data from the Model</span>
+<span class="cm">// 9. Browser receives and displays the HTML page</span>
+
+<span class="an">@GetMapping</span>
+<span class="kw">public</span> <span class="tp">String</span> <span class="fn">listAll</span>(<span class="tp">Model</span> model) {
+    model.<span class="fn">addAttribute</span>(<span class="st">"employees"</span>, service.<span class="fn">findAll</span>());
+    <span class="kw">return</span> <span class="st">"employees/list"</span>;  <span class="cm">// step 6 → ViewResolver maps this</span>
+}</pre></div></div>
+</section>
+
+<!-- ══ SECTION 6: REST FLOW DIAGRAM ══ -->
+<section class="sec" id="rest-flow">
+<div class="sec-label" style="color:var(--amber)">Section 6</div>
+<h2>Complete Spring Boot REST API + JPA Flow</h2>
+<p>This diagram shows the REST API flow. The big difference from MVC: there is no ViewResolver or Thymeleaf — the controller returns JSON directly. The client (mobile app, Postman, React app) handles the display.</p>
+
+<!-- REST FLOW SVG DIAGRAM -->
+<div style="background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px;margin:14px 0;overflow-x:auto">
+<svg width="100%" viewBox="0 0 720 620" style="min-width:560px">
+<defs>
+  <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#1e3a5f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <marker id="arr4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<text x="360" y="24" text-anchor="middle" font-family="'Lora',serif" font-size="16" font-weight="600" fill="#1e1b18">Spring Boot REST API + Spring Data JPA Flow</text>
+
+<!-- CLIENT -->
+<rect x="250" y="40" width="220" height="52" rx="8" fill="#ddeaf6" stroke="#1e3a5f" stroke-width="1.2"/>
+<text x="360" y="62" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600" fill="#1e3a5f">Client (Postman / Mobile / React)</text>
+<text x="360" y="80" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#6b6560">POST /api/employees  {JSON body}</text>
+
+<line x1="360" y1="92" x2="360" y2="120" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr3)"/>
+
+<!-- SPRING SECURITY -->
+<rect x="260" y="120" width="200" height="44" rx="6" fill="#5a2a6a" stroke="#4a1a5a" stroke-width="1.2"/>
+<text x="360" y="139" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">Spring Security Filter</text>
+<text x="360" y="155" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#ddd">JWT / Basic auth check</text>
+
+<line x1="360" y1="164" x2="360" y2="192" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr3)"/>
+
+<!-- REST CONTROLLER -->
+<rect x="180" y="192" width="360" height="60" rx="8" fill="#1a6060" stroke="#0f4040" stroke-width="1.2"/>
+<text x="360" y="214" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600" fill="#fff">@RestController — EmployeeRestController</text>
+<text x="360" y="232" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#ddd">@PostMapping  @RequestBody @Valid EmployeeDTO</text>
+<text x="360" y="246" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#aed8d8">Jackson converts JSON → Java DTO object</text>
+
+<!-- Arrow right to DTO Mapper -->
+<line x1="540" y1="222" x2="590" y2="222" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr3)"/>
+<text x="565" y="215" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#6b6560">map</text>
+
+<rect x="590" y="200" width="110" height="44" rx="6" fill="#9b3922" stroke="#7a2810" stroke-width="1.2"/>
+<text x="645" y="219" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">Mapper</text>
+<text x="645" y="235" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#ddd">DTO → Entity</text>
+
+<line x1="360" y1="252" x2="360" y2="280" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr3)"/>
+
+<!-- VALIDATOR -->
+<rect x="240" y="280" width="240" height="44" rx="8" fill="#534AB7" stroke="#3a35a0" stroke-width="1.2"/>
+<text x="360" y="299" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">Bean Validation</text>
+<text x="360" y="315" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#ddd">@NotBlank @Email @Min — runs here</text>
+
+<!-- Arrow right to GlobalExceptionHandler if fails -->
+<line x1="480" y1="302" x2="530" y2="302" stroke="#9b3922" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arr3)"/>
+<text x="505" y="295" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#9b3922">fails →</text>
+<rect x="530" y="282" width="160" height="40" rx="6" fill="#fbe8e3" stroke="#e8b0a0" stroke-width="1.2"/>
+<text x="610" y="299" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#9b3922">@ControllerAdvice</text>
+<text x="610" y="313" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#9b3922">returns 400 JSON error</text>
+
+<line x1="360" y1="324" x2="360" y2="352" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr3)"/>
+
+<!-- SERVICE -->
+<rect x="230" y="352" width="260" height="52" rx="8" fill="#2d6a4f" stroke="#1a4a30" stroke-width="1.2"/>
+<text x="360" y="373" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600" fill="#fff">@Service — EmployeeService</text>
+<text x="360" y="391" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#ddd">@Transactional  business logic</text>
+
+<line x1="360" y1="404" x2="360" y2="432" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr3)"/>
+
+<!-- REPOSITORY -->
+<rect x="230" y="432" width="260" height="52" rx="8" fill="#8a6000" stroke="#6a4600" stroke-width="1.2"/>
+<text x="360" y="453" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">Spring Data JPA — EmployeeRepository</text>
+<text x="360" y="471" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#ddd">save() / findById() / findAll() — Hibernate generates SQL</text>
+
+<line x1="360" y1="484" x2="360" y2="512" stroke="#1e3a5f" stroke-width="1.5" marker-end="url(#arr3)"/>
+
+<!-- DATABASE -->
+<rect x="270" y="512" width="180" height="44" rx="8" fill="#9b3922" stroke="#7a2810" stroke-width="1.2"/>
+<text x="360" y="531" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#fff">MySQL Database</text>
+<text x="360" y="547" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#ddd">SQL executed</text>
+
+<!-- Return path -->
+<path d="M270 534 Q220 534 220 475 Q220 378 230 370" fill="none" stroke="#2d6a4f" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arr4)"/>
+<text x="160" y="456" font-family="sans-serif" font-size="10" fill="#2d6a4f">Entity returned</text>
+
+<!-- Entity to Mapper back -->
+<path d="M230 362 Q180 362 180 222 Q180 222 180 222" fill="none" stroke="#2d6a4f" stroke-width="1.2" stroke-dasharray="5 3"/>
+<path d="M180 222 Q180 222 360 222" fill="none" stroke="#2d6a4f" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arr4)"/>
+
+<!-- Final JSON response arrow -->
+<text x="560" y="562" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#2d6a4f">Entity → DTO → Jackson → JSON</text>
+<rect x="480" y="568" width="160" height="36" rx="6" fill="#d8f0e6" stroke="#2d6a4f" stroke-width="1.2"/>
+<text x="560" y="583" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#2d6a4f">HTTP 201 Created</text>
+<text x="560" y="597" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#6b6560">{"id":1,"name":"Ravi",...}</text>
+</svg>
+</div>
+
+<div class="box teal"><h4>Key difference between MVC and REST flow</h4>
+<p>In MVC: Controller → Model → ViewResolver → Thymeleaf → HTML to browser.</p>
+<p>In REST: Controller → @ResponseBody → Jackson serialises Java object → JSON to client. No template engine. No HTML. Just structured data.</p></div>
+</section>
+
+<!-- ══ SECTION 7: GLOBAL EXCEPTION HANDLING ══ -->
+<section class="sec" id="exception">
+<div class="sec-label" style="color:var(--rust)">Section 7</div>
+<h2>Global Exception Handling with @ControllerAdvice</h2>
+<p>Without global exception handling, every exception shows an ugly stack trace to the user. With @ControllerAdvice, you catch exceptions from ALL controllers in one place and return clean, structured error responses.</p>
+
+<div class="cw"><div class="cbar"><span class="cfile">exception/GlobalExceptionHandler.java</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="an">@ControllerAdvice</span>
+<span class="cm">// Spring registers this class to intercept exceptions from ALL controllers</span>
+<span class="kw">public class</span> <span class="tp">GlobalExceptionHandler</span> {
+
+    <span class="cm">// Handle validation errors (@Valid fails) → HTTP 400</span>
+    <span class="an">@ExceptionHandler</span>(<span class="tp">MethodArgumentNotValidException</span>.<span class="kw">class</span>)
+    <span class="an">@ResponseStatus</span>(<span class="tp">HttpStatus</span>.<span class="an">BAD_REQUEST</span>)
+    <span class="an">@ResponseBody</span>
+    <span class="kw">public</span> <span class="tp">Map</span>&lt;<span class="tp">String</span>, <span class="tp">String</span>&gt; <span class="fn">handleValidationErrors</span>(
+            <span class="tp">MethodArgumentNotValidException</span> ex) {
+        <span class="tp">Map</span>&lt;<span class="tp">String</span>, <span class="tp">String</span>&gt; errors = <span class="kw">new</span> <span class="tp">HashMap</span>&lt;&gt;();
+        ex.<span class="fn">getBindingResult</span>().<span class="fn">getFieldErrors</span>().<span class="fn">forEach</span>(err ->
+            errors.<span class="fn">put</span>(err.<span class="fn">getField</span>(), err.<span class="fn">getDefaultMessage</span>()));
+        <span class="kw">return</span> errors;
+        <span class="cm">// Returns: {"name":"Name is required","email":"Invalid email"}</span>
+    }
+
+    <span class="cm">// Handle resource not found → HTTP 404</span>
+    <span class="an">@ExceptionHandler</span>(<span class="tp">ResourceNotFoundException</span>.<span class="kw">class</span>)
+    <span class="an">@ResponseStatus</span>(<span class="tp">HttpStatus</span>.<span class="an">NOT_FOUND</span>)
+    <span class="an">@ResponseBody</span>
+    <span class="kw">public</span> <span class="tp">Map</span>&lt;<span class="tp">String</span>, <span class="tp">String</span>&gt; <span class="fn">handleNotFound</span>(<span class="tp">ResourceNotFoundException</span> ex) {
+        <span class="kw">return</span> <span class="tp">Map</span>.<span class="fn">of</span>(<span class="st">"error"</span>, ex.<span class="fn">getMessage</span>());
+        <span class="cm">// Returns: {"error":"Employee not found with id: 999"}</span>
+    }
+
+    <span class="cm">// Handle duplicate resource → HTTP 409 Conflict</span>
+    <span class="an">@ExceptionHandler</span>(<span class="tp">DuplicateEmailException</span>.<span class="kw">class</span>)
+    <span class="an">@ResponseStatus</span>(<span class="tp">HttpStatus</span>.<span class="an">CONFLICT</span>)
+    <span class="an">@ResponseBody</span>
+    <span class="kw">public</span> <span class="tp">Map</span>&lt;<span class="tp">String</span>, <span class="tp">String</span>&gt; <span class="fn">handleDuplicate</span>(<span class="tp">DuplicateEmailException</span> ex) {
+        <span class="kw">return</span> <span class="tp">Map</span>.<span class="fn">of</span>(<span class="st">"error"</span>, ex.<span class="fn">getMessage</span>());
+    }
+
+    <span class="cm">// Catch everything else → HTTP 500</span>
+    <span class="an">@ExceptionHandler</span>(<span class="tp">Exception</span>.<span class="kw">class</span>)
+    <span class="an">@ResponseStatus</span>(<span class="tp">HttpStatus</span>.<span class="an">INTERNAL_SERVER_ERROR</span>)
+    <span class="an">@ResponseBody</span>
+    <span class="kw">public</span> <span class="tp">Map</span>&lt;<span class="tp">String</span>, <span class="tp">String</span>&gt; <span class="fn">handleGeneral</span>(<span class="tp">Exception</span> ex) {
+        <span class="kw">return</span> <span class="tp">Map</span>.<span class="fn">of</span>(<span class="st">"error"</span>, <span class="st">"An unexpected error occurred"</span>);
+        <span class="cm">// Never expose the real exception message to clients in production</span>
+    }
+}</pre></div></div>
+</section>
+
+<!-- ══ SECTION 8: STARTERS ══ -->
+<section class="sec" id="starters">
+<div class="sec-label" style="color:var(--green)">Section 8</div>
+<h2>Spring Boot Starter Dependencies Explained</h2>
+<p>A "starter" is a pre-packaged bundle of dependencies. Instead of adding 10 individual libraries and figuring out which versions work together, you add one starter and Spring Boot handles the rest.</p>
+<div class="tw"><table>
+<thead><tr><th>Starter</th><th>What it gives you</th><th>When to add it</th></tr></thead>
+<tbody>
+<tr><td><code>spring-boot-starter-web</code></td><td>Spring MVC, Tomcat server, Jackson (JSON), REST support</td><td>Any web application — MVC or REST API</td></tr>
+<tr><td><code>spring-boot-starter-thymeleaf</code></td><td>Thymeleaf template engine</td><td>When returning HTML pages (MVC)</td></tr>
+<tr><td><code>spring-boot-starter-data-jpa</code></td><td>Spring Data JPA, Hibernate, EntityManager</td><td>Any database operation</td></tr>
+<tr><td><code>spring-boot-starter-validation</code></td><td>Bean Validation (Hibernate Validator), all @NotBlank etc.</td><td>Form or API input validation</td></tr>
+<tr><td><code>spring-boot-starter-security</code></td><td>Spring Security, authentication, authorization</td><td>Login, role-based access control</td></tr>
+<tr><td><code>spring-boot-devtools</code></td><td>Auto-restart on file save, live reload</td><td>Development only (remove for production)</td></tr>
+<tr><td><code>mysql-connector-j</code></td><td>MySQL JDBC driver</td><td>MySQL database connection</td></tr>
+</tbody></table></div>
+<div class="cw"><div class="cbar"><span class="cfile">pom.xml — complete starter setup for a REST API project</span><span class="clang">xml</span></div>
+<div class="cbody"><pre><span class="tag">&lt;dependencies&gt;</span>
+
+    <span class="cm">&lt;!-- Spring MVC + embedded Tomcat + Jackson JSON --&gt;</span>
+    <span class="tag">&lt;dependency&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+    <span class="cm">&lt;!-- Spring Data JPA + Hibernate --&gt;</span>
+    <span class="tag">&lt;dependency&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+    <span class="cm">&lt;!-- Validation (@NotBlank @Email @Min etc.) --&gt;</span>
+    <span class="tag">&lt;dependency&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-validation<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+    <span class="cm">&lt;!-- MySQL driver --&gt;</span>
+    <span class="tag">&lt;dependency&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span>com.mysql<span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span>mysql-connector-j<span class="tag">&lt;/artifactId&gt;</span>
+        <span class="tag">&lt;scope&gt;</span>runtime<span class="tag">&lt;/scope&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+<span class="tag">&lt;/dependencies&gt;</span></pre></div></div>
+</section>
+
+<!-- ══ SECTION 9: JPA REPOSITORIES ══ -->
+<section class="sec" id="repos">
+<div class="sec-label" style="color:var(--amber)">Section 9</div>
+<h2>Spring Data JPA Repository Basics</h2>
+<p>A repository is the layer that talks to the database. With Spring Data JPA, you just extend an interface and get 20+ CRUD methods for free — no SQL needed for standard operations.</p>
+<div class="cw"><div class="cbar"><span class="cfile">repository/EmployeeRepository.java</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="an">@Repository</span>
+<span class="kw">public interface</span> <span class="tp">EmployeeRepository</span> <span class="kw">extends</span> <span class="tp">JpaRepository</span>&lt;<span class="tp">Employee</span>, <span class="tp">Long</span>&gt; {
+    <span class="cm">// JpaRepository&lt;Employee, Long&gt;:</span>
+    <span class="cm">// Employee = the entity this repository manages</span>
+    <span class="cm">// Long = the type of the @Id field</span>
+
+    <span class="cm">// FREE methods you get without writing anything:</span>
+    <span class="cm">// save(employee)         → INSERT or UPDATE</span>
+    <span class="cm">// findById(id)           → SELECT WHERE id=?  returns Optional</span>
+    <span class="cm">// findAll()              → SELECT * FROM employees</span>
+    <span class="cm">// deleteById(id)         → DELETE WHERE id=?</span>
+    <span class="cm">// count()                → SELECT COUNT(*)</span>
+    <span class="cm">// existsById(id)         → SELECT COUNT(*) WHERE id=?</span>
+
+    <span class="cm">// CUSTOM query methods — Spring reads the name and generates SQL</span>
+    <span class="tp">Optional</span>&lt;<span class="tp">Employee</span>&gt; <span class="fn">findByEmail</span>(<span class="tp">String</span> email);
+    <span class="cm">// → SELECT * FROM employees WHERE email = ?</span>
+
+    <span class="tp">List</span>&lt;<span class="tp">Employee</span>&gt; <span class="fn">findByDepartment</span>(<span class="tp">String</span> department);
+    <span class="cm">// → SELECT * FROM employees WHERE department = ?</span>
+
+    <span class="tp">List</span>&lt;<span class="tp">Employee</span>&gt; <span class="fn">findByNameContainingIgnoreCase</span>(<span class="tp">String</span> keyword);
+    <span class="cm">// → SELECT * FROM employees WHERE LOWER(name) LIKE %keyword%</span>
+
+    <span class="tp">List</span>&lt;<span class="tp">Employee</span>&gt; <span class="fn">findBySalaryGreaterThan</span>(<span class="tp">BigDecimal</span> amount);
+    <span class="cm">// → SELECT * FROM employees WHERE salary > ?</span>
+
+    <span class="kw">boolean</span> <span class="fn">existsByEmail</span>(<span class="tp">String</span> email);
+    <span class="cm">// → SELECT COUNT(*) FROM employees WHERE email = ? → used for uniqueness check</span>
+
+    <span class="cm">// JPQL custom query when method name is too complex</span>
+    <span class="an">@Query</span>(<span class="st">"SELECT e FROM Employee e WHERE e.department = :dept AND e.salary > :sal"</span>)
+    <span class="tp">List</span>&lt;<span class="tp">Employee</span>&gt; <span class="fn">findByDeptAndMinSalary</span>(
+        <span class="an">@Param</span>(<span class="st">"dept"</span>) <span class="tp">String</span> dept,
+        <span class="an">@Param</span>(<span class="st">"sal"</span>)  <span class="tp">BigDecimal</span> salary);
+
+    <span class="cm">// Paging: get page 0 (first 10), page 1 (next 10), etc.</span>
+    <span class="tp">Page</span>&lt;<span class="tp">Employee</span>&gt; <span class="fn">findByDepartment</span>(<span class="tp">String</span> dept, <span class="tp">Pageable</span> pageable);
+}</pre></div></div>
+
+<div class="cw"><div class="cbar"><span class="cfile">service/EmployeeService.java — using the repository</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="an">@Service</span>
+<span class="an">@Transactional</span>
+<span class="kw">public class</span> <span class="tp">EmployeeService</span> {
+
+    <span class="an">@Autowired</span>
+    <span class="kw">private</span> <span class="tp">EmployeeRepository</span> repo;
+
+    <span class="an">@Transactional</span>(readOnly = <span class="kw">true</span>)
+    <span class="kw">public</span> <span class="tp">List</span>&lt;<span class="tp">Employee</span>&gt; <span class="fn">findAll</span>() {
+        <span class="kw">return</span> repo.<span class="fn">findAll</span>();
+    }
+
+    <span class="an">@Transactional</span>(readOnly = <span class="kw">true</span>)
+    <span class="kw">public</span> <span class="tp">Employee</span> <span class="fn">findById</span>(<span class="tp">Long</span> id) {
+        <span class="kw">return</span> repo.<span class="fn">findById</span>(id)
+            .<span class="fn">orElseThrow</span>(() ->
+                <span class="kw">new</span> <span class="tp">ResourceNotFoundException</span>(<span class="st">"Employee not found with id: "</span> + id));
+    }
+
+    <span class="kw">public</span> <span class="tp">Employee</span> <span class="fn">save</span>(<span class="tp">Employee</span> emp) {
+        <span class="kw">if</span> (repo.<span class="fn">existsByEmail</span>(emp.<span class="fn">getEmail</span>())) {
+            <span class="kw">throw new</span> <span class="tp">DuplicateEmailException</span>(<span class="st">"Email already exists"</span>);
+        }
+        <span class="kw">return</span> repo.<span class="fn">save</span>(emp);
+    }
+
+    <span class="kw">public void</span> <span class="fn">delete</span>(<span class="tp">Long</span> id) {
+        <span class="kw">if</span> (!repo.<span class="fn">existsById</span>(id)) {
+            <span class="kw">throw new</span> <span class="tp">ResourceNotFoundException</span>(<span class="st">"Employee not found with id: "</span> + id);
+        }
+        repo.<span class="fn">deleteById</span>(id);
+    }
+
+    <span class="cm">// Paging example: get page 0 with 10 records, sorted by name</span>
+    <span class="an">@Transactional</span>(readOnly = <span class="kw">true</span>)
+    <span class="kw">public</span> <span class="tp">Page</span>&lt;<span class="tp">Employee</span>&gt; <span class="fn">getPage</span>(<span class="kw">int</span> pageNo, <span class="kw">int</span> size) {
+        <span class="tp">Pageable</span> pageable = <span class="tp">PageRequest</span>.<span class="fn">of</span>(pageNo, size, <span class="tp">Sort</span>.<span class="fn">by</span>(<span class="st">"name"</span>).<span class="fn">ascending</span>());
+        <span class="kw">return</span> repo.<span class="fn">findAll</span>(pageable);
+    }
+}</pre></div></div>
+</section>
+
+<!-- ══ SECTION 10: EXTRAS ══ -->
+<section class="sec" id="extras">
+<div class="sec-label" style="color:var(--navy)">Section 10</div>
+<h2>What You Should Also Know — Extras and Best Practices</h2>
+
+<h3>application.properties — complete reference</h3>
+<div class="cw"><div class="cbar"><span class="cfile">src/main/resources/application.properties</span><span class="clang">properties</span></div>
+<div class="cbody"><pre><span class="cm"># Server</span>
+server.port=8080
+spring.application.name=employeeapp
+
+<span class="cm"># Database</span>
+spring.datasource.url=jdbc:mysql://localhost:3306/employeedb
+spring.datasource.username=root
+spring.datasource.password=your_password
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+<span class="cm"># JPA / Hibernate</span>
+spring.jpa.hibernate.ddl-auto=update    <span class="cm"># create | update | validate | none</span>
+spring.jpa.show-sql=true                <span class="cm"># print SQL to console (dev only)</span>
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+
+<span class="cm"># Thymeleaf (MVC only)</span>
+spring.thymeleaf.cache=false            <span class="cm"># disable for development</span>
+
+<span class="cm"># Jackson (REST API — JSON serialization)</span>
+spring.jackson.serialization.write-dates-as-timestamps=false
+spring.jackson.default-property-inclusion=non_null  <span class="cm"># skip null fields in JSON</span></pre></div></div>
+
+<h3 class="g">Project structure for a complete Spring Boot app</h3>
+<div class="cw"><div class="cbar"><span class="cfile">Recommended package structure</span><span class="clang">text</span></div>
+<div class="cbody"><pre>src/main/java/com/example/employeeapp/
+  EmployeeAppApplication.java            ← @SpringBootApplication entry point
+  
+  model/
+    Employee.java                        ← @Entity — maps to DB table
+  
+  dto/
+    EmployeeDTO.java                     ← what the API sends/receives
+    EmployeeMapper.java                  ← converts Entity ↔ DTO
+  
+  repository/
+    EmployeeRepository.java              ← extends JpaRepository
+  
+  service/
+    EmployeeService.java                 ← @Service — business logic
+  
+  controller/
+    EmployeeController.java              ← @Controller (MVC with Thymeleaf)
+    EmployeeRestController.java          ← @RestController (REST API)
+  
+  exception/
+    ResourceNotFoundException.java       ← custom exceptions
+    DuplicateEmailException.java
+    GlobalExceptionHandler.java          ← @ControllerAdvice
+  
+  validation/
+    ValidPhone.java                      ← custom validation annotations
+    PhoneValidator.java
+
+src/main/resources/
+  application.properties
+  templates/                             ← Thymeleaf HTML files (MVC only)
+    employees/
+      list.html
+      form.html</pre></div></div>
+
+<h3 class="t">Common interview questions + answers</h3>
+<div class="tw"><table>
+<thead><tr><th>Question</th><th>One-line answer</th></tr></thead>
+<tbody>
+<tr><td>What is the difference between @Controller and @RestController?</td><td>@RestController adds @ResponseBody to every method — returns JSON, not a template name</td></tr>
+<tr><td>What does @Valid do?</td><td>Triggers Bean Validation on the annotated method parameter — runs all constraint annotations</td></tr>
+<tr><td>Why use DTO instead of returning Entity directly?</td><td>Hides sensitive fields, prevents circular references, keeps API stable when entity changes</td></tr>
+<tr><td>What is the difference between JPA and Hibernate?</td><td>JPA is the specification (rules). Hibernate is the implementation (does the actual work).</td></tr>
+<tr><td>What does @Transactional do?</td><td>Wraps the method in a DB transaction — all SQL succeeds or all rolls back on exception</td></tr>
+<tr><td>What is @ControllerAdvice?</td><td>A global exception handler — catches exceptions from ALL controllers in one class</td></tr>
+<tr><td>What is the difference between save() with and without an ID?</td><td>id=null → INSERT new row. id set → UPDATE existing row</td></tr>
+<tr><td>What does ddl-auto=update do?</td><td>Hibernate reads @Entity classes and creates/updates matching tables on startup</td></tr>
+</tbody></table></div>
+
+<div class="summary">
+<h4>Complete guide summary</h4>
+<ul>
+<li><strong>Validation:</strong> add spring-boot-starter-validation, put @NotBlank/@Email/@Min on entity fields, use @Valid + BindingResult in controller, use th:errors in Thymeleaf for display.</li>
+<li><strong>REST API:</strong> change @Controller to @RestController, return ResponseEntity for full HTTP status control, receive JSON with @RequestBody, use @Valid for API validation.</li>
+<li><strong>DTO:</strong> create a plain class with only the fields you want to expose, write a mapper (manual or MapStruct), always convert Entity → DTO before returning from REST and DTO → Entity before saving.</li>
+<li><strong>JPA vs Hibernate:</strong> JPA is the rules. Hibernate follows the rules. Spring Data JPA builds on both so you write almost no code.</li>
+<li><strong>Spring vs Spring Boot:</strong> Spring is the full framework. Spring Boot wraps it with auto-configuration, embedded Tomcat, and starters to get you running in minutes.</li>
+<li><strong>Exception handling:</strong> @ControllerAdvice + @ExceptionHandler catches all exceptions centrally — no try-catch in every controller.</li>
+<li><strong>Repositories:</strong> extend JpaRepository to get 20+ CRUD methods free. Add method names (findByEmail, findByDepartment) to get custom queries automatically.</li>
+</ul>
+</div>
+</section>
+
+</div>
+<footer>
+  <strong>Spring Boot Complete Guide</strong>
+  Validation · REST API · DTO · JPA vs Hibernate · Spring vs Spring Boot · MVC Flow · REST Flow · Exception Handling · Starters · Repositories
+</footer>
+<script>
+var p=document.getElementById('prog');
+window.addEventListener('scroll',function(){var d=document.documentElement,b=document.body;var pct=(d.scrollTop||b.scrollTop)/((d.scrollHeight||b.scrollHeight)-d.clientHeight)*100;p.style.width=pct+'%';});
+var secs=document.querySelectorAll('section.sec');var links=document.querySelectorAll('.nav a');
+var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting&&e.target.id){links.forEach(function(l){l.classList.remove('on')});var a=document.querySelector('.nav a[href="#'+e.target.id+'"]');if(a)a.classList.add('on');}});},{rootMargin:'-40% 0px -55% 0px'});
+secs.forEach(function(s){obs.observe(s)});
+</script>
+</body>
+</html>

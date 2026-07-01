@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<title>Scala Course — Master Prompt</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
+:root{
+  --bg:#fff;--bg2:#f7f9fc;--bg3:#eef2f8;--border:#e2e8f0;--border2:#cbd5e1;
+  --text:#0f172a;--t2:#475569;--t3:#94a3b8;
+  --accent:#1e40af;--accent2:#0e7490;
+  --blue:#1e40af;--green:#15803d;--orange:#c2410c;--purple:#6d28d9;
+  --teal:#0e7490;--red:#b91c1c;--amber:#b45309;--pink:#be185d;
+  --dark:#0f172a;--dark2:#1e293b;--dark3:#334155;--dtext:#e2e8f0;
+  --sw:256px;--readw:760px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);
+  font-size:15px;line-height:1.7;display:flex;-webkit-font-smoothing:antialiased}
+/* SIDEBAR */
+.sidebar{width:var(--sw);min-height:100vh;background:var(--bg2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;padding-bottom:32px}
+.sidebar::-webkit-scrollbar{width:3px}.sidebar::-webkit-scrollbar-thumb{background:var(--border2)}
+.sb-top{padding:20px 18px 16px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.sb-top h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--accent);letter-spacing:-.2px}
+.sb-top p{font-size:11px;color:var(--t3);margin-top:4px;font-weight:500}
+.nav-sec{padding:14px 18px 6px;font-size:9px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:var(--t3)}
+.ni{display:block;padding:8px 18px;font-size:12.5px;font-weight:500;color:var(--t2);
+  text-decoration:none;border-left:2px solid transparent;transition:all .12s;line-height:1.35}
+.ni:hover{background:var(--bg3);color:var(--text)}
+.ni.active{background:#eff4ff;color:var(--accent);border-left-color:var(--accent);font-weight:600}
+.ni-sub{font-size:9.5px;color:var(--t3);display:block;margin-bottom:1px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+/* PROGRESS */
+.pbar{position:fixed;top:0;left:var(--sw);right:0;height:2px;background:var(--border);z-index:200}
+.pbar-f{height:2px;background:var(--accent);transition:width .3s}
+/* MAIN */
+.main{margin-left:var(--sw);flex:1;min-width:0}
+/* HERO — restrained, professional */
+.hero{background:var(--bg2);border-bottom:1px solid var(--border);padding:40px 48px 34px}
+.hero-inner{max-width:var(--readw);margin:0 auto}
+.phase-badge{display:inline-block;background:#eff4ff;border:1px solid #c7d7fb;color:var(--accent);
+  font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 12px;border-radius:5px;margin-bottom:16px}
+.hero h1{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;line-height:1.15;
+  margin-bottom:12px;color:var(--text);letter-spacing:-.5px}
+.hero p{font-size:15px;color:var(--t2);line-height:1.65;margin-bottom:18px;max-width:680px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:7px}
+.hero-chip{background:#fff;border:1px solid var(--border);color:var(--t2);
+  font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:5px}
+/* CONTENT — capped reading width */
+.content{padding:8px 48px 60px}
+.content > section{max-width:var(--readw);margin:0 auto}
+section{padding:32px 0 28px;border-bottom:1px solid var(--border)}
+section:last-child{border-bottom:none}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:6px}
+h2{font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:var(--text);
+  margin-bottom:14px;letter-spacing:-.3px}
+h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);
+  margin:20px 0 8px;padding-left:11px;border-left:3px solid var(--accent)}
+h4{font-family:'Syne',sans-serif;font-size:13.5px;font-weight:800;color:var(--accent);margin:16px 0 6px}
+p{color:var(--t2);margin-bottom:11px;font-size:15px;line-height:1.7}
+p strong{color:var(--text);font-weight:600}
+ul,ol{padding-left:22px;margin-bottom:11px}
+li{color:var(--t2);margin-bottom:6px;line-height:1.65;font-size:15px}
+li strong{color:var(--text);font-weight:600}
+code{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:var(--bg3);
+  color:var(--orange);padding:2px 6px;border-radius:4px;border:1px solid var(--border)}
+/* CODE BLOCK */
+.cb{background:var(--dark);border-radius:8px;margin:14px 0;overflow:hidden;border:1px solid var(--dark2)}
+.cbh{display:flex;justify-content:space-between;align-items:center;padding:8px 15px;
+  background:var(--dark2);border-bottom:1px solid var(--dark3)}
+.cf{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#94a3b8;font-weight:500}
+.bd{font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;padding:2px 7px;border-radius:4px}
+.bj{background:rgba(194,65,12,.22);color:#fb923c}
+pre{padding:15px 18px;overflow-x:auto;font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;line-height:1.7;color:var(--dtext);white-space:pre}
+pre::-webkit-scrollbar{height:4px}pre::-webkit-scrollbar-thumb{background:var(--dark3)}
+pre code{font-family:inherit;font-size:inherit;background:transparent;color:inherit;padding:0;border:none}
+pre .kw{color:#c084fc}pre .an{color:#fbbf24}pre .cl{color:#67e8f9}
+pre .fn{color:#86efac}pre .st{color:#86efac}pre .cm{color:#64748b;font-style:italic}
+pre .tg{color:#f87171}pre .nb{color:#f87171}pre .num{color:#fb923c}
+/* WHY BOX — refined */
+.why-box{border-radius:8px;margin:14px 0;overflow:hidden;border:1px solid var(--border)}
+.why-row{display:grid;grid-template-columns:130px 1fr;border-bottom:1px solid var(--border)}
+.why-row:last-child{border-bottom:none}
+.why-label{padding:12px 14px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:center;
+  justify-content:center;text-align:center;line-height:1.35}
+.why-val{padding:12px 16px;font-size:14px;color:var(--t2);border-left:1px solid var(--border);line-height:1.6}
+.why-val strong{color:var(--text)}
+.wl-what{background:#eff4ff;color:var(--blue)}
+.wl-prob{background:#fef2f2;color:var(--red)}
+.wl-why{background:#f0fdf4;color:var(--green)}
+.wl-how{background:#f5f3ff;color:var(--purple)}
+.wl-real{background:#fff7ed;color:var(--orange)}
+.wl-inter{background:#fefce8;color:var(--amber)}
+.wl-mand{background:#ecfeff;color:var(--teal)}
+/* NOTES */
+.note{border-radius:6px;padding:12px 16px;margin:12px 0;font-size:14px;border-left:3px solid;line-height:1.6}
+.note strong{margin-right:4px;font-weight:700}
+.nblue{background:#eff4ff;border-color:var(--blue);color:#1e3a8a}
+.ngreen{background:#f0fdf4;border-color:var(--green);color:#14532d}
+.norange{background:#fff7ed;border-color:var(--orange);color:#9a3412}
+.nred{background:#fef2f2;border-color:var(--red);color:#991b1b}
+.nteal{background:#ecfeff;border-color:var(--teal);color:#155e75}
+.npurple{background:#f5f3ff;border-color:var(--purple);color:#5b21b6}
+/* TABLE — clean */
+.tw{overflow-x:auto;margin:14px 0;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead{background:var(--bg3)}
+th{padding:9px 14px;text-align:left;font-size:10px;font-weight:700;letter-spacing:.5px;
+  text-transform:uppercase;color:var(--t2);border-bottom:1px solid var(--border)}
+td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--t2);vertical-align:top;line-height:1.55}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:var(--bg2)}
+td code{font-size:12px}
+/* FLOW STEPS */
+.flow-steps{margin:14px 0}
+.fs-item{display:flex;gap:14px;margin-bottom:14px;align-items:flex-start}
+.fs-num{width:26px;height:26px;border-radius:6px;background:var(--accent);color:#fff;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:800;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;margin-top:1px}
+.fs-body{flex:1}
+.fs-title{font-weight:700;color:var(--text);font-size:14.5px;margin-bottom:3px}
+.fs-desc{font-size:14px;color:var(--t2);line-height:1.6}
+.fs-desc code{font-size:12.5px}
+/* ARCH */
+.arch{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px;margin:14px 0}
+.arch-title{font-family:'Syne',sans-serif;font-size:10.5px;font-weight:800;letter-spacing:.5px;
+  text-transform:uppercase;color:var(--accent);margin-bottom:14px;text-align:center}
+.arch-row{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:5px 0}
+.arch-box,.abox{border-radius:7px;padding:9px 14px;font-size:12.5px;font-weight:700;text-align:center;
+  min-width:104px;line-height:1.35;font-family:'Syne',sans-serif;border:1px solid}
+.arch-box small,.abox small{display:block;font-size:10px;font-weight:500;margin-top:3px;opacity:.85}
+.ab-blue{background:#eff4ff;border-color:#c7d7fb;color:var(--blue)}
+.ab-green{background:#f0fdf4;border-color:#bbf7d0;color:var(--green)}
+.ab-red{background:#fef2f2;border-color:#fecaca;color:var(--red)}
+.ab-teal{background:#ecfeff;border-color:#a5f3fc;color:var(--teal)}
+.ab-purple{background:#f5f3ff;border-color:#ddd6fe;color:var(--purple)}
+.ab-amber{background:#fefce8;border-color:#fde68a;color:var(--amber)}
+.ab-pink{background:#fdf2f8;border-color:#fbcfe8;color:var(--pink)}
+.arch-arr,.arch-arr-v{color:var(--t3);font-weight:700}
+.arch-arr-v{font-size:13px;text-align:center;margin:3px 0;display:block;letter-spacing:.3px}
+/* PROS CONS */
+.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:14px 0}
+.pros-box,.cons-box{border-radius:8px;padding:14px 16px;border:1px solid}
+.pros-box{background:#f0fdf4;border-color:#bbf7d0}.cons-box{background:#fef2f2;border-color:#fecaca}
+.pc-title{font-family:'Syne',sans-serif;font-size:11.5px;font-weight:800;margin-bottom:9px;text-transform:uppercase;letter-spacing:.4px}
+.pros-box .pc-title{color:var(--green)}.cons-box .pc-title{color:var(--red)}
+.pros-box ul,.cons-box ul{padding-left:18px;margin:0}
+.pros-box li,.cons-box li{font-size:13.5px;margin-bottom:6px;line-height:1.55}
+/* IQ */
+.iq-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:14px 0}
+.iq-title{font-family:'Syne',sans-serif;font-size:10.5px;font-weight:800;text-transform:uppercase;
+  letter-spacing:.5px;color:var(--amber);margin-bottom:12px}
+.iq-item{margin-bottom:13px;padding-bottom:13px;border-bottom:1px solid var(--border)}
+.iq-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.iq-q{font-weight:700;color:var(--text);font-size:14px;margin-bottom:4px}
+.iq-a{color:var(--t2);font-size:14px;line-height:1.65}
+@media(max-width:900px){
+  :root{--sw:0px}.sidebar{display:none}
+  .hero{padding:24px 20px}.hero h1{font-size:24px}
+  .content{padding:8px 20px 40px}
+  .pros-cons{grid-template-columns:1fr}
+  .why-row{grid-template-columns:100px 1fr}
+}
+/* ALIASES for older guide structure (sidebar-header / nav-item / nav-num) */
+.sidebar-header{padding:20px 18px 16px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.sidebar-header h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--accent);letter-spacing:-.2px}
+.sidebar-header p{font-size:11px;color:var(--t3);margin-top:4px;font-weight:500}
+.nav-item{display:block;padding:8px 18px;font-size:12.5px;font-weight:500;color:var(--t2);
+  text-decoration:none;border-left:2px solid transparent;transition:all .12s;line-height:1.35}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:#eff4ff;color:var(--accent);border-left-color:var(--accent);font-weight:600}
+.nav-num{font-size:9.5px;color:var(--t3);display:block;margin-bottom:1px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+/* ALIASES for Java Interview guide structure */
+.htag{display:inline-block;background:#eff4ff;border:1px solid #c7d7fb;color:var(--accent);
+  font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 12px;border-radius:5px;margin-bottom:16px}
+.ni span{font-size:9.5px;color:var(--t3);display:block;margin-bottom:1px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+.ni.active span{color:var(--accent)}
+/* Q&A blocks (Java Interview guide) */
+.qa-block{background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:14px 16px;margin:12px 0}
+.qa-q{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.qa-q-badge{flex-shrink:0;width:22px;height:22px;border-radius:5px;background:var(--accent);
+  color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center}
+.qa-q-text{font-weight:700;color:var(--text);font-size:14.5px;line-height:1.5;padding-top:1px}
+.qa-a{padding-left:32px;border-top:1px solid var(--border);padding-top:10px;margin-top:2px}
+.qa-a p{color:var(--t2);font-size:14px;line-height:1.65;margin-bottom:8px}
+.qa-a p:last-child{margin-bottom:0}
+.qa-a strong{color:var(--text)}
+.qa-a ol,.qa-a ul{padding-left:20px;margin-bottom:8px}
+.qa-a li{font-size:14px;line-height:1.6;margin-bottom:5px}
+</style></head><body>
+<div style="max-width:800px;margin:0 auto;padding:40px 32px">
+<div style="background:#0f172a;color:#fff;border-radius:10px;padding:32px;margin-bottom:32px">
+<div style="font-family:Syne,sans-serif;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#67e8f9;margin-bottom:12px">MASTER PROMPT — SCALA COURSE</div>
+<h1 style="font-family:Syne,sans-serif;font-size:28px;font-weight:800;line-height:1.2;margin-bottom:12px">Scala Basics Course<br>Generation Prompt</h1>
+<p style="font-size:14px;opacity:.8;line-height:1.6">Use this prompt to regenerate or extend the Scala Basics Course document in any AI tool.</p>
+</div>
+
+<section id="s-prompt">
+<div class="sec-label">THE PROMPT</div>
+<h2>Complete Scala Course Generation Prompt</h2>
+<div class="cb"><div class="cbh"><span class="cf">Copy this entire prompt</span><span class="bd bj">TEXT</span></div><pre><code>Create a complete learning document titled:
+"Scala Basics Course — Complete Beginner Guide"
+
+Rules (apply throughout the entire document):
+- Assume the reader has zero knowledge of Scala, JVM, or functional programming
+- Define every technical term the first time it appears
+- Use short, simple sentences — one idea per sentence
+- Professional tone — suitable for management review or corporate training
+- No emojis anywhere
+- Capped reading width — do not stretch text full screen width
+- Consistent heading hierarchy (H1 title, H2 sections, H3 subsections)
+- Every code example must be copy-pasteable and runnable
+- Include screenshot placeholders describing exactly what to show
+- Include India-specific notes where relevant (slow internet, offline use, JVM memory)
+
+Document structure — include ALL of these sections:
+
+SECTION 1 — Introduction to Scala
+  - What Scala is (with a plain analogy)
+  - JVM explained in simple terms
+  - A glossary table: JVM, compiled, functional, OOP, sbt, REPL
+  - Why beginners do not need Java knowledge
+  - India note: Scala at Flipkart, Swiggy, PhonePe
+
+SECTION 2 — Why Scala Matters
+  - Key reasons table: less code, type safety, FP+OOP, Java interop, Spark, concurrency, Scala 3
+  - Real-world usage table: Spark, Twitter, LinkedIn, Flipkart, Netflix, Airbnb
+
+SECTION 3 — Toolchain Setup
+  - Tools table: JDK 17 Temurin, Scala 3.4.x, sbt 1.10.x, VS Code + Metals
+  - Step-by-step JDK 17 Temurin install: Windows, macOS, Linux with exact commands
+  - Coursier install for Scala + sbt on all platforms
+  - REPL verification: scala> 1 + 1 should print val res0: Int = 2
+  - sbt verification: sbt --version
+  - Screenshot placeholder after each verification step
+  - India note: first sbt run takes 10-15 minutes, cached after that
+
+SECTION 4 — VS Code + Metals / IntelliJ
+  - Step-by-step table for VS Code Metals install
+  - Screenshot: Metals import build notification
+  - Step-by-step table for IntelliJ Community + Scala plugin
+  - Tip: VS Code lighter for beginners, IntelliJ for larger projects
+
+SECTION 5 — Language Fundamentals
+  - val vs var with why-box explanation
+  - Basic types table: Int, Long, Double, Float, Boolean, Char, String, Unit
+  - String interpolation: s"", f"", raw""
+  - if/else as an expression (returns a value)
+  - for loop, for-expression with yield
+  - while loop
+  - Screenshot: REPL showing val inference
+
+SECTION 6 — Functions
+  - def syntax with parameters and return type
+  - Default parameters and named arguments
+  - Anonymous functions (lambdas): x => x + 1
+  - Higher-order functions: map, filter, reduce with List examples
+  - Screenshot: filter output in REPL
+
+SECTION 7 — Object-Oriented Programming
+  - class with fields and methods
+  - case class: auto-generated equals, hashCode, toString, copy
+  - trait: shared behaviour with abstract and concrete methods
+  - object: singleton, companion object with apply
+
+SECTION 8 — Collections
+  - Table: List, Vector, Set, Map, Option, Seq
+  - List operations: head, tail, sorted, distinct, sum, take, drop, ::, :+
+  - Map: get (returns Option), getOrElse, +, -, iteration
+  - Option: Some/None, getOrElse, map, pattern match
+  - Why-box: null problem vs Option solution
+
+SECTION 9 — Pattern Matching
+  - Basic match with guard conditions
+  - sealed trait + case classes for exhaustive matching
+  - Matching on Option and List structure
+  - Note: sealed trait enables exhaustiveness checking
+
+SECTION 10 — sbt and Project Structure
+  - sbt new scala/scala3.g8 command
+  - File tree showing all project files with one-line descriptions
+  - Complete build.sbt content
+  - project/build.properties content
+  - src/main/scala/Main.scala content
+  - sbt commands table: compile, run, test, console, clean, ~compile, package
+  - Screenshot: sbt run output, VS Code project tree
+
+SECTION 11 — Testing with ScalaTest
+  - Add ScalaTest to build.sbt (% Test dependency)
+  - Calculator example: add and divide functions
+  - Test class using AnyFlatSpec with Matchers
+  - sbt test command and expected output: All tests passed
+  - Screenshot: test output
+  - Lab box: write a test for isEven, run sbt test, verify pass
+
+SECTION 12 — JSON and HTTP
+  - Add circe dependencies to build.sbt
+  - Encode case class to JSON with asJson
+  - Decode JSON string with decode[T]
+  - Handle Either[Error, T] from decode
+  - Add sttp dependency
+  - GET and POST HTTP requests with sttp
+
+SECTION 13 — CLI Application Lab
+  - Lab format: Overview, Objectives, Prerequisites, Steps
+  - Contact Book app: add, find, list, quit commands
+  - Complete source file: ContactBook.scala
+  - sbt run session with example input/output
+  - Acceptance checklist: 6 items
+
+SECTION 14 — Concurrency and Futures
+  - Why-box: sequential vs concurrent
+  - Future[T] basic usage with Await.result
+  - Combining futures with for-comprehension
+  - onComplete with Success and Failure
+  - Note: Cats Effect and ZIO for production
+
+SECTION 15 — Functional Programming Foundations
+  - Table: immutability, pure function, HOF, composition, functor, monad
+  - Pure vs impure function code example
+  - map, andThen function composition
+  - Pipeline: map → filter → map on a List
+  - Either[L, R] for error handling without exceptions
+  - for-comprehension with Either
+
+SECTION 16 — Streams
+  - LazyList: infinite sequence, take
+  - Process a file with Iterator without loading all into memory
+  - Note: Akka Streams / fs2 for production
+
+SECTION 17 — Persistence
+  - Embedded H2 database (no server needed)
+  - Add Doobie + H2 to build.sbt
+  - Create table, insert, query with Doobie
+  - India note: H2 works fully offline
+  - Note: switch Transactor URL for PostgreSQL in production
+
+SECTION 18 — Web Services with http4s
+  - Add http4s, circe, cats-effect to build.sbt
+  - Minimal REST API: GET /health, GET /greet/:name
+  - sbt run + curl test commands
+  - Screenshot: server started + curl response
+
+SECTION 19 — Advanced Scala 3 Features
+  - Enums: simple and with data
+  - Extension methods: add methods to String
+  - given / using: type class pattern
+
+SECTION 20 — Packaging and Distribution
+  - Add sbt-assembly to project/plugins.sbt
+  - Configure mainClass and jarName in build.sbt
+  - sbt assembly command
+  - java -jar my-app.jar to run
+  - sbt clean for teardown
+  - India note: fat JAR only needs JDK 17 — no sbt needed
+
+SECTION 21 — Performance and Profiling
+  - timed helper function with System.currentTimeMillis
+  - JVM heap: -Xmx4g, -Xms512m
+  - Performance tips table: Vector vs List, Iterator for files, avoid toString in loops, @tailrec
+
+SECTION 22 — Troubleshooting and Pitfalls
+  - 10 error cards, each with:
+    - Header: exact error message or symptom (dark background, amber text)
+    - Cause: one paragraph
+    - Fix: green note box with numbered steps
+  - Errors to include:
+    1. sbt hangs on first run
+    2. java: command not found
+    3. Metals does not import build
+    4. error: not found: type Xxx
+    5. OutOfMemoryError: Java heap space
+    6. sbt test shows compilation errors (fix: sbt clean)
+    7. NoClassDefFoundError at runtime
+    8. Port already in use
+    9. Character encoding issues
+    10. Scala 2 vs Scala 3 syntax confusion
+
+SECTION 23 — Capstone Project: Student Score API
+  - Lab format: Overview, project structure file tree
+  - Models.scala: Student, CreateStudent, Grade enum
+  - StudentService.scala: in-memory TrieMap store
+  - API endpoints table: GET/POST/DELETE
+  - curl test commands with expected responses
+  - Acceptance checklist: 7 items
+
+SECTION 24 — Glossary
+  - Table with 24 terms and plain definitions
+  - Include: case class, companion object, Either, extension method,
+    for-comprehension, Future, given/using, HOF, immutable, JDK, JVM,
+    LazyList, monad, Option, pattern matching, REPL, sbt, sealed trait,
+    tail recursion, trait, type inference, Unit, val, var
+
+SECTION 25 — Scala 3 Cheat Sheet
+  - One large code block with all syntax categories:
+    Values/types, functions, classes, collections, pattern matching,
+    control flow, Option/Either, sbt commands
+
+SECTION 26 — Further Learning Roadmap
+  - Phase table: Foundations → Cats Effect → Spark → Akka → Kafka → OSS
+  - India note: all tools free, docs.scala-lang.org works offline when cached
+  - Resources table: docs.scala-lang.org (free), Coursera Odersky (free to audit),
+    rockthejvm.com, scastie.scala-lang.org
+
+Formatting requirements:
+- Use why-box (4-row colored box) to explain concepts before showing code
+- Use dark code blocks with language badge (SCALA, SHELL, SBT, CONFIG, OUTPUT)
+- Use screenshot placeholder boxes with dashed border
+- Use checklist boxes for lab acceptance criteria
+- Use lab boxes (bordered with blue header) for hands-on exercises
+- Use note boxes for tips, India notes, warnings, and key points
+- Use striped tables with bold column headers
+- Include a section summary box (teal) at the end of each section
+- Progress bar in the left sidebar
+- Smooth scroll navigation in the sidebar</code></pre></div>
+
+</section>
+
+<div class="note nteal" style="margin-top:24px"><strong>How to Use:</strong> Copy the entire prompt above. Paste into any AI tool (Claude, ChatGPT, Gemini). The output will follow the exact structure described. To add a section, describe it in the same format. To extend a section, add your content requirements to that section's bullet list.</div>
+</div>
+</body></html>

@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Spring MVC + Thymeleaf + MySQL — Complete Beginner Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink:       #1a1410;
+    --ink-mid:   #3d342a;
+    --ink-soft:  #6b5c4e;
+    --paper:     #faf7f2;
+    --paper-2:   #f2ece0;
+    --paper-3:   #e8dfd0;
+    --accent:    #c0392b;
+    --accent-2:  #e67e22;
+    --teal:      #16817a;
+    --blue:      #1a5276;
+    --green:     #1e8449;
+    --border:    #d6cbbf;
+    --code-bg:   #1e1b16;
+    --code-text: #e8dfd0;
+    --ann-color: #7dcea0;
+    --kw-color:  #f0b27a;
+    --str-color: #85c1e9;
+    --cm-color:  #8d9a7b;
+    --type-color:#c39bd3;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Lora', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  /* ─── INTRO BANNER ─── */
+  .intro-banner {
+    background: linear-gradient(135deg, #1a1410 0%, #3d1f10 50%, #1a1410 100%);
+    color: var(--paper);
+    padding: 3.5rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .intro-banner::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(192,57,43,0.08) 39px, rgba(192,57,43,0.08) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(192,57,43,0.08) 39px, rgba(192,57,43,0.08) 40px);
+  }
+  .intro-banner-inner { position: relative; max-width: 860px; margin: 0 auto; }
+  .intro-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 1.2rem;
+  }
+  .intro-banner h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-weight: 800;
+    color: #faf7f2;
+    line-height: 1.2;
+    margin-bottom: 1.2rem;
+  }
+  .intro-quote {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: #d6cbbf;
+    max-width: 680px;
+    margin: 0 auto 1.5rem;
+    padding: 1rem 1.5rem;
+    border-left: 3px solid var(--accent);
+    text-align: left;
+  }
+  .intro-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(250,247,242,0.5);
+    letter-spacing: 0.08em;
+  }
+
+  /* ─── LAYOUT ─── */
+  .page-wrap { max-width: 980px; margin: 0 auto; padding: 0 1.5rem 4rem; }
+
+  /* ─── TOC ─── */
+  .toc-box {
+    background: var(--paper-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem 2rem;
+    margin: 2.5rem 0;
+  }
+  .toc-box h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 1rem;
+  }
+  .toc-list { list-style: none; columns: 2; column-gap: 2rem; }
+  .toc-list li { margin-bottom: 0.4rem; break-inside: avoid; }
+  .toc-list a {
+    color: var(--blue);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    border-bottom: 1px dashed rgba(26,82,118,0.3);
+    transition: color 0.15s;
+  }
+  .toc-list a:hover { color: var(--accent); }
+  .toc-num { color: var(--ink-soft); margin-right: 6px; }
+
+  /* ─── SECTION HEADINGS ─── */
+  .section-block { margin: 3rem 0; }
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--paper-3);
+  }
+  .section-num {
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-head h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--ink-mid);
+    margin: 1.8rem 0 0.6rem;
+  }
+
+  p { margin-bottom: 1rem; color: var(--ink-mid); }
+
+  /* ─── INFO / WARN / TIP BOXES ─── */
+  .info-box, .warn-box, .tip-box, .flow-box {
+    border-radius: 5px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .info-box { background: #eaf4fb; border-left: 3px solid #1a5276; color: #1a3a50; }
+  .warn-box { background: #fef9e7; border-left: 3px solid #e67e22; color: #6e4b10; }
+  .tip-box  { background: #eafaf1; border-left: 3px solid #1e8449; color: #145a32; }
+  .flow-box { background: var(--paper-2); border-left: 3px solid var(--border); color: var(--ink-mid); }
+  .box-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    display: block;
+  }
+  .info-box .box-label  { color: var(--blue); }
+  .warn-box .box-label  { color: var(--accent-2); }
+  .tip-box .box-label   { color: var(--green); }
+  .flow-box .box-label  { color: var(--ink-soft); }
+
+  /* ─── CODE BLOCKS ─── */
+  .code-wrap {
+    background: var(--code-bg);
+    border-radius: 8px;
+    margin: 1rem 0 1.5rem;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .code-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .code-lang {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: rgba(232,223,208,0.5);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .code-file {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(232,223,208,0.8);
+    margin-left: auto;
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #febc2e; }
+  .dot-g { background: #28c840; }
+
+  pre {
+    padding: 1.2rem 1.4rem;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--code-text);
+    tab-size: 4;
+  }
+  pre .kw   { color: var(--kw-color); font-style: italic; }
+  pre .ann  { color: var(--ann-color); }
+  pre .str  { color: var(--str-color); }
+  pre .cm   { color: var(--cm-color); font-style: italic; }
+  pre .tp   { color: var(--type-color); }
+  pre .num  { color: #f1948a; }
+  pre .tag  { color: #85c1e9; }
+  pre .attr { color: #a9cce3; }
+  pre .val  { color: #a9dfbf; }
+  pre .prop { color: var(--kw-color); }
+  pre .eq   { color: var(--code-text); }
+
+  /* ─── INTERACTION FLOW DIAGRAM ─── */
+  .flow-diagram {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  .flow-step {
+    flex: 1;
+    min-width: 110px;
+    background: var(--paper-2);
+    border: 1px solid var(--border);
+    border-radius: 0;
+    padding: 0.9rem 0.75rem;
+    text-align: center;
+    position: relative;
+  }
+  .flow-step:first-child { border-radius: 6px 0 0 6px; }
+  .flow-step:last-child  { border-radius: 0 6px 6px 0; }
+  .flow-step + .flow-step { border-left: none; }
+  .flow-step::after {
+    content: '→';
+    position: absolute;
+    right: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+    font-size: 18px;
+    z-index: 1;
+    background: var(--paper);
+    padding: 0 2px;
+  }
+  .flow-step:last-child::after { display: none; }
+  .flow-step-icon { font-size: 20px; margin-bottom: 4px; }
+  .flow-step-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .flow-step-sub {
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ─── ANNOTATION TABLES ─── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0 1.5rem;
+    font-size: 13.5px;
+  }
+  thead tr { background: var(--paper-3); }
+  th {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    text-align: left;
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--paper-3);
+    color: var(--ink-mid);
+    vertical-align: top;
+  }
+  td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--teal);
+    white-space: nowrap;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--paper-2); }
+
+  /* ─── STEP LIST ─── */
+  .steps { counter-reset: step; list-style: none; margin: 1rem 0; }
+  .steps li {
+    counter-increment: step;
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: flex-start;
+  }
+  .steps li::before {
+    content: counter(step);
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .steps li p { margin: 0; }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--paper-3);
+    margin: 2.5rem 0;
+  }
+
+  /* ─── BADGE ─── */
+  .badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+  }
+  .badge-red    { background: #fadbd8; color: #922b21; }
+  .badge-green  { background: #d5f5e3; color: #1e8449; }
+  .badge-blue   { background: #d6eaf8; color: #1a5276; }
+  .badge-orange { background: #fdebd0; color: #784212; }
+  .badge-teal   { background: #d1f2eb; color: #0e6655; }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    text-align: center;
+    padding: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    border-top: 1px solid var(--paper-3);
+    margin-top: 3rem;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 600px) {
+    .toc-list { columns: 1; }
+    .flow-diagram { flex-wrap: wrap; gap: 8px; }
+    .flow-step { border-radius: 6px !important; border: 1px solid var(--border) !important; }
+    .flow-step::after { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     INTRO BANNER
+════════════════════════════════════════════════ -->
+<header class="intro-banner">
+  <div class="intro-banner-inner">
+    <span class="intro-tag">Learning Journal</span>
+    <h1>Spring MVC + Thymeleaf + MySQL</h1>
+    <blockquote class="intro-quote">
+      Newgen Software is an enterprise platform provider specializing in Workflow Automation, ECM, and BPM.
+      These are new areas for me.
+    </blockquote>
+    <p class="intro-meta">A complete beginner-friendly reference guide — Entity · Repository · Service · Controller · View</p>
+  </div>
+</header>
+
+<div class="page-wrap">
+
+  <!-- ─── TABLE OF CONTENTS ─── -->
+  <nav class="toc-box">
+    <h2>Contents</h2>
+    <ul class="toc-list">
+      <li><a href="#sec-overview"><span class="toc-num">01</span>What We're Building</a></li>
+      <li><a href="#sec-deps"><span class="toc-num">02</span>Maven Dependencies</a></li>
+      <li><a href="#sec-props"><span class="toc-num">03</span>application.properties</a></li>
+      <li><a href="#sec-entity"><span class="toc-num">04</span>Entity Class</a></li>
+      <li><a href="#sec-repo"><span class="toc-num">05</span>Repository Interface</a></li>
+      <li><a href="#sec-service"><span class="toc-num">06</span>Service Layer</a></li>
+      <li><a href="#sec-controller"><span class="toc-num">07</span>Controller Class</a></li>
+      <li><a href="#sec-view"><span class="toc-num">08</span>Thymeleaf HTML View</a></li>
+      <li><a href="#sec-flow"><span class="toc-num">09</span>How It All Connects</a></li>
+      <li><a href="#sec-annotations"><span class="toc-num">10</span>Annotation Reference</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══════════════════════════════
+       01 — WHAT WE'RE BUILDING
+  ════════════════════════════════ -->
+  <div id="sec-overview" class="section-block">
+    <div class="section-head">
+      <div class="section-num">01</div>
+      <h2>What We're Building</h2>
+    </div>
+
+    <p>
+      We'll build a simple <strong>Employee Management</strong> app. It lets you:
+      add a new employee (name + department), list all employees from MySQL, and
+      delete an employee by ID. This covers the full request-response lifecycle
+      in Spring MVC with a Thymeleaf front end.
+    </p>
+
+    <div class="flow-diagram">
+      <div class="flow-step">
+        <div class="flow-step-icon">🌐</div>
+        <div class="flow-step-name">Browser</div>
+        <div class="flow-step-sub">HTTP request</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-icon">🎮</div>
+        <div class="flow-step-name">Controller</div>
+        <div class="flow-step-sub">Handles URL</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-icon">⚙️</div>
+        <div class="flow-step-name">Service</div>
+        <div class="flow-step-sub">Business logic</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-icon">🗄️</div>
+        <div class="flow-step-name">Repository</div>
+        <div class="flow-step-sub">DB queries</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-icon">🐬</div>
+        <div class="flow-step-name">MySQL</div>
+        <div class="flow-step-sub">Data storage</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-icon">🍃</div>
+        <div class="flow-step-name">Thymeleaf</div>
+        <div class="flow-step-sub">Renders HTML</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <span class="box-label">Why this architecture?</span>
+      Each layer has a single responsibility. The Controller only handles HTTP. The Service only
+      handles business rules. The Repository only talks to the database. This makes the code easy
+      to test and change without breaking everything else.
+    </div>
+
+    <h3>Project folder structure</h3>
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="code-lang">Directory Tree</span>
+      </div>
+      <pre>src/
+└── main/
+    ├── java/com/example/empapp/
+    │   ├── <span class="tp">EmpAppApplication.java</span>      <span class="cm">← Spring Boot entry point</span>
+    │   ├── entity/
+    │   │   └── <span class="tp">Employee.java</span>           <span class="cm">← Maps to DB table</span>
+    │   ├── repository/
+    │   │   └── <span class="tp">EmployeeRepository.java</span>  <span class="cm">← DB operations</span>
+    │   ├── service/
+    │   │   └── <span class="tp">EmployeeService.java</span>     <span class="cm">← Business logic</span>
+    │   └── controller/
+    │       └── <span class="tp">EmployeeController.java</span>  <span class="cm">← URL handling</span>
+    └── resources/
+        ├── <span class="str">application.properties</span>       <span class="cm">← DB config</span>
+        └── templates/
+            └── <span class="str">employees.html</span>           <span class="cm">← Thymeleaf view</span></pre>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ═══════════════════════════════
+       02 — MAVEN DEPENDENCIES
+  ════════════════════════════════ -->
+  <div id="sec-deps" class="section-block">
+    <div class="section-head">
+      <div class="section-num">02</div>
+      <h2>Maven Dependencies (pom.xml)</h2>
+    </div>
+
+    <p>
+      Add these four starters to your <code>pom.xml</code>. Spring Boot automatically configures
+      everything when it sees these on the classpath.
+    </p>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="code-lang">XML</span>
+        <span class="code-file">pom.xml</span>
+      </div>
+      <pre><span class="tag">&lt;dependencies&gt;</span>
+
+    <span class="cm">&lt;!-- 1. Spring MVC web layer (controllers, views) --&gt;</span>
+    <span class="tag">&lt;dependency&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+    <span class="cm">&lt;!-- 2. Thymeleaf template engine --&gt;</span>
+    <span class="tag">&lt;dependency&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-thymeleaf<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+    <span class="cm">&lt;!-- 3. Spring Data JPA (Hibernate underneath) --&gt;</span>
+    <span class="tag">&lt;dependency&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+    <span class="cm">&lt;!-- 4. MySQL JDBC driver --&gt;</span>
+    <span class="tag">&lt;dependency&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span>com.mysql<span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span>mysql-connector-j<span class="tag">&lt;/artifactId&gt;</span>
+        <span class="tag">&lt;scope&gt;</span>runtime<span class="tag">&lt;/scope&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+    <span class="cm">&lt;!-- 5. Lombok — removes boilerplate getters/setters --&gt;</span>
+    <span class="tag">&lt;dependency&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span>org.projectlombok<span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span>lombok<span class="tag">&lt;/artifactId&gt;</span>
+        <span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+<span class="tag">&lt;/dependencies&gt;</span></pre>
+    </div>
+
+    <div class="tip-box">
+      <span class="box-label">Tip — Lombok</span>
+      Lombok is optional but recommended for beginners. It auto-generates getters, setters, constructors,
+      and toString methods using annotations like <code>@Data</code> and <code>@AllArgsConstructor</code>,
+      so you write much less boilerplate code.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ═══════════════════════════════
+       03 — APPLICATION.PROPERTIES
+  ════════════════════════════════ -->
+  <div id="sec-props" class="section-block">
+    <div class="section-head">
+      <div class="section-num">03</div>
+      <h2>application.properties — MySQL Configuration</h2>
+    </div>
+
+    <p>
+      This file tells Spring Boot how to connect to your MySQL database and how Hibernate
+      should behave. It lives at <code>src/main/resources/application.properties</code>.
+    </p>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="code-lang">Properties</span>
+        <span class="code-file">application.properties</span>
+      </div>
+      <pre><span class="cm"># ─────────────────────────────────────────────────────
+# DATABASE CONNECTION SETTINGS
+# ─────────────────────────────────────────────────────</span>
+
+<span class="cm"># The JDBC URL tells Spring where to find MySQL.
+# Format: jdbc:mysql://HOST:PORT/DATABASE_NAME?options</span>
+<span class="prop">spring.datasource.url</span><span class="eq">=</span><span class="val">jdbc:mysql://localhost:3306/empdb?useSSL=false&amp;serverTimezone=UTC</span>
+
+<span class="cm"># Your MySQL username (default is 'root')</span>
+<span class="prop">spring.datasource.username</span><span class="eq">=</span><span class="val">root</span>
+
+<span class="cm"># Your MySQL password</span>
+<span class="prop">spring.datasource.password</span><span class="eq">=</span><span class="val">yourpassword</span>
+
+<span class="cm"># The JDBC driver class for MySQL 8+</span>
+<span class="prop">spring.datasource.driver-class-name</span><span class="eq">=</span><span class="val">com.mysql.cj.jdbc.Driver</span>
+
+
+<span class="cm"># ─────────────────────────────────────────────────────
+# JPA / HIBERNATE SETTINGS
+# ─────────────────────────────────────────────────────</span>
+
+<span class="cm"># Dialect tells Hibernate which SQL "flavor" to generate.
+# Use MySQL8Dialect for MySQL 8.x</span>
+<span class="prop">spring.jpa.properties.hibernate.dialect</span><span class="eq">=</span><span class="val">org.hibernate.dialect.MySQL8Dialect</span>
+
+<span class="cm"># DDL Auto Options:
+#   create       — drops and recreates tables every startup (dev only!)
+#   create-drop  — creates on start, drops on shutdown
+#   update       — alters existing tables to match entities (careful!)
+#   validate     — checks table matches entity, throws error if not
+#   none         — does nothing (production default)</span>
+<span class="prop">spring.jpa.hibernate.ddl-auto</span><span class="eq">=</span><span class="val">update</span>
+
+<span class="cm"># Prints every SQL query Hibernate runs (great for debugging)</span>
+<span class="prop">spring.jpa.show-sql</span><span class="eq">=</span><span class="val">true</span>
+
+<span class="cm"># Formats the printed SQL so it's readable</span>
+<span class="prop">spring.jpa.properties.hibernate.format_sql</span><span class="eq">=</span><span class="val">true</span>
+
+
+<span class="cm"># ─────────────────────────────────────────────────────
+# SERVER SETTINGS
+# ─────────────────────────────────────────────────────</span>
+
+<span class="cm"># App runs on http://localhost:8080 by default
+# Change this if port 8080 is taken:</span>
+<span class="prop">server.port</span><span class="eq">=</span><span class="val">8080</span>
+
+<span class="cm"># Thymeleaf caching: false in dev so template changes show instantly</span>
+<span class="prop">spring.thymeleaf.cache</span><span class="eq">=</span><span class="val">false</span></pre>
+    </div>
+
+    <div class="warn-box">
+      <span class="box-label">Before you start</span>
+      Create the database in MySQL first: <code>CREATE DATABASE empdb;</code>
+      Then update username/password above to match your local MySQL setup.
+      Hibernate will auto-create the <code>employee</code> table thanks to <code>ddl-auto=update</code>.
+    </div>
+
+    <h3>What each property does</h3>
+    <table>
+      <thead><tr><th>Property</th><th>What it controls</th></tr></thead>
+      <tbody>
+        <tr><td>datasource.url</td><td>Full address to reach the MySQL database — host, port, and database name</td></tr>
+        <tr><td>datasource.username</td><td>MySQL login username</td></tr>
+        <tr><td>datasource.password</td><td>MySQL login password</td></tr>
+        <tr><td>hibernate.dialect</td><td>Tells Hibernate which SQL syntax to generate (MySQL-specific vs PostgreSQL, etc.)</td></tr>
+        <tr><td>ddl-auto=update</td><td>Hibernate looks at your Entity class and creates/modifies the DB table to match it</td></tr>
+        <tr><td>show-sql=true</td><td>Prints every SQL query to the console — useful when debugging</td></tr>
+        <tr><td>thymeleaf.cache=false</td><td>Template changes take effect immediately without restarting the server</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ═══════════════════════════════
+       04 — ENTITY
+  ════════════════════════════════ -->
+  <div id="sec-entity" class="section-block">
+    <div class="section-head">
+      <div class="section-num">04</div>
+      <h2>Entity Class — Employee.java</h2>
+    </div>
+
+    <p>
+      An <strong>Entity</strong> is a Java class that is directly mapped to a database table.
+      Each field in the class becomes a column. Each instance of the class represents
+      one row in the table. Hibernate reads these annotations and creates
+      the SQL table for you automatically.
+    </p>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="code-lang">Java</span>
+        <span class="code-file">entity/Employee.java</span>
+      </div>
+      <pre><span class="kw">package</span> com.example.empapp.entity;
+
+<span class="kw">import</span> jakarta.persistence.*;
+<span class="kw">import</span> lombok.*;
+
+<span class="cm">/**
+ * ENTITY — maps directly to the 'employee' table in MySQL.
+ * Hibernate reads these annotations and generates SQL automatically.
+ */</span>
+
+<span class="ann">@Entity</span>                      <span class="cm">// Marks this class as a JPA entity (DB table)</span>
+<span class="ann">@Table(name = <span class="str">"employee"</span>)</span>  <span class="cm">// The actual table name in MySQL</span>
+<span class="ann">@Data</span>                        <span class="cm">// Lombok: auto-generates getters, setters, equals, toString</span>
+<span class="ann">@NoArgsConstructor</span>           <span class="cm">// Lombok: creates Employee() empty constructor (required by JPA)</span>
+<span class="ann">@AllArgsConstructor</span>          <span class="cm">// Lombok: creates Employee(id, name, dept) constructor</span>
+<span class="kw">public class</span> <span class="tp">Employee</span> {
+
+    <span class="ann">@Id</span>                      <span class="cm">// This field is the PRIMARY KEY in the table</span>
+    <span class="ann">@GeneratedValue(strategy = GenerationType.IDENTITY)</span>
+    <span class="cm">    // AUTO_INCREMENT in MySQL: Hibernate never sets this,
+    // MySQL assigns it automatically when a row is inserted</span>
+    <span class="kw">private</span> <span class="tp">Long</span> id;
+
+    <span class="ann">@Column(name = <span class="str">"name"</span>, nullable = <span class="kw">false</span>, length = <span class="num">100</span>)</span>
+    <span class="cm">    // Maps to the 'name' column. Cannot be NULL. Max 100 characters.</span>
+    <span class="kw">private</span> <span class="tp">String</span> name;
+
+    <span class="ann">@Column(name = <span class="str">"department"</span>, nullable = <span class="kw">false</span>, length = <span class="num">80</span>)</span>
+    <span class="cm">    // Maps to the 'department' column.</span>
+    <span class="kw">private</span> <span class="tp">String</span> department;
+
+    <span class="ann">@Column(name = <span class="str">"email"</span>, unique = <span class="kw">true</span>)</span>
+    <span class="cm">    // unique=true adds a UNIQUE constraint in MySQL</span>
+    <span class="kw">private</span> <span class="tp">String</span> email;
+}</pre>
+    </div>
+
+    <p>
+      When the app starts, Hibernate runs something like this SQL behind the scenes
+      (because of <code>ddl-auto=update</code>):
+    </p>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="code-lang">SQL</span>
+        <span class="code-file">Generated by Hibernate</span>
+      </div>
+      <pre><span class="cm">-- Hibernate generates this SQL from your Entity class automatically</span>
+<span class="kw">CREATE TABLE</span> employee (
+    id         <span class="tp">BIGINT</span>       <span class="kw">NOT NULL</span> AUTO_INCREMENT,
+    name       <span class="tp">VARCHAR</span>(<span class="num">100</span>) <span class="kw">NOT NULL</span>,
+    department <span class="tp">VARCHAR</span>(<span class="num">80</span>)  <span class="kw">NOT NULL</span>,
+    email      <span class="tp">VARCHAR</span>(<span class="num">255</span>) <span class="kw">UNIQUE</span>,
+    <span class="kw">PRIMARY KEY</span> (id)
+);</pre>
+    </div>
+
+    <div class="info-box">
+      <span class="box-label">Key Insight</span>
+      You never write <code>CREATE TABLE</code> yourself. You only write the Java class.
+      Hibernate translates the annotations into SQL DDL automatically. This is the power of JPA.
+    </div>
+
+    <h3>Entity annotation reference</h3>
+    <table>
+      <thead><tr><th>Annotation</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td>@Entity</td><td>Marks this class as a JPA-managed entity. Hibernate tracks instances of this class.</td></tr>
+        <tr><td>@Table(name=)</td><td>Specifies the actual MySQL table name. If omitted, uses the class name in lowercase.</td></tr>
+        <tr><td>@Id</td><td>Marks the primary key column. Every entity must have exactly one.</td></tr>
+        <tr><td>@GeneratedValue</td><td>Tells JPA how to generate the ID. IDENTITY delegates to MySQL's AUTO_INCREMENT.</td></tr>
+        <tr><td>@Column</td><td>Customizes column name, length, nullable constraint, uniqueness, etc.</td></tr>
+        <tr><td>@Data (Lombok)</td><td>Generates all getters, setters, equals(), hashCode(), and toString().</td></tr>
+        <tr><td>@NoArgsConstructor</td><td>JPA requires a no-argument constructor. Lombok generates it for you.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ═══════════════════════════════
+       05 — REPOSITORY
+  ════════════════════════════════ -->
+  <div id="sec-repo" class="section-block">
+    <div class="section-head">
+      <div class="section-num">05</div>
+      <h2>Repository Interface — EmployeeRepository.java</h2>
+    </div>
+
+    <p>
+      The Repository is the layer that directly communicates with the database.
+      You don't write any SQL here. You just <strong>extend <code>JpaRepository</code></strong>
+      and Spring Data auto-generates all the common database operations for you
+      (save, find, delete, list all, etc.).
+    </p>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="code-lang">Java</span>
+        <span class="code-file">repository/EmployeeRepository.java</span>
+      </div>
+      <pre><span class="kw">package</span> com.example.empapp.repository;
+
+<span class="kw">import</span> com.example.empapp.entity.Employee;
+<span class="kw">import</span> org.springframework.data.jpa.repository.JpaRepository;
+<span class="kw">import</span> org.springframework.data.jpa.repository.Query;
+<span class="kw">import</span> org.springframework.stereotype.Repository;
+<span class="kw">import</span> java.util.List;
+<span class="kw">import</span> java.util.Optional;
+
+<span class="cm">/**
+ * REPOSITORY — talks directly to the MySQL database.
+ *
+ * By extending JpaRepository&lt;Employee, Long&gt;, Spring Data
+ * automatically provides:
+ *   save(entity)         → INSERT or UPDATE
+ *   findById(id)         → SELECT WHERE id = ?
+ *   findAll()            → SELECT * FROM employee
+ *   deleteById(id)       → DELETE WHERE id = ?
+ *   count()              → SELECT COUNT(*)
+ *   existsById(id)       → SELECT COUNT(*) > 0
+ *
+ * JpaRepository&lt;Employee, Long&gt;:
+ *   First type  = The Entity class
+ *   Second type = The type of the primary key (@Id field)
+ */</span>
+<span class="ann">@Repository</span>  <span class="cm">// Marks this as a Spring-managed repository bean</span>
+<span class="kw">public interface</span> <span class="tp">EmployeeRepository</span> <span class="kw">extends</span> <span class="tp">JpaRepository</span>&lt;<span class="tp">Employee</span>, <span class="tp">Long</span>&gt; {
+
+    <span class="cm">// ─── DERIVED QUERIES ─────────────────────────────────────────
+    // Spring reads the method name and generates SQL automatically.
+    // You just declare the method — no implementation needed!
+    // ─────────────────────────────────────────────────────────────</span>
+
+    <span class="cm">// SELECT * FROM employee WHERE department = ?</span>
+    <span class="tp">List</span>&lt;<span class="tp">Employee</span>&gt; findByDepartment(<span class="tp">String</span> department);
+
+    <span class="cm">// SELECT * FROM employee WHERE name LIKE '%keyword%'</span>
+    <span class="tp">List</span>&lt;<span class="tp">Employee</span>&gt; findByNameContainingIgnoreCase(<span class="tp">String</span> keyword);
+
+    <span class="cm">// SELECT * FROM employee WHERE email = ?</span>
+    <span class="tp">Optional</span>&lt;<span class="tp">Employee</span>&gt; findByEmail(<span class="tp">String</span> email);
+
+    <span class="cm">// ─── JPQL CUSTOM QUERY ───────────────────────────────────────
+    // When derived queries get complex, write JPQL manually.
+    // JPQL uses class names and field names (not table/column names).
+    // ─────────────────────────────────────────────────────────────</span>
+
+    <span class="ann">@Query(<span class="str">"SELECT e FROM Employee e WHERE e.department = :dept ORDER BY e.name ASC"</span>)</span>
+    <span class="tp">List</span>&lt;<span class="tp">Employee</span>&gt; findByDeptSorted(<span class="ann">@Param(<span class="str">"dept"</span>)</span> <span class="tp">String</span> dept);
+
+    <span class="cm">// ─── NATIVE SQL QUERY ────────────────────────────────────────
+    // Use nativeQuery=true when you need raw MySQL SQL.
+    // ─────────────────────────────────────────────────────────────</span>
+
+    <span class="ann">@Query(value = <span class="str">"SELECT * FROM employee WHERE department = ?1 LIMIT 5"</span>,
+           nativeQuery = <span class="kw">true</span>)</span>
+    <span class="tp">List</span>&lt;<span class="tp">Employee</span>&gt; findTop5ByDept(<span class="tp">String</span> dept);
+}</pre>
+    </div>
+
+    <div class="tip-box">
+      <span class="box-label">How derived query names work</span>
+      Spring reads method names like <code>findByDepartment</code> and automatically
+      generates SQL. The rule is: <code>findBy</code> + FieldName + optional keyword.
+      Keywords include <code>Containing</code>, <code>IgnoreCase</code>, <code>GreaterThan</code>,
+      <code>Between</code>, <code>OrderByNameAsc</code>, and many more. No SQL writing needed!
+    </div>
+
+    <h3>Built-in JpaRepository methods (free, no code needed)</h3>
+    <table>
+      <thead><tr><th>Method</th><th>SQL Equivalent</th></tr></thead>
+      <tbody>
+        <tr><td>save(employee)</td><td>INSERT INTO employee ... or UPDATE employee SET ...</td></tr>
+        <tr><td>findById(1L)</td><td>SELECT * FROM employee WHERE id = 1</td></tr>
+        <tr><td>findAll()</td><td>SELECT * FROM employee</td></tr>
+        <tr><td>deleteById(1L)</td><td>DELETE FROM employee WHERE id = 1</td></tr>
+        <tr><td>count()</td><td>SELECT COUNT(*) FROM employee</td></tr>
+        <tr><td>existsById(1L)</td><td>SELECT COUNT(*) > 0 FROM employee WHERE id = 1</td></tr>
+        <tr><td>findAll(Sort.by("name"))</td><td>SELECT * FROM employee ORDER BY name</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ═══════════════════════════════
+       06 — SERVICE
+  ════════════════════════════════ -->
+  <div id="sec-service" class="section-block">
+    <div class="section-head">
+      <div class="section-num">06</div>
+      <h2>Service Layer — EmployeeService.java</h2>
+    </div>
+
+    <p>
+      The Service layer sits between the Controller and the Repository.
+      It contains the <strong>business logic</strong> — rules like
+      "you can't add a duplicate email" or "department name must not be empty".
+      The Controller should never talk to the Repository directly; it always goes
+      through the Service.
+    </p>
+
+    <div class="flow-box">
+      <span class="box-label">Why a separate Service layer?</span>
+      Imagine tomorrow you add a REST API alongside your web app. Both the REST Controller
+      and the web Controller can reuse the same Service. Without a Service layer, you'd
+      duplicate business logic in two places.
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="code-lang">Java</span>
+        <span class="code-file">service/EmployeeService.java</span>
+      </div>
+      <pre><span class="kw">package</span> com.example.empapp.service;
+
+<span class="kw">import</span> com.example.empapp.entity.Employee;
+<span class="kw">import</span> com.example.empapp.repository.EmployeeRepository;
+<span class="kw">import</span> org.springframework.beans.factory.annotation.Autowired;
+<span class="kw">import</span> org.springframework.stereotype.Service;
+<span class="kw">import</span> org.springframework.transaction.annotation.Transactional;
+<span class="kw">import</span> java.util.List;
+<span class="kw">import</span> java.util.Optional;
+
+<span class="cm">/**
+ * SERVICE — contains all business logic.
+ *
+ * Rules this service enforces:
+ *  1. No duplicate email addresses allowed
+ *  2. Name and department fields must not be blank
+ *  3. Handles "not found" gracefully with exceptions
+ */</span>
+<span class="ann">@Service</span>      <span class="cm">// Marks this class as a Spring-managed Service bean</span>
+<span class="kw">public class</span> <span class="tp">EmployeeService</span> {
+
+    <span class="cm">// @Autowired tells Spring to inject the EmployeeRepository automatically.
+    // Spring creates one instance of EmployeeRepository and hands it here.
+    // This is called Dependency Injection (DI).</span>
+    <span class="ann">@Autowired</span>
+    <span class="kw">private</span> <span class="tp">EmployeeRepository</span> employeeRepository;
+
+    <span class="cm">// ─── GET ALL EMPLOYEES ───────────────────────────────────────</span>
+    <span class="kw">public</span> <span class="tp">List</span>&lt;<span class="tp">Employee</span>&gt; getAllEmployees() {
+        <span class="kw">return</span> employeeRepository.findAll();
+        <span class="cm">// Calls: SELECT * FROM employee</span>
+    }
+
+    <span class="cm">// ─── GET ONE EMPLOYEE BY ID ──────────────────────────────────</span>
+    <span class="kw">public</span> <span class="tp">Employee</span> getById(<span class="tp">Long</span> id) {
+        <span class="cm">// findById returns Optional&lt;Employee&gt; — it might be empty if ID doesn't exist</span>
+        <span class="kw">return</span> employeeRepository.findById(id)
+            .orElseThrow(() -&gt;
+                <span class="kw">new</span> <span class="tp">RuntimeException</span>(<span class="str">"Employee not found with id: "</span> + id));
+    }
+
+    <span class="cm">// ─── SAVE (INSERT OR UPDATE) ─────────────────────────────────
+    // @Transactional: if any error happens during save, the whole
+    // operation is rolled back. Database stays consistent.</span>
+    <span class="ann">@Transactional</span>
+    <span class="kw">public</span> <span class="tp">Employee</span> saveEmployee(<span class="tp">Employee</span> employee) {
+
+        <span class="cm">// BUSINESS RULE 1: No blank name</span>
+        <span class="kw">if</span> (employee.getName() == <span class="kw">null</span> || employee.getName().isBlank()) {
+            <span class="kw">throw new</span> <span class="tp">IllegalArgumentException</span>(<span class="str">"Employee name cannot be blank"</span>);
+        }
+
+        <span class="cm">// BUSINESS RULE 2: No duplicate email</span>
+        <span class="kw">if</span> (employee.getEmail() != <span class="kw">null</span>) {
+            <span class="tp">Optional</span>&lt;<span class="tp">Employee</span>&gt; existing =
+                employeeRepository.findByEmail(employee.getEmail());
+            <span class="kw">if</span> (existing.isPresent() &amp;&amp; !existing.get().getId().equals(employee.getId())) {
+                <span class="kw">throw new</span> <span class="tp">IllegalArgumentException</span>(<span class="str">"Email already in use: "</span> + employee.getEmail());
+            }
+        }
+
+        <span class="cm">// If validation passes, save to DB.
+        // save() does INSERT if id is null, UPDATE if id is set.</span>
+        <span class="kw">return</span> employeeRepository.save(employee);
+    }
+
+    <span class="cm">// ─── DELETE ──────────────────────────────────────────────────</span>
+    <span class="ann">@Transactional</span>
+    <span class="kw">public void</span> deleteEmployee(<span class="tp">Long</span> id) {
+        <span class="cm">// Check if employee exists before deleting</span>
+        <span class="kw">if</span> (!employeeRepository.existsById(id)) {
+            <span class="kw">throw new</span> <span class="tp">RuntimeException</span>(<span class="str">"Cannot delete — employee not found: "</span> + id);
+        }
+        employeeRepository.deleteById(id);
+    }
+
+    <span class="cm">// ─── SEARCH BY DEPARTMENT ────────────────────────────────────</span>
+    <span class="kw">public</span> <span class="tp">List</span>&lt;<span class="tp">Employee</span>&gt; getByDepartment(<span class="tp">String</span> dept) {
+        <span class="kw">return</span> employeeRepository.findByDepartment(dept);
+    }
+
+    <span class="cm">// ─── SEARCH BY NAME KEYWORD ──────────────────────────────────</span>
+    <span class="kw">public</span> <span class="tp">List</span>&lt;<span class="tp">Employee</span>&gt; searchByName(<span class="tp">String</span> keyword) {
+        <span class="kw">return</span> employeeRepository.findByNameContainingIgnoreCase(keyword);
+    }
+}</pre>
+    </div>
+
+    <div class="info-box">
+      <span class="box-label">@Transactional explained</span>
+      Imagine you're saving an employee and it fails halfway (e.g., due to a DB constraint).
+      Without <code>@Transactional</code>, a partial save might corrupt your data.
+      With it, if anything fails, the entire operation is undone (rolled back) automatically.
+      Always annotate methods that write to the DB with <code>@Transactional</code>.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ═══════════════════════════════
+       07 — CONTROLLER
+  ════════════════════════════════ -->
+  <div id="sec-controller" class="section-block">
+    <div class="section-head">
+      <div class="section-num">07</div>
+      <h2>Controller — EmployeeController.java</h2>
+    </div>
+
+    <p>
+      The Controller is the entry point for every HTTP request. Spring MVC maps
+      URL paths to controller methods. It's the traffic director — it receives
+      a request, calls the Service to get data, puts data into a <strong>Model</strong>
+      object, and returns the name of a Thymeleaf template to render.
+    </p>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="code-lang">Java</span>
+        <span class="code-file">controller/EmployeeController.java</span>
+      </div>
+      <pre><span class="kw">package</span> com.example.empapp.controller;
+
+<span class="kw">import</span> com.example.empapp.entity.Employee;
+<span class="kw">import</span> com.example.empapp.service.EmployeeService;
+<span class="kw">import</span> org.springframework.beans.factory.annotation.Autowired;
+<span class="kw">import</span> org.springframework.stereotype.Controller;
+<span class="kw">import</span> org.springframework.ui.Model;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+
+<span class="cm">/**
+ * CONTROLLER — handles HTTP requests and maps them to service calls.
+ *
+ * URL routes handled here:
+ *   GET  /employees           → list all employees
+ *   GET  /employees/new       → show the "add employee" form
+ *   POST /employees/save      → process the form submission
+ *   GET  /employees/edit/{id} → show the "edit employee" form
+ *   GET  /employees/delete/{id} → delete and redirect
+ */</span>
+<span class="ann">@Controller</span>                    <span class="cm">// Marks this as a Spring MVC Controller</span>
+<span class="ann">@RequestMapping(<span class="str">"/employees"</span>)</span> <span class="cm">// All URLs in this class start with /employees</span>
+<span class="kw">public class</span> <span class="tp">EmployeeController</span> {
+
+    <span class="ann">@Autowired</span>
+    <span class="kw">private</span> <span class="tp">EmployeeService</span> employeeService;
+
+    <span class="cm">// ─────────────────────────────────────────────────────────────
+    // GET /employees
+    // Lists all employees and puts them into the Model.
+    // The Model is like a bag of data passed to the HTML template.
+    // ─────────────────────────────────────────────────────────────</span>
+    <span class="ann">@GetMapping</span>
+    <span class="kw">public</span> <span class="tp">String</span> listEmployees(<span class="tp">Model</span> model) {
+
+        <span class="cm">// Call service → gets all employees from DB</span>
+        model.addAttribute(<span class="str">"employees"</span>, employeeService.getAllEmployees());
+
+        <span class="cm">// Also add total count for display in the view</span>
+        model.addAttribute(<span class="str">"total"</span>, employeeService.getAllEmployees().size());
+
+        <span class="cm">// Return "employees" → Spring looks for templates/employees.html</span>
+        <span class="kw">return</span> <span class="str">"employees"</span>;
+    }
+
+    <span class="cm">// ─────────────────────────────────────────────────────────────
+    // GET /employees/new
+    // Shows a blank form to add a new employee.
+    // We add an empty Employee object so Thymeleaf can bind to its fields.
+    // ─────────────────────────────────────────────────────────────</span>
+    <span class="ann">@GetMapping(<span class="str">"/new"</span>)</span>
+    <span class="kw">public</span> <span class="tp">String</span> showAddForm(<span class="tp">Model</span> model) {
+        model.addAttribute(<span class="str">"employee"</span>, <span class="kw">new</span> <span class="tp">Employee</span>());
+        model.addAttribute(<span class="str">"formTitle"</span>, <span class="str">"Add New Employee"</span>);
+        <span class="kw">return</span> <span class="str">"employees"</span>;
+    }
+
+    <span class="cm">// ─────────────────────────────────────────────────────────────
+    // POST /employees/save
+    // Processes form submission. Spring binds the form fields to
+    // the Employee object automatically using @ModelAttribute.
+    //
+    // @ModelAttribute("employee") means:
+    //   Look at the POST request body, find all fields named "name",
+    //   "department", "email", etc., and fill the Employee object.
+    // ─────────────────────────────────────────────────────────────</span>
+    <span class="ann">@PostMapping(<span class="str">"/save"</span>)</span>
+    <span class="kw">public</span> <span class="tp">String</span> saveEmployee(<span class="ann">@ModelAttribute(<span class="str">"employee"</span>)</span> <span class="tp">Employee</span> employee,
+                                <span class="tp">Model</span> model) {
+        <span class="kw">try</span> {
+            employeeService.saveEmployee(employee);
+            <span class="cm">// After successful save, redirect to list page.
+            // "redirect:" tells Spring to send HTTP 302 to the browser.</span>
+            <span class="kw">return</span> <span class="str">"redirect:/employees"</span>;
+
+        } <span class="kw">catch</span> (<span class="tp">Exception</span> e) {
+            <span class="cm">// If validation fails, show the form again with an error message</span>
+            model.addAttribute(<span class="str">"error"</span>, e.getMessage());
+            model.addAttribute(<span class="str">"employee"</span>, employee);
+            model.addAttribute(<span class="str">"formTitle"</span>, <span class="str">"Add New Employee"</span>);
+            model.addAttribute(<span class="str">"employees"</span>, employeeService.getAllEmployees());
+            <span class="kw">return</span> <span class="str">"employees"</span>;
+        }
+    }
+
+    <span class="cm">// ─────────────────────────────────────────────────────────────
+    // GET /employees/edit/{id}
+    // Shows a pre-filled edit form for an existing employee.
+    // @PathVariable reads the {id} from the URL.
+    // ─────────────────────────────────────────────────────────────</span>
+    <span class="ann">@GetMapping(<span class="str">"/edit/{id}"</span>)</span>
+    <span class="kw">public</span> <span class="tp">String</span> showEditForm(<span class="ann">@PathVariable</span> <span class="tp">Long</span> id, <span class="tp">Model</span> model) {
+        model.addAttribute(<span class="str">"employee"</span>, employeeService.getById(id));
+        model.addAttribute(<span class="str">"formTitle"</span>, <span class="str">"Edit Employee"</span>);
+        model.addAttribute(<span class="str">"employees"</span>, employeeService.getAllEmployees());
+        <span class="kw">return</span> <span class="str">"employees"</span>;
+    }
+
+    <span class="cm">// ─────────────────────────────────────────────────────────────
+    // GET /employees/delete/{id}
+    // Deletes the employee and redirects back to the list.
+    // We use GET (not DELETE) because HTML forms only support GET/POST.
+    // ─────────────────────────────────────────────────────────────</span>
+    <span class="ann">@GetMapping(<span class="str">"/delete/{id}"</span>)</span>
+    <span class="kw">public</span> <span class="tp">String</span> deleteEmployee(<span class="ann">@PathVariable</span> <span class="tp">Long</span> id) {
+        employeeService.deleteEmployee(id);
+        <span class="kw">return</span> <span class="str">"redirect:/employees"</span>;
+    }
+
+    <span class="cm">// ─────────────────────────────────────────────────────────────
+    // GET /employees/search?keyword=Alice
+    // Searches employees by name keyword.
+    // @RequestParam reads the query parameter from the URL.
+    // ─────────────────────────────────────────────────────────────</span>
+    <span class="ann">@GetMapping(<span class="str">"/search"</span>)</span>
+    <span class="kw">public</span> <span class="tp">String</span> search(<span class="ann">@RequestParam(required = <span class="kw">false</span>)</span> <span class="tp">String</span> keyword, <span class="tp">Model</span> model) {
+        <span class="tp">List</span>&lt;<span class="tp">Employee</span>&gt; results = (keyword != <span class="kw">null</span> &amp;&amp; !keyword.isBlank())
+            ? employeeService.searchByName(keyword)
+            : employeeService.getAllEmployees();
+        model.addAttribute(<span class="str">"employees"</span>, results);
+        model.addAttribute(<span class="str">"keyword"</span>, keyword);
+        model.addAttribute(<span class="str">"employee"</span>, <span class="kw">new</span> <span class="tp">Employee</span>());
+        <span class="kw">return</span> <span class="str">"employees"</span>;
+    }
+}</pre>
+    </div>
+
+    <h3>Controller annotation reference</h3>
+    <table>
+      <thead><tr><th>Annotation</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td>@Controller</td><td>Marks this as a Spring MVC controller. Returns view names (not raw data).</td></tr>
+        <tr><td>@RequestMapping</td><td>Sets the base URL prefix for all methods in this class.</td></tr>
+        <tr><td>@GetMapping</td><td>Maps HTTP GET requests to a method. Used to show pages.</td></tr>
+        <tr><td>@PostMapping</td><td>Maps HTTP POST requests. Used when a form is submitted.</td></tr>
+        <tr><td>@PathVariable</td><td>Extracts a value from the URL path, e.g., <code>/employees/delete/{id}</code></td></tr>
+        <tr><td>@RequestParam</td><td>Reads a query string parameter, e.g., <code>/search?keyword=Alice</code></td></tr>
+        <tr><td>@ModelAttribute</td><td>Binds form field values to a Java object automatically.</td></tr>
+        <tr><td>Model</td><td>A container passed from the Controller to the Thymeleaf template with data.</td></tr>
+        <tr><td>return "employees"</td><td>Tells Spring to render <code>templates/employees.html</code></td></tr>
+        <tr><td>return "redirect:/"</td><td>Tells the browser to navigate to a different URL (HTTP 302)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ═══════════════════════════════
+       08 — THYMELEAF VIEW
+  ════════════════════════════════ -->
+  <div id="sec-view" class="section-block">
+    <div class="section-head">
+      <div class="section-num">08</div>
+      <h2>Thymeleaf HTML Template — employees.html</h2>
+    </div>
+
+    <p>
+      Thymeleaf is a server-side template engine. It processes your HTML on the server
+      and replaces the <code>th:</code> attributes with real data from the Model before
+      sending the final HTML to the browser. The file lives at
+      <code>src/main/resources/templates/employees.html</code>.
+    </p>
+
+    <div class="info-box">
+      <span class="box-label">Key Thymeleaf attributes</span>
+      <code>th:text</code> → replaces the element's content with a variable value.<br />
+      <code>th:each</code> → loops over a list, like a for-each.<br />
+      <code>th:action</code> → sets the form's submit URL.<br />
+      <code>th:object</code> → binds a form to a Java object.<br />
+      <code>th:field</code> → binds an input to a field on the bound object.<br />
+      <code>th:if / th:unless</code> → conditional rendering.<br />
+      <code>th:href</code> → generates a URL with <code>@{/path}</code>.<br />
+      <code>${variable}</code> → reads a model attribute.
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="code-lang">HTML + Thymeleaf</span>
+        <span class="code-file">templates/employees.html</span>
+      </div>
+      <pre><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="cm">&lt;!--
+  xmlns:th="http://www.thymeleaf.org"
+  This line activates Thymeleaf — it tells the HTML parser
+  that "th:" is a valid custom attribute prefix.
+--&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span><span class="eq">=</span><span class="val">"en"</span> <span class="attr">xmlns:th</span><span class="eq">=</span><span class="val">"http://www.thymeleaf.org"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">charset</span><span class="eq">=</span><span class="val">"UTF-8"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;title&gt;</span>Employee Management<span class="tag">&lt;/title&gt;</span>
+    <span class="tag">&lt;link</span> <span class="attr">rel</span><span class="eq">=</span><span class="val">"stylesheet"</span>
+          <span class="attr">href</span><span class="eq">=</span><span class="val">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span><span class="eq">=</span><span class="val">"container mt-4"</span><span class="tag">&gt;</span>
+
+    <span class="cm">&lt;!-- PAGE TITLE --&gt;</span>
+    <span class="tag">&lt;h1&gt;</span>Employee Management<span class="tag">&lt;/h1&gt;</span>
+
+    <span class="cm">&lt;!--
+      th:text = replaces the content of &lt;span&gt; with the value
+      of the "total" model attribute.
+      ${total} reads from Model.addAttribute("total", ...)
+    --&gt;</span>
+    <span class="tag">&lt;p&gt;</span>Total employees: <span class="tag">&lt;strong</span> <span class="attr">th:text</span><span class="eq">=</span><span class="val">"${total}"</span><span class="tag">&gt;</span>0<span class="tag">&lt;/strong&gt;&lt;/p&gt;</span>
+
+    <span class="cm">&lt;!-- ─────────────────────────────────────────
+         ERROR MESSAGE — shown only when "error" exists in model
+         th:if = renders this div only when ${error} is not null
+    ───────────────────────────────────────── --&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span><span class="eq">=</span><span class="val">"alert alert-danger"</span>
+         <span class="attr">th:if</span><span class="eq">=</span><span class="val">"${error}"</span>
+         <span class="attr">th:text</span><span class="eq">=</span><span class="val">"${error}"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+
+    <span class="cm">&lt;!-- ─────────────────────────────────────────
+         ADD / EDIT FORM
+         th:action = the URL where this form submits to
+           @{/employees/save} generates: /employees/save
+         th:object = binds the form to the "employee" model attribute
+           (the Employee object from Model.addAttribute("employee", ...))
+         method="post" = HTTP POST request
+    ───────────────────────────────────────── --&gt;</span>
+    <span class="tag">&lt;form</span> <span class="attr">th:action</span><span class="eq">=</span><span class="val">"@{/employees/save}"</span>
+          <span class="attr">th:object</span><span class="eq">=</span><span class="val">"${employee}"</span>
+          <span class="attr">method</span><span class="eq">=</span><span class="val">"post"</span><span class="tag">&gt;</span>
+
+        <span class="cm">&lt;!--
+          th:field = binds this input to the "id" field of the Employee object.
+          This renders as: &lt;input type="hidden" name="id" value="5"&gt;
+          It's essential for UPDATE operations — tells the service "edit this id"
+          instead of creating a new one.
+        --&gt;</span>
+        <span class="tag">&lt;input</span> <span class="attr">type</span><span class="eq">=</span><span class="val">"hidden"</span> <span class="attr">th:field</span><span class="eq">=</span><span class="val">"*{id}"</span> <span class="tag">/&gt;</span>
+
+        <span class="tag">&lt;div</span> <span class="attr">class</span><span class="eq">=</span><span class="val">"mb-3"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;label</span> <span class="attr">class</span><span class="eq">=</span><span class="val">"form-label"</span><span class="tag">&gt;</span>Full Name<span class="tag">&lt;/label&gt;</span>
+            <span class="cm">&lt;!--
+              *{name} — the * syntax means "field of th:object"
+              So *{name} means employee.getName()
+              This input will be pre-filled when editing an employee.
+            --&gt;</span>
+            <span class="tag">&lt;input</span> <span class="attr">type</span><span class="eq">=</span><span class="val">"text"</span>
+                   <span class="attr">class</span><span class="eq">=</span><span class="val">"form-control"</span>
+                   <span class="attr">th:field</span><span class="eq">=</span><span class="val">"*{name}"</span>
+                   <span class="attr">placeholder</span><span class="eq">=</span><span class="val">"Enter employee name"</span>
+                   <span class="attr">required</span> <span class="tag">/&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+
+        <span class="tag">&lt;div</span> <span class="attr">class</span><span class="eq">=</span><span class="val">"mb-3"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;label</span> <span class="attr">class</span><span class="eq">=</span><span class="val">"form-label"</span><span class="tag">&gt;</span>Department<span class="tag">&lt;/label&gt;</span>
+            <span class="tag">&lt;input</span> <span class="attr">type</span><span class="eq">=</span><span class="val">"text"</span>
+                   <span class="attr">class</span><span class="eq">=</span><span class="val">"form-control"</span>
+                   <span class="attr">th:field</span><span class="eq">=</span><span class="val">"*{department}"</span>
+                   <span class="attr">placeholder</span><span class="eq">=</span><span class="val">"e.g., Engineering"</span>
+                   <span class="attr">required</span> <span class="tag">/&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+
+        <span class="tag">&lt;div</span> <span class="attr">class</span><span class="eq">=</span><span class="val">"mb-3"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;label</span> <span class="attr">class</span><span class="eq">=</span><span class="val">"form-label"</span><span class="tag">&gt;</span>Email<span class="tag">&lt;/label&gt;</span>
+            <span class="tag">&lt;input</span> <span class="attr">type</span><span class="eq">=</span><span class="val">"email"</span>
+                   <span class="attr">class</span><span class="eq">=</span><span class="val">"form-control"</span>
+                   <span class="attr">th:field</span><span class="eq">=</span><span class="val">"*{email}"</span>
+                   <span class="attr">placeholder</span><span class="eq">=</span><span class="val">"employee@example.com"</span> <span class="tag">/&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+
+        <span class="cm">&lt;!--
+          Dynamic button label:
+          th:text shows "Update Employee" when editing (id not null),
+          otherwise shows "Add Employee".
+        --&gt;</span>
+        <span class="tag">&lt;button</span> <span class="attr">type</span><span class="eq">=</span><span class="val">"submit"</span>
+                <span class="attr">class</span><span class="eq">=</span><span class="val">"btn btn-primary"</span>
+                <span class="attr">th:text</span><span class="eq">=</span><span class="val">"${employee.id != null} ? 'Update Employee' : 'Add Employee'"</span><span class="tag">&gt;</span>
+            Save
+        <span class="tag">&lt;/button&gt;</span>
+
+        <span class="cm">&lt;!-- Cancel link — only visible when editing --&gt;</span>
+        <span class="tag">&lt;a</span> <span class="attr">th:if</span><span class="eq">=</span><span class="val">"${employee.id != null}"</span>
+           <span class="attr">th:href</span><span class="eq">=</span><span class="val">"@{/employees}"</span>
+           <span class="attr">class</span><span class="eq">=</span><span class="val">"btn btn-secondary ms-2"</span><span class="tag">&gt;</span>Cancel<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/form&gt;</span>
+
+    <span class="cm">&lt;!-- ─────────────────────────────────────────
+         SEARCH FORM
+    ───────────────────────────────────────── --&gt;</span>
+    <span class="tag">&lt;form</span> <span class="attr">th:action</span><span class="eq">=</span><span class="val">"@{/employees/search}"</span> <span class="attr">method</span><span class="eq">=</span><span class="val">"get"</span> <span class="attr">class</span><span class="eq">=</span><span class="val">"mt-4 d-flex gap-2"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;input</span> <span class="attr">type</span><span class="eq">=</span><span class="val">"text"</span>
+               <span class="attr">name</span><span class="eq">=</span><span class="val">"keyword"</span>
+               <span class="attr">class</span><span class="eq">=</span><span class="val">"form-control"</span>
+               <span class="attr">placeholder</span><span class="eq">=</span><span class="val">"Search by name..."</span>
+               <span class="attr">th:value</span><span class="eq">=</span><span class="val">"${keyword}"</span> <span class="tag">/&gt;</span>
+        <span class="tag">&lt;button</span> <span class="attr">type</span><span class="eq">=</span><span class="val">"submit"</span> <span class="attr">class</span><span class="eq">=</span><span class="val">"btn btn-outline-secondary"</span><span class="tag">&gt;</span>Search<span class="tag">&lt;/button&gt;</span>
+        <span class="tag">&lt;a</span> <span class="attr">th:href</span><span class="eq">=</span><span class="val">"@{/employees}"</span> <span class="attr">class</span><span class="eq">=</span><span class="val">"btn btn-outline-secondary"</span><span class="tag">&gt;</span>Reset<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/form&gt;</span>
+
+    <span class="cm">&lt;!-- ─────────────────────────────────────────
+         EMPLOYEE TABLE
+         th:each loops over the "employees" model attribute.
+         "emp : ${employees}" means:
+           for each Employee in the list, call it "emp"
+           then use ${emp.name}, ${emp.department}, etc.
+    ───────────────────────────────────────── --&gt;</span>
+    <span class="tag">&lt;table</span> <span class="attr">class</span><span class="eq">=</span><span class="val">"table table-striped mt-4"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;thead</span> <span class="attr">class</span><span class="eq">=</span><span class="val">"table-dark"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;tr&gt;</span>
+                <span class="tag">&lt;th&gt;</span>#<span class="tag">&lt;/th&gt;</span>
+                <span class="tag">&lt;th&gt;</span>Name<span class="tag">&lt;/th&gt;</span>
+                <span class="tag">&lt;th&gt;</span>Department<span class="tag">&lt;/th&gt;</span>
+                <span class="tag">&lt;th&gt;</span>Email<span class="tag">&lt;/th&gt;</span>
+                <span class="tag">&lt;th&gt;</span>Actions<span class="tag">&lt;/th&gt;</span>
+            <span class="tag">&lt;/tr&gt;</span>
+        <span class="tag">&lt;/thead&gt;</span>
+        <span class="tag">&lt;tbody&gt;</span>
+
+            <span class="cm">&lt;!-- th:each iterates over the list --&gt;</span>
+            <span class="tag">&lt;tr</span> <span class="attr">th:each</span><span class="eq">=</span><span class="val">"emp : ${employees}"</span><span class="tag">&gt;</span>
+
+                <span class="cm">&lt;!-- th:text reads emp.id, emp.name, etc. --&gt;</span>
+                <span class="tag">&lt;td</span> <span class="attr">th:text</span><span class="eq">=</span><span class="val">"${emp.id}"</span><span class="tag">&gt;&lt;/td&gt;</span>
+                <span class="tag">&lt;td</span> <span class="attr">th:text</span><span class="eq">=</span><span class="val">"${emp.name}"</span><span class="tag">&gt;&lt;/td&gt;</span>
+                <span class="tag">&lt;td</span> <span class="attr">th:text</span><span class="eq">=</span><span class="val">"${emp.department}"</span><span class="tag">&gt;&lt;/td&gt;</span>
+                <span class="tag">&lt;td</span> <span class="attr">th:text</span><span class="eq">=</span><span class="val">"${emp.email}"</span><span class="tag">&gt;&lt;/td&gt;</span>
+
+                <span class="tag">&lt;td&gt;</span>
+                    <span class="cm">&lt;!--
+                      th:href with @{} syntax for URL generation.
+                      (emp.id) inserts the employee's actual ID.
+                      Generates: /employees/edit/5
+                    --&gt;</span>
+                    <span class="tag">&lt;a</span> <span class="attr">th:href</span><span class="eq">=</span><span class="val">"@{/employees/edit/{id}(id=${emp.id})}"</span>
+                       <span class="attr">class</span><span class="eq">=</span><span class="val">"btn btn-sm btn-warning"</span><span class="tag">&gt;</span>Edit<span class="tag">&lt;/a&gt;</span>
+
+                    <span class="cm">&lt;!-- Delete link generates: /employees/delete/5 --&gt;</span>
+                    <span class="tag">&lt;a</span> <span class="attr">th:href</span><span class="eq">=</span><span class="val">"@{/employees/delete/{id}(id=${emp.id})}"</span>
+                       <span class="attr">class</span><span class="eq">=</span><span class="val">"btn btn-sm btn-danger ms-1"</span>
+                       <span class="attr">onclick</span><span class="eq">=</span><span class="val">"return confirm('Delete this employee?')"</span><span class="tag">&gt;</span>Delete<span class="tag">&lt;/a&gt;</span>
+                <span class="tag">&lt;/td&gt;</span>
+            <span class="tag">&lt;/tr&gt;</span>
+
+            <span class="cm">&lt;!-- th:if — shows this row when the list is empty --&gt;</span>
+            <span class="tag">&lt;tr</span> <span class="attr">th:if</span><span class="eq">=</span><span class="val">"${#lists.isEmpty(employees)}"</span><span class="tag">&gt;</span>
+                <span class="tag">&lt;td</span> <span class="attr">colspan</span><span class="eq">=</span><span class="val">"5"</span> <span class="attr">class</span><span class="eq">=</span><span class="val">"text-center text-muted"</span><span class="tag">&gt;</span>
+                    No employees found.
+                <span class="tag">&lt;/td&gt;</span>
+            <span class="tag">&lt;/tr&gt;</span>
+
+        <span class="tag">&lt;/tbody&gt;</span>
+    <span class="tag">&lt;/table&gt;</span>
+
+<span class="tag">&lt;/div&gt;&lt;!-- /container --&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></pre>
+    </div>
+
+    <h3>Thymeleaf attribute cheat sheet</h3>
+    <table>
+      <thead><tr><th>Attribute</th><th>Use case</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>th:text</td><td>Set element content</td><td><code>th:text="${emp.name}"</code></td></tr>
+        <tr><td>th:each</td><td>Loop over a list</td><td><code>th:each="emp : ${employees}"</code></td></tr>
+        <tr><td>th:if</td><td>Show element only when true</td><td><code>th:if="${error}"</code></td></tr>
+        <tr><td>th:unless</td><td>Show element only when false</td><td><code>th:unless="${loggedIn}"</code></td></tr>
+        <tr><td>th:href</td><td>Set link URL</td><td><code>th:href="@{/employees}"</code></td></tr>
+        <tr><td>th:action</td><td>Set form submit URL</td><td><code>th:action="@{/employees/save}"</code></td></tr>
+        <tr><td>th:object</td><td>Bind form to Java object</td><td><code>th:object="${employee}"</code></td></tr>
+        <tr><td>th:field</td><td>Bind input to object field</td><td><code>th:field="*{name}"</code></td></tr>
+        <tr><td>th:value</td><td>Set input value directly</td><td><code>th:value="${keyword}"</code></td></tr>
+        <tr><td>${...}</td><td>Read model attribute</td><td><code>${employees}</code></td></tr>
+        <tr><td>*{...}</td><td>Read field from th:object</td><td><code>*{name}</code></td></tr>
+        <tr><td>@{...}</td><td>Generate a URL</td><td><code>@{/edit/{id}(id=${emp.id})}</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ═══════════════════════════════
+       09 — HOW IT ALL CONNECTS
+  ════════════════════════════════ -->
+  <div id="sec-flow" class="section-block">
+    <div class="section-head">
+      <div class="section-num">09</div>
+      <h2>How It All Connects — Step by Step</h2>
+    </div>
+
+    <h3>Scenario A: User opens the employee list page</h3>
+    <ol class="steps">
+      <li><p>Browser sends <code>GET /employees</code> to your Spring Boot server on port 8080.</p></li>
+      <li><p>Spring MVC finds <code>EmployeeController.listEmployees()</code> because it matches <code>@GetMapping</code> on <code>/employees</code>.</p></li>
+      <li><p>Controller calls <code>employeeService.getAllEmployees()</code>.</p></li>
+      <li><p>Service calls <code>employeeRepository.findAll()</code> — no business logic needed for a simple list.</p></li>
+      <li><p>Repository runs <code>SELECT * FROM employee</code> against MySQL and returns a <code>List&lt;Employee&gt;</code>.</p></li>
+      <li><p>The list travels back: Repository → Service → Controller. Controller does <code>model.addAttribute("employees", list)</code>.</p></li>
+      <li><p>Controller returns the string <code>"employees"</code>. Spring looks for <code>templates/employees.html</code>.</p></li>
+      <li><p>Thymeleaf processes the template. It replaces <code>th:each="emp : ${employees}"</code> by rendering one <code>&lt;tr&gt;</code> per employee.</p></li>
+      <li><p>The complete HTML page is sent to the browser. The user sees the table.</p></li>
+    </ol>
+
+    <h3>Scenario B: User submits the "Add Employee" form</h3>
+    <ol class="steps">
+      <li><p>User fills in name, department, email and clicks "Add Employee". The browser sends <code>POST /employees/save</code> with form data in the request body.</p></li>
+      <li><p>Spring finds <code>EmployeeController.saveEmployee()</code> via <code>@PostMapping("/save")</code>.</p></li>
+      <li><p><code>@ModelAttribute("employee")</code> tells Spring to read the POST body fields (name, department, email) and fill an <code>Employee</code> object automatically.</p></li>
+      <li><p>Controller calls <code>employeeService.saveEmployee(employee)</code>.</p></li>
+      <li><p>Service runs business rules: checks blank name, checks duplicate email. If invalid, throws an exception.</p></li>
+      <li><p>If valid, Service calls <code>employeeRepository.save(employee)</code>. Since <code>employee.id</code> is null (new employee), Hibernate runs <code>INSERT INTO employee ...</code>. MySQL assigns an auto-incremented ID.</p></li>
+      <li><p>Control returns to the Controller. It returns <code>"redirect:/employees"</code>.</p></li>
+      <li><p>Spring sends HTTP 302 to the browser. Browser automatically sends a new <code>GET /employees</code> request.</p></li>
+      <li><p>The list page loads again, now showing the newly added employee.</p></li>
+    </ol>
+
+    <h3>Scenario C: User clicks "Edit"</h3>
+    <ol class="steps">
+      <li><p>User clicks the Edit button next to employee ID 5. Browser sends <code>GET /employees/edit/5</code>.</p></li>
+      <li><p><code>@PathVariable Long id</code> captures the value <code>5</code> from the URL.</p></li>
+      <li><p>Controller calls <code>employeeService.getById(5)</code> → Repository fetches <code>SELECT * FROM employee WHERE id = 5</code>.</p></li>
+      <li><p>The existing Employee object (with all its field values) is added to the Model.</p></li>
+      <li><p>Thymeleaf renders the form. Because <code>th:field="*{name}"</code> is bound to the employee object, the name input is pre-filled with "Alice". The hidden <code>id</code> field carries the value <code>5</code>.</p></li>
+      <li><p>User edits the name and submits. <code>POST /employees/save</code> runs again, but this time <code>employee.id = 5</code> is not null.</p></li>
+      <li><p>Repository's <code>save()</code> detects the existing ID and runs <code>UPDATE employee SET name=... WHERE id=5</code> instead of INSERT.</p></li>
+    </ol>
+
+    <div class="tip-box">
+      <span class="box-label">The hidden ID field is crucial</span>
+      The hidden <code>&lt;input th:field="*{id}" type="hidden"&gt;</code> in the form carries the
+      employee's ID from the edit page back to the save controller. Without it, <code>employee.id</code>
+      would be null and Hibernate would INSERT a new row instead of updating the existing one.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ═══════════════════════════════
+       10 — ANNOTATION REFERENCE
+  ════════════════════════════════ -->
+  <div id="sec-annotations" class="section-block">
+    <div class="section-head">
+      <div class="section-num">10</div>
+      <h2>Complete Annotation Quick Reference</h2>
+    </div>
+
+    <h3>Layer badges</h3>
+    <p>
+      <span class="badge badge-blue">Entity</span>&nbsp;
+      <span class="badge badge-green">Repository</span>&nbsp;
+      <span class="badge badge-orange">Service</span>&nbsp;
+      <span class="badge badge-red">Controller</span>&nbsp;
+      <span class="badge badge-teal">Spring Core</span>
+    </p>
+
+    <table>
+      <thead><tr><th>Annotation</th><th>Layer</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td>@SpringBootApplication</td><td><span class="badge badge-teal">Core</span></td><td>Entry point. Enables component scan, auto-config, and property loading.</td></tr>
+        <tr><td>@Entity</td><td><span class="badge badge-blue">Entity</span></td><td>Marks class as a JPA entity (database table).</td></tr>
+        <tr><td>@Table</td><td><span class="badge badge-blue">Entity</span></td><td>Customizes the table name in MySQL.</td></tr>
+        <tr><td>@Id</td><td><span class="badge badge-blue">Entity</span></td><td>Marks the primary key field.</td></tr>
+        <tr><td>@GeneratedValue</td><td><span class="badge badge-blue">Entity</span></td><td>Configures auto-increment for the primary key.</td></tr>
+        <tr><td>@Column</td><td><span class="badge badge-blue">Entity</span></td><td>Customizes column name, nullable, length, unique.</td></tr>
+        <tr><td>@Repository</td><td><span class="badge badge-green">Repo</span></td><td>Marks interface as a Spring repository. Enables exception translation.</td></tr>
+        <tr><td>@Query</td><td><span class="badge badge-green">Repo</span></td><td>Defines custom JPQL or native SQL query on a repository method.</td></tr>
+        <tr><td>@Service</td><td><span class="badge badge-orange">Service</span></td><td>Marks class as a Spring service bean. Used for business logic.</td></tr>
+        <tr><td>@Transactional</td><td><span class="badge badge-orange">Service</span></td><td>Wraps method in a DB transaction. Rolls back on exception.</td></tr>
+        <tr><td>@Controller</td><td><span class="badge badge-red">Controller</span></td><td>Marks class as Spring MVC controller. Returns view names.</td></tr>
+        <tr><td>@RequestMapping</td><td><span class="badge badge-red">Controller</span></td><td>Sets the base URL path for the controller class.</td></tr>
+        <tr><td>@GetMapping</td><td><span class="badge badge-red">Controller</span></td><td>Maps HTTP GET requests to a method.</td></tr>
+        <tr><td>@PostMapping</td><td><span class="badge badge-red">Controller</span></td><td>Maps HTTP POST requests (form submissions) to a method.</td></tr>
+        <tr><td>@PathVariable</td><td><span class="badge badge-red">Controller</span></td><td>Reads a value from the URL path (e.g., /edit/{id}).</td></tr>
+        <tr><td>@RequestParam</td><td><span class="badge badge-red">Controller</span></td><td>Reads a URL query parameter (e.g., ?keyword=Alice).</td></tr>
+        <tr><td>@ModelAttribute</td><td><span class="badge badge-red">Controller</span></td><td>Binds form POST data to a Java object automatically.</td></tr>
+        <tr><td>@Autowired</td><td><span class="badge badge-teal">Core</span></td><td>Injects a Spring bean automatically (Dependency Injection).</td></tr>
+      </tbody>
+    </table>
+
+    <div class="warn-box">
+      <span class="box-label">Common beginner mistakes</span>
+      <strong>1. Forgetting the hidden ID field</strong> in an edit form causes UPDATE to become INSERT.<br/>
+      <strong>2. Using @RestController instead of @Controller</strong> makes Spring return raw JSON/text, not HTML views.<br/>
+      <strong>3. ddl-auto=create in production</strong> will wipe your entire database on every restart.<br/>
+      <strong>4. Not using redirect after POST</strong> causes the form to re-submit if the user refreshes the page (the "double-submit" problem).<br/>
+      <strong>5. Not setting both sides of a bidirectional relationship</strong> in JPA can cause stale data in the second-level cache.
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<footer class="footer">
+  Spring MVC + Thymeleaf + MySQL · Beginner Reference Guide · Built for learning Newgen Software domain concepts
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JUnit · Mockito · JaCoCo · SpotBugs — Complete Learning Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════════════ */
+:root{
+  --bg:#0e1117;
+  --bg2:#141820;
+  --bg3:#1b2130;
+  --card:#1e2535;
+  --border:#2a3448;
+  --border2:#354060;
+  --text:#e8ecf4;
+  --text2:#a8b4cc;
+  --text3:#64748b;
+  --accent:#3b82f6;
+  --accent2:#1d4ed8;
+  --green:#22c55e;
+  --green-bg:rgba(34,197,94,.1);
+  --red:#ef4444;
+  --red-bg:rgba(239,68,68,.1);
+  --amber:#f59e0b;
+  --amber-bg:rgba(245,158,11,.1);
+  --purple:#a855f7;
+  --purple-bg:rgba(168,85,247,.1);
+  --teal:#14b8a6;
+  --teal-bg:rgba(20,184,166,.1);
+  --orange:#f97316;
+  --orange-bg:rgba(249,115,22,.1);
+  --display:'Playfair Display',Georgia,serif;
+  --body:'Source Sans 3','Segoe UI',sans-serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
+}
+
+/* ═══════════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;scroll-padding-top:54px;}
+body{font-family:var(--body);background:var(--bg);color:var(--text);font-size:15.5px;line-height:1.75;}
+
+/* ═══════════════════════════════════════════════════
+   PROGRESS
+═══════════════════════════════════════════════════ */
+#progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--purple));width:0%;z-index:999;transition:width .1s;}
+
+/* ═══════════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════════ */
+.hero{
+  min-height:340px;
+  background:linear-gradient(135deg,#0a0e16 0%,#0e1525 40%,#111827 100%);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-end;
+  padding:60px 48px 48px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-100px;right:-100px;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(59,130,246,.08) 0%,transparent 70%);
+}
+.hero::after{
+  content:'';position:absolute;bottom:-60px;left:200px;
+  width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(168,85,247,.06) 0%,transparent 70%);
+}
+.hero-inner{max-width:960px;margin:0 auto;width:100%;position:relative;}
+.hero-tag{
+  font-family:var(--mono);font-size:.65rem;letter-spacing:.35em;
+  text-transform:uppercase;color:var(--accent);
+  background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);
+  padding:5px 14px;border-radius:4px;display:inline-block;margin-bottom:20px;
+}
+.hero h1{
+  font-family:var(--display);
+  font-size:clamp(2rem,5vw,3.4rem);
+  font-weight:900;line-height:1.08;
+  margin-bottom:16px;
+  background:linear-gradient(135deg,#e8ecf4 0%,#a8b4cc 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero h1 em{
+  font-style:italic;
+  background:linear-gradient(135deg,var(--accent),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-sub{color:var(--text2);font-size:1.05rem;max-width:640px;line-height:1.6;margin-bottom:28px;}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;}
+.pill{
+  font-family:var(--mono);font-size:.7rem;padding:5px 13px;
+  border-radius:20px;border:1px solid var(--border2);color:var(--text2);
+  background:var(--bg3);
+}
+.pill.blue{border-color:rgba(59,130,246,.4);color:var(--accent);background:rgba(59,130,246,.08);}
+.pill.green{border-color:rgba(34,197,94,.4);color:var(--green);background:var(--green-bg);}
+.pill.purple{border-color:rgba(168,85,247,.4);color:var(--purple);background:var(--purple-bg);}
+.pill.amber{border-color:rgba(245,158,11,.4);color:var(--amber);background:var(--amber-bg);}
+
+/* ═══════════════════════════════════════════════════
+   STICKY NAV
+═══════════════════════════════════════════════════ */
+.topnav{
+  position:sticky;top:0;z-index:200;
+  background:rgba(14,17,23,.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);overflow-x:auto;
+}
+.topnav-inner{
+  max-width:960px;margin:0 auto;
+  display:flex;padding:0 48px;white-space:nowrap;
+}
+.topnav a{
+  padding:14px 13px;font-size:.76rem;font-weight:500;
+  color:var(--text3);text-decoration:none;
+  border-bottom:2px solid transparent;transition:.15s;flex-shrink:0;
+  font-family:var(--body);letter-spacing:.01em;
+}
+.topnav a:hover{color:var(--text2);}
+.topnav a.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* ═══════════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════════ */
+.wrap{max-width:960px;margin:0 auto;padding:0 48px;}
+.chapter{padding:64px 0;border-bottom:1px solid var(--border);}
+
+.ch-eyebrow{
+  font-family:var(--mono);font-size:.64rem;font-weight:600;
+  letter-spacing:.35em;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.ch-num{
+  font-family:var(--display);font-size:5rem;font-weight:900;
+  line-height:1;opacity:.06;margin-bottom:-10px;
+  background:linear-gradient(135deg,var(--text),transparent);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.ch-title{
+  font-family:var(--display);
+  font-size:clamp(1.7rem,3.5vw,2.4rem);
+  font-weight:700;line-height:1.1;margin-bottom:14px;
+}
+.ch-lead{
+  font-family:var(--display);font-style:italic;
+  color:var(--text2);font-size:1.05rem;
+  max-width:700px;line-height:1.6;margin-bottom:32px;
+}
+
+/* ═══════════════════════════════════════════════════
+   HEADINGS
+═══════════════════════════════════════════════════ */
+h3{
+  font-family:var(--display);font-size:1.3rem;font-weight:700;
+  margin:36px 0 14px;color:var(--text);
+  padding-left:16px;
+  border-left:3px solid var(--accent);
+}
+h4{font-size:1rem;font-weight:700;margin:24px 0 10px;color:var(--text);}
+h5{
+  font-family:var(--mono);font-size:.72rem;font-weight:600;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text3);margin:20px 0 8px;
+}
+p{margin-bottom:13px;color:var(--text2);}
+p:last-child{margin-bottom:0;}
+
+/* ═══════════════════════════════════════════════════
+   CALLOUTS
+═══════════════════════════════════════════════════ */
+.callout{
+  display:flex;gap:14px;padding:16px 20px;
+  margin:20px 0;border-radius:6px;font-size:.9rem;
+}
+.callout .icon{font-size:1rem;flex-shrink:0;margin-top:2px;}
+.callout p{font-size:.88rem;line-height:1.6;margin-bottom:5px;color:inherit;}
+.callout p:last-child{margin-bottom:0;}
+.callout strong{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
+.callout.info{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);color:var(--text2);}
+.callout.info strong{color:var(--accent);}
+.callout.good{background:var(--green-bg);border:1px solid rgba(34,197,94,.2);color:var(--text2);}
+.callout.good strong{color:var(--green);}
+.callout.warn{background:var(--amber-bg);border:1px solid rgba(245,158,11,.2);color:var(--text2);}
+.callout.warn strong{color:var(--amber);}
+.callout.danger{background:var(--red-bg);border:1px solid rgba(239,68,68,.2);color:var(--text2);}
+.callout.danger strong{color:var(--red);}
+.callout.tip{background:var(--purple-bg);border:1px solid rgba(168,85,247,.2);color:var(--text2);}
+.callout.tip strong{color:var(--purple);}
+
+/* ═══════════════════════════════════════════════════
+   CODE BLOCKS
+═══════════════════════════════════════════════════ */
+.code-wrap{background:#090d14;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:20px 0;}
+.code-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 18px;background:#060a10;
+  border-bottom:1px solid var(--border);
+}
+.code-bar-left{display:flex;align-items:center;gap:10px;}
+.code-dots{display:flex;gap:5px;}
+.code-dot{width:10px;height:10px;border-radius:50%;}
+.cd-r{background:#ff5f57;}.cd-y{background:#ffbd2e;}.cd-g{background:#28ca41;}
+.code-file{font-family:var(--mono);font-size:.68rem;color:var(--text3);letter-spacing:.04em;}
+.code-lang{font-family:var(--mono);font-size:.65rem;color:var(--accent);background:rgba(59,130,246,.12);padding:2px 8px;border-radius:3px;}
+.code-body{padding:22px 24px;overflow-x:auto;}
+pre{font-family:var(--mono);font-size:.79rem;line-height:1.9;color:#c9d3e8;white-space:pre;}
+
+/* syntax colours */
+.kw{color:#f472b6;font-weight:500;}
+.cl{color:#67e8f9;}
+.fn{color:#86efac;}
+.cm{color:#4a5568;font-style:italic;}
+.st{color:#fbbf24;}
+.nm{color:#fb923c;}
+.an{color:#c084fc;}
+.op{color:#94a3b8;}
+.tp{color:#38bdf8;}
+
+code.il{
+  font-family:var(--mono);font-size:.82em;
+  background:rgba(59,130,246,.1);color:#93c5fd;
+  padding:2px 7px;border-radius:4px;
+  border:1px solid rgba(59,130,246,.2);
+}
+
+/* ═══════════════════════════════════════════════════
+   TABLE
+═══════════════════════════════════════════════════ */
+.tbl-wrap{overflow-x:auto;margin:18px 0;}
+table{width:100%;border-collapse:collapse;font-size:.86rem;}
+th{
+  background:var(--bg3);color:var(--text);
+  padding:11px 15px;text-align:left;
+  font-size:.72rem;font-weight:600;
+  letter-spacing:.07em;text-transform:uppercase;
+  border-bottom:1px solid var(--border2);
+}
+td{padding:10px 15px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;}
+tr:hover td{background:var(--bg3);}
+
+/* ═══════════════════════════════════════════════════
+   CARDS & GRIDS
+═══════════════════════════════════════════════════ */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:20px 0;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 20px;}
+.card-icon{font-size:1.6rem;margin-bottom:8px;}
+.card h4{font-size:.9rem;margin:0 0 6px;color:var(--text);}
+.card p{font-size:.8rem;color:var(--text2);line-height:1.5;}
+.card.blue{border-top:3px solid var(--accent);}
+.card.green{border-top:3px solid var(--green);}
+.card.purple{border-top:3px solid var(--purple);}
+.card.amber{border-top:3px solid var(--amber);}
+
+/* ═══════════════════════════════════════════════════
+   STEP LIST
+═══════════════════════════════════════════════════ */
+.steps{counter-reset:step;margin:20px 0;}
+.step{
+  counter-increment:step;
+  display:flex;gap:16px;
+  padding:14px 0;border-bottom:1px solid var(--border);
+}
+.step:last-child{border-bottom:none;}
+.step::before{
+  content:counter(step);
+  font-family:var(--mono);font-size:.74rem;font-weight:700;
+  color:var(--bg);background:var(--accent);
+  width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  margin-top:3px;
+}
+.step p{font-size:.9rem;margin:0;}
+
+/* ═══════════════════════════════════════════════════
+   EXERCISE BOX
+═══════════════════════════════════════════════════ */
+.exercise{
+  background:var(--bg3);border:1px solid var(--border2);
+  border-left:4px solid var(--purple);
+  border-radius:0 8px 8px 0;
+  overflow:hidden;margin:24px 0;
+}
+.ex-head{
+  padding:13px 20px;
+  background:var(--purple-bg);
+  display:flex;align-items:center;gap:10px;
+}
+.ex-tag{
+  font-family:var(--mono);font-size:.65rem;font-weight:600;
+  letter-spacing:.15em;text-transform:uppercase;
+  color:var(--bg);background:var(--purple);
+  padding:3px 10px;border-radius:3px;
+}
+.ex-title{font-size:.95rem;font-weight:600;color:var(--text);}
+.ex-body{padding:16px 20px;font-size:.9rem;}
+.ex-body p{color:var(--text2);}
+
+details{border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:12px 0;}
+details summary{
+  padding:11px 16px;font-size:.86rem;font-weight:600;
+  cursor:pointer;background:var(--bg3);color:var(--text);
+  user-select:none;list-style:none;
+  display:flex;align-items:center;gap:8px;
+}
+details summary::before{content:'▶';font-size:.65rem;color:var(--accent);transition:.2s;}
+details[open] summary::before{transform:rotate(90deg);}
+details .sol{padding:16px;background:var(--bg2);}
+
+/* ═══════════════════════════════════════════════════
+   COMPARE (bad vs good)
+═══════════════════════════════════════════════════ */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0;}
+.cmp-box{border-radius:8px;overflow:hidden;border:1px solid var(--border);}
+.cmp-head{padding:9px 16px;font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;}
+.cmp-box.bad .cmp-head{background:var(--red-bg);color:var(--red);border-bottom:1px solid rgba(239,68,68,.2);}
+.cmp-box.ok .cmp-head{background:var(--green-bg);color:var(--green);border-bottom:1px solid rgba(34,197,94,.2);}
+@media(max-width:700px){.compare{grid-template-columns:1fr;}}
+
+/* ═══════════════════════════════════════════════════
+   BADGE LABELS
+═══════════════════════════════════════════════════ */
+.badge{display:inline-block;font-family:var(--mono);font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:4px;margin:2px;}
+.badge.blue{background:rgba(59,130,246,.15);color:var(--accent);border:1px solid rgba(59,130,246,.3);}
+.badge.green{background:var(--green-bg);color:var(--green);border:1px solid rgba(34,197,94,.3);}
+.badge.red{background:var(--red-bg);color:var(--red);border:1px solid rgba(239,68,68,.3);}
+.badge.purple{background:var(--purple-bg);color:var(--purple);border:1px solid rgba(168,85,247,.3);}
+.badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid rgba(245,158,11,.3);}
+
+/* ═══════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════ */
+footer{
+  background:var(--bg2);border-top:1px solid var(--border);
+  text-align:center;padding:40px 24px;
+  font-family:var(--mono);font-size:.72rem;color:var(--text3);
+}
+footer strong{
+  font-family:var(--display);font-size:1.1rem;font-style:italic;
+  font-weight:400;color:var(--text);display:block;margin-bottom:6px;
+}
+
+@media(max-width:760px){
+  .hero{padding:48px 22px 36px;}
+  .wrap{padding:0 22px;}
+  .topnav-inner{padding:0 22px;}
+  .ch-num{font-size:3.5rem;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Complete Learning Guide</div>
+    <h1>JUnit · Mockito · <em>JaCoCo</em> · SpotBugs</h1>
+    <p class="hero-sub">Everything you need to write professional tests, mock dependencies, measure coverage, and catch bugs automatically — with step-by-step Maven setup and real code examples for each tool.</p>
+    <div class="pill-row">
+      <span class="pill blue">JUnit 5</span>
+      <span class="pill green">Mockito 5</span>
+      <span class="pill purple">JaCoCo</span>
+      <span class="pill amber">SpotBugs</span>
+      <span class="pill">Maven Plugin</span>
+      <span class="pill">Code Examples</span>
+      <span class="pill">Practice Exercises</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav class="topnav" id="topnav">
+  <div class="topnav-inner">
+    <a href="#ch1">What &amp; Why</a>
+    <a href="#ch2">Maven Setup</a>
+    <a href="#ch3">JUnit 5</a>
+    <a href="#ch4">Mockito</a>
+    <a href="#ch5">JaCoCo</a>
+    <a href="#ch6">SpotBugs</a>
+    <a href="#ch7">All Together</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 1 — WHAT AND WHY
+═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch1">
+<div class="wrap">
+  <div class="ch-eyebrow" style="color:var(--accent)">Chapter 1</div>
+  <div class="ch-num">01</div>
+  <h2 class="ch-title">What Are These Tools and Why Do We Need Them?</h2>
+  <p class="ch-lead">Before writing a single line of test code, you must understand what problem each tool solves. Each one has a specific job, and together they form a complete quality net under your code.</p>
+
+  <div class="card-grid">
+    <div class="card blue">
+      <div class="card-icon">🧪</div>
+      <h4>JUnit 5</h4>
+      <p>The testing framework. Lets you write methods that verify your code works correctly. The foundation of everything else.</p>
+    </div>
+    <div class="card green">
+      <div class="card-icon">🎭</div>
+      <h4>Mockito</h4>
+      <p>Creates fake versions of dependencies (databases, APIs). Test your class in isolation without needing real infrastructure.</p>
+    </div>
+    <div class="card purple">
+      <div class="card-icon">📊</div>
+      <h4>JaCoCo</h4>
+      <p>Measures what percentage of your code is actually tested. Generates coloured HTML reports showing tested vs untested lines.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-icon">🔍</div>
+      <h4>SpotBugs</h4>
+      <p>Scans your compiled bytecode for real bugs — null pointers, wrong comparisons, resource leaks — before they hit production.</p>
+    </div>
+  </div>
+
+  <h3>Real-world problem each tool solves</h3>
+
+  <div class="callout info">
+    <div class="icon">📌</div>
+    <div>
+      <strong>JUnit — "Did I break something?"</strong>
+      <p>A developer changes the interest calculation formula in a banking app. Without JUnit tests, the only way to verify nothing broke is to manually test dozens of scenarios. With JUnit, 50 tests run in 3 seconds and instantly show if any scenario is now wrong.</p>
+    </div>
+  </div>
+
+  <div class="callout good">
+    <div class="icon">📌</div>
+    <div>
+      <strong>Mockito — "I can't test this because it needs a database"</strong>
+      <p>An OrderService calls PaymentGateway (charges real money), InventoryDatabase (needs a server), and EmailService (sends real emails). With Mockito, you create fake versions that return controlled responses. No real money charged. No server needed. Tests run in milliseconds.</p>
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <div class="icon">📌</div>
+    <div>
+      <strong>JaCoCo — "How much of my code is tested?"</strong>
+      <p>A team has 200 test cases and feels confident. JaCoCo reveals only 38% of code paths are tested. The untested 62% contains the exact code paths that fail in production. JaCoCo shows precisely which lines need more tests.</p>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <div class="icon">📌</div>
+    <div>
+      <strong>SpotBugs — "Find bugs before users do"</strong>
+      <p>A developer compares two Integer objects with <code class="il">==</code> instead of <code class="il">.equals()</code>. Works for values 1–127 (due to Java caching) but silently fails for 128+. SpotBugs catches this in 2 seconds at build time. Without it, this bug only appears in production when order quantity exceeds 127.</p>
+    </div>
+  </div>
+
+  <h3>How the four tools connect</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">Pipeline flow</span></div></div>
+    <div class="code-body"><pre>
+  You write code
+       |
+       v
+  <span class="kw">SpotBugs</span>  ──── Scans .class files for bugs BEFORE tests even run
+       |
+       v
+  <span class="fn">JUnit 5</span>   ──── You write test methods that verify your logic
+       |
+       v
+  <span class="cl">Mockito</span>   ──── Inside JUnit tests, mocks replace real dependencies
+       |
+       v
+  <span class="an">JaCoCo</span>   ──── Measures which lines your JUnit+Mockito tests covered
+       |
+       v
+  Build PASSES or FAILS based on quality gates
+</pre></div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 2 — MAVEN SETUP
+═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch2">
+<div class="wrap">
+  <div class="ch-eyebrow" style="color:var(--green)">Chapter 2</div>
+  <div class="ch-num">02</div>
+  <h2 class="ch-title">Maven Setup — All Four Tools in One pom.xml</h2>
+  <p class="ch-lead">Everything is configured in your project's pom.xml. Add this once, and all four tools are ready. No other installation needed.</p>
+
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">pom.xml</span></div><span class="code-lang">xml</span></div>
+    <div class="code-body"><pre><span class="op">&lt;project&gt;</span>
+
+  <span class="op">&lt;groupId&gt;</span>com.training<span class="op">&lt;/groupId&gt;</span>
+  <span class="op">&lt;artifactId&gt;</span>testing-demo<span class="op">&lt;/artifactId&gt;</span>
+  <span class="op">&lt;version&gt;</span>1.0.0<span class="op">&lt;/version&gt;</span>
+
+  <span class="op">&lt;properties&gt;</span>
+    <span class="op">&lt;java.version&gt;</span>17<span class="op">&lt;/java.version&gt;</span>
+    <span class="op">&lt;maven.compiler.source&gt;</span>17<span class="op">&lt;/maven.compiler.source&gt;</span>
+    <span class="op">&lt;maven.compiler.target&gt;</span>17<span class="op">&lt;/maven.compiler.target&gt;</span>
+  <span class="op">&lt;/properties&gt;</span>
+
+  <span class="cm">&lt;!-- ==============================
+       DEPENDENCIES
+  ================================= --&gt;</span>
+  <span class="op">&lt;dependencies&gt;</span>
+
+    <span class="cm">&lt;!-- JUnit 5 — the test framework --&gt;</span>
+    <span class="op">&lt;dependency&gt;</span>
+      <span class="op">&lt;groupId&gt;</span>org.junit.jupiter<span class="op">&lt;/groupId&gt;</span>
+      <span class="op">&lt;artifactId&gt;</span>junit-jupiter<span class="op">&lt;/artifactId&gt;</span>
+      <span class="op">&lt;version&gt;</span>5.10.2<span class="op">&lt;/version&gt;</span>
+      <span class="op">&lt;scope&gt;</span>test<span class="op">&lt;/scope&gt;</span>
+    <span class="op">&lt;/dependency&gt;</span>
+
+    <span class="cm">&lt;!-- Mockito — for mocking dependencies --&gt;</span>
+    <span class="op">&lt;dependency&gt;</span>
+      <span class="op">&lt;groupId&gt;</span>org.mockito<span class="op">&lt;/groupId&gt;</span>
+      <span class="op">&lt;artifactId&gt;</span>mockito-junit-jupiter<span class="op">&lt;/artifactId&gt;</span>
+      <span class="op">&lt;version&gt;</span>5.11.0<span class="op">&lt;/version&gt;</span>
+      <span class="op">&lt;scope&gt;</span>test<span class="op">&lt;/scope&gt;</span>
+    <span class="op">&lt;/dependency&gt;</span>
+
+    <span class="cm">&lt;!-- Lombok — reduces boilerplate --&gt;</span>
+    <span class="op">&lt;dependency&gt;</span>
+      <span class="op">&lt;groupId&gt;</span>org.projectlombok<span class="op">&lt;/groupId&gt;</span>
+      <span class="op">&lt;artifactId&gt;</span>lombok<span class="op">&lt;/artifactId&gt;</span>
+      <span class="op">&lt;version&gt;</span>1.18.32<span class="op">&lt;/version&gt;</span>
+      <span class="op">&lt;scope&gt;</span>provided<span class="op">&lt;/scope&gt;</span>
+    <span class="op">&lt;/dependency&gt;</span>
+
+  <span class="op">&lt;/dependencies&gt;</span>
+
+  <span class="cm">&lt;!-- ==============================
+       PLUGINS
+  ================================= --&gt;</span>
+  <span class="op">&lt;build&gt;</span>
+    <span class="op">&lt;plugins&gt;</span>
+
+      <span class="cm">&lt;!-- Maven Surefire — runs JUnit tests --&gt;</span>
+      <span class="op">&lt;plugin&gt;</span>
+        <span class="op">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="op">&lt;/groupId&gt;</span>
+        <span class="op">&lt;artifactId&gt;</span>maven-surefire-plugin<span class="op">&lt;/artifactId&gt;</span>
+        <span class="op">&lt;version&gt;</span>3.2.5<span class="op">&lt;/version&gt;</span>
+      <span class="op">&lt;/plugin&gt;</span>
+
+      <span class="cm">&lt;!-- JaCoCo — code coverage --&gt;</span>
+      <span class="op">&lt;plugin&gt;</span>
+        <span class="op">&lt;groupId&gt;</span>org.jacoco<span class="op">&lt;/groupId&gt;</span>
+        <span class="op">&lt;artifactId&gt;</span>jacoco-maven-plugin<span class="op">&lt;/artifactId&gt;</span>
+        <span class="op">&lt;version&gt;</span>0.8.12<span class="op">&lt;/version&gt;</span>
+        <span class="op">&lt;executions&gt;</span>
+          <span class="cm">&lt;!-- Attaches JaCoCo agent before tests run --&gt;</span>
+          <span class="op">&lt;execution&gt;</span>
+            <span class="op">&lt;id&gt;</span>prepare-agent<span class="op">&lt;/id&gt;</span>
+            <span class="op">&lt;goals&gt;&lt;goal&gt;</span>prepare-agent<span class="op">&lt;/goal&gt;&lt;/goals&gt;</span>
+          <span class="op">&lt;/execution&gt;</span>
+          <span class="cm">&lt;!-- Generates HTML report after tests --&gt;</span>
+          <span class="op">&lt;execution&gt;</span>
+            <span class="op">&lt;id&gt;</span>report<span class="op">&lt;/id&gt;</span>
+            <span class="op">&lt;phase&gt;</span>test<span class="op">&lt;/phase&gt;</span>
+            <span class="op">&lt;goals&gt;&lt;goal&gt;</span>report<span class="op">&lt;/goal&gt;&lt;/goals&gt;</span>
+          <span class="op">&lt;/execution&gt;</span>
+          <span class="cm">&lt;!-- Fails build if coverage drops below 80% --&gt;</span>
+          <span class="op">&lt;execution&gt;</span>
+            <span class="op">&lt;id&gt;</span>check<span class="op">&lt;/id&gt;</span>
+            <span class="op">&lt;goals&gt;&lt;goal&gt;</span>check<span class="op">&lt;/goal&gt;&lt;/goals&gt;</span>
+            <span class="op">&lt;configuration&gt;</span>
+              <span class="op">&lt;rules&gt;&lt;rule&gt;</span>
+                <span class="op">&lt;element&gt;</span>BUNDLE<span class="op">&lt;/element&gt;</span>
+                <span class="op">&lt;limits&gt;&lt;limit&gt;</span>
+                  <span class="op">&lt;counter&gt;</span>LINE<span class="op">&lt;/counter&gt;</span>
+                  <span class="op">&lt;value&gt;</span>COVEREDRATIO<span class="op">&lt;/value&gt;</span>
+                  <span class="op">&lt;minimum&gt;</span>0.80<span class="op">&lt;/minimum&gt;</span>
+                <span class="op">&lt;/limit&gt;&lt;/limits&gt;</span>
+              <span class="op">&lt;/rule&gt;&lt;/rules&gt;</span>
+            <span class="op">&lt;/configuration&gt;</span>
+          <span class="op">&lt;/execution&gt;</span>
+        <span class="op">&lt;/executions&gt;</span>
+      <span class="op">&lt;/plugin&gt;</span>
+
+      <span class="cm">&lt;!-- SpotBugs — bytecode bug analysis --&gt;</span>
+      <span class="op">&lt;plugin&gt;</span>
+        <span class="op">&lt;groupId&gt;</span>com.github.spotbugs<span class="op">&lt;/groupId&gt;</span>
+        <span class="op">&lt;artifactId&gt;</span>spotbugs-maven-plugin<span class="op">&lt;/artifactId&gt;</span>
+        <span class="op">&lt;version&gt;</span>4.8.4.0<span class="op">&lt;/version&gt;</span>
+        <span class="op">&lt;configuration&gt;</span>
+          <span class="op">&lt;effort&gt;</span>Max<span class="op">&lt;/effort&gt;</span>
+          <span class="op">&lt;threshold&gt;</span>Medium<span class="op">&lt;/threshold&gt;</span>
+          <span class="op">&lt;failOnError&gt;</span>true<span class="op">&lt;/failOnError&gt;</span>
+        <span class="op">&lt;/configuration&gt;</span>
+        <span class="op">&lt;executions&gt;</span>
+          <span class="op">&lt;execution&gt;</span>
+            <span class="op">&lt;goals&gt;&lt;goal&gt;</span>check<span class="op">&lt;/goal&gt;&lt;/goals&gt;</span>
+          <span class="op">&lt;/execution&gt;</span>
+        <span class="op">&lt;/executions&gt;</span>
+      <span class="op">&lt;/plugin&gt;</span>
+
+    <span class="op">&lt;/plugins&gt;</span>
+  <span class="op">&lt;/build&gt;</span>
+
+<span class="op">&lt;/project&gt;</span></pre></div>
+  </div>
+
+  <h3>Commands to run each tool</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Command</th><th>What it does</th><th>When to use</th></tr></thead>
+    <tbody>
+      <tr><td><code class="il">mvn test</code></td><td>Compiles code and runs all JUnit tests</td><td>After every change</td></tr>
+      <tr><td><code class="il">mvn test jacoco:report</code></td><td>Runs tests + generates coverage HTML</td><td>To see coverage report</td></tr>
+      <tr><td><code class="il">mvn verify</code></td><td>Runs tests + JaCoCo check (fails if below 80%)</td><td>Before committing code</td></tr>
+      <tr><td><code class="il">mvn compile spotbugs:check</code></td><td>Compiles + runs SpotBugs bug analysis</td><td>After compile, before tests</td></tr>
+      <tr><td><code class="il">mvn spotbugs:gui</code></td><td>Opens SpotBugs visual GUI</td><td>To browse bugs interactively</td></tr>
+      <tr><td><code class="il">mvn clean verify spotbugs:check</code></td><td>Full quality check — everything</td><td>CI/CD pipeline, before merge</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout info">
+    <div class="icon">📁</div>
+    <div>
+      <strong>Project structure</strong>
+      <p>Place production code in <code class="il">src/main/java/</code> and test code in <code class="il">src/test/java/</code>. Maven automatically finds test classes whose names end in <code class="il">Test.java</code>. JaCoCo report opens at <code class="il">target/site/jacoco/index.html</code>.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 3 — JUNIT 5
+═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch3">
+<div class="wrap">
+  <div class="ch-eyebrow" style="color:var(--accent)">Chapter 3</div>
+  <div class="ch-num">03</div>
+  <h2 class="ch-title">JUnit 5 — Writing and Running Tests</h2>
+  <p class="ch-lead">JUnit 5 is the industry-standard Java testing framework. A test is simply a method annotated with <code class="il">@Test</code> that calls your code and checks the result using assertions.</p>
+
+  <h3>Core annotations reference</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Annotation</th><th>What it does</th><th>Example use</th></tr></thead>
+    <tbody>
+      <tr><td><code class="il">@Test</code></td><td>Marks the method as a test case</td><td>Every individual test</td></tr>
+      <tr><td><code class="il">@BeforeEach</code></td><td>Runs before each test — set up objects</td><td>Create fresh object before each test</td></tr>
+      <tr><td><code class="il">@AfterEach</code></td><td>Runs after each test — cleanup</td><td>Close files, reset state</td></tr>
+      <tr><td><code class="il">@BeforeAll</code></td><td>Runs once before all tests (must be static)</td><td>Start database connection</td></tr>
+      <tr><td><code class="il">@AfterAll</code></td><td>Runs once after all tests (must be static)</td><td>Close database connection</td></tr>
+      <tr><td><code class="il">@DisplayName</code></td><td>Human-readable name shown in test report</td><td>Make reports readable</td></tr>
+      <tr><td><code class="il">@Disabled</code></td><td>Skips the test temporarily</td><td>Known broken test to fix later</td></tr>
+      <tr><td><code class="il">@ParameterizedTest</code></td><td>Run same test with multiple inputs</td><td>Test multiple values at once</td></tr>
+      <tr><td><code class="il">@ValueSource</code></td><td>Provide simple values for parameterized test</td><td>Test with int[], String[], double[]</td></tr>
+      <tr><td><code class="il">@CsvSource</code></td><td>Provide input + expected pairs</td><td>grade(90)="A", grade(80)="B"</td></tr>
+      <tr><td><code class="il">@MethodSource</code></td><td>Provide data from a static method</td><td>Complex test data objects</td></tr>
+      <tr><td><code class="il">@Nested</code></td><td>Group related tests inside a class</td><td>Organise by scenario</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Core assertions reference</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Assertion</th><th>What it checks</th></tr></thead>
+    <tbody>
+      <tr><td><code class="il">assertEquals(expected, actual)</code></td><td>Values are equal</td></tr>
+      <tr><td><code class="il">assertNotEquals(a, b)</code></td><td>Values are not equal</td></tr>
+      <tr><td><code class="il">assertTrue(condition)</code></td><td>Condition is true</td></tr>
+      <tr><td><code class="il">assertFalse(condition)</code></td><td>Condition is false</td></tr>
+      <tr><td><code class="il">assertNull(obj)</code></td><td>Object is null</td></tr>
+      <tr><td><code class="il">assertNotNull(obj)</code></td><td>Object is not null</td></tr>
+      <tr><td><code class="il">assertThrows(Exception.class, () -> ...)</code></td><td>Code throws expected exception</td></tr>
+      <tr><td><code class="il">assertAll(executable...)</code></td><td>Run multiple assertions, all must pass</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- EXAMPLE 1 -->
+  <h3>Example 1 — BankAccount (basic assertions)</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">BankAccount.java (production code)</span></div><span class="code-lang">java</span></div>
+    <div class="code-body"><pre><span class="kw">public class</span> <span class="cl">BankAccount</span> {
+    <span class="kw">private double</span> balance;
+    <span class="kw">private final</span> <span class="cl">String</span> owner;
+
+    <span class="kw">public</span> <span class="cl">BankAccount</span>(<span class="cl">String</span> owner, <span class="kw">double</span> initialBalance) {
+        <span class="kw">if</span> (initialBalance < <span class="nm">0</span>)
+            <span class="kw">throw new</span> <span class="cl">IllegalArgumentException</span>(<span class="st">"Balance cannot be negative"</span>);
+        <span class="kw">this</span>.owner = owner;
+        <span class="kw">this</span>.balance = initialBalance;
+    }
+
+    <span class="kw">public void</span> <span class="fn">deposit</span>(<span class="kw">double</span> amount) {
+        <span class="kw">if</span> (amount <= <span class="nm">0</span>)
+            <span class="kw">throw new</span> <span class="cl">IllegalArgumentException</span>(<span class="st">"Deposit must be positive"</span>);
+        balance += amount;
+    }
+
+    <span class="kw">public void</span> <span class="fn">withdraw</span>(<span class="kw">double</span> amount) {
+        <span class="kw">if</span> (amount > balance)
+            <span class="kw">throw new</span> <span class="cl">InsufficientFundsException</span>(
+                <span class="st">"Need "</span> + amount + <span class="st">" but only have "</span> + balance);
+        balance -= amount;
+    }
+
+    <span class="kw">public double</span> <span class="fn">getBalance</span>() { <span class="kw">return</span> balance; }
+    <span class="kw">public</span> <span class="cl">String</span>  <span class="fn">getOwner</span>()   { <span class="kw">return</span> owner; }
+
+    <span class="kw">public boolean</span> <span class="fn">transfer</span>(<span class="cl">BankAccount</span> target, <span class="kw">double</span> amount) {
+        <span class="kw">try</span> {
+            <span class="fn">withdraw</span>(amount);
+            target.<span class="fn">deposit</span>(amount);
+            <span class="kw">return true</span>;
+        } <span class="kw">catch</span> (<span class="cl">InsufficientFundsException</span> e) {
+            <span class="kw">return false</span>;
+        }
+    }
+}</pre></div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">BankAccountTest.java (test code)</span></div><span class="code-lang">java</span></div>
+    <div class="code-body"><pre><span class="kw">import</span> org.junit.jupiter.api.*;
+<span class="kw">import static</span> org.junit.jupiter.api.Assertions.*;
+
+<span class="an">@DisplayName</span>(<span class="st">"BankAccount Tests"</span>)
+<span class="kw">class</span> <span class="cl">BankAccountTest</span> {
+
+    <span class="kw">private</span> <span class="cl">BankAccount</span> account;
+
+    <span class="cm">// Runs BEFORE each test method — fresh account every time</span>
+    <span class="an">@BeforeEach</span>
+    <span class="kw">void</span> <span class="fn">setUp</span>() {
+        account = <span class="kw">new</span> <span class="cl">BankAccount</span>(<span class="st">"Alice"</span>, <span class="nm">1000.0</span>);
+    }
+
+    <span class="cm">// ─── basic state tests ───────────────────────────</span>
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Account has correct initial balance"</span>)
+    <span class="kw">void</span> <span class="fn">initialBalance</span>() {
+        assertEquals(<span class="nm">1000.0</span>, account.<span class="fn">getBalance</span>());
+        assertEquals(<span class="st">"Alice"</span>, account.<span class="fn">getOwner</span>());
+    }
+
+    <span class="cm">// ─── deposit tests ───────────────────────────────</span>
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Deposit increases balance correctly"</span>)
+    <span class="kw">void</span> <span class="fn">depositIncreasesBalance</span>() {
+        account.<span class="fn">deposit</span>(<span class="nm">500.0</span>);
+        assertEquals(<span class="nm">1500.0</span>, account.<span class="fn">getBalance</span>());
+    }
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Deposit of zero throws exception"</span>)
+    <span class="kw">void</span> <span class="fn">depositZeroThrows</span>() {
+        <span class="kw">var</span> ex = assertThrows(
+            <span class="cl">IllegalArgumentException</span>.<span class="kw">class</span>,
+            () -> account.<span class="fn">deposit</span>(<span class="nm">0</span>)
+        );
+        assertEquals(<span class="st">"Deposit must be positive"</span>, ex.<span class="fn">getMessage</span>());
+    }
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Deposit of negative amount throws exception"</span>)
+    <span class="kw">void</span> <span class="fn">depositNegativeThrows</span>() {
+        assertThrows(<span class="cl">IllegalArgumentException</span>.<span class="kw">class</span>,
+            () -> account.<span class="fn">deposit</span>(-<span class="nm">100</span>));
+    }
+
+    <span class="cm">// ─── withdraw tests ──────────────────────────────</span>
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Withdraw reduces balance correctly"</span>)
+    <span class="kw">void</span> <span class="fn">withdrawReducesBalance</span>() {
+        account.<span class="fn">withdraw</span>(<span class="nm">300.0</span>);
+        assertEquals(<span class="nm">700.0</span>, account.<span class="fn">getBalance</span>());
+    }
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Withdraw more than balance throws InsufficientFundsException"</span>)
+    <span class="kw">void</span> <span class="fn">withdrawExceedingBalance</span>() {
+        assertThrows(<span class="cl">InsufficientFundsException</span>.<span class="kw">class</span>,
+            () -> account.<span class="fn">withdraw</span>(<span class="nm">2000.0</span>));
+    }
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Withdraw exact balance leaves zero"</span>)
+    <span class="kw">void</span> <span class="fn">withdrawExactBalance</span>() {
+        account.<span class="fn">withdraw</span>(<span class="nm">1000.0</span>);
+        assertEquals(<span class="nm">0.0</span>, account.<span class="fn">getBalance</span>());
+    }
+
+    <span class="cm">// ─── transfer tests ──────────────────────────────</span>
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Successful transfer updates both accounts"</span>)
+    <span class="kw">void</span> <span class="fn">transferSuccess</span>() {
+        <span class="cl">BankAccount</span> target = <span class="kw">new</span> <span class="cl">BankAccount</span>(<span class="st">"Bob"</span>, <span class="nm">500.0</span>);
+        <span class="kw">boolean</span> result = account.<span class="fn">transfer</span>(target, <span class="nm">200.0</span>);
+
+        <span class="cm">// assertAll: runs ALL assertions even if first fails</span>
+        assertAll(
+            () -> assertTrue(result),
+            () -> assertEquals(<span class="nm">800.0</span>, account.<span class="fn">getBalance</span>()),
+            () -> assertEquals(<span class="nm">700.0</span>, target.<span class="fn">getBalance</span>())
+        );
+    }
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Transfer with insufficient funds returns false"</span>)
+    <span class="kw">void</span> <span class="fn">transferInsufficientFunds</span>() {
+        <span class="cl">BankAccount</span> target = <span class="kw">new</span> <span class="cl">BankAccount</span>(<span class="st">"Bob"</span>, <span class="nm">0</span>);
+        <span class="kw">boolean</span> result = account.<span class="fn">transfer</span>(target, <span class="nm">5000.0</span>);
+
+        assertAll(
+            () -> assertFalse(result),
+            () -> assertEquals(<span class="nm">1000.0</span>, account.<span class="fn">getBalance</span>()),  <span class="cm">// unchanged</span>
+            () -> assertEquals(<span class="nm">0.0</span>, target.<span class="fn">getBalance</span>())          <span class="cm">// unchanged</span>
+        );
+    }
+}</pre></div>
+  </div>
+
+  <!-- EXAMPLE 2 — Parameterized -->
+  <h3>Example 2 — Parameterized Tests (test multiple inputs at once)</h3>
+  <div class="callout info">
+    <div class="icon">💡</div>
+    <div>
+      <strong>Why parameterized?</strong>
+      <p>Instead of writing 10 separate test methods for 10 different inputs, write one test and supply the data. Same coverage, 90% less code. Perfect for boundary conditions like grade boundaries, discount tiers, or tax brackets.</p>
+    </div>
+  </div>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">GradeCalculatorTest.java</span></div><span class="code-lang">java</span></div>
+    <div class="code-body"><pre><span class="kw">import</span> org.junit.jupiter.params.ParameterizedTest;
+<span class="kw">import</span> org.junit.jupiter.params.provider.*;
+<span class="kw">import static</span> org.junit.jupiter.api.Assertions.*;
+
+<span class="kw">class</span> <span class="cl">GradeCalculatorTest</span> {
+
+    <span class="kw">private final</span> <span class="cl">GradeCalculator</span> calc = <span class="kw">new</span> <span class="cl">GradeCalculator</span>();
+
+    <span class="cm">// ─── @ValueSource: same test, many single values ──</span>
+    <span class="an">@ParameterizedTest</span>
+    <span class="an">@ValueSource</span>(doubles = {<span class="nm">90</span>, <span class="nm">95</span>, <span class="nm">99</span>, <span class="nm">100</span>})
+    <span class="an">@DisplayName</span>(<span class="st">"Scores 90-100 should return grade A"</span>)
+    <span class="kw">void</span> <span class="fn">scoreAbove90IsGradeA</span>(<span class="kw">double</span> score) {
+        assertEquals(<span class="st">"A"</span>, calc.<span class="fn">getGrade</span>(score));
+    }
+
+    <span class="cm">// ─── @CsvSource: input → expected pairs ──────────</span>
+    <span class="an">@ParameterizedTest</span>
+    <span class="an">@CsvSource</span>({
+        <span class="st">"100, A"</span>,
+        <span class="st">"90,  A"</span>,
+        <span class="st">"89,  B"</span>,
+        <span class="st">"80,  B"</span>,
+        <span class="st">"79,  C"</span>,
+        <span class="st">"70,  C"</span>,
+        <span class="st">"69,  D"</span>,
+        <span class="st">"60,  D"</span>,
+        <span class="st">"59,  F"</span>,
+        <span class="st">"0,   F"</span>
+    })
+    <span class="an">@DisplayName</span>(<span class="st">"Grade boundaries"</span>)
+    <span class="kw">void</span> <span class="fn">gradeBoundaries</span>(<span class="kw">double</span> score, <span class="cl">String</span> expected) {
+        assertEquals(expected, calc.<span class="fn">getGrade</span>(score));
+    }
+
+    <span class="cm">// ─── @MethodSource: complex objects ─────────────</span>
+    <span class="kw">static</span> <span class="cl">Stream</span>&lt;<span class="cl">Arguments</span>&gt; <span class="fn">discountScenarios</span>() {
+        <span class="kw">return</span> <span class="cl">Stream</span>.<span class="fn">of</span>(
+            Arguments.<span class="fn">of</span>(<span class="st">"GOLD"</span>,   <span class="nm">1000</span>, <span class="nm">200</span>),   <span class="cm">// 20% off</span>
+            Arguments.<span class="fn">of</span>(<span class="st">"SILVER"</span>, <span class="nm">1000</span>, <span class="nm">100</span>),   <span class="cm">// 10% off</span>
+            Arguments.<span class="fn">of</span>(<span class="st">"BRONZE"</span>, <span class="nm">1000</span>, <span class="nm">50</span>),    <span class="cm">// 5% off</span>
+            Arguments.<span class="fn">of</span>(<span class="st">"NONE"</span>,   <span class="nm">1000</span>, <span class="nm">0</span>)      <span class="cm">// no discount</span>
+        );
+    }
+
+    <span class="an">@ParameterizedTest</span>
+    <span class="an">@MethodSource</span>(<span class="st">"discountScenarios"</span>)
+    <span class="an">@DisplayName</span>(<span class="st">"Discount by membership tier"</span>)
+    <span class="kw">void</span> <span class="fn">discountByTier</span>(<span class="cl">String</span> tier, <span class="kw">double</span> price, <span class="kw">double</span> expectedDiscount) {
+        assertEquals(expectedDiscount, calc.<span class="fn">getDiscount</span>(tier, price));
+    }
+}</pre></div>
+  </div>
+
+  <!-- EXAMPLE 3 — Nested -->
+  <h3>Example 3 — @Nested Tests (organise by scenario)</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">OrderServiceTest.java</span></div><span class="code-lang">java</span></div>
+    <div class="code-body"><pre><span class="an">@DisplayName</span>(<span class="st">"OrderService Tests"</span>)
+<span class="kw">class</span> <span class="cl">OrderServiceTest</span> {
+
+    <span class="kw">private</span> <span class="cl">OrderService</span> service;
+
+    <span class="an">@BeforeEach</span>
+    <span class="kw">void</span> <span class="fn">setUp</span>() { service = <span class="kw">new</span> <span class="cl">OrderService</span>(); }
+
+    <span class="an">@Nested</span>
+    <span class="an">@DisplayName</span>(<span class="st">"When order is valid"</span>)
+    <span class="kw">class</span> <span class="cl">ValidOrder</span> {
+
+        <span class="an">@Test</span>
+        <span class="kw">void</span> <span class="fn">shouldAcceptOrder</span>() {
+            <span class="cl">Order</span> o = <span class="kw">new</span> <span class="cl">Order</span>(<span class="st">"PROD-1"</span>, <span class="nm">3</span>, <span class="nm">100.0</span>);
+            assertTrue(service.<span class="fn">placeOrder</span>(o).<span class="fn">isSuccess</span>());
+        }
+
+        <span class="an">@Test</span>
+        <span class="kw">void</span> <span class="fn">totalShouldBeCalculatedCorrectly</span>() {
+            <span class="cl">Order</span> o = <span class="kw">new</span> <span class="cl">Order</span>(<span class="st">"PROD-1"</span>, <span class="nm">3</span>, <span class="nm">100.0</span>);
+            assertEquals(<span class="nm">300.0</span>, service.<span class="fn">calculateTotal</span>(o));
+        }
+    }
+
+    <span class="an">@Nested</span>
+    <span class="an">@DisplayName</span>(<span class="st">"When order quantity is invalid"</span>)
+    <span class="kw">class</span> <span class="cl">InvalidQuantity</span> {
+
+        <span class="an">@Test</span>
+        <span class="kw">void</span> <span class="fn">zeroQuantityThrows</span>() {
+            assertThrows(<span class="cl">InvalidOrderException</span>.<span class="kw">class</span>,
+                () -> service.<span class="fn">placeOrder</span>(<span class="kw">new</span> <span class="cl">Order</span>(<span class="st">"P1"</span>, <span class="nm">0</span>, <span class="nm">100</span>)));
+        }
+
+        <span class="an">@Test</span>
+        <span class="kw">void</span> <span class="fn">negativeQuantityThrows</span>() {
+            assertThrows(<span class="cl">InvalidOrderException</span>.<span class="kw">class</span>,
+                () -> service.<span class="fn">placeOrder</span>(<span class="kw">new</span> <span class="cl">Order</span>(<span class="st">"P1"</span>, -<span class="nm">1</span>, <span class="nm">100</span>)));
+        }
+    }
+}
+<span class="cm">// Test report shows:
+// OrderService Tests
+//   When order is valid
+//     shouldAcceptOrder                ✓
+//     totalShouldBeCalculatedCorrectly ✓
+//   When order quantity is invalid
+//     zeroQuantityThrows               ✓
+//     negativeQuantityThrows           ✓</span></pre></div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="ex-tag">Exercise 1</span><span class="ex-title">Write tests for a ProductInventory class</span></div>
+    <div class="ex-body">
+      <p>Create <code class="il">ProductInventory</code> with: <code class="il">addStock(String productId, int qty)</code>, <code class="il">removeStock(String productId, int qty)</code>, <code class="il">getStock(String productId)</code>. Rules: qty cannot be negative, cannot remove more than available. Write at least 7 tests covering: add stock, remove stock, get stock, remove too much throws exception, negative qty throws, stock of unknown product returns 0, parameterized test for multiple products.</p>
+      <details><summary>View solution</summary><div class="sol">
+        <div class="code-wrap"><div class="code-body"><pre><span class="kw">class</span> <span class="cl">ProductInventoryTest</span> {
+    <span class="kw">private</span> <span class="cl">ProductInventory</span> inventory;
+
+    <span class="an">@BeforeEach</span>
+    <span class="kw">void</span> <span class="fn">setUp</span>() { inventory = <span class="kw">new</span> <span class="cl">ProductInventory</span>(); }
+
+    <span class="an">@Test</span> <span class="kw">void</span> <span class="fn">addStockIncreasesQuantity</span>() {
+        inventory.<span class="fn">addStock</span>(<span class="st">"P001"</span>, <span class="nm">50</span>);
+        assertEquals(<span class="nm">50</span>, inventory.<span class="fn">getStock</span>(<span class="st">"P001"</span>));
+    }
+
+    <span class="an">@Test</span> <span class="kw">void</span> <span class="fn">removeStockDecreasesQuantity</span>() {
+        inventory.<span class="fn">addStock</span>(<span class="st">"P001"</span>, <span class="nm">50</span>);
+        inventory.<span class="fn">removeStock</span>(<span class="st">"P001"</span>, <span class="nm">20</span>);
+        assertEquals(<span class="nm">30</span>, inventory.<span class="fn">getStock</span>(<span class="st">"P001"</span>));
+    }
+
+    <span class="an">@Test</span> <span class="kw">void</span> <span class="fn">unknownProductReturnsZero</span>() {
+        assertEquals(<span class="nm">0</span>, inventory.<span class="fn">getStock</span>(<span class="st">"GHOST"</span>));
+    }
+
+    <span class="an">@Test</span> <span class="kw">void</span> <span class="fn">removeMoreThanAvailableThrows</span>() {
+        inventory.<span class="fn">addStock</span>(<span class="st">"P001"</span>, <span class="nm">10</span>);
+        assertThrows(<span class="cl">InsufficientStockException</span>.<span class="kw">class</span>,
+            () -> inventory.<span class="fn">removeStock</span>(<span class="st">"P001"</span>, <span class="nm">20</span>));
+    }
+
+    <span class="an">@Test</span> <span class="kw">void</span> <span class="fn">negativeAddQtyThrows</span>() {
+        assertThrows(<span class="cl">IllegalArgumentException</span>.<span class="kw">class</span>,
+            () -> inventory.<span class="fn">addStock</span>(<span class="st">"P001"</span>, -<span class="nm">5</span>));
+    }
+
+    <span class="an">@ParameterizedTest</span>
+    <span class="an">@CsvSource</span>({<span class="st">"P001, 10"</span>, <span class="st">"P002, 25"</span>, <span class="st">"P003, 100"</span>})
+    <span class="kw">void</span> <span class="fn">addStockForMultipleProducts</span>(<span class="cl">String</span> id, <span class="kw">int</span> qty) {
+        inventory.<span class="fn">addStock</span>(id, qty);
+        assertEquals(qty, inventory.<span class="fn">getStock</span>(id));
+    }
+}</pre></div></div>
+      </div></details>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="ex-tag">Exercise 2</span><span class="ex-title">Write tests for a PasswordValidator</span></div>
+    <div class="ex-body">
+      <p>Rules: min 8 chars, at least 1 uppercase, at least 1 digit, at least 1 special character (<code class="il">!@#$%</code>). Use <code class="il">@ParameterizedTest</code> with <code class="il">@CsvSource</code> to test: valid passwords return true, each rule violation returns false.</p>
+      <details><summary>View solution</summary><div class="sol">
+        <div class="code-wrap"><div class="code-body"><pre><span class="kw">class</span> <span class="cl">PasswordValidatorTest</span> {
+    <span class="kw">private final</span> <span class="cl">PasswordValidator</span> v = <span class="kw">new</span> <span class="cl">PasswordValidator</span>();
+
+    <span class="an">@ParameterizedTest</span>
+    <span class="an">@CsvSource</span>({
+        <span class="st">"Abcdef1!,  true"</span>,   <span class="cm">// valid</span>
+        <span class="st">"Ab1!,      false"</span>,  <span class="cm">// too short</span>
+        <span class="st">"abcdefg1!, false"</span>,  <span class="cm">// no uppercase</span>
+        <span class="st">"Abcdefgh!, false"</span>,  <span class="cm">// no digit</span>
+        <span class="st">"Abcdefg1,  false"</span>   <span class="cm">// no special char</span>
+    })
+    <span class="kw">void</span> <span class="fn">passwordValidation</span>(<span class="cl">String</span> pw, <span class="kw">boolean</span> expected) {
+        assertEquals(expected, v.<span class="fn">isValid</span>(pw));
+    }
+}</pre></div></div>
+      </div></details>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 4 — MOCKITO
+═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch4">
+<div class="wrap">
+  <div class="ch-eyebrow" style="color:var(--green)">Chapter 4</div>
+  <div class="ch-num">04</div>
+  <h2 class="ch-title">Mockito — Mocking Dependencies</h2>
+  <p class="ch-lead">Mockito creates fake (mock) objects that behave exactly as you specify. You control what they return, what they throw, and then verify they were called correctly.</p>
+
+  <div class="callout info">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>The core idea</strong>
+      <p>A unit test should test ONE class in isolation. When your class depends on a database, an API, or another service, those dependencies make the test slow, fragile, and hard to control. Mockito replaces each dependency with a fake that you fully control.</p>
+    </div>
+  </div>
+
+  <h3>Core Mockito methods</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Method</th><th>What it does</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code class="il">mock(Class)</code></td><td>Create a fake object</td><td><code class="il">mock(UserRepository.class)</code></td></tr>
+      <tr><td><code class="il">@Mock</code></td><td>Annotation shortcut to create mock</td><td>Cleaner than manual mock()</td></tr>
+      <tr><td><code class="il">@InjectMocks</code></td><td>Creates class under test, injects all mocks</td><td>Auto-wires all @Mock into your class</td></tr>
+      <tr><td><code class="il">when().thenReturn()</code></td><td>Define what mock returns on method call</td><td><code class="il">when(repo.findById(1)).thenReturn(user)</code></td></tr>
+      <tr><td><code class="il">when().thenThrow()</code></td><td>Define what exception mock throws</td><td><code class="il">when(api.call()).thenThrow(TimeoutException::new)</code></td></tr>
+      <tr><td><code class="il">doNothing().when()</code></td><td>Silence a void method</td><td><code class="il">doNothing().when(emailSvc).send(any())</code></td></tr>
+      <tr><td><code class="il">verify(mock).method()</code></td><td>Assert method was called</td><td><code class="il">verify(repo).save(user)</code></td></tr>
+      <tr><td><code class="il">verify(mock, times(n))</code></td><td>Assert method called exactly n times</td><td><code class="il">verify(repo, times(1)).save(any())</code></td></tr>
+      <tr><td><code class="il">verify(mock, never())</code></td><td>Assert method was NEVER called</td><td><code class="il">verify(emailSvc, never()).send(any())</code></td></tr>
+      <tr><td><code class="il">ArgumentCaptor</code></td><td>Capture what argument was passed to mock</td><td>Check the exact object saved to DB</td></tr>
+      <tr><td><code class="il">any(), anyString()</code></td><td>Argument matchers — match any value</td><td>Used in when() and verify()</td></tr>
+      <tr><td><code class="il">eq(value)</code></td><td>Match specific value</td><td><code class="il">verify(repo).findById(eq(42L))</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- EXAMPLE 1 -->
+  <h3>Example 1 — OrderService (mock payment + database + email)</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">OrderService.java (production code)</span></div><span class="code-lang">java</span></div>
+    <div class="code-body"><pre><span class="an">@Service</span>
+<span class="an">@RequiredArgsConstructor</span>
+<span class="kw">public class</span> <span class="cl">OrderService</span> {
+
+    <span class="kw">private final</span> <span class="cl">OrderRepository</span>  orderRepo;
+    <span class="kw">private final</span> <span class="cl">PaymentGateway</span>   payment;
+    <span class="kw">private final</span> <span class="cl">EmailService</span>      email;
+    <span class="kw">private final</span> <span class="cl">InventoryService</span>  inventory;
+
+    <span class="kw">public</span> <span class="cl">OrderResult</span> <span class="fn">placeOrder</span>(<span class="cl">Order</span> order) {
+
+        <span class="cm">// 1. Check stock</span>
+        <span class="kw">if</span> (!inventory.<span class="fn">isAvailable</span>(order.<span class="fn">getProductId</span>(), order.<span class="fn">getQty</span>())) {
+            <span class="kw">return</span> <span class="cl">OrderResult</span>.<span class="fn">failed</span>(<span class="st">"Out of stock"</span>);
+        }
+
+        <span class="cm">// 2. Charge payment</span>
+        <span class="cl">PaymentResult</span> payResult = payment.<span class="fn">charge</span>(
+            order.<span class="fn">getCustomerId</span>(), order.<span class="fn">getTotal</span>());
+        <span class="kw">if</span> (!payResult.<span class="fn">isSuccess</span>()) {
+            <span class="kw">return</span> <span class="cl">OrderResult</span>.<span class="fn">failed</span>(<span class="st">"Payment failed"</span>);
+        }
+
+        <span class="cm">// 3. Save order</span>
+        order.<span class="fn">setStatus</span>(<span class="st">"CONFIRMED"</span>);
+        order.<span class="fn">setTransactionId</span>(payResult.<span class="fn">getTransactionId</span>());
+        orderRepo.<span class="fn">save</span>(order);
+
+        <span class="cm">// 4. Send confirmation</span>
+        email.<span class="fn">sendConfirmation</span>(order);
+
+        <span class="kw">return</span> <span class="cl">OrderResult</span>.<span class="fn">success</span>(payResult.<span class="fn">getTransactionId</span>());
+    }
+}</pre></div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">OrderServiceTest.java (test code)</span></div><span class="code-lang">java</span></div>
+    <div class="code-body"><pre><span class="kw">import</span> org.junit.jupiter.api.*;
+<span class="kw">import</span> org.junit.jupiter.api.extension.ExtendWith;
+<span class="kw">import</span> org.mockito.*;
+<span class="kw">import</span> org.mockito.junit.jupiter.MockitoExtension;
+<span class="kw">import static</span> org.junit.jupiter.api.Assertions.*;
+<span class="kw">import static</span> org.mockito.Mockito.*;
+
+<span class="an">@ExtendWith</span>(<span class="cl">MockitoExtension</span>.<span class="kw">class</span>)   <span class="cm">// enables @Mock and @InjectMocks</span>
+<span class="kw">class</span> <span class="cl">OrderServiceTest</span> {
+
+    <span class="cm">// These are ALL fake — no real database, no real payment, no real email</span>
+    <span class="an">@Mock</span> <span class="cl">OrderRepository</span>  orderRepo;
+    <span class="an">@Mock</span> <span class="cl">PaymentGateway</span>   payment;
+    <span class="an">@Mock</span> <span class="cl">EmailService</span>      email;
+    <span class="an">@Mock</span> <span class="cl">InventoryService</span>  inventory;
+
+    <span class="cm">// OrderService created with ALL mocks auto-injected</span>
+    <span class="an">@InjectMocks</span> <span class="cl">OrderService</span> orderService;
+
+    <span class="cm">// ─── Test 1: Happy path ───────────────────────────</span>
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Successful order: stock OK + payment OK → saved + email sent"</span>)
+    <span class="kw">void</span> <span class="fn">successfulOrder</span>() {
+        <span class="cm">// ARRANGE — tell mocks what to return</span>
+        <span class="cl">Order</span> order = <span class="kw">new</span> <span class="cl">Order</span>(<span class="st">"CUST-1"</span>, <span class="st">"PROD-1"</span>, <span class="nm">2</span>, <span class="nm">500.0</span>);
+
+        <span class="fn">when</span>(inventory.<span class="fn">isAvailable</span>(<span class="st">"PROD-1"</span>, <span class="nm">2</span>))
+            .<span class="fn">thenReturn</span>(<span class="kw">true</span>);
+        <span class="fn">when</span>(payment.<span class="fn">charge</span>(<span class="st">"CUST-1"</span>, <span class="nm">500.0</span>))
+            .<span class="fn">thenReturn</span>(<span class="kw">new</span> <span class="cl">PaymentResult</span>(<span class="kw">true</span>, <span class="st">"TXN-123"</span>));
+
+        <span class="cm">// ACT — call the method under test</span>
+        <span class="cl">OrderResult</span> result = orderService.<span class="fn">placeOrder</span>(order);
+
+        <span class="cm">// ASSERT — verify the result is correct</span>
+        assertTrue(result.<span class="fn">isSuccess</span>());
+        assertEquals(<span class="st">"TXN-123"</span>, result.<span class="fn">getTransactionId</span>());
+
+        <span class="cm">// VERIFY — confirm mocks were called correctly</span>
+        verify(orderRepo, times(<span class="nm">1</span>)).<span class="fn">save</span>(order);
+        verify(email, times(<span class="nm">1</span>)).<span class="fn">sendConfirmation</span>(order);
+    }
+
+    <span class="cm">// ─── Test 2: Out of stock ─────────────────────────</span>
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Out of stock: payment NOT charged, order NOT saved"</span>)
+    <span class="kw">void</span> <span class="fn">outOfStock</span>() {
+        <span class="cl">Order</span> order = <span class="kw">new</span> <span class="cl">Order</span>(<span class="st">"CUST-1"</span>, <span class="st">"PROD-1"</span>, <span class="nm">999</span>, <span class="nm">5000.0</span>);
+
+        <span class="fn">when</span>(inventory.<span class="fn">isAvailable</span>(<span class="st">"PROD-1"</span>, <span class="nm">999</span>))
+            .<span class="fn">thenReturn</span>(<span class="kw">false</span>);   <span class="cm">// out of stock</span>
+
+        <span class="cl">OrderResult</span> result = orderService.<span class="fn">placeOrder</span>(order);
+
+        assertFalse(result.<span class="fn">isSuccess</span>());
+        assertEquals(<span class="st">"Out of stock"</span>, result.<span class="fn">getMessage</span>());
+
+        <span class="cm">// Payment and save should NEVER be called when out of stock</span>
+        verify(payment, never()).<span class="fn">charge</span>(anyString(), anyDouble());
+        verify(orderRepo, never()).<span class="fn">save</span>(any());
+        verify(email, never()).<span class="fn">sendConfirmation</span>(any());
+    }
+
+    <span class="cm">// ─── Test 3: Payment fails ────────────────────────</span>
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Payment declined: order NOT saved, email NOT sent"</span>)
+    <span class="kw">void</span> <span class="fn">paymentDeclined</span>() {
+        <span class="cl">Order</span> order = <span class="kw">new</span> <span class="cl">Order</span>(<span class="st">"CUST-2"</span>, <span class="st">"PROD-2"</span>, <span class="nm">1</span>, <span class="nm">200.0</span>);
+
+        <span class="fn">when</span>(inventory.<span class="fn">isAvailable</span>(anyString(), anyInt()))
+            .<span class="fn">thenReturn</span>(<span class="kw">true</span>);
+        <span class="fn">when</span>(payment.<span class="fn">charge</span>(anyString(), anyDouble()))
+            .<span class="fn">thenReturn</span>(<span class="kw">new</span> <span class="cl">PaymentResult</span>(<span class="kw">false</span>, <span class="kw">null</span>));  <span class="cm">// declined</span>
+
+        <span class="cl">OrderResult</span> result = orderService.<span class="fn">placeOrder</span>(order);
+
+        assertFalse(result.<span class="fn">isSuccess</span>());
+        verify(orderRepo, never()).<span class="fn">save</span>(any());
+        verify(email, never()).<span class="fn">sendConfirmation</span>(any());
+    }
+
+    <span class="cm">// ─── Test 4: ArgumentCaptor ───────────────────────</span>
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Saved order should have CONFIRMED status and transaction ID"</span>)
+    <span class="kw">void</span> <span class="fn">savedOrderHasCorrectState</span>() {
+        <span class="cl">Order</span> order = <span class="kw">new</span> <span class="cl">Order</span>(<span class="st">"CUST-3"</span>, <span class="st">"PROD-3"</span>, <span class="nm">1</span>, <span class="nm">300.0</span>);
+
+        <span class="fn">when</span>(inventory.<span class="fn">isAvailable</span>(anyString(), anyInt())).thenReturn(<span class="kw">true</span>);
+        <span class="fn">when</span>(payment.<span class="fn">charge</span>(anyString(), anyDouble()))
+            .<span class="fn">thenReturn</span>(<span class="kw">new</span> <span class="cl">PaymentResult</span>(<span class="kw">true</span>, <span class="st">"TXN-999"</span>));
+
+        orderService.<span class="fn">placeOrder</span>(order);
+
+        <span class="cm">// Capture the exact Order object passed to repo.save()</span>
+        <span class="cl">ArgumentCaptor</span>&lt;<span class="cl">Order</span>&gt; captor = <span class="cl">ArgumentCaptor</span>.<span class="fn">forClass</span>(<span class="cl">Order</span>.<span class="kw">class</span>);
+        verify(orderRepo).<span class="fn">save</span>(captor.<span class="fn">capture</span>());
+
+        <span class="cl">Order</span> savedOrder = captor.<span class="fn">getValue</span>();
+        assertEquals(<span class="st">"CONFIRMED"</span>, savedOrder.<span class="fn">getStatus</span>());
+        assertEquals(<span class="st">"TXN-999"</span>,   savedOrder.<span class="fn">getTransactionId</span>());
+    }
+}</pre></div>
+  </div>
+
+  <!-- EXAMPLE 2 — thenThrow -->
+  <h3>Example 2 — Testing Error Handling (thenThrow)</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">UserServiceTest.java</span></div><span class="code-lang">java</span></div>
+    <div class="code-body"><pre><span class="an">@ExtendWith</span>(<span class="cl">MockitoExtension</span>.<span class="kw">class</span>)
+<span class="kw">class</span> <span class="cl">UserServiceTest</span> {
+
+    <span class="an">@Mock</span> <span class="cl">UserRepository</span>     userRepo;
+    <span class="an">@Mock</span> <span class="cl">EmailService</span>        emailSvc;
+    <span class="an">@Mock</span> <span class="cl">AuditLogger</span>         auditLog;
+
+    <span class="an">@InjectMocks</span> <span class="cl">UserService</span> userService;
+
+    <span class="cm">// ─── Test: Database timeout ───────────────────────</span>
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Database timeout is handled gracefully"</span>)
+    <span class="kw">void</span> <span class="fn">databaseTimeout</span>() {
+        <span class="fn">when</span>(userRepo.<span class="fn">findByEmail</span>(<span class="st">"test@mail.com"</span>))
+            .<span class="fn">thenThrow</span>(<span class="kw">new</span> <span class="cl">DatabaseException</span>(<span class="st">"Connection timed out"</span>));
+
+        <span class="cl">ServiceResponse</span>&lt;<span class="cl">User</span>&gt; response =
+            userService.<span class="fn">getUser</span>(<span class="st">"test@mail.com"</span>);
+
+        assertFalse(response.<span class="fn">isSuccess</span>());
+        assertEquals(<span class="st">"Service temporarily unavailable"</span>,
+                     response.<span class="fn">getMessage</span>());
+        <span class="cm">// Verify error was logged</span>
+        verify(auditLog, times(<span class="nm">1</span>)).<span class="fn">logError</span>(anyString(), any());
+    }
+
+    <span class="cm">// ─── Test: Duplicate email on register ───────────</span>
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Registering duplicate email returns error, no email sent"</span>)
+    <span class="kw">void</span> <span class="fn">duplicateEmailRegistration</span>() {
+        <span class="fn">when</span>(userRepo.<span class="fn">existsByEmail</span>(<span class="st">"dup@mail.com"</span>))
+            .<span class="fn">thenReturn</span>(<span class="kw">true</span>);
+
+        <span class="cl">ServiceResponse</span>&lt;<span class="cl">User</span>&gt; response =
+            userService.<span class="fn">register</span>(<span class="kw">new</span> <span class="cl">User</span>(<span class="st">"dup@mail.com"</span>, <span class="st">"pwd"</span>));
+
+        assertFalse(response.<span class="fn">isSuccess</span>());
+        assertEquals(<span class="st">"Email already registered"</span>, response.<span class="fn">getMessage</span>());
+        verify(emailSvc, never()).<span class="fn">sendWelcome</span>(anyString());
+        verify(userRepo, never()).<span class="fn">save</span>(any());
+    }
+
+    <span class="cm">// ─── Test: Void method (doNothing) ───────────────</span>
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Password reset sends exactly one email"</span>)
+    <span class="kw">void</span> <span class="fn">passwordReset</span>() {
+        <span class="kw">var</span> user = <span class="kw">new</span> <span class="cl">User</span>(<span class="st">"user@mail.com"</span>, <span class="st">"oldPwd"</span>);
+        <span class="fn">when</span>(userRepo.<span class="fn">findByEmail</span>(<span class="st">"user@mail.com"</span>))
+            .<span class="fn">thenReturn</span>(user);
+
+        <span class="cm">// emailSvc.sendReset() is void — doNothing() is default but shown for clarity</span>
+        <span class="fn">doNothing</span>().<span class="fn">when</span>(emailSvc).<span class="fn">sendReset</span>(anyString(), anyString());
+
+        userService.<span class="fn">resetPassword</span>(<span class="st">"user@mail.com"</span>);
+
+        <span class="cm">// Verify the reset email was sent exactly once</span>
+        verify(emailSvc, times(<span class="nm">1</span>)).<span class="fn">sendReset</span>(
+            eq(<span class="st">"user@mail.com"</span>), anyString()  <span class="cm">// any token</span>
+        );
+    }
+}</pre></div>
+  </div>
+
+  <!-- EXAMPLE 3 — Spy -->
+  <h3>Example 3 — @Spy (partial mocking — real code + override specific method)</h3>
+  <div class="callout tip">
+    <div class="icon">🔬</div>
+    <div>
+      <strong>Mock vs Spy</strong>
+      <p><strong>Mock</strong> — completely fake object. All methods return null/0/false by default unless you configure them with when().<br><strong>Spy</strong> — wraps a REAL object. Real methods execute unless you specifically override them. Use spy when you want to test a real class but mock only some of its methods.</p>
+    </div>
+  </div>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">PricingServiceTest.java</span></div><span class="code-lang">java</span></div>
+    <div class="code-body"><pre><span class="an">@ExtendWith</span>(<span class="cl">MockitoExtension</span>.<span class="kw">class</span>)
+<span class="kw">class</span> <span class="cl">PricingServiceTest</span> {
+
+    <span class="cm">// @Spy wraps the REAL PricingService instance</span>
+    <span class="an">@Spy</span>
+    <span class="cl">PricingService</span> pricingService = <span class="kw">new</span> <span class="cl">PricingService</span>();
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Real calculateBase runs, but applyTax is overridden"</span>)
+    <span class="kw">void</span> <span class="fn">spyTest</span>() {
+        <span class="cm">// Override ONLY the tax calculation (e.g. tax API is down)</span>
+        <span class="fn">doReturn</span>(<span class="nm">100.0</span>).<span class="fn">when</span>(pricingService).<span class="fn">applyTax</span>(anyDouble());
+
+        <span class="cm">// calculateFinalPrice calls: calculateBase() (REAL) + applyTax() (MOCKED)</span>
+        <span class="kw">double</span> finalPrice = pricingService.<span class="fn">calculateFinalPrice</span>(<span class="st">"PROD-1"</span>);
+
+        <span class="cm">// Real base calculation ran + our overridden tax = verifiable result</span>
+        assertEquals(<span class="nm">600.0</span>, finalPrice);  <span class="cm">// 500 base + 100 tax</span>
+
+        <span class="cm">// Verify real method was called</span>
+        verify(pricingService).<span class="fn">calculateBase</span>(<span class="st">"PROD-1"</span>);
+    }
+}</pre></div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="ex-tag">Exercise 3</span><span class="ex-title">Mock a NotificationService</span></div>
+    <div class="ex-body">
+      <p>Build tests for a <code class="il">RegistrationService</code> that depends on <code class="il">UserRepository</code> and <code class="il">NotificationService</code>. Test: (1) successful registration saves user and sends welcome notification, (2) duplicate email blocks registration and sends no notification, (3) repository throws RuntimeException, notification is not sent and error is propagated.</p>
+      <details><summary>View solution</summary><div class="sol">
+        <div class="code-wrap"><div class="code-body"><pre><span class="an">@ExtendWith</span>(<span class="cl">MockitoExtension</span>.<span class="kw">class</span>)
+<span class="kw">class</span> <span class="cl">RegistrationServiceTest</span> {
+    <span class="an">@Mock</span> <span class="cl">UserRepository</span>      repo;
+    <span class="an">@Mock</span> <span class="cl">NotificationService</span>  notifier;
+    <span class="an">@InjectMocks</span> <span class="cl">RegistrationService</span> svc;
+
+    <span class="an">@Test</span> <span class="kw">void</span> <span class="fn">successfulRegistration</span>() {
+        <span class="kw">var</span> user = <span class="kw">new</span> <span class="cl">User</span>(<span class="st">"alice@mail.com"</span>);
+        <span class="fn">when</span>(repo.<span class="fn">existsByEmail</span>(<span class="st">"alice@mail.com"</span>)).thenReturn(<span class="kw">false</span>);
+        <span class="fn">when</span>(repo.<span class="fn">save</span>(user)).thenReturn(user);
+
+        <span class="cl">RegistrationResult</span> r = svc.<span class="fn">register</span>(user);
+
+        assertTrue(r.<span class="fn">isSuccess</span>());
+        verify(repo).<span class="fn">save</span>(user);
+        verify(notifier).<span class="fn">sendWelcome</span>(<span class="st">"alice@mail.com"</span>);
+    }
+
+    <span class="an">@Test</span> <span class="kw">void</span> <span class="fn">duplicateEmailBlocked</span>() {
+        <span class="fn">when</span>(repo.<span class="fn">existsByEmail</span>(anyString())).thenReturn(<span class="kw">true</span>);
+
+        <span class="cl">RegistrationResult</span> r = svc.<span class="fn">register</span>(<span class="kw">new</span> <span class="cl">User</span>(<span class="st">"dup@mail.com"</span>));
+
+        assertFalse(r.<span class="fn">isSuccess</span>());
+        verify(notifier, never()).<span class="fn">sendWelcome</span>(anyString());
+        verify(repo, never()).<span class="fn">save</span>(any());
+    }
+
+    <span class="an">@Test</span> <span class="kw">void</span> <span class="fn">dbFailurePropagated</span>() {
+        <span class="fn">when</span>(repo.<span class="fn">existsByEmail</span>(anyString())).thenReturn(<span class="kw">false</span>);
+        <span class="fn">when</span>(repo.<span class="fn">save</span>(any()))
+            .<span class="fn">thenThrow</span>(<span class="kw">new</span> <span class="cl">RuntimeException</span>(<span class="st">"DB down"</span>));
+
+        assertThrows(<span class="cl">RuntimeException</span>.<span class="kw">class</span>,
+            () -> svc.<span class="fn">register</span>(<span class="kw">new</span> <span class="cl">User</span>(<span class="st">"b@mail.com"</span>)));
+        verify(notifier, never()).<span class="fn">sendWelcome</span>(anyString());
+    }
+}</pre></div></div>
+      </div></details>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 5 — JACOCO
+═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch5">
+<div class="wrap">
+  <div class="ch-eyebrow" style="color:var(--purple)">Chapter 5</div>
+  <div class="ch-num">05</div>
+  <h2 class="ch-title">JaCoCo — Code Coverage Reports</h2>
+  <p class="ch-lead">JaCoCo instruments your code while tests run and generates a colour-coded HTML report showing which lines were exercised and which were completely missed.</p>
+
+  <h3>How JaCoCo works</h3>
+  <div class="steps">
+    <div class="step"><p><strong>Prepare Agent:</strong> JaCoCo attaches a Java agent that instruments every .class file before test execution begins.</p></div>
+    <div class="step"><p><strong>Tests Run:</strong> Your JUnit tests execute. The agent records every line, branch, and method that is touched.</p></div>
+    <div class="step"><p><strong>Report Generated:</strong> After tests finish, JaCoCo writes the collected data to <code class="il">target/jacoco.exec</code> and generates an HTML report at <code class="il">target/site/jacoco/index.html</code>.</p></div>
+    <div class="step"><p><strong>Coverage Check:</strong> If you have a minimum coverage rule (e.g., 80%), the build fails automatically if coverage falls below it.</p></div>
+  </div>
+
+  <h3>Coverage types explained</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Type</th><th>What it measures</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Line coverage</strong></td><td>Percentage of code lines executed at least once</td><td>85 of 100 lines executed = 85%</td></tr>
+      <tr><td><strong>Branch coverage</strong></td><td>Percentage of if/else/switch branches taken</td><td>if/else: test both branches = 100%, only if = 50%</td></tr>
+      <tr><td><strong>Method coverage</strong></td><td>Percentage of methods called at least once</td><td>10 of 12 methods called = 83%</td></tr>
+      <tr><td><strong>Class coverage</strong></td><td>Percentage of classes with any method tested</td><td>All 8 classes touched = 100%</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Reading the HTML report</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">What the colours mean in target/site/jacoco/index.html</span></div></div>
+    <div class="code-body"><pre><span class="fn">GREEN  background</span>  = Line was fully executed during tests — tested
+<span class="red">RED    background</span>  = Line was NEVER executed — completely untested
+<span class="an">YELLOW background</span>  = Branch partially covered
+                     e.g. the "if" ran but "else" never ran
+
+<span class="cm">// Example source view in JaCoCo report:</span>
+
+<span class="kw">public double</span> <span class="fn">calculateShipping</span>(<span class="kw">double</span> weight, <span class="cl">String</span> zone) {
+    <span class="fn">if</span> (weight > <span class="nm">10</span>) {              <span class="cm">// ← GREEN (tested)</span>
+        <span class="kw">if</span> (<span class="st">"EXPRESS"</span>.<span class="fn">equals</span>(zone)) {  <span class="cm">// ← YELLOW (only one branch)</span>
+            <span class="kw">return</span> weight * <span class="nm">80</span>;        <span class="cm">// ← GREEN</span>
+        } <span class="kw">else</span> {
+            <span class="kw">return</span> weight * <span class="nm">40</span>;        <span class="cm">// ← RED (never tested!)</span>
+        }
+    }
+    <span class="kw">return</span> weight * <span class="nm">20</span>;              <span class="cm">// ← RED (weight &lt;= 10 never tested)</span>
+}</pre></div>
+  </div>
+
+  <h3>Example — Low coverage scenario and how to fix it</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">InsurancePremiumCalculator.java</span></div><span class="code-lang">java</span></div>
+    <div class="code-body"><pre><span class="kw">public class</span> <span class="cl">InsurancePremiumCalculator</span> {
+
+    <span class="kw">public double</span> <span class="fn">calculateMonthlyPremium</span>(
+            <span class="kw">int</span> age, <span class="kw">boolean</span> isSmoker, <span class="kw">boolean</span> hasCondition) {
+
+        <span class="kw">double</span> base = <span class="nm">500.0</span>;
+
+        <span class="cm">// Age bracket</span>
+        <span class="kw">if</span> (age < <span class="nm">30</span>)          { base *= <span class="nm">1.0</span>; }
+        <span class="kw">else if</span> (age < <span class="nm">50</span>)     { base *= <span class="nm">1.5</span>; }
+        <span class="kw">else</span>                   { base *= <span class="nm">2.5</span>; }
+
+        <span class="cm">// Smoker surcharge</span>
+        <span class="kw">if</span> (isSmoker)          { base += <span class="nm">200</span>; }
+
+        <span class="cm">// Pre-existing condition</span>
+        <span class="kw">if</span> (hasCondition)      { base += <span class="nm">300</span>; }
+
+        <span class="kw">return</span> base;
+    }
+}</pre></div>
+  </div>
+
+  <div class="compare">
+    <div class="cmp-box bad">
+      <div class="cmp-head">Only 1 test — 40% coverage</div>
+      <div style="padding:0;">
+        <div class="code-wrap" style="margin:0;border:none;border-radius:0;">
+          <div class="code-body"><pre><span class="an">@Test</span>
+<span class="kw">void</span> <span class="fn">onlyOneScenario</span>() {
+    <span class="kw">var</span> calc = <span class="kw">new</span> <span class="cl">InsurancePremiumCalculator</span>();
+    <span class="cm">// Tests only: age&lt;30, non-smoker, no condition</span>
+    assertEquals(<span class="nm">500.0</span>, calc.<span class="fn">calculateMonthlyPremium</span>(
+        <span class="nm">25</span>, <span class="kw">false</span>, <span class="kw">false</span>));
+}
+<span class="cm">// age 30-50 bracket: RED
+// age 50+ bracket: RED
+// isSmoker=true: RED
+// hasCondition=true: RED</span></pre></div>
+        </div>
+      </div>
+    </div>
+    <div class="cmp-box ok">
+      <div class="cmp-head">Full tests — 100% coverage</div>
+      <div style="padding:0;">
+        <div class="code-wrap" style="margin:0;border:none;border-radius:0;">
+          <div class="code-body"><pre><span class="an">@ParameterizedTest</span>
+<span class="an">@CsvSource</span>({
+  <span class="st">"25, false, false, 500.0"</span>,  <span class="cm">// age&lt;30</span>
+  <span class="st">"35, false, false, 750.0"</span>,  <span class="cm">// age 30-50</span>
+  <span class="st">"55, false, false, 1250.0"</span>, <span class="cm">// age 50+</span>
+  <span class="st">"25, true,  false, 700.0"</span>,  <span class="cm">// smoker</span>
+  <span class="st">"25, false, true,  800.0"</span>,  <span class="cm">// condition</span>
+  <span class="st">"55, true,  true,  1750.0"</span>  <span class="cm">// all risks</span>
+})
+<span class="kw">void</span> <span class="fn">allScenarios</span>(<span class="kw">int</span> age, <span class="kw">boolean</span> smk,
+    <span class="kw">boolean</span> cond, <span class="kw">double</span> expected) {
+  assertEquals(expected, calc
+      .<span class="fn">calculateMonthlyPremium</span>(age, smk, cond));
+}
+<span class="cm">// All lines GREEN — 100% coverage</span></pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Setting the minimum coverage threshold</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">pom.xml — JaCoCo check configuration</span></div><span class="code-lang">xml</span></div>
+    <div class="code-body"><pre><span class="cm">&lt;!-- Fail build if LINE coverage drops below 80% --&gt;</span>
+<span class="op">&lt;execution&gt;</span>
+  <span class="op">&lt;id&gt;</span>check<span class="op">&lt;/id&gt;</span>
+  <span class="op">&lt;goals&gt;&lt;goal&gt;</span>check<span class="op">&lt;/goal&gt;&lt;/goals&gt;</span>
+  <span class="op">&lt;configuration&gt;</span>
+    <span class="op">&lt;rules&gt;&lt;rule&gt;</span>
+      <span class="op">&lt;element&gt;</span>BUNDLE<span class="op">&lt;/element&gt;</span>
+      <span class="op">&lt;limits&gt;</span>
+        <span class="op">&lt;limit&gt;</span>
+          <span class="op">&lt;counter&gt;</span>LINE<span class="op">&lt;/counter&gt;</span>
+          <span class="op">&lt;value&gt;</span>COVEREDRATIO<span class="op">&lt;/value&gt;</span>
+          <span class="op">&lt;minimum&gt;</span>0.80<span class="op">&lt;/minimum&gt;</span>  <span class="cm">&lt;!-- 80% --&gt;</span>
+        <span class="op">&lt;/limit&gt;</span>
+        <span class="op">&lt;limit&gt;</span>
+          <span class="op">&lt;counter&gt;</span>BRANCH<span class="op">&lt;/counter&gt;</span>
+          <span class="op">&lt;value&gt;</span>COVEREDRATIO<span class="op">&lt;/value&gt;</span>
+          <span class="op">&lt;minimum&gt;</span>0.70<span class="op">&lt;/minimum&gt;</span>  <span class="cm">&lt;!-- 70% branch --&gt;</span>
+        <span class="op">&lt;/limit&gt;</span>
+      <span class="op">&lt;/limits&gt;</span>
+    <span class="op">&lt;/rule&gt;&lt;/rules&gt;</span>
+  <span class="op">&lt;/configuration&gt;</span>
+<span class="op">&lt;/execution&gt;</span></pre></div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="ex-tag">Exercise 4</span><span class="ex-title">Identify missing test cases for 100% branch coverage</span></div>
+    <div class="ex-body">
+      <p>Given this method and just one test <code class="il">calculateTax(50000, "INDIA")</code>, which additional tests are needed for 100% branch coverage?</p>
+      <div class="code-wrap"><div class="code-body"><pre><span class="kw">public double</span> <span class="fn">calculateTax</span>(<span class="kw">double</span> income, <span class="cl">String</span> country) {
+    <span class="kw">if</span> (<span class="st">"INDIA"</span>.<span class="fn">equals</span>(country)) {
+        <span class="kw">if</span> (income > <span class="nm">1000000</span>) <span class="kw">return</span> income * <span class="nm">0.30</span>;
+        <span class="kw">if</span> (income > <span class="nm">500000</span>)  <span class="kw">return</span> income * <span class="nm">0.20</span>;
+        <span class="kw">return</span> income * <span class="nm">0.05</span>;
+    } <span class="kw">else if</span> (<span class="st">"UK"</span>.<span class="fn">equals</span>(country)) {
+        <span class="kw">return</span> income * <span class="nm">0.20</span>;
+    } <span class="kw">else</span> {
+        <span class="kw">throw new</span> <span class="cl">IllegalArgumentException</span>(<span class="st">"Unsupported country"</span>);
+    }
+}</pre></div></div>
+      <details><summary>View solution</summary><div class="sol">
+        <p>The existing test covers: INDIA + income between 0–500000. Missing branches:</p>
+        <p><strong>Test 2:</strong> <code class="il">calculateTax(600000, "INDIA")</code> — covers 500k–1M bracket (20%)</p>
+        <p><strong>Test 3:</strong> <code class="il">calculateTax(2000000, "INDIA")</code> — covers over 1M bracket (30%)</p>
+        <p><strong>Test 4:</strong> <code class="il">calculateTax(50000, "UK")</code> — covers UK branch</p>
+        <p><strong>Test 5:</strong> <code class="il">assertThrows(..., () -> calculateTax(50000, "MARS"))</code> — covers unsupported country exception</p>
+        <p>5 tests = 100% branch coverage on this method.</p>
+      </div></details>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 6 — SPOTBUGS
+═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch6">
+<div class="wrap">
+  <div class="ch-eyebrow" style="color:var(--amber)">Chapter 6</div>
+  <div class="ch-num">06</div>
+  <h2 class="ch-title">SpotBugs — Finding Real Bugs at Build Time</h2>
+  <p class="ch-lead">SpotBugs analyses your compiled .class files (bytecode) for real bugs — null pointers, wrong comparisons, resource leaks, security holes — and reports them before your tests even run.</p>
+
+  <h3>Why bytecode analysis beats source analysis</h3>
+  <p>PMD and Checkstyle read source code text. SpotBugs reads bytecode, which means it understands how Java actually executes at runtime. Some bugs are invisible at the source level but obvious in bytecode — like Integer comparison using <code class="il">==</code> that looks correct but fails for values above 127 due to Java's Integer cache.</p>
+
+  <h3>Bug categories SpotBugs catches</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Category</th><th>Examples</th><th>Severity</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge blue">Correctness</span></td><td>Null dereference, == on objects, infinite loop, wrong String comparison</td><td>High</td></tr>
+      <tr><td><span class="badge red">Security</span></td><td>SQL injection, hardcoded passwords, exposed sensitive data</td><td>Critical</td></tr>
+      <tr><td><span class="badge amber">Bad practice</span></td><td>Empty catch blocks, finalizer ignores exception, clone does not call super</td><td>Medium</td></tr>
+      <tr><td><span class="badge purple">Performance</span></td><td>Boxing primitive for comparison, string concatenation in loop</td><td>Low</td></tr>
+      <tr><td><span class="badge green">MT Safety</span></td><td>Unsynchronised access to shared field, lock ordering issues</td><td>High</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Example 1 — Four common SpotBugs patterns</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">BuggyOrderService.java — SpotBugs finds all of these</span></div><span class="code-lang">java</span></div>
+    <div class="code-body"><pre><span class="kw">public class</span> <span class="cl">BuggyOrderService</span> {
+
+    <span class="cm">// ─── BUG 1: Null dereference ──────────────────────</span>
+    <span class="cm">// SpotBugs: NP_NULL_ON_SOME_PATH</span>
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">getCustomerName</span>(<span class="cl">Long</span> orderId) {
+        <span class="cl">Order</span> order = orderRepo.<span class="fn">findById</span>(orderId);
+        <span class="kw">return</span> order.<span class="fn">getCustomer</span>().<span class="fn">getName</span>();
+        <span class="cm">// findById can return null — crash guaranteed when order not found</span>
+    }
+
+    <span class="cm">// ─── BUG 2: Integer comparison with == ────────────</span>
+    <span class="cm">// SpotBugs: RC_REF_COMPARISON_BAD_PRACTICE</span>
+    <span class="kw">public boolean</span> <span class="fn">isSameQuantity</span>(<span class="cl">Integer</span> a, <span class="cl">Integer</span> b) {
+        <span class="kw">return</span> a == b;
+        <span class="cm">// Works for -128 to 127 (cache range), FAILS for 128+</span>
+        <span class="cm">// Example: isSameQuantity(200, 200) returns FALSE!</span>
+    }
+
+    <span class="cm">// ─── BUG 3: Resource leak ─────────────────────────</span>
+    <span class="cm">// SpotBugs: OBL_UNSATISFIED_OBLIGATION</span>
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">readFile</span>(<span class="cl">String</span> path) <span class="kw">throws</span> <span class="cl">IOException</span> {
+        <span class="cl">FileReader</span> reader = <span class="kw">new</span> <span class="cl">FileReader</span>(path);
+        <span class="kw">return new</span> <span class="cl">BufferedReader</span>(reader).<span class="fn">readLine</span>();
+        <span class="cm">// reader is never closed — file handle leak!</span>
+        <span class="cm">// On Windows this prevents the file from being deleted/moved</span>
+    }
+
+    <span class="cm">// ─── BUG 4: SQL injection ─────────────────────────</span>
+    <span class="cm">// SpotBugs: SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE</span>
+    <span class="kw">public</span> <span class="cl">List</span>&lt;<span class="cl">Order</span>&gt; <span class="fn">searchOrders</span>(<span class="cl">String</span> customerName) {
+        <span class="cl">String</span> sql = <span class="st">"SELECT * FROM orders WHERE customer = '"</span>
+                   + customerName + <span class="st">"'"</span>;
+        <span class="kw">return</span> jdbcTemplate.<span class="fn">query</span>(sql);
+        <span class="cm">// customerName = "'; DROP TABLE orders; --" ← SQL injection!</span>
+    }
+}</pre></div>
+  </div>
+
+  <h3>Example 2 — Fixed versions of every bug above</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">FixedOrderService.java</span></div><span class="code-lang">java</span></div>
+    <div class="code-body"><pre><span class="kw">public class</span> <span class="cl">FixedOrderService</span> {
+
+    <span class="cm">// ─── FIX 1: Null dereference → Optional chain ─────</span>
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">getCustomerName</span>(<span class="cl">Long</span> orderId) {
+        <span class="kw">return</span> <span class="cl">Optional</span>.<span class="fn">ofNullable</span>(orderRepo.<span class="fn">findById</span>(orderId))
+            .<span class="fn">map</span>(<span class="cl">Order</span>::getCustomer)
+            .<span class="fn">map</span>(<span class="cl">Customer</span>::getName)
+            .<span class="fn">orElse</span>(<span class="st">"Unknown"</span>);
+    }
+
+    <span class="cm">// ─── FIX 2: Use Objects.equals() ─────────────────</span>
+    <span class="kw">public boolean</span> <span class="fn">isSameQuantity</span>(<span class="cl">Integer</span> a, <span class="cl">Integer</span> b) {
+        <span class="kw">return</span> <span class="cl">Objects</span>.<span class="fn">equals</span>(a, b);
+        <span class="cm">// Works correctly for ALL values, null-safe</span>
+    }
+
+    <span class="cm">// ─── FIX 3: try-with-resources (auto-closes) ──────</span>
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">readFile</span>(<span class="cl">String</span> path) <span class="kw">throws</span> <span class="cl">IOException</span> {
+        <span class="kw">try</span> (<span class="kw">var</span> reader = <span class="kw">new</span> <span class="cl">BufferedReader</span>(<span class="kw">new</span> <span class="cl">FileReader</span>(path))) {
+            <span class="kw">return</span> reader.<span class="fn">readLine</span>();
+        }
+        <span class="cm">// Reader closed automatically — even if exception thrown</span>
+    }
+
+    <span class="cm">// ─── FIX 4: Parameterized query ───────────────────</span>
+    <span class="kw">public</span> <span class="cl">List</span>&lt;<span class="cl">Order</span>&gt; <span class="fn">searchOrders</span>(<span class="cl">String</span> customerName) {
+        <span class="cl">String</span> sql = <span class="st">"SELECT * FROM orders WHERE customer = ?"</span>;
+        <span class="kw">return</span> jdbcTemplate.<span class="fn">query</span>(sql, customerName);
+        <span class="cm">// ? is a bind parameter — injection impossible</span>
+    }
+}</pre></div>
+  </div>
+
+  <h3>Example 3 — Expose mutable object (defensive copy)</h3>
+  <div class="compare">
+    <div class="cmp-box bad">
+      <div class="cmp-head">EI_EXPOSE_REP — Exposes mutable internal field</div>
+      <div style="padding:0;">
+        <div class="code-wrap" style="margin:0;border:none;border-radius:0;"><div class="code-body"><pre><span class="kw">public class</span> <span class="cl">Report</span> {
+    <span class="kw">private</span> <span class="cl">Date</span> createdAt;
+    <span class="kw">private</span> <span class="cl">List</span>&lt;<span class="cl">String</span>&gt; items;
+
+    <span class="cm">// SpotBugs flags this:</span>
+    <span class="kw">public</span> <span class="cl">Date</span> <span class="fn">getCreatedAt</span>() {
+        <span class="kw">return</span> createdAt; <span class="cm">// caller can modify!</span>
+    }
+    <span class="kw">public</span> <span class="cl">List</span>&lt;<span class="cl">String</span>&gt; <span class="fn">getItems</span>() {
+        <span class="kw">return</span> items; <span class="cm">// caller can add/remove!</span>
+    }
+}</pre></div></div>
+      </div>
+    </div>
+    <div class="cmp-box ok">
+      <div class="cmp-head">Fixed — defensive copies</div>
+      <div style="padding:0;">
+        <div class="code-wrap" style="margin:0;border:none;border-radius:0;"><div class="code-body"><pre><span class="kw">public class</span> <span class="cl">Report</span> {
+    <span class="kw">private</span> <span class="cl">Date</span> createdAt;
+    <span class="kw">private</span> <span class="cl">List</span>&lt;<span class="cl">String</span>&gt; items;
+
+    <span class="cm">// Return copy — caller cannot change internal state</span>
+    <span class="kw">public</span> <span class="cl">Date</span> <span class="fn">getCreatedAt</span>() {
+        <span class="kw">return new</span> <span class="cl">Date</span>(createdAt.<span class="fn">getTime</span>());
+    }
+    <span class="kw">public</span> <span class="cl">List</span>&lt;<span class="cl">String</span>&gt; <span class="fn">getItems</span>() {
+        <span class="kw">return</span> <span class="cl">Collections</span>.<span class="fn">unmodifiableList</span>(items);
+    }
+    <span class="cm">// Better yet: use LocalDate (immutable) instead of Date</span>
+}</pre></div></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>SpotBugs GUI — visual bug browser</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">Terminal</span></div></div>
+    <div class="code-body"><pre>mvn compile spotbugs:gui
+
+<span class="cm"># Opens a desktop GUI showing:
+# - List of all bugs grouped by category
+# - Source code snippet with the bug highlighted
+# - Description of the bug pattern
+# - Suggested fix
+#
+# Click each bug to see exactly which line has the issue</span></pre></div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="ex-tag">Exercise 5</span><span class="ex-title">Identify and fix SpotBugs patterns</span></div>
+    <div class="ex-body">
+      <p>For each code snippet, name the SpotBugs bug pattern and write the fix:</p>
+      <p><strong>Snippet A:</strong> <code class="il">if (status == "ACTIVE") { ... }</code></p>
+      <p><strong>Snippet B:</strong> <code class="il">catch (IOException e) { /* ignore */ }</code></p>
+      <p><strong>Snippet C:</strong></p>
+      <div class="code-wrap"><div class="code-body"><pre><span class="kw">private static</span> <span class="kw">int</span> counter = <span class="nm">0</span>;
+<span class="kw">public void</span> <span class="fn">increment</span>() { counter++; }  <span class="cm">// used by multiple threads</span></pre></div></div>
+      <details><summary>View solution</summary><div class="sol">
+        <p><strong>Snippet A — ES_COMPARING_STRINGS_WITH_EQ:</strong> Comparing String with == tests reference equality, not value equality. Fix: <code class="il">if ("ACTIVE".equals(status)) { ... }</code></p>
+        <p><strong>Snippet B — DE_MIGHT_IGNORE:</strong> Swallowing exception silently hides errors. Fix:</p>
+        <div class="code-wrap"><div class="code-body"><pre><span class="kw">catch</span> (<span class="cl">IOException</span> e) {
+    log.<span class="fn">error</span>(<span class="st">"Operation failed: {}"</span>, e.<span class="fn">getMessage</span>(), e);
+    <span class="kw">throw new</span> <span class="cl">ServiceException</span>(<span class="st">"IO operation failed"</span>, e);
+}</pre></div></div>
+        <p><strong>Snippet C — IS2_INCONSISTENT_SYNC:</strong> Non-atomic <code class="il">counter++</code> on a shared field in a multi-threaded environment. Fix: use <code class="il">AtomicInteger</code> or <code class="il">synchronized</code>:</p>
+        <div class="code-wrap"><div class="code-body"><pre><span class="kw">private static final</span> <span class="cl">AtomicInteger</span> counter = <span class="kw">new</span> <span class="cl">AtomicInteger</span>(<span class="nm">0</span>);
+<span class="kw">public void</span> <span class="fn">increment</span>() { counter.<span class="fn">incrementAndGet</span>(); }</pre></div></div>
+      </div></details>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 7 — ALL TOGETHER
+═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch7">
+<div class="wrap">
+  <div class="ch-eyebrow" style="color:var(--teal)">Chapter 7</div>
+  <div class="ch-num">07</div>
+  <h2 class="ch-title">Complete Working Example — All Four Tools Together</h2>
+  <p class="ch-lead">A full end-to-end example: a real service class with production code, comprehensive JUnit + Mockito tests, JaCoCo coverage verification, and SpotBugs-clean implementation.</p>
+
+  <h3>The production class</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">LoanEligibilityService.java</span></div><span class="code-lang">java</span></div>
+    <div class="code-body"><pre><span class="an">@Service</span>
+<span class="an">@RequiredArgsConstructor</span>
+<span class="kw">public class</span> <span class="cl">LoanEligibilityService</span> {
+
+    <span class="kw">private final</span> <span class="cl">CustomerRepository</span>  customerRepo;
+    <span class="kw">private final</span> <span class="cl">CreditScoreService</span>   creditService;
+    <span class="kw">private final</span> <span class="cl">LoanPolicyService</span>     policyService;
+    <span class="kw">private final</span> <span class="cl">AuditLogger</span>           auditLogger;
+
+    <span class="kw">public</span> <span class="cl">EligibilityResult</span> <span class="fn">checkEligibility</span>(<span class="cl">String</span> customerId,
+                                               <span class="kw">double</span> loanAmount) {
+        <span class="cm">// 1. Load customer (SpotBugs-safe: Optional.ofNullable)</span>
+        <span class="cl">Customer</span> customer = <span class="cl">Optional</span>
+            .<span class="fn">ofNullable</span>(customerRepo.<span class="fn">findById</span>(customerId))
+            .<span class="fn">orElseThrow</span>(() -> <span class="kw">new</span> <span class="cl">CustomerNotFoundException</span>(customerId));
+
+        <span class="cm">// 2. Get credit score</span>
+        <span class="kw">int</span> creditScore = creditService.<span class="fn">getScore</span>(customerId);
+
+        <span class="cm">// 3. Check policy limits</span>
+        <span class="kw">double</span> maxLoan = policyService.<span class="fn">getMaxLoanAmount</span>(creditScore);
+
+        <span class="cm">// 4. Apply eligibility rules</span>
+        <span class="kw">if</span> (creditScore < <span class="nm">600</span>) {
+            auditLogger.<span class="fn">log</span>(customerId, <span class="st">"REJECTED: Low credit score"</span>);
+            <span class="kw">return</span> <span class="cl">EligibilityResult</span>.<span class="fn">rejected</span>(<span class="st">"Credit score below minimum"</span>);
+        }
+
+        <span class="kw">if</span> (loanAmount > maxLoan) {
+            auditLogger.<span class="fn">log</span>(customerId, <span class="st">"REJECTED: Exceeds max loan"</span>);
+            <span class="kw">return</span> <span class="cl">EligibilityResult</span>.<span class="fn">rejected</span>(
+                <span class="st">"Loan amount exceeds maximum of "</span> + maxLoan);
+        }
+
+        <span class="kw">if</span> (loanAmount > customer.<span class="fn">getAnnualIncome</span>() * <span class="nm">10</span>) {
+            auditLogger.<span class="fn">log</span>(customerId, <span class="st">"REJECTED: Income ratio exceeded"</span>);
+            <span class="kw">return</span> <span class="cl">EligibilityResult</span>.<span class="fn">rejected</span>(<span class="st">"Loan exceeds 10x annual income"</span>);
+        }
+
+        auditLogger.<span class="fn">log</span>(customerId, <span class="st">"APPROVED: loan="</span> + loanAmount);
+        <span class="kw">return</span> <span class="cl">EligibilityResult</span>.<span class="fn">approved</span>(loanAmount, creditScore);
+    }
+}</pre></div>
+  </div>
+
+  <h3>Complete test class — JUnit + Mockito</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">LoanEligibilityServiceTest.java — full coverage</span></div><span class="code-lang">java</span></div>
+    <div class="code-body"><pre><span class="an">@ExtendWith</span>(<span class="cl">MockitoExtension</span>.<span class="kw">class</span>)
+<span class="an">@DisplayName</span>(<span class="st">"LoanEligibilityService Tests"</span>)
+<span class="kw">class</span> <span class="cl">LoanEligibilityServiceTest</span> {
+
+    <span class="an">@Mock</span> <span class="cl">CustomerRepository</span>  customerRepo;
+    <span class="an">@Mock</span> <span class="cl">CreditScoreService</span>   creditService;
+    <span class="an">@Mock</span> <span class="cl">LoanPolicyService</span>     policyService;
+    <span class="an">@Mock</span> <span class="cl">AuditLogger</span>           auditLogger;
+
+    <span class="an">@InjectMocks</span>
+    <span class="cl">LoanEligibilityService</span> service;
+
+    <span class="cm">// Shared test data</span>
+    <span class="kw">private</span> <span class="cl">Customer</span> goodCustomer;
+
+    <span class="an">@BeforeEach</span>
+    <span class="kw">void</span> <span class="fn">setUp</span>() {
+        goodCustomer = <span class="cl">Customer</span>.<span class="fn">builder</span>()
+            .id(<span class="st">"C001"</span>).name(<span class="st">"Alice"</span>).annualIncome(<span class="nm">600000</span>)
+            .<span class="fn">build</span>();
+    }
+
+    <span class="cm">// ── HAPPY PATH ─────────────────────────────────────</span>
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Approved: good credit, valid amount, within income ratio"</span>)
+    <span class="kw">void</span> <span class="fn">loanApproved</span>() {
+        <span class="fn">when</span>(customerRepo.<span class="fn">findById</span>(<span class="st">"C001"</span>)).thenReturn(goodCustomer);
+        <span class="fn">when</span>(creditService.<span class="fn">getScore</span>(<span class="st">"C001"</span>)).thenReturn(<span class="nm">750</span>);
+        <span class="fn">when</span>(policyService.<span class="fn">getMaxLoanAmount</span>(<span class="nm">750</span>)).thenReturn(<span class="nm">5000000.0</span>);
+
+        <span class="cl">EligibilityResult</span> result = service.<span class="fn">checkEligibility</span>(<span class="st">"C001"</span>, <span class="nm">2000000</span>);
+
+        assertTrue(result.<span class="fn">isApproved</span>());
+        assertEquals(<span class="nm">2000000</span>, result.<span class="fn">getApprovedAmount</span>());
+        assertEquals(<span class="nm">750</span>, result.<span class="fn">getCreditScore</span>());
+        verify(auditLogger).<span class="fn">log</span>(eq(<span class="st">"C001"</span>), contains(<span class="st">"APPROVED"</span>));
+    }
+
+    <span class="cm">// ── REJECTION CASES ────────────────────────────────</span>
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Rejected: credit score below 600"</span>)
+    <span class="kw">void</span> <span class="fn">rejectedLowCreditScore</span>() {
+        <span class="fn">when</span>(customerRepo.<span class="fn">findById</span>(<span class="st">"C001"</span>)).thenReturn(goodCustomer);
+        <span class="fn">when</span>(creditService.<span class="fn">getScore</span>(<span class="st">"C001"</span>)).thenReturn(<span class="nm">550</span>);  <span class="cm">// below 600</span>
+
+        <span class="cl">EligibilityResult</span> result = service.<span class="fn">checkEligibility</span>(<span class="st">"C001"</span>, <span class="nm">500000</span>);
+
+        assertFalse(result.<span class="fn">isApproved</span>());
+        assertEquals(<span class="st">"Credit score below minimum"</span>, result.<span class="fn">getReason</span>());
+        verify(policyService, never()).<span class="fn">getMaxLoanAmount</span>(anyInt());
+        verify(auditLogger).<span class="fn">log</span>(eq(<span class="st">"C001"</span>), contains(<span class="st">"REJECTED"</span>));
+    }
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Rejected: amount exceeds policy maximum"</span>)
+    <span class="kw">void</span> <span class="fn">rejectedExceedsMaxLoan</span>() {
+        <span class="fn">when</span>(customerRepo.<span class="fn">findById</span>(<span class="st">"C001"</span>)).thenReturn(goodCustomer);
+        <span class="fn">when</span>(creditService.<span class="fn">getScore</span>(<span class="st">"C001"</span>)).thenReturn(<span class="nm">700</span>);
+        <span class="fn">when</span>(policyService.<span class="fn">getMaxLoanAmount</span>(<span class="nm">700</span>)).thenReturn(<span class="nm">1000000.0</span>);
+
+        <span class="cl">EligibilityResult</span> result = service.<span class="fn">checkEligibility</span>(<span class="st">"C001"</span>, <span class="nm">2000000</span>);
+
+        assertFalse(result.<span class="fn">isApproved</span>());
+        assertTrue(result.<span class="fn">getReason</span>().<span class="fn">contains</span>(<span class="st">"exceeds maximum"</span>));
+    }
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Rejected: loan amount exceeds 10x annual income"</span>)
+    <span class="kw">void</span> <span class="fn">rejectedIncomeRatio</span>() {
+        <span class="fn">when</span>(customerRepo.<span class="fn">findById</span>(<span class="st">"C001"</span>)).thenReturn(goodCustomer);
+        <span class="fn">when</span>(creditService.<span class="fn">getScore</span>(<span class="st">"C001"</span>)).thenReturn(<span class="nm">700</span>);
+        <span class="fn">when</span>(policyService.<span class="fn">getMaxLoanAmount</span>(<span class="nm">700</span>)).thenReturn(<span class="nm">100000000.0</span>);
+
+        <span class="cm">// goodCustomer income = 600000, so 10x = 6000000. Request = 8000000</span>
+        <span class="cl">EligibilityResult</span> result = service.<span class="fn">checkEligibility</span>(<span class="st">"C001"</span>, <span class="nm">8000000</span>);
+
+        assertFalse(result.<span class="fn">isApproved</span>());
+        assertEquals(<span class="st">"Loan exceeds 10x annual income"</span>, result.<span class="fn">getReason</span>());
+    }
+
+    <span class="cm">// ── ERROR CASES ────────────────────────────────────</span>
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Customer not found throws CustomerNotFoundException"</span>)
+    <span class="kw">void</span> <span class="fn">customerNotFound</span>() {
+        <span class="fn">when</span>(customerRepo.<span class="fn">findById</span>(<span class="st">"GHOST"</span>)).thenReturn(<span class="kw">null</span>);
+
+        assertThrows(<span class="cl">CustomerNotFoundException</span>.<span class="kw">class</span>,
+            () -> service.<span class="fn">checkEligibility</span>(<span class="st">"GHOST"</span>, <span class="nm">500000</span>));
+        verify(creditService, never()).<span class="fn">getScore</span>(anyString());
+    }
+
+    <span class="an">@Test</span>
+    <span class="an">@DisplayName</span>(<span class="st">"Credit service unavailable throws and logs error"</span>)
+    <span class="kw">void</span> <span class="fn">creditServiceUnavailable</span>() {
+        <span class="fn">when</span>(customerRepo.<span class="fn">findById</span>(<span class="st">"C001"</span>)).thenReturn(goodCustomer);
+        <span class="fn">when</span>(creditService.<span class="fn">getScore</span>(<span class="st">"C001"</span>))
+            .<span class="fn">thenThrow</span>(<span class="kw">new</span> <span class="cl">ServiceUnavailableException</span>(<span class="st">"Credit API down"</span>));
+
+        assertThrows(<span class="cl">ServiceUnavailableException</span>.<span class="kw">class</span>,
+            () -> service.<span class="fn">checkEligibility</span>(<span class="st">"C001"</span>, <span class="nm">500000</span>));
+    }
+
+    <span class="cm">// ── BOUNDARY TEST ─────────────────────────────────</span>
+    <span class="an">@ParameterizedTest</span>
+    <span class="an">@CsvSource</span>({
+        <span class="st">"599, false"</span>,   <span class="cm">// just below threshold</span>
+        <span class="st">"600, true"</span>,    <span class="cm">// exactly at threshold</span>
+        <span class="st">"601, true"</span>     <span class="cm">// just above threshold</span>
+    })
+    <span class="an">@DisplayName</span>(<span class="st">"Credit score boundary — exactly 600 should be approved"</span>)
+    <span class="kw">void</span> <span class="fn">creditScoreBoundary</span>(<span class="kw">int</span> score, <span class="kw">boolean</span> expectedApproval) {
+        <span class="fn">when</span>(customerRepo.<span class="fn">findById</span>(anyString())).thenReturn(goodCustomer);
+        <span class="fn">when</span>(creditService.<span class="fn">getScore</span>(anyString())).thenReturn(score);
+        <span class="fn">when</span>(policyService.<span class="fn">getMaxLoanAmount</span>(anyInt())).thenReturn(<span class="nm">5000000.0</span>);
+
+        <span class="cl">EligibilityResult</span> result = service.<span class="fn">checkEligibility</span>(<span class="st">"C001"</span>, <span class="nm">100000</span>);
+
+        assertEquals(expectedApproval, result.<span class="fn">isApproved</span>());
+    }
+}</pre></div>
+  </div>
+
+  <h3>What JaCoCo shows after running these tests</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><div class="code-bar-left"><div class="code-dots"><div class="code-dot cd-r"></div><div class="code-dot cd-y"></div><div class="code-dot cd-g"></div></div><span class="code-file">Terminal — mvn test → check target/site/jacoco/index.html</span></div></div>
+    <div class="code-body"><pre>  Class                       Lines    Branches  Methods
+  LoanEligibilityService      100%     100%      100%
+  <span class="cm">  All 4 rejection branches tested
+  All 3 approval conditions tested
+  Error paths tested (NPE, service down)
+  Boundary conditions tested (score=599, 600, 601)
+  Zero uncovered lines</span>
+
+  BUILD SUCCESS — Coverage check PASSED (100% > 80% threshold)</pre></div>
+  </div>
+
+  <h3>Quick reference: running in IntelliJ IDEA</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Action</th><th>How to do it in IntelliJ</th></tr></thead>
+    <tbody>
+      <tr><td>Run all tests</td><td>Right-click project root → Run All Tests, or <code class="il">Ctrl+Shift+F10</code></td></tr>
+      <tr><td>Run one test file</td><td>Right-click the test file → Run, or green play button in gutter</td></tr>
+      <tr><td>Run with coverage</td><td>Right-click → Run with Coverage (shows % in IDE)</td></tr>
+      <tr><td>Run Maven commands</td><td>Maven panel on right → Lifecycle → double-click test/verify</td></tr>
+      <tr><td>View JaCoCo HTML</td><td><code class="il">target/site/jacoco/index.html</code> → right-click → Open In → Browser</td></tr>
+      <tr><td>SpotBugs GUI</td><td>Terminal tab → <code class="il">mvn spotbugs:gui</code></td></tr>
+    </tbody>
+  </table></div>
+</div>
+</section>
+
+<footer>
+  <strong>JUnit · Mockito · JaCoCo · SpotBugs — Complete Learning Guide</strong>
+  What &amp; Why &bull; Maven Setup &bull; JUnit 5 &bull; Mockito &bull; JaCoCo &bull; SpotBugs &bull; Full Example
+</footer>
+
+<script>
+// progress bar
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight);
+  document.getElementById('progress').style.width = (pct * 100) + '%';
+});
+// active nav
+const secs  = document.querySelectorAll('.chapter');
+const links = document.querySelectorAll('.topnav a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`.topnav a[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+secs.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

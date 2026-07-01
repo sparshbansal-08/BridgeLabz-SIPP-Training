@@ -1,0 +1,408 @@
+AGILE AND SOFTWARE MAINTENANCE
+==============================
+
+Agile Methodology Basics
+
+What is Agile in simple words
+Why was Agile created and what problem does it solve
+What is the difference between Agile and Waterfall
+What is an iteration in Agile
+What does incremental delivery mean
+Name a few popular Agile frameworks
+Is Scrum the same as Agile
+
+Scrum Frameworks
+
+What is Scrum in simple terms
+What is a sprint
+How long is a typical sprint
+What is a product backlog
+What is a sprint backlog
+What is an increment in Scrum
+What is the Definition of Done
+
+Role Boundaries
+
+Who is the Product Owner
+Who is the Scrum Master
+Who is on the Development Team
+What does the Scrum Master do every day
+Who decides the priority of the backlog
+Who is responsible for the sprint goal
+
+User Story Components
+
+What is a user story
+What is the common format of a user story
+What are acceptance criteria
+What is a story point
+What does estimation mean in Agile
+What is an epic
+
+Sprint Lifecycles
+
+What are the four main Scrum ceremonies
+What happens in Sprint Planning
+What is the Daily Standup
+What are the three questions in a Daily Standup
+What happens in the Sprint Review
+What is the purpose of the Sprint Retrospective
+What is velocity in Scrum
+
+Software Support and Maintenance
+
+What is software maintenance
+What are the four types of software maintenance
+What is corrective maintenance
+What is preventive maintenance
+Why is maintenance important after release
+
+Incident Management Workflows
+
+What is an incident
+What is a ticket
+What are the common stages of a ticket
+What does it mean to escalate a ticket
+What is the difference between resolved and closed
+What is root cause analysis
+
+SLA Definitions
+
+What does SLA stand for
+What is response time in an SLA
+What is resolution time in an SLA
+What is ticket priority
+What is the difference between P1 and P4
+What happens when an SLA is breached
+
+Production Support Categories
+
+What is L1 support
+What is L2 support
+What is L3 support
+When does L1 escalate to L2
+When does an issue go to L3
+What is a runbook
+
+
+OPERATING SYSTEMS AND SCRIPTING
+===============================
+
+Unix Commands Basics
+
+What is Unix
+What command shows the current directory
+What command lists files in a directory
+How do you change directories in Unix
+How do you create a new directory
+How do you copy a file
+How do you move or rename a file
+How do you delete a file
+What does the cat command do
+How do you view a large file one page at a time
+
+File Permissions
+
+What are the three types of file permissions
+What are the three permission groups
+What number represents read write and execute
+What does chmod do
+What does chmod 755 mean
+What does chown do
+How do you make a script executable
+
+Regex Searches
+
+What does the grep command do
+How do you search for a word in a file
+How do you make a grep search case insensitive
+How do you search inside many files at once
+What is a regular expression
+
+Pipe Flows
+
+What is a pipe in Unix
+How does the pipe operator work
+How do you count lines using a pipe
+What is the difference between the greater than and double greater than operators
+What is standard input and standard output
+
+Stream Automation Scripts
+
+What is a shell script
+What is the shebang line
+How do you create a variable in a shell script
+How do you print text in bash
+How do you write an if statement in bash
+How do you write a for loop in bash
+What does the question mark variable hold
+
+
+VERSION CONTROL AND COLLABORATION
+=================================
+
+GIT Basics
+
+What is Git
+Why do developers use Git
+What is the difference between Git and GitHub
+What is a repository
+What is a commit
+What does the git init command do
+What does the git clone command do
+What does the git status command show
+
+Staging Models
+
+What is the working directory in Git
+What is the staging area
+What does git add do
+What does git commit do
+What is the difference between git add and git commit
+What is the local repository
+
+Remote Synchronizations
+
+What is a remote repository
+What does git push do
+What does git pull do
+What is the difference between git fetch and git pull
+What is origin in Git
+What does git clone download
+
+Branching Structures
+
+What is a branch
+Why are branches useful
+How do you create a new branch
+How do you switch to another branch
+What is the main branch
+What is a feature branch
+What is a pull request
+
+Branch Merge and Conflict Mitigations
+
+What does it mean to merge branches
+What is the difference between merge and rebase
+What is a merge conflict
+What causes a merge conflict
+How do you know a conflict happened
+What are the conflict markers in a file
+How do you resolve a merge conflict
+How can you avoid merge conflicts
+
+
+FRONT-END DEVELOPMENT
+=====================
+
+Bootstrap 5 Basics
+
+What is Bootstrap
+Why do developers use Bootstrap
+How do you add Bootstrap to a project
+What is a responsive website
+
+Flex Containers
+
+What class makes an element a flex container
+How do you arrange flex items in a row
+How do you arrange flex items in a column
+How do you center items horizontally
+How do you center items vertically
+How do you add space between flex items
+
+Core Grid Alignment Behaviors
+
+How many columns does the Bootstrap grid have
+What is a container in Bootstrap
+What is a row in Bootstrap
+What is a column in Bootstrap
+Why should columns add up to twelve
+How do you make three equal columns
+What is the difference between container and container fluid
+
+Display Utility Classes
+
+What does the d none class do
+How do you hide an element on small screens
+What are breakpoints in Bootstrap
+What does col 12 col md 6 mean
+What is mobile first design
+
+TypeScript Basics
+
+What is TypeScript
+How is TypeScript related to JavaScript
+Can a browser run TypeScript directly
+What is transpilation
+What tool compiles TypeScript to JavaScript
+
+Type Safety Advantages
+
+What is static typing
+What advantage does static typing give
+How does TypeScript catch errors early
+What is type inference
+
+Configuration Rules
+
+What is the tsconfig json file
+What does the strict option do
+What does the target option set
+What does the outDir option do
+
+Interfaces and Structural Modules
+
+What is an interface in TypeScript
+What is the difference between an interface and a type
+What is an optional property
+What is a union type
+What is a module in TypeScript
+
+
+LOGGING FRAMEWORKS
+==================
+
+Logging Basics
+
+What is logging in an application
+Why is logging important
+Why is logging better than System dot out dot println
+What is a logger
+
+Log4j and SLF4J
+
+What is Log4j
+What is SLF4J
+What is the difference between Log4j and SLF4J
+What does it mean that SLF4J is a facade
+Why should you code against SLF4J instead of Log4j directly
+
+Appender Mechanisms
+
+What is an appender
+What does a console appender do
+What does a file appender do
+What is a rolling file appender
+Can a logger write to more than one appender
+
+Logging Priority Levels
+
+What are the common logging levels
+Which level is the most detailed
+When do you use the INFO level
+When do you use the WARN level
+When do you use the ERROR level
+If the level is set to WARN will INFO messages show
+
+Formatting Layouts
+
+What is a log pattern or layout
+What information can a log line include
+How do you add a timestamp to a log line
+Why is consistent log formatting useful
+
+
+SOFTWARE ENGINEERING
+====================
+
+Design Principles Basics
+
+What is a design principle
+What is clean code
+Why are design principles important
+
+SOLID Clean Coding Practices
+
+What does SOLID stand for
+What is the Single Responsibility Principle
+What is the Open Closed Principle
+What is the Liskov Substitution Principle
+What is the Interface Segregation Principle
+What is the Dependency Inversion Principle
+
+Core Structural Patterns
+
+What is a design pattern
+What are the three categories of design patterns
+What is the Singleton pattern
+What is the Factory pattern
+What is the Adapter pattern
+What is the Decorator pattern
+What is the difference between Factory and Strategy
+
+UML Semantic Notations
+
+What is UML
+What is a class diagram
+What do plus and minus mean in a class diagram
+How is inheritance shown in UML
+What is the difference between aggregation and composition
+What is a sequence diagram
+What is a lifeline in a sequence diagram
+
+
+UNIT TESTING AND QUALITY GATES
+==============================
+
+Unit Testing Basics
+
+What is unit testing
+Why do we write unit tests
+What is a test case
+What is the arrange act assert pattern
+
+TDD Concepts
+
+What does TDD stand for
+What are the three steps of TDD
+What happens in the Red step
+What happens in the Green step
+What happens in the Refactor step
+Why do we write the test before the code
+
+JUnit Lifecycle Hooks
+
+What is JUnit
+What does the Test annotation do
+What does BeforeEach do
+What does AfterEach do
+What is the difference between BeforeEach and BeforeAll
+Why must BeforeAll be static
+How do you skip a test
+
+Test Assertion Options
+
+What is an assertion
+What does assertEquals check
+What does assertTrue check
+How do you test that an exception is thrown
+What does assertNull check
+
+Mockito Mock Object Controls
+
+What is Mockito
+Why do we use mocks in testing
+What does the Mock annotation do
+What does the InjectMocks annotation do
+What is the difference between a mock and a spy
+
+Stubbing Signatures
+
+What is stubbing
+How do you make a mock return a value
+What does the verify method do
+How do you check a method was called once
+
+Code Quality Automation
+
+What is static code analysis
+What does Checkstyle check
+What does PMD check
+What does SpotBugs find
+What does JaCoCo measure
+What is code coverage
+Does full coverage mean no bugs
+What is SonarQube
+What is a quality gate
+What is a quality profile in SonarQube

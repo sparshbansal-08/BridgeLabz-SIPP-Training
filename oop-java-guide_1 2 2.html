@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OOP in Java — Complete Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --bg2: #13161e;
+    --bg3: #1a1e2a;
+    --card: #1e2233;
+    --border: #2a2f42;
+    --accent: #5b8af5;
+    --accent2: #a78bfa;
+    --accent3: #34d399;
+    --accent4: #f59e0b;
+    --accent5: #f87171;
+    --text: #e2e8f0;
+    --muted: #8892a4;
+    --code-bg: #111420;
+    --keyword: #a78bfa;
+    --string: #34d399;
+    --comment: #4b5563;
+    --type: #5b8af5;
+    --number: #f59e0b;
+    --fn: #60a5fa;
+    --tag-cls: #5b8af5;
+    --tag-obj: #34d399;
+    --tag-oop: #a78bfa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── HEADER ── */
+  .hero {
+    background: linear-gradient(135deg, #0d0f14 0%, #151928 50%, #0d0f14 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 40px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -120px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(91,138,245,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(91,138,245,0.12);
+    border: 1px solid rgba(91,138,245,0.3);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 46px);
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    margin-bottom: 14px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 560px;
+    margin: 0 auto 28px;
+  }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .hero-tag {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin: 40px auto;
+    max-width: 900px;
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+  .toc-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+  }
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+  .toc-item:hover {
+    background: var(--bg3);
+    border-color: var(--border);
+    color: var(--accent);
+  }
+  .toc-num {
+    width: 22px; height: 22px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    max-width: 900px;
+    margin: 0 auto 60px;
+    padding: 0 24px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 30px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    flex-shrink: 0;
+    color: #fff;
+  }
+  .section-title h2 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+  .section-title p {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* ── INFO CARDS ── */
+  .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 20px 0; }
+
+  .info-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .info-card-icon { font-size: 22px; margin-bottom: 10px; }
+  .info-card h4 { font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+  .info-card p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  .info-card.blue { border-color: rgba(91,138,245,0.3); background: rgba(91,138,245,0.05); }
+  .info-card.purple { border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.05); }
+  .info-card.green { border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.05); }
+  .info-card.amber { border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.05); }
+  .info-card.red { border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.05); }
+
+  /* ── CALLOUTS ── */
+  .callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 18px 0;
+    font-size: 13.5px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .callout-body strong { display: block; margin-bottom: 4px; font-size: 13px; }
+  .callout-body p, .callout-body li { color: var(--muted); font-size: 13px; }
+  .callout-body ul { padding-left: 16px; }
+  .callout-body li { margin-bottom: 3px; }
+
+  .callout.what  { background: rgba(91,138,245,0.08);  border: 1px solid rgba(91,138,245,0.25);  }
+  .callout.why   { background: rgba(52,211,153,0.08);  border: 1px solid rgba(52,211,153,0.25);  }
+  .callout.when  { background: rgba(245,158,11,0.08);  border: 1px solid rgba(245,158,11,0.25);  }
+  .callout.how   { background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.25); }
+  .callout.warn  { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.25); }
+  .callout.tip   { background: rgba(52,211,153,0.06);  border: 1px solid rgba(52,211,153,0.2);   }
+
+  /* ── CODE BLOCKS ── */
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 18px 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+  }
+  .code-dots { display: flex; gap: 6px; }
+  .code-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .code-dot.r { background: #f87171; }
+  .code-dot.y { background: #fbbf24; }
+  .code-dot.g { background: #34d399; }
+  .code-label { font-size: 11px; color: var(--muted); font-family: 'Sora', sans-serif; }
+  .code-body { padding: 20px; overflow-x: auto; }
+  pre { margin: 0; font-size: 13px; line-height: 1.8; }
+
+  /* syntax highlight helpers */
+  .kw { color: var(--keyword); font-weight: 500; }
+  .ty { color: var(--type); }
+  .st { color: var(--string); }
+  .cm { color: var(--comment); font-style: italic; }
+  .nm { color: var(--number); }
+  .fn { color: var(--fn); }
+  .tx { color: var(--text); }
+
+  /* ── ANALOGY BOXES ── */
+  .analogy {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 18px 0;
+    font-size: 13.5px;
+  }
+  .analogy strong { color: var(--accent2); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px; }
+
+  /* ── RULE TABLE ── */
+  .rule-list { list-style: none; display: grid; gap: 8px; margin: 16px 0; }
+  .rule-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px; font-size: 13px;
+  }
+  .rule-icon { font-size: 16px; flex-shrink: 0; }
+
+  /* ── NAMING TABLE ── */
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 13px; }
+  th {
+    background: var(--bg3); border: 1px solid var(--border);
+    padding: 10px 14px; text-align: left; font-weight: 600;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted);
+  }
+  td { border: 1px solid var(--border); padding: 10px 14px; color: var(--text); }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono'; font-size: 12px; color: var(--accent); }
+
+  /* ── EXERCISE CARDS ── */
+  .exercise-card {
+    background: var(--card);
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 14px;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+  .exercise-header {
+    background: rgba(245,158,11,0.08);
+    padding: 14px 20px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid rgba(245,158,11,0.2);
+  }
+  .exercise-badge {
+    background: rgba(245,158,11,0.2);
+    color: var(--accent4);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 20px;
+  }
+  .exercise-title { font-size: 14px; font-weight: 600; }
+  .exercise-body { padding: 20px; }
+  .exercise-body p { font-size: 13.5px; margin-bottom: 14px; }
+  .exercise-task { color: var(--text); margin-bottom: 16px; }
+  .solution-toggle {
+    background: rgba(52,211,153,0.08);
+    border: 1px solid rgba(52,211,153,0.25);
+    color: var(--accent3);
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .solution-toggle:hover { background: rgba(52,211,153,0.14); }
+  .solution-panel { display: none; margin-top: 14px; }
+  .solution-panel.open { display: block; }
+
+  /* ── TAGS ── */
+  .tag {
+    display: inline-block;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 20px;
+    margin-right: 6px; margin-bottom: 6px;
+  }
+  .tag.cls  { background: rgba(91,138,245,0.15);  color: var(--tag-cls);  border: 1px solid rgba(91,138,245,0.3);  }
+  .tag.obj  { background: rgba(52,211,153,0.12);  color: var(--tag-obj);  border: 1px solid rgba(52,211,153,0.3);  }
+  .tag.oop  { background: rgba(167,139,250,0.12); color: var(--tag-oop);  border: 1px solid rgba(167,139,250,0.3); }
+  .tag.warn { background: rgba(248,113,113,0.12); color: var(--accent5);  border: 1px solid rgba(248,113,113,0.3); }
+
+  /* ── PILLAR CARDS ── */
+  .pillars { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 20px 0; }
+  .pillar-card {
+    border-radius: 12px; padding: 20px;
+    border: 1px solid var(--border);
+  }
+  .pillar-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .pillar-card p  { font-size: 12.5px; color: var(--muted); }
+  .pillar-card.enc { border-color: rgba(91,138,245,0.3); background: rgba(91,138,245,0.05); }
+  .pillar-card.enc h3 { color: var(--accent); }
+  .pillar-card.inh { border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.05); }
+  .pillar-card.inh h3 { color: var(--accent3); }
+  .pillar-card.pol { border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.05); }
+  .pillar-card.pol h3 { color: var(--accent2); }
+  .pillar-card.abs { border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.05); }
+  .pillar-card.abs h3 { color: var(--accent4); }
+
+  /* ── STEP LIST ── */
+  .steps { counter-reset: step; display: grid; gap: 10px; margin: 16px 0; }
+  .step {
+    counter-increment: step;
+    display: flex; gap: 14px;
+    align-items: flex-start;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .step::before {
+    content: counter(step);
+    width: 26px; height: 26px;
+    background: var(--accent);
+    border-radius: 7px;
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; color: #fff;
+  }
+  .step-body h4 { font-size: 13.5px; font-weight: 600; margin-bottom: 4px; }
+  .step-body p  { font-size: 12.5px; color: var(--muted); }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 50px 0; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 40px 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  /* ── INLINE CODE ── */
+  code {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+  }
+
+  h3 { font-size: 17px; font-weight: 600; margin: 24px 0 12px; }
+  p  { margin-bottom: 12px; }
+
+  @media (max-width: 600px) {
+    .pillars { grid-template-columns: 1fr; }
+    .info-grid { grid-template-columns: 1fr; }
+    .hero { padding: 40px 20px 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ────────────────────── HERO ────────────────────── -->
+<div class="hero">
+  <div class="hero-badge">Java Programming</div>
+  <h1>Object-Oriented Programming<br><span>in Java</span></h1>
+  <p>A complete beginner-to-confident guide covering every OOP concept with clear explanations, real examples, and hands-on exercises.</p>
+  <div class="hero-tags">
+    <span class="hero-tag">Classes &amp; Objects</span>
+    <span class="hero-tag">Constructors</span>
+    <span class="hero-tag">this &amp; super</span>
+    <span class="hero-tag">Encapsulation</span>
+    <span class="hero-tag">Inheritance</span>
+    <span class="hero-tag">Polymorphism</span>
+    <span class="hero-tag">Abstraction</span>
+    <span class="hero-tag">Practice Exercises</span>
+  </div>
+</div>
+
+<!-- ── TOC ── -->
+<div class="toc">
+  <div class="toc-title">Table of Contents</div>
+  <div class="toc-grid">
+    <a href="#s0" class="toc-item"><div class="toc-num">0</div>What is OOP?</a>
+    <a href="#s1" class="toc-item"><div class="toc-num">1</div>Classes</a>
+    <a href="#s2" class="toc-item"><div class="toc-num">2</div>Objects</a>
+    <a href="#s3" class="toc-item"><div class="toc-num">3</div>Constructors</a>
+    <a href="#s4" class="toc-item"><div class="toc-num">4</div>this keyword</a>
+    <a href="#s5" class="toc-item"><div class="toc-num">5</div>Encapsulation</a>
+    <a href="#s6" class="toc-item"><div class="toc-num">6</div>Inheritance</a>
+    <a href="#s7" class="toc-item"><div class="toc-num">7</div>super keyword</a>
+    <a href="#s8" class="toc-item"><div class="toc-num">8</div>Polymorphism</a>
+    <a href="#s9" class="toc-item"><div class="toc-num">9</div>Abstraction</a>
+    <a href="#s10" class="toc-item"><div class="toc-num">10</div>Naming Rules</a>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 0 — WHAT IS OOP
+══════════════════════════════════════════════════ -->
+<div class="section" id="s0">
+  <div class="section-header">
+    <div class="section-num">0</div>
+    <div class="section-title">
+      <h2>What is Object-Oriented Programming?</h2>
+      <p>The big picture before we dive in</p>
+    </div>
+  </div>
+
+  <p>Before OOP, programs were just long lists of instructions — one thing after another. This was hard to organise, hard to reuse, and nearly impossible to maintain in large projects.</p>
+  <p><strong>OOP is a way of writing code that models the real world.</strong> Instead of thinking in procedures, you think in <em>things</em> — objects that have data (properties) and can do stuff (methods).</p>
+
+  <div class="analogy">
+    <strong>Real-World Analogy</strong>
+    Think about a car. A car has <em>data</em> — colour, brand, speed, fuel. A car can <em>do things</em> — accelerate, brake, honk. In OOP, we model this exactly: the data becomes <strong>fields</strong>, and the actions become <strong>methods</strong>. The blueprint for "what a car is" is the <strong>class</strong>. Your actual red Honda in the driveway is the <strong>object</strong>.
+  </div>
+
+  <div class="pillars">
+    <div class="pillar-card enc">
+      <h3>🔒 Encapsulation</h3>
+      <p>Hiding internal data. Only expose what's needed. Like a capsule pill — the medicine is inside, protected.</p>
+    </div>
+    <div class="pillar-card inh">
+      <h3>🧬 Inheritance</h3>
+      <p>A child class gets the properties and methods of a parent class automatically. Like a child inheriting traits from parents.</p>
+    </div>
+    <div class="pillar-card pol">
+      <h3>🎭 Polymorphism</h3>
+      <p>One name, many forms. A method can behave differently depending on the object. Like a "speak" command that works for Dog, Cat, and Bird.</p>
+    </div>
+    <div class="pillar-card abs">
+      <h3>🎨 Abstraction</h3>
+      <p>Hiding complexity. You use a TV remote without knowing the circuit board. You call a method without knowing how it works internally.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 1 — CLASSES
+══════════════════════════════════════════════════ -->
+<div class="section" id="s1">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">
+      <h2>Classes</h2>
+      <p>The blueprint — defining what something is</p>
+    </div>
+  </div>
+
+  <div class="callout what">
+    <span class="callout-icon">📘</span>
+    <div class="callout-body">
+      <strong>What is a Class?</strong>
+      <p>A class is a <strong>template</strong> or <strong>blueprint</strong>. It defines what data an object will hold and what actions it can perform. No memory is used until you create an actual object from it.</p>
+    </div>
+  </div>
+  <div class="callout why">
+    <span class="callout-icon">💡</span>
+    <div class="callout-body">
+      <strong>Why use Classes?</strong>
+      <p>Instead of writing separate variables for every student in a school system, you define a <code>Student</code> class once — and create as many student objects as you need. Reusable, organised, maintainable.</p>
+    </div>
+  </div>
+  <div class="callout when">
+    <span class="callout-icon">📅</span>
+    <div class="callout-body">
+      <strong>When to create a Class?</strong>
+      <p>Whenever you have a concept that has both <em>data</em> (name, age, price) and <em>behaviour</em> (calculate, display, save). Real-world nouns are great candidates: <code>Car</code>, <code>BankAccount</code>, <code>Student</code>.</p>
+    </div>
+  </div>
+
+  <h3>Syntax &amp; Rules</h3>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+      <span class="code-label">Class syntax</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="cm">// Syntax:</span>
+<span class="kw">accessModifier class</span> <span class="ty">ClassName</span> <span class="tx">{</span>
+    <span class="cm">// fields (data / attributes)</span>
+    <span class="ty">dataType</span> <span class="tx">fieldName</span><span class="tx">;</span>
+
+    <span class="cm">// constructor</span>
+    <span class="ty">ClassName</span><span class="tx">(parameters) { ... }</span>
+
+    <span class="cm">// methods (behaviours)</span>
+    <span class="ty">returnType</span> <span class="fn">methodName</span><span class="tx">(parameters) { ... }</span>
+<span class="tx">}</span></pre></div>
+  </div>
+
+  <ul class="rule-list">
+    <li class="rule-item"><span class="rule-icon">✅</span> Class name starts with a capital letter: <code>Student</code>, <code>BankAccount</code></li>
+    <li class="rule-item"><span class="rule-icon">✅</span> One <code>public</code> class per file, and the filename must match the class name exactly</li>
+    <li class="rule-item"><span class="rule-icon">✅</span> Fields (variables inside the class) usually have access modifier <code>private</code></li>
+    <li class="rule-item"><span class="rule-icon">⚠️</span> A class is just a blueprint — it stores no data by itself</li>
+  </ul>
+
+  <h3>Full Example — Defining a Class</h3>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+      <span class="code-label">Dog.java</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Dog</span> <span class="tx">{</span>
+
+    <span class="cm">// Fields — the data a Dog holds</span>
+    <span class="kw">String</span> <span class="tx">name</span><span class="tx">;</span>
+    <span class="kw">String</span> <span class="tx">breed</span><span class="tx">;</span>
+    <span class="kw">int</span>    <span class="tx">age</span><span class="tx">;</span>
+
+    <span class="cm">// Method — something a Dog can do</span>
+    <span class="kw">void</span> <span class="fn">bark</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(name + </span><span class="st">" says: Woof!"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+
+    <span class="kw">void</span> <span class="fn">displayInfo</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Name: "</span> <span class="tx">+ name + </span><span class="st">", Breed: "</span> <span class="tx">+ breed + </span><span class="st">", Age: "</span> <span class="tx">+ age);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// At this point, no Dog exists yet. This is just the blueprint.</span></pre></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 2 — OBJECTS
+══════════════════════════════════════════════════ -->
+<div class="section" id="s2">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">
+      <h2>Objects</h2>
+      <p>The real thing — creating instances from blueprints</p>
+    </div>
+  </div>
+
+  <div class="callout what">
+    <span class="callout-icon">📘</span>
+    <div class="callout-body">
+      <strong>What is an Object?</strong>
+      <p>An object is a <strong>specific instance</strong> of a class. When you create an object, Java allocates memory for it and it gets its own copy of the class's fields. Multiple objects from the same class are all independent.</p>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <strong>Analogy</strong>
+    The class <code>Dog</code> is the concept "dog". The objects <code>myDog</code> and <code>yourDog</code> are two actual dogs — they share the same structure (name, breed, age) but have completely different values.
+  </div>
+
+  <h3>Creating Objects — step by step</h3>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-body">
+        <h4>Declare a variable of the class type</h4>
+        <p><code>Dog myDog;</code> — this reserves space for a reference, but the object doesn't exist yet.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-body">
+        <h4>Use the <code>new</code> keyword to create the object</h4>
+        <p><code>myDog = new Dog();</code> — Java allocates memory and calls the constructor.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-body">
+        <h4>Combine into one line (most common)</h4>
+        <p><code>Dog myDog = new Dog();</code> — declare and create together.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-body">
+        <h4>Access fields and methods with the dot operator</h4>
+        <p><code>myDog.name = "Rex";</code> or <code>myDog.bark();</code></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+      <span class="code-label">Main.java — creating and using objects</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Main</span> <span class="tx">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="kw">String</span><span class="tx">[] args) {</span>
+
+        <span class="cm">// Create first Dog object</span>
+        <span class="ty">Dog</span> <span class="tx">myDog = </span><span class="kw">new</span> <span class="ty">Dog</span><span class="tx">();</span>
+        <span class="tx">myDog.name  = </span><span class="st">"Rex"</span><span class="tx">;</span>
+        <span class="tx">myDog.breed = </span><span class="st">"Labrador"</span><span class="tx">;</span>
+        <span class="tx">myDog.age   = </span><span class="nm">3</span><span class="tx">;</span>
+
+        <span class="cm">// Create second Dog object — completely independent!</span>
+        <span class="ty">Dog</span> <span class="tx">yourDog = </span><span class="kw">new</span> <span class="ty">Dog</span><span class="tx">();</span>
+        <span class="tx">yourDog.name  = </span><span class="st">"Bella"</span><span class="tx">;</span>
+        <span class="tx">yourDog.breed = </span><span class="st">"Poodle"</span><span class="tx">;</span>
+        <span class="tx">yourDog.age   = </span><span class="nm">5</span><span class="tx">;</span>
+
+        <span class="cm">// Call methods on each object</span>
+        <span class="tx">myDog.</span><span class="fn">bark</span><span class="tx">();          </span><span class="cm">// Rex says: Woof!</span>
+        <span class="tx">yourDog.</span><span class="fn">bark</span><span class="tx">();        </span><span class="cm">// Bella says: Woof!</span>
+        <span class="tx">myDog.</span><span class="fn">displayInfo</span><span class="tx">();   </span><span class="cm">// Name: Rex, Breed: Labrador, Age: 3</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre></div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="exercise-header">
+      <span class="exercise-badge">Exercise 1</span>
+      <span class="exercise-title">Classes &amp; Objects — Build a Car</span>
+    </div>
+    <div class="exercise-body">
+      <p class="exercise-task">Create a class called <code>Car</code> with fields: <code>brand</code> (String), <code>colour</code> (String), and <code>year</code> (int). Add a method <code>honk()</code> that prints <em>"[brand] goes Beep!"</em>. In <code>Main</code>, create two Car objects and call <code>honk()</code> on each.</p>
+      <button class="solution-toggle" onclick="toggleSolution('sol1')">▶ Show Solution</button>
+      <div class="solution-panel" id="sol1">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+            <span class="code-label">Solution</span>
+          </div>
+          <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Car</span> <span class="tx">{</span>
+    <span class="kw">String</span> <span class="tx">brand</span><span class="tx">;</span>
+    <span class="kw">String</span> <span class="tx">colour</span><span class="tx">;</span>
+    <span class="kw">int</span>    <span class="tx">year</span><span class="tx">;</span>
+
+    <span class="kw">void</span> <span class="fn">honk</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(brand + </span><span class="st">" goes Beep!"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">Main</span> <span class="tx">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="kw">String</span><span class="tx">[] args) {</span>
+        <span class="ty">Car</span> <span class="tx">car1 = </span><span class="kw">new</span> <span class="ty">Car</span><span class="tx">();</span>
+        <span class="tx">car1.brand = </span><span class="st">"Toyota"</span><span class="tx">;</span>
+        <span class="tx">car1.colour = </span><span class="st">"Red"</span><span class="tx">;</span>
+        <span class="tx">car1.year = </span><span class="nm">2020</span><span class="tx">;</span>
+
+        <span class="ty">Car</span> <span class="tx">car2 = </span><span class="kw">new</span> <span class="ty">Car</span><span class="tx">();</span>
+        <span class="tx">car2.brand = </span><span class="st">"Honda"</span><span class="tx">;</span>
+        <span class="tx">car2.colour = </span><span class="st">"Blue"</span><span class="tx">;</span>
+        <span class="tx">car2.year = </span><span class="nm">2022</span><span class="tx">;</span>
+
+        <span class="tx">car1.</span><span class="fn">honk</span><span class="tx">();  </span><span class="cm">// Toyota goes Beep!</span>
+        <span class="tx">car2.</span><span class="fn">honk</span><span class="tx">();  </span><span class="cm">// Honda goes Beep!</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 3 — CONSTRUCTORS
+══════════════════════════════════════════════════ -->
+<div class="section" id="s3">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div class="section-title">
+      <h2>Constructors</h2>
+      <p>Initialising objects at birth</p>
+    </div>
+  </div>
+
+  <div class="callout what">
+    <span class="callout-icon">📘</span>
+    <div class="callout-body">
+      <strong>What is a Constructor?</strong>
+      <p>A constructor is a special method that runs <strong>automatically when you create an object</strong> with <code>new</code>. Its job is to set the object's initial values. It has the <em>same name as the class</em> and <em>no return type</em>.</p>
+    </div>
+  </div>
+
+  <div class="callout why">
+    <span class="callout-icon">💡</span>
+    <div class="callout-body">
+      <strong>Why use Constructors?</strong>
+      <p>Without a constructor, you have to set every field manually after creation — messy and error-prone. With a constructor, you set everything in one clean step when creating the object.</p>
+    </div>
+  </div>
+
+  <h3>Types of Constructors</h3>
+
+  <div class="info-grid">
+    <div class="info-card blue">
+      <div class="info-card-icon">🏗️</div>
+      <h4>Default Constructor</h4>
+      <p>No parameters. Java creates one automatically if you write none. Fields get default values (0, null, false).</p>
+    </div>
+    <div class="info-card purple">
+      <div class="info-card-icon">🔧</div>
+      <h4>Parameterised Constructor</h4>
+      <p>Accepts arguments. You pass values when creating the object, so it starts fully initialised.</p>
+    </div>
+    <div class="info-card green">
+      <div class="info-card-icon">📋</div>
+      <h4>Constructor Overloading</h4>
+      <p>Multiple constructors with different parameters. Java picks the right one based on what you pass.</p>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+      <span class="code-label">Student.java — constructors demonstrated</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Student</span> <span class="tx">{</span>
+
+    <span class="kw">String</span> <span class="tx">name</span><span class="tx">;</span>
+    <span class="kw">int</span>    <span class="tx">age</span><span class="tx">;</span>
+    <span class="kw">double</span> <span class="tx">gpa</span><span class="tx">;</span>
+
+    <span class="cm">// ── 1. Default constructor (no parameters)</span>
+    <span class="ty">Student</span><span class="tx">() {</span>
+        <span class="tx">name = </span><span class="st">"Unknown"</span><span class="tx">;</span>
+        <span class="tx">age  = </span><span class="nm">0</span><span class="tx">;</span>
+        <span class="tx">gpa  = </span><span class="nm">0.0</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── 2. Parameterised constructor</span>
+    <span class="ty">Student</span><span class="tx">(</span><span class="kw">String</span> <span class="tx">name, </span><span class="kw">int</span> <span class="tx">age, </span><span class="kw">double</span> <span class="tx">gpa) {</span>
+        <span class="kw">this</span><span class="tx">.name = name;</span>    <span class="cm">// 'this' explained in next section</span>
+        <span class="kw">this</span><span class="tx">.age  = age;</span>
+        <span class="kw">this</span><span class="tx">.gpa  = gpa;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">void</span> <span class="fn">display</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(name + </span><span class="st">" | Age: "</span> <span class="tx">+ age + </span><span class="st">" | GPA: "</span> <span class="tx">+ gpa);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// In Main:</span>
+<span class="ty">Student</span> <span class="tx">s1 = </span><span class="kw">new</span> <span class="ty">Student</span><span class="tx">();</span>                  <span class="cm">// uses default constructor</span>
+<span class="ty">Student</span> <span class="tx">s2 = </span><span class="kw">new</span> <span class="ty">Student</span><span class="tx">(</span><span class="st">"Alice"</span><span class="tx">, </span><span class="nm">20</span><span class="tx">, </span><span class="nm">3.9</span><span class="tx">);</span>  <span class="cm">// uses parameterised constructor</span>
+
+<span class="tx">s1.</span><span class="fn">display</span><span class="tx">();</span>  <span class="cm">// Unknown | Age: 0 | GPA: 0.0</span>
+<span class="tx">s2.</span><span class="fn">display</span><span class="tx">();</span>  <span class="cm">// Alice   | Age: 20 | GPA: 3.9</span></pre></div>
+  </div>
+
+  <ul class="rule-list">
+    <li class="rule-item"><span class="rule-icon">✅</span> Constructor name must <strong>exactly match</strong> the class name (including case)</li>
+    <li class="rule-item"><span class="rule-icon">✅</span> No return type — not even <code>void</code></li>
+    <li class="rule-item"><span class="rule-icon">✅</span> Called automatically when you write <code>new ClassName()</code></li>
+    <li class="rule-item"><span class="rule-icon">⚠️</span> If you write any constructor, Java no longer provides a default — add one yourself if needed</li>
+  </ul>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 4 — this
+══════════════════════════════════════════════════ -->
+<div class="section" id="s4">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div class="section-title">
+      <h2>The <code>this</code> Keyword</h2>
+      <p>Referring to the current object</p>
+    </div>
+  </div>
+
+  <div class="callout what">
+    <span class="callout-icon">📘</span>
+    <div class="callout-body">
+      <strong>What is <code>this</code>?</strong>
+      <p><code>this</code> is a reference to the <strong>current object</strong> — the one the method or constructor is running on right now. It tells Java "I mean <em>this</em> object's field, not the local variable."</p>
+    </div>
+  </div>
+
+  <h3>When do you need <code>this</code>?</h3>
+  <p>The most common situation: your constructor parameter has the <strong>same name</strong> as the field. Without <code>this</code>, Java gets confused and uses the parameter for both.</p>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+      <span class="code-label">Why this is needed — the confusion problem</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Person</span> <span class="tx">{</span>
+    <span class="kw">String</span> <span class="tx">name</span><span class="tx">;</span>   <span class="cm">// ← field</span>
+    <span class="kw">int</span>    <span class="tx">age</span><span class="tx">;</span>    <span class="cm">// ← field</span>
+
+    <span class="cm">// ❌ WITHOUT this — broken!</span>
+    <span class="ty">Person</span><span class="tx">(</span><span class="kw">String</span> <span class="tx">name, </span><span class="kw">int</span> <span class="tx">age) {</span>
+        <span class="tx">name = name;</span>  <span class="cm">// Just assigns the parameter to itself! Field stays null.</span>
+        <span class="tx">age  = age;</span>   <span class="cm">// Same problem — field stays 0.</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ✅ WITH this — correct!</span>
+    <span class="ty">Person</span><span class="tx">(</span><span class="kw">String</span> <span class="tx">name, </span><span class="kw">int</span> <span class="tx">age) {</span>
+        <span class="kw">this</span><span class="tx">.name = name;</span>  <span class="cm">// this.name = the field | name = the parameter</span>
+        <span class="kw">this</span><span class="tx">.age  = age;</span>   <span class="cm">// clear, unambiguous</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre></div>
+  </div>
+
+  <h3>Other uses of <code>this</code></h3>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+      <span class="code-label">this() — calling one constructor from another</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Rectangle</span> <span class="tx">{</span>
+    <span class="kw">int</span> <span class="tx">width</span><span class="tx">;</span>
+    <span class="kw">int</span> <span class="tx">height</span><span class="tx">;</span>
+
+    <span class="cm">// Full constructor</span>
+    <span class="ty">Rectangle</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">width, </span><span class="kw">int</span> <span class="tx">height) {</span>
+        <span class="kw">this</span><span class="tx">.width  = width;</span>
+        <span class="kw">this</span><span class="tx">.height = height;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Square shortcut — calls the constructor above with this()</span>
+    <span class="ty">Rectangle</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">side) {</span>
+        <span class="kw">this</span><span class="tx">(side, side);</span>  <span class="cm">// reuses the code above — no duplication!</span>
+    <span class="tx">}</span>
+
+    <span class="kw">int</span> <span class="fn">area</span><span class="tx">() {</span>
+        <span class="kw">return this</span><span class="tx">.width * </span><span class="kw">this</span><span class="tx">.height;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Usage:</span>
+<span class="ty">Rectangle</span> <span class="tx">r1 = </span><span class="kw">new</span> <span class="ty">Rectangle</span><span class="tx">(</span><span class="nm">4</span><span class="tx">, </span><span class="nm">6</span><span class="tx">);</span>   <span class="cm">// area = 24</span>
+<span class="ty">Rectangle</span> <span class="tx">r2 = </span><span class="kw">new</span> <span class="ty">Rectangle</span><span class="tx">(</span><span class="nm">5</span><span class="tx">);</span>      <span class="cm">// area = 25 (5x5 square)</span></pre></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 5 — ENCAPSULATION
+══════════════════════════════════════════════════ -->
+<div class="section" id="s5">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div class="section-title">
+      <h2>Encapsulation</h2>
+      <p>Protecting data with private fields and getters/setters</p>
+    </div>
+  </div>
+
+  <div class="callout what">
+    <span class="callout-icon">📘</span>
+    <div class="callout-body">
+      <strong>What is Encapsulation?</strong>
+      <p>Encapsulation means <strong>wrapping data (fields) and the methods that work on it inside a class</strong>, then <strong>hiding the fields</strong> from outside code. You only allow access through controlled methods called <em>getters</em> and <em>setters</em>.</p>
+    </div>
+  </div>
+  <div class="callout why">
+    <span class="callout-icon">💡</span>
+    <div class="callout-body">
+      <strong>Why use Encapsulation?</strong>
+      <ul>
+        <li>Prevents invalid data (e.g. someone setting age to -500)</li>
+        <li>You can change the internal implementation without breaking external code</li>
+        <li>Clear boundary between what is public and what is internal</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <strong>Analogy</strong>
+    Think of a bank account. You can't directly put your hand into the database and change the balance. You go through official methods: <em>deposit()</em> and <em>withdraw()</em>. Those methods contain rules (can't withdraw more than balance). That's encapsulation.
+  </div>
+
+  <h3>Access Modifiers</h3>
+  <table>
+    <tr><th>Modifier</th><th>Same Class</th><th>Same Package</th><th>Subclass</th><th>Everywhere</th></tr>
+    <tr><td><code>private</code></td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
+    <tr><td><code>default</code> (no modifier)</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
+    <tr><td><code>protected</code></td><td>✅</td><td>✅</td><td>✅</td><td>❌</td></tr>
+    <tr><td><code>public</code></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+  </table>
+
+  <div class="callout tip">
+    <span class="callout-icon">👆</span>
+    <div class="callout-body">
+      <strong>Golden Rule</strong>
+      <p>Make fields <code>private</code>. Provide <code>public</code> getters and setters. This is the standard Java convention you'll see in every professional codebase.</p>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+      <span class="code-label">BankAccount.java — full encapsulation example</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">BankAccount</span> <span class="tx">{</span>
+
+    <span class="cm">// Private fields — hidden from outside code</span>
+    <span class="kw">private</span> <span class="kw">String</span> <span class="tx">owner</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="kw">double</span> <span class="tx">balance</span><span class="tx">;</span>
+
+    <span class="cm">// Constructor</span>
+    <span class="kw">public</span> <span class="ty">BankAccount</span><span class="tx">(</span><span class="kw">String</span> <span class="tx">owner, </span><span class="kw">double</span> <span class="tx">initialBalance) {</span>
+        <span class="kw">this</span><span class="tx">.owner   = owner</span><span class="tx">;</span>
+        <span class="kw">this</span><span class="tx">.balance = (initialBalance > </span><span class="nm">0</span><span class="tx">) ? initialBalance : </span><span class="nm">0</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── Getter — read-only access</span>
+    <span class="kw">public double</span> <span class="fn">getBalance</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="tx">balance</span><span class="tx">;</span>
+    <span class="tx">}</span>
+    <span class="kw">public</span> <span class="kw">String</span> <span class="fn">getOwner</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="tx">owner</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── Business methods — controlled write access</span>
+    <span class="kw">public void</span> <span class="fn">deposit</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="kw">if</span> <span class="tx">(amount > </span><span class="nm">0</span><span class="tx">) {</span>
+            <span class="tx">balance += amount</span><span class="tx">;</span>
+            <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Deposited: "</span> <span class="tx">+ amount);</span>
+        <span class="tx">} </span><span class="kw">else</span> <span class="tx">{</span>
+            <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Invalid amount."</span><span class="tx">);</span>
+        <span class="tx">}</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">withdraw</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="kw">if</span> <span class="tx">(amount > </span><span class="nm">0</span> <span class="tx">&amp;&amp; amount &lt;= balance) {</span>
+            <span class="tx">balance -= amount</span><span class="tx">;</span>
+            <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Withdrawn: "</span> <span class="tx">+ amount);</span>
+        <span class="tx">} </span><span class="kw">else</span> <span class="tx">{</span>
+            <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Insufficient funds."</span><span class="tx">);</span>
+        <span class="tx">}</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Usage:</span>
+<span class="ty">BankAccount</span> <span class="tx">acc = </span><span class="kw">new</span> <span class="ty">BankAccount</span><span class="tx">(</span><span class="st">"Alice"</span><span class="tx">, </span><span class="nm">1000</span><span class="tx">);</span>
+<span class="tx">acc.</span><span class="fn">deposit</span><span class="tx">(</span><span class="nm">500</span><span class="tx">);</span>               <span class="cm">// Deposited: 500.0</span>
+<span class="tx">acc.</span><span class="fn">withdraw</span><span class="tx">(</span><span class="nm">200</span><span class="tx">);</span>              <span class="cm">// Withdrawn: 200.0</span>
+<span class="tx">acc.</span><span class="fn">withdraw</span><span class="tx">(</span><span class="nm">9999</span><span class="tx">);</span>             <span class="cm">// Insufficient funds.</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(acc.</span><span class="fn">getBalance</span><span class="tx">());</span>  <span class="cm">// 1300.0</span>
+
+<span class="cm">// This would NOT compile — balance is private:</span>
+<span class="cm">// acc.balance = -99999;  ← ERROR!</span></pre></div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="exercise-header">
+      <span class="exercise-badge">Exercise 2</span>
+      <span class="exercise-title">Encapsulation — Temperature Class</span>
+    </div>
+    <div class="exercise-body">
+      <p class="exercise-task">Create a class <code>Temperature</code> with a private field <code>celsius</code> (double). Write a setter that rejects values below −273.15 (absolute zero). Write a getter for celsius and a method <code>toFahrenheit()</code> that returns the converted value.</p>
+      <button class="solution-toggle" onclick="toggleSolution('sol2')">▶ Show Solution</button>
+      <div class="solution-panel" id="sol2">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+            <span class="code-label">Solution</span>
+          </div>
+          <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Temperature</span> <span class="tx">{</span>
+    <span class="kw">private double</span> <span class="tx">celsius</span><span class="tx">;</span>
+
+    <span class="kw">public void</span> <span class="fn">setCelsius</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">celsius) {</span>
+        <span class="kw">if</span> <span class="tx">(celsius &lt; -</span><span class="nm">273.15</span><span class="tx">) {</span>
+            <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Below absolute zero! Not allowed."</span><span class="tx">);</span>
+        <span class="tx">} </span><span class="kw">else</span> <span class="tx">{</span>
+            <span class="kw">this</span><span class="tx">.celsius = celsius</span><span class="tx">;</span>
+        <span class="tx">}</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public double</span> <span class="fn">getCelsius</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="tx">celsius</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public double</span> <span class="fn">toFahrenheit</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="tx">(celsius * </span><span class="nm">9.0</span> <span class="tx">/ </span><span class="nm">5.0</span><span class="tx">) + </span><span class="nm">32</span><span class="tx">;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 6 — INHERITANCE
+══════════════════════════════════════════════════ -->
+<div class="section" id="s6">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <div class="section-title">
+      <h2>Inheritance</h2>
+      <p>Building new classes on top of existing ones</p>
+    </div>
+  </div>
+
+  <div class="callout what">
+    <span class="callout-icon">📘</span>
+    <div class="callout-body">
+      <strong>What is Inheritance?</strong>
+      <p>Inheritance lets a class (child/subclass) <strong>automatically receive</strong> all the non-private fields and methods of another class (parent/superclass). The child can then add its own fields/methods or override existing ones.</p>
+    </div>
+  </div>
+  <div class="callout why">
+    <span class="callout-icon">💡</span>
+    <div class="callout-body">
+      <strong>Why use Inheritance?</strong>
+      <p><strong>Code reuse.</strong> Instead of rewriting <code>name</code>, <code>age</code>, and <code>displayInfo()</code> in every class, put them in a parent class once. All children get them for free. Changes in the parent apply to all children automatically.</p>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <strong>Analogy</strong>
+    <code>Animal</code> is the parent. <code>Dog</code> and <code>Cat</code> are children. All animals breathe and eat — so those methods live in <code>Animal</code>. Dogs bark, cats meow — those are specific methods in each child class.
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+      <span class="code-label">Animal.java + Dog.java + Cat.java — inheritance</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="cm">// ── Parent class</span>
+<span class="kw">public class</span> <span class="ty">Animal</span> <span class="tx">{</span>
+    <span class="kw">protected</span> <span class="kw">String</span> <span class="tx">name</span><span class="tx">;</span>
+    <span class="kw">protected</span> <span class="kw">int</span>    <span class="tx">age</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">Animal</span><span class="tx">(</span><span class="kw">String</span> <span class="tx">name, </span><span class="kw">int</span> <span class="tx">age) {</span>
+        <span class="kw">this</span><span class="tx">.name = name</span><span class="tx">;</span>
+        <span class="kw">this</span><span class="tx">.age  = age</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">eat</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(name + </span><span class="st">" is eating."</span><span class="tx">);</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">sleep</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(name + </span><span class="st">" is sleeping."</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── Child class: inherits Animal with 'extends'</span>
+<span class="kw">public class</span> <span class="ty">Dog</span> <span class="kw">extends</span> <span class="ty">Animal</span> <span class="tx">{</span>
+    <span class="kw">private</span> <span class="kw">String</span> <span class="tx">breed</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">Dog</span><span class="tx">(</span><span class="kw">String</span> <span class="tx">name, </span><span class="kw">int</span> <span class="tx">age, </span><span class="kw">String</span> <span class="tx">breed) {</span>
+        <span class="kw">super</span><span class="tx">(name, age);</span>   <span class="cm">// calls Animal's constructor</span>
+        <span class="kw">this</span><span class="tx">.breed = breed</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Dog's own method</span>
+    <span class="kw">public void</span> <span class="fn">bark</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(name + </span><span class="st">" says: Woof!"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">Cat</span> <span class="kw">extends</span> <span class="ty">Animal</span> <span class="tx">{</span>
+    <span class="kw">public</span> <span class="ty">Cat</span><span class="tx">(</span><span class="kw">String</span> <span class="tx">name, </span><span class="kw">int</span> <span class="tx">age) {</span>
+        <span class="kw">super</span><span class="tx">(name, age);</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">meow</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(name + </span><span class="st">" says: Meow!"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// In Main:</span>
+<span class="ty">Dog</span> <span class="tx">d = </span><span class="kw">new</span> <span class="ty">Dog</span><span class="tx">(</span><span class="st">"Rex"</span><span class="tx">, </span><span class="nm">3</span><span class="tx">, </span><span class="st">"Labrador"</span><span class="tx">);</span>
+<span class="tx">d.</span><span class="fn">eat</span><span class="tx">();</span>   <span class="cm">// inherited from Animal → Rex is eating.</span>
+<span class="tx">d.</span><span class="fn">bark</span><span class="tx">();</span>  <span class="cm">// Dog's own method → Rex says: Woof!</span>
+
+<span class="ty">Cat</span> <span class="tx">c = </span><span class="kw">new</span> <span class="ty">Cat</span><span class="tx">(</span><span class="st">"Luna"</span><span class="tx">, </span><span class="nm">2</span><span class="tx">);</span>
+<span class="tx">c.</span><span class="fn">sleep</span><span class="tx">();</span>  <span class="cm">// inherited → Luna is sleeping.</span>
+<span class="tx">c.</span><span class="fn">meow</span><span class="tx">();</span>  <span class="cm">// Cat's own method → Luna says: Meow!</span></pre></div>
+  </div>
+
+  <ul class="rule-list">
+    <li class="rule-item"><span class="rule-icon">✅</span> Use <code>extends</code> keyword: <code>class Dog extends Animal</code></li>
+    <li class="rule-item"><span class="rule-icon">✅</span> Java supports <strong>single inheritance</strong> only — one direct parent per class</li>
+    <li class="rule-item"><span class="rule-icon">✅</span> Use <code>protected</code> in the parent so children can access fields directly</li>
+    <li class="rule-item"><span class="rule-icon">⚠️</span> <code>private</code> fields in the parent are NOT inherited (invisible to child)</li>
+    <li class="rule-item"><span class="rule-icon">⚠️</span> Every class in Java implicitly extends <code>Object</code> — the root of all classes</li>
+  </ul>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 7 — super
+══════════════════════════════════════════════════ -->
+<div class="section" id="s7">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <div class="section-title">
+      <h2>The <code>super</code> Keyword</h2>
+      <p>Accessing the parent class from a child class</p>
+    </div>
+  </div>
+
+  <div class="callout what">
+    <span class="callout-icon">📘</span>
+    <div class="callout-body">
+      <strong>What is <code>super</code>?</strong>
+      <p><code>super</code> refers to the <strong>parent class</strong>. It lets you call the parent's constructor (<code>super()</code>) or the parent's methods (<code>super.methodName()</code>) from inside a child class.</p>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+      <span class="code-label">super() and super.method() — two uses</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Vehicle</span> <span class="tx">{</span>
+    <span class="kw">protected</span> <span class="kw">String</span> <span class="tx">brand</span><span class="tx">;</span>
+    <span class="kw">protected</span> <span class="kw">int</span>    <span class="tx">speed</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">Vehicle</span><span class="tx">(</span><span class="kw">String</span> <span class="tx">brand, </span><span class="kw">int</span> <span class="tx">speed) {</span>
+        <span class="kw">this</span><span class="tx">.brand = brand</span><span class="tx">;</span>
+        <span class="kw">this</span><span class="tx">.speed = speed</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">describe</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Brand: "</span> <span class="tx">+ brand + </span><span class="st">", Max speed: "</span> <span class="tx">+ speed + </span><span class="st">" km/h"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">ElectricCar</span> <span class="kw">extends</span> <span class="ty">Vehicle</span> <span class="tx">{</span>
+    <span class="kw">private int</span> <span class="tx">batteryRange</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">ElectricCar</span><span class="tx">(</span><span class="kw">String</span> <span class="tx">brand, </span><span class="kw">int</span> <span class="tx">speed, </span><span class="kw">int</span> <span class="tx">batteryRange) {</span>
+        <span class="kw">super</span><span class="tx">(brand, speed);</span>   <span class="cm">// ← calls Vehicle's constructor</span>
+        <span class="kw">this</span><span class="tx">.batteryRange = batteryRange</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Override describe() but also call the parent's version</span>
+    <span class="tx">@</span><span class="fn">Override</span>
+    <span class="kw">public void</span> <span class="fn">describe</span><span class="tx">() {</span>
+        <span class="kw">super</span><span class="tx">.</span><span class="fn">describe</span><span class="tx">();</span>       <span class="cm">// ← calls Vehicle.describe() first</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Battery range: "</span> <span class="tx">+ batteryRange + </span><span class="st">" km"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Output:</span>
+<span class="ty">ElectricCar</span> <span class="tx">ev = </span><span class="kw">new</span> <span class="ty">ElectricCar</span><span class="tx">(</span><span class="st">"Tesla"</span><span class="tx">, </span><span class="nm">250</span><span class="tx">, </span><span class="nm">500</span><span class="tx">);</span>
+<span class="tx">ev.</span><span class="fn">describe</span><span class="tx">();</span>
+<span class="cm">// Brand: Tesla, Max speed: 250 km/h</span>
+<span class="cm">// Battery range: 500 km</span></pre></div>
+  </div>
+
+  <ul class="rule-list">
+    <li class="rule-item"><span class="rule-icon">✅</span> <code>super(args)</code> must be the <strong>first line</strong> in a constructor</li>
+    <li class="rule-item"><span class="rule-icon">✅</span> <code>super.method()</code> can be called anywhere in the child's methods</li>
+    <li class="rule-item"><span class="rule-icon">⚠️</span> You cannot use <code>super</code> in a static method</li>
+  </ul>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 8 — POLYMORPHISM
+══════════════════════════════════════════════════ -->
+<div class="section" id="s8">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <div class="section-title">
+      <h2>Polymorphism</h2>
+      <p>One interface, many behaviours</p>
+    </div>
+  </div>
+
+  <div class="callout what">
+    <span class="callout-icon">📘</span>
+    <div class="callout-body">
+      <strong>What is Polymorphism?</strong>
+      <p>"Poly" = many, "morph" = form. Polymorphism means <strong>the same method name can behave differently</strong> depending on the object it's called on. There are two types: <em>method overriding</em> (runtime) and <em>method overloading</em> (compile-time).</p>
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card purple">
+      <div class="info-card-icon">🔄</div>
+      <h4>Method Overriding (Runtime)</h4>
+      <p>A child class rewrites a parent method with the same name and signature. Decided at runtime.</p>
+    </div>
+    <div class="info-card blue">
+      <div class="info-card-icon">📦</div>
+      <h4>Method Overloading (Compile-time)</h4>
+      <p>Same method name but different parameters in the same class. Decided at compile time.</p>
+    </div>
+  </div>
+
+  <h3>Method Overriding</h3>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+      <span class="code-label">Overriding — same method, different behaviour</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Shape</span> <span class="tx">{</span>
+    <span class="kw">public void</span> <span class="fn">draw</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Drawing a shape..."</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">Circle</span> <span class="kw">extends</span> <span class="ty">Shape</span> <span class="tx">{</span>
+    <span class="tx">@</span><span class="fn">Override</span>
+    <span class="kw">public void</span> <span class="fn">draw</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Drawing a circle ⬤"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">Triangle</span> <span class="kw">extends</span> <span class="ty">Shape</span> <span class="tx">{</span>
+    <span class="tx">@</span><span class="fn">Override</span>
+    <span class="kw">public void</span> <span class="fn">draw</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Drawing a triangle △"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── The power of polymorphism: use parent type to hold child objects</span>
+<span class="ty">Shape</span><span class="tx">[] shapes = {</span><span class="kw">new</span> <span class="ty">Circle</span><span class="tx">(), </span><span class="kw">new</span> <span class="ty">Triangle</span><span class="tx">(), </span><span class="kw">new</span> <span class="ty">Shape</span><span class="tx">()};</span>
+
+<span class="kw">for</span> <span class="tx">(</span><span class="ty">Shape</span> <span class="tx">s : shapes) {</span>
+    <span class="tx">s.</span><span class="fn">draw</span><span class="tx">();</span>  <span class="cm">// Each calls ITS OWN draw() — decided at runtime!</span>
+<span class="tx">}</span>
+<span class="cm">// Output:</span>
+<span class="cm">// Drawing a circle ⬤</span>
+<span class="cm">// Drawing a triangle △</span>
+<span class="cm">// Drawing a shape...</span></pre></div>
+  </div>
+
+  <h3>Method Overloading</h3>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+      <span class="code-label">Overloading — same name, different parameters</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Calculator</span> <span class="tx">{</span>
+
+    <span class="cm">// add two ints</span>
+    <span class="kw">public int</span> <span class="fn">add</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">a, </span><span class="kw">int</span> <span class="tx">b) {</span>
+        <span class="kw">return</span> <span class="tx">a + b</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// add three ints</span>
+    <span class="kw">public int</span> <span class="fn">add</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">a, </span><span class="kw">int</span> <span class="tx">b, </span><span class="kw">int</span> <span class="tx">c) {</span>
+        <span class="kw">return</span> <span class="tx">a + b + c</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// add two doubles</span>
+    <span class="kw">public double</span> <span class="fn">add</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">a, </span><span class="kw">double</span> <span class="tx">b) {</span>
+        <span class="kw">return</span> <span class="tx">a + b</span><span class="tx">;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="ty">Calculator</span> <span class="tx">calc = </span><span class="kw">new</span> <span class="ty">Calculator</span><span class="tx">();</span>
+<span class="tx">calc.</span><span class="fn">add</span><span class="tx">(</span><span class="nm">2</span><span class="tx">, </span><span class="nm">3</span><span class="tx">);</span>           <span class="cm">// → 5</span>
+<span class="tx">calc.</span><span class="fn">add</span><span class="tx">(</span><span class="nm">2</span><span class="tx">, </span><span class="nm">3</span><span class="tx">, </span><span class="nm">4</span><span class="tx">);</span>        <span class="cm">// → 9</span>
+<span class="tx">calc.</span><span class="fn">add</span><span class="tx">(</span><span class="nm">1.5</span><span class="tx">, </span><span class="nm">2.5</span><span class="tx">);</span>       <span class="cm">// → 4.0</span></pre></div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="exercise-header">
+      <span class="exercise-badge">Exercise 3</span>
+      <span class="exercise-title">Polymorphism — Animal Sounds</span>
+    </div>
+    <div class="exercise-body">
+      <p class="exercise-task">Create a parent class <code>Animal</code> with a method <code>makeSound()</code> that prints "Some animal sound". Create subclasses <code>Dog</code>, <code>Cat</code>, and <code>Cow</code> that each override <code>makeSound()</code> with their own sounds. Create an array of <code>Animal</code> and loop through it calling <code>makeSound()</code> on each.</p>
+      <button class="solution-toggle" onclick="toggleSolution('sol3')">▶ Show Solution</button>
+      <div class="solution-panel" id="sol3">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+            <span class="code-label">Solution</span>
+          </div>
+          <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Animal</span> <span class="tx">{</span>
+    <span class="kw">public void</span> <span class="fn">makeSound</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Some animal sound"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">Dog</span> <span class="kw">extends</span> <span class="ty">Animal</span> <span class="tx">{</span>
+    <span class="tx">@</span><span class="fn">Override</span>
+    <span class="kw">public void</span> <span class="fn">makeSound</span><span class="tx">() { </span><span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Woof!"</span><span class="tx">); }</span>
+<span class="tx">}</span>
+<span class="kw">public class</span> <span class="ty">Cat</span> <span class="kw">extends</span> <span class="ty">Animal</span> <span class="tx">{</span>
+    <span class="tx">@</span><span class="fn">Override</span>
+    <span class="kw">public void</span> <span class="fn">makeSound</span><span class="tx">() { </span><span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Meow!"</span><span class="tx">); }</span>
+<span class="tx">}</span>
+<span class="kw">public class</span> <span class="ty">Cow</span> <span class="kw">extends</span> <span class="ty">Animal</span> <span class="tx">{</span>
+    <span class="tx">@</span><span class="fn">Override</span>
+    <span class="kw">public void</span> <span class="fn">makeSound</span><span class="tx">() { </span><span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Moo!"</span><span class="tx">); }</span>
+<span class="tx">}</span>
+
+<span class="cm">// In Main:</span>
+<span class="ty">Animal</span><span class="tx">[] animals = {</span><span class="kw">new</span> <span class="ty">Dog</span><span class="tx">(), </span><span class="kw">new</span> <span class="ty">Cat</span><span class="tx">(), </span><span class="kw">new</span> <span class="ty">Cow</span><span class="tx">()};</span>
+<span class="kw">for</span> <span class="tx">(</span><span class="ty">Animal</span> <span class="tx">a : animals) {</span>
+    <span class="tx">a.</span><span class="fn">makeSound</span><span class="tx">();</span>
+<span class="tx">}</span>
+<span class="cm">// Woof!</span>
+<span class="cm">// Meow!</span>
+<span class="cm">// Moo!</span></pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 9 — ABSTRACTION
+══════════════════════════════════════════════════ -->
+<div class="section" id="s9">
+  <div class="section-header">
+    <div class="section-num">9</div>
+    <div class="section-title">
+      <h2>Abstraction</h2>
+      <p>Hiding complexity, showing only what matters</p>
+    </div>
+  </div>
+
+  <div class="callout what">
+    <span class="callout-icon">📘</span>
+    <div class="callout-body">
+      <strong>What is Abstraction?</strong>
+      <p>Abstraction means <strong>hiding the complex details</strong> and showing only the relevant interface. In Java this is achieved through <em>abstract classes</em> and <em>interfaces</em>. You define <em>what</em> must be done without specifying <em>how</em>.</p>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <strong>Analogy</strong>
+    You use a TV remote. You press "Volume Up" — you don't know how the infrared signal encodes the command, how the TV's chip decodes it, how the amplifier adjusts. The remote gives you an <em>abstract interface</em>. The complexity is hidden.
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card amber">
+      <div class="info-card-icon">🎨</div>
+      <h4>Abstract Class</h4>
+      <p>A class declared with <code>abstract</code>. Can have both regular and abstract methods. Cannot be instantiated directly.</p>
+    </div>
+    <div class="info-card green">
+      <div class="info-card-icon">🔌</div>
+      <h4>Interface</h4>
+      <p>A pure contract — all methods are abstract by default. A class can implement multiple interfaces (unlike inheritance).</p>
+    </div>
+  </div>
+
+  <h3>Abstract Class</h3>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+      <span class="code-label">Abstract class — Payment system</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="cm">// Abstract class — cannot create: new Payment()</span>
+<span class="kw">public abstract class</span> <span class="ty">Payment</span> <span class="tx">{</span>
+    <span class="kw">protected double</span> <span class="tx">amount</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">Payment</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="kw">this</span><span class="tx">.amount = amount</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Abstract method — no body! Subclasses MUST implement it.</span>
+    <span class="kw">public abstract void</span> <span class="fn">pay</span><span class="tx">();</span>
+
+    <span class="cm">// Normal method — inherited by all subclasses</span>
+    <span class="kw">public void</span> <span class="fn">printReceipt</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Payment receipt: $"</span> <span class="tx">+ amount);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Concrete subclass — must implement pay()</span>
+<span class="kw">public class</span> <span class="ty">CreditCardPayment</span> <span class="kw">extends</span> <span class="ty">Payment</span> <span class="tx">{</span>
+    <span class="kw">private</span> <span class="kw">String</span> <span class="tx">cardNumber</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">CreditCardPayment</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount, </span><span class="kw">String</span> <span class="tx">cardNumber) {</span>
+        <span class="kw">super</span><span class="tx">(amount);</span>
+        <span class="kw">this</span><span class="tx">.cardNumber = cardNumber</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="tx">@</span><span class="fn">Override</span>
+    <span class="kw">public void</span> <span class="fn">pay</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Paid $"</span> <span class="tx">+ amount + </span><span class="st">" via Credit Card **** "</span> <span class="tx">+ cardNumber.</span><span class="fn">substring</span><span class="tx">(cardNumber.</span><span class="fn">length</span><span class="tx">() - </span><span class="nm">4</span><span class="tx">));</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">CashPayment</span> <span class="kw">extends</span> <span class="ty">Payment</span> <span class="tx">{</span>
+    <span class="kw">public</span> <span class="ty">CashPayment</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) { </span><span class="kw">super</span><span class="tx">(amount); }</span>
+
+    <span class="tx">@</span><span class="fn">Override</span>
+    <span class="kw">public void</span> <span class="fn">pay</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Paid $"</span> <span class="tx">+ amount + </span><span class="st">" in cash."</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Usage:</span>
+<span class="ty">Payment</span> <span class="tx">p1 = </span><span class="kw">new</span> <span class="ty">CreditCardPayment</span><span class="tx">(</span><span class="nm">150.00</span><span class="tx">, </span><span class="st">"1234567890123456"</span><span class="tx">);</span>
+<span class="ty">Payment</span> <span class="tx">p2 = </span><span class="kw">new</span> <span class="ty">CashPayment</span><span class="tx">(</span><span class="nm">30.00</span><span class="tx">);</span>
+
+<span class="tx">p1.</span><span class="fn">pay</span><span class="tx">();</span>            <span class="cm">// Paid $150.0 via Credit Card **** 3456</span>
+<span class="tx">p1.</span><span class="fn">printReceipt</span><span class="tx">();</span>   <span class="cm">// Payment receipt: $150.0</span>
+<span class="tx">p2.</span><span class="fn">pay</span><span class="tx">();</span>            <span class="cm">// Paid $30.0 in cash.</span></pre></div>
+  </div>
+
+  <h3>Interface</h3>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+      <span class="code-label">Interface — defining a contract</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="cm">// Interface: a pure contract</span>
+<span class="kw">public interface</span> <span class="ty">Printable</span> <span class="tx">{</span>
+    <span class="kw">void</span> <span class="fn">print</span><span class="tx">();</span>       <span class="cm">// automatically public and abstract</span>
+<span class="tx">}</span>
+
+<span class="kw">public interface</span> <span class="ty">Saveable</span> <span class="tx">{</span>
+    <span class="kw">void</span> <span class="fn">save</span><span class="tx">();</span>
+<span class="tx">}</span>
+
+<span class="cm">// A class can IMPLEMENT multiple interfaces</span>
+<span class="kw">public class</span> <span class="ty">Report</span> <span class="kw">implements</span> <span class="ty">Printable</span><span class="tx">, </span><span class="ty">Saveable</span> <span class="tx">{</span>
+    <span class="kw">private</span> <span class="kw">String</span> <span class="tx">title</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">Report</span><span class="tx">(</span><span class="kw">String</span> <span class="tx">title) { </span><span class="kw">this</span><span class="tx">.title = title; }</span>
+
+    <span class="tx">@</span><span class="fn">Override</span>
+    <span class="kw">public void</span> <span class="fn">print</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Printing: "</span> <span class="tx">+ title);</span>
+    <span class="tx">}</span>
+
+    <span class="tx">@</span><span class="fn">Override</span>
+    <span class="kw">public void</span> <span class="fn">save</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Saving: "</span> <span class="tx">+ title);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre></div>
+  </div>
+
+  <div class="callout warn">
+    <span class="callout-icon">⚡</span>
+    <div class="callout-body">
+      <strong>Abstract Class vs Interface — when to use which?</strong>
+      <ul>
+        <li>Use <strong>abstract class</strong> when subclasses share common code (fields, implemented methods)</li>
+        <li>Use <strong>interface</strong> when you just want to enforce a contract with no shared implementation</li>
+        <li>Use <strong>interface</strong> when a class needs to fulfil multiple roles (Java allows multiple interface implementation but only single inheritance)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="exercise-header">
+      <span class="exercise-badge">Exercise 4</span>
+      <span class="exercise-title">Abstraction — Shape Area Calculator</span>
+    </div>
+    <div class="exercise-body">
+      <p class="exercise-task">Create an abstract class <code>Shape</code> with an abstract method <code>getArea()</code> (returns double). Create subclasses <code>Circle</code> (with field <code>radius</code>) and <code>Rectangle</code> (with fields <code>width</code> and <code>height</code>). Each must implement <code>getArea()</code> with the correct formula. In Main, create one of each and print their areas.</p>
+      <button class="solution-toggle" onclick="toggleSolution('sol4')">▶ Show Solution</button>
+      <div class="solution-panel" id="sol4">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+            <span class="code-label">Solution</span>
+          </div>
+          <div class="code-body"><pre>
+<span class="kw">public abstract class</span> <span class="ty">Shape</span> <span class="tx">{</span>
+    <span class="kw">public abstract double</span> <span class="fn">getArea</span><span class="tx">();</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">Circle</span> <span class="kw">extends</span> <span class="ty">Shape</span> <span class="tx">{</span>
+    <span class="kw">private double</span> <span class="tx">radius</span><span class="tx">;</span>
+    <span class="kw">public</span> <span class="ty">Circle</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">radius) { </span><span class="kw">this</span><span class="tx">.radius = radius; }</span>
+
+    <span class="tx">@</span><span class="fn">Override</span>
+    <span class="kw">public double</span> <span class="fn">getArea</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="ty">Math</span><span class="tx">.PI * radius * radius</span><span class="tx">;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">Rectangle</span> <span class="kw">extends</span> <span class="ty">Shape</span> <span class="tx">{</span>
+    <span class="kw">private double</span> <span class="tx">width, height</span><span class="tx">;</span>
+    <span class="kw">public</span> <span class="ty">Rectangle</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">w, </span><span class="kw">double</span> <span class="tx">h) { width = w; height = h; }</span>
+
+    <span class="tx">@</span><span class="fn">Override</span>
+    <span class="kw">public double</span> <span class="fn">getArea</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">width * height; }</span>
+<span class="tx">}</span>
+
+<span class="cm">// In Main:</span>
+<span class="ty">Shape</span> <span class="tx">c = </span><span class="kw">new</span> <span class="ty">Circle</span><span class="tx">(</span><span class="nm">5</span><span class="tx">);</span>
+<span class="ty">Shape</span> <span class="tx">r = </span><span class="kw">new</span> <span class="ty">Rectangle</span><span class="tx">(</span><span class="nm">4</span><span class="tx">, </span><span class="nm">6</span><span class="tx">);</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Circle area: "</span>    <span class="tx">+ c.</span><span class="fn">getArea</span><span class="tx">());</span>  <span class="cm">// ~78.54</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Rectangle area: "</span> <span class="tx">+ r.</span><span class="fn">getArea</span><span class="tx">());</span>  <span class="cm">// 24.0</span></pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 10 — NAMING CONVENTIONS
+══════════════════════════════════════════════════ -->
+<div class="section" id="s10">
+  <div class="section-header">
+    <div class="section-num">10</div>
+    <div class="section-title">
+      <h2>Naming Conventions &amp; Rules</h2>
+      <p>Write code that every Java developer can read</p>
+    </div>
+  </div>
+
+  <table>
+    <tr>
+      <th>Element</th><th>Convention</th><th>Example</th>
+    </tr>
+    <tr><td>Class</td><td>PascalCase — every word capitalised</td><td><code>BankAccount</code>, <code>StudentManager</code></td></tr>
+    <tr><td>Object / variable</td><td>camelCase — first word lowercase</td><td><code>myAccount</code>, <code>totalScore</code></td></tr>
+    <tr><td>Method</td><td>camelCase — starts with a verb</td><td><code>getBalance()</code>, <code>calculateTax()</code></td></tr>
+    <tr><td>Constant</td><td>ALL_CAPS with underscores</td><td><code>MAX_SIZE</code>, <code>PI</code></td></tr>
+    <tr><td>Package</td><td>all lowercase, no underscores</td><td><code>com.myapp.models</code></td></tr>
+    <tr><td>Interface</td><td>PascalCase, often adjective</td><td><code>Printable</code>, <code>Runnable</code>, <code>Serializable</code></td></tr>
+    <tr><td>Abstract class</td><td>PascalCase, often noun</td><td><code>Shape</code>, <code>Vehicle</code>, <code>AbstractUser</code></td></tr>
+    <tr><td>Getter method</td><td>getFieldName()</td><td><code>getName()</code>, <code>getAge()</code></td></tr>
+    <tr><td>Setter method</td><td>setFieldName(value)</td><td><code>setName(String name)</code></td></tr>
+    <tr><td>Boolean getter</td><td>isCondition() or hasCondition()</td><td><code>isActive()</code>, <code>hasPermission()</code></td></tr>
+  </table>
+
+  <div class="callout tip">
+    <span class="callout-icon">📝</span>
+    <div class="callout-body">
+      <strong>Key Rules Summary</strong>
+      <ul>
+        <li>One public class per <code>.java</code> file, filename = class name</li>
+        <li>Fields: <code>private</code>. Methods: <code>public</code>. Constructor: <code>public</code>.</li>
+        <li>Always use <code>@Override</code> annotation when overriding parent methods</li>
+        <li>Abstract class with at least one abstract method cannot be instantiated</li>
+        <li>Interface methods are implicitly <code>public abstract</code></li>
+        <li><code>super()</code> must be the first line of a child constructor</li>
+        <li>Java is single-inheritance for classes, but multi-implementation for interfaces</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Final Challenge -->
+  <div class="exercise-card" style="border-color: rgba(167,139,250,0.35); margin-top: 30px;">
+    <div class="exercise-header" style="background: rgba(167,139,250,0.08); border-color: rgba(167,139,250,0.2);">
+      <span class="exercise-badge" style="background: rgba(167,139,250,0.2); color: var(--accent2);">Final Challenge</span>
+      <span class="exercise-title">Build a Complete OOP System — Library</span>
+    </div>
+    <div class="exercise-body">
+      <p>Combine everything you've learned:</p>
+      <p class="exercise-task">
+        1. Create an abstract class <code>LibraryItem</code> with private fields <code>title</code> and <code>author</code>, a constructor, getters, and an abstract method <code>getDetails()</code>.<br><br>
+        2. Create subclass <code>Book</code> that adds <code>pageCount</code> and implements <code>getDetails()</code>.<br><br>
+        3. Create subclass <code>Magazine</code> that adds <code>issueNumber</code> and implements <code>getDetails()</code>.<br><br>
+        4. In Main, create an array of <code>LibraryItem</code> containing both Books and Magazines. Loop through and call <code>getDetails()</code> on each.
+      </p>
+      <button class="solution-toggle" onclick="toggleSolution('solFinal')">▶ Show Solution</button>
+      <div class="solution-panel" id="solFinal">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div></div>
+            <span class="code-label">Full Solution</span>
+          </div>
+          <div class="code-body"><pre>
+<span class="kw">public abstract class</span> <span class="ty">LibraryItem</span> <span class="tx">{</span>
+    <span class="kw">private</span> <span class="kw">String</span> <span class="tx">title</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="kw">String</span> <span class="tx">author</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">LibraryItem</span><span class="tx">(</span><span class="kw">String</span> <span class="tx">title, </span><span class="kw">String</span> <span class="tx">author) {</span>
+        <span class="kw">this</span><span class="tx">.title  = title</span><span class="tx">;</span>
+        <span class="kw">this</span><span class="tx">.author = author</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public</span> <span class="kw">String</span> <span class="fn">getTitle</span><span class="tx">()  { </span><span class="kw">return</span> <span class="tx">title; }</span>
+    <span class="kw">public</span> <span class="kw">String</span> <span class="fn">getAuthor</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">author; }</span>
+
+    <span class="kw">public abstract void</span> <span class="fn">getDetails</span><span class="tx">();</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">Book</span> <span class="kw">extends</span> <span class="ty">LibraryItem</span> <span class="tx">{</span>
+    <span class="kw">private int</span> <span class="tx">pageCount</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">Book</span><span class="tx">(</span><span class="kw">String</span> <span class="tx">title, </span><span class="kw">String</span> <span class="tx">author, </span><span class="kw">int</span> <span class="tx">pageCount) {</span>
+        <span class="kw">super</span><span class="tx">(title, author);</span>
+        <span class="kw">this</span><span class="tx">.pageCount = pageCount</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="tx">@</span><span class="fn">Override</span>
+    <span class="kw">public void</span> <span class="fn">getDetails</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"[Book] "</span> <span class="tx">+ </span><span class="fn">getTitle</span><span class="tx">() + </span><span class="st">" by "</span> <span class="tx">+ </span><span class="fn">getAuthor</span><span class="tx">() + </span><span class="st">" | Pages: "</span> <span class="tx">+ pageCount);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">Magazine</span> <span class="kw">extends</span> <span class="ty">LibraryItem</span> <span class="tx">{</span>
+    <span class="kw">private int</span> <span class="tx">issueNumber</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">Magazine</span><span class="tx">(</span><span class="kw">String</span> <span class="tx">title, </span><span class="kw">String</span> <span class="tx">author, </span><span class="kw">int</span> <span class="tx">issueNumber) {</span>
+        <span class="kw">super</span><span class="tx">(title, author);</span>
+        <span class="kw">this</span><span class="tx">.issueNumber = issueNumber</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="tx">@</span><span class="fn">Override</span>
+    <span class="kw">public void</span> <span class="fn">getDetails</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"[Magazine] "</span> <span class="tx">+ </span><span class="fn">getTitle</span><span class="tx">() + </span><span class="st">" | Issue #"</span> <span class="tx">+ issueNumber);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Main:</span>
+<span class="ty">LibraryItem</span><span class="tx">[] items = {</span>
+    <span class="kw">new</span> <span class="ty">Book</span><span class="tx">(</span><span class="st">"Clean Code"</span><span class="tx">, </span><span class="st">"Robert Martin"</span><span class="tx">, </span><span class="nm">464</span><span class="tx">),</span>
+    <span class="kw">new</span> <span class="ty">Magazine</span><span class="tx">(</span><span class="st">"National Geographic"</span><span class="tx">, </span><span class="st">"NG Society"</span><span class="tx">, </span><span class="nm">523</span><span class="tx">),</span>
+    <span class="kw">new</span> <span class="ty">Book</span><span class="tx">(</span><span class="st">"Effective Java"</span><span class="tx">, </span><span class="st">"Joshua Bloch"</span><span class="tx">, </span><span class="nm">412</span><span class="tx">)</span>
+<span class="tx">};</span>
+
+<span class="kw">for</span> <span class="tx">(</span><span class="ty">LibraryItem</span> <span class="tx">item : items) {</span>
+    <span class="tx">item.</span><span class="fn">getDetails</span><span class="tx">();</span>
+<span class="tx">}</span>
+<span class="cm">// [Book] Clean Code by Robert Martin | Pages: 464</span>
+<span class="cm">// [Magazine] National Geographic | Issue #523</span>
+<span class="cm">// [Book] Effective Java by Joshua Bloch | Pages: 412</span></pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>OOP in Java — Complete Guide &nbsp;·&nbsp; All concepts, examples, and exercises in one document</p>
+  <p style="margin-top: 8px; font-size: 11px;">Classes · Objects · Constructors · this · super · Encapsulation · Inheritance · Polymorphism · Abstraction</p>
+</footer>
+
+<script>
+  function toggleSolution(id) {
+    const panel = document.getElementById(id);
+    const btn = panel.previousElementSibling;
+    const isOpen = panel.classList.contains('open');
+    panel.classList.toggle('open');
+    btn.textContent = isOpen ? '▶ Show Solution' : '▼ Hide Solution';
+  }
+</script>
+</body>
+</html>

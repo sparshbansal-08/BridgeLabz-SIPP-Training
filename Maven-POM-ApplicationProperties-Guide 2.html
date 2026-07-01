@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maven, POM and application.properties - Beginner Q&amp;A Guide</title>
+<style>
+    :root {
+        --primary: #11335b;
+        --secondary: #1f6fb2;
+        --accent: #b45309;
+        --light: #eef4fa;
+        --border: #c7d6e6;
+        --text: #1f2933;
+        --muted: #4a5b73;
+        --code-bg: #0d1f33;
+        --qbar: #1f6fb2;
+    }
+    * { box-sizing: border-box; }
+    body {
+        font-family: "Segoe UI", Calibri, Arial, sans-serif;
+        color: var(--text);
+        line-height: 1.55;
+        padding: 0 48px 64px 48px;
+        max-width: 1000px;
+        margin: 0 auto;
+        background: #ffffff;
+    }
+    h1, h2, h3 { color: var(--primary); font-weight: 600; }
+    h1 { font-size: 28px; margin: 0 0 4px 0; }
+    h2 {
+        font-size: 22px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 3px solid var(--secondary);
+        padding-bottom: 6px;
+        margin-top: 44px;
+    }
+    h3 { font-size: 16px; margin-top: 26px; color: var(--accent); }
+    p { margin: 8px 0; }
+
+    code {
+        font-family: "Consolas", "Courier New", monospace;
+        background: var(--light);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        padding: 1px 5px;
+        font-size: 12.5px;
+        color: #b03060;
+    }
+
+    .cover {
+        text-align: center;
+        padding: 80px 0 56px 0;
+        border-bottom: 3px solid var(--primary);
+        margin-bottom: 10px;
+    }
+    .cover .subtitle { font-size: 16px; color: var(--muted); margin-top: 8px; }
+    .cover .meta { font-size: 13px; color: var(--muted); margin-top: 32px; }
+    .badge {
+        display: inline-block;
+        background: var(--accent);
+        color: #fff;
+        font-size: 12px;
+        padding: 4px 12px;
+        border-radius: 14px;
+        margin: 4px;
+    }
+
+    .qa { margin: 14px 0; padding-left: 14px; border-left: 3px solid var(--qbar); }
+    .q { font-weight: 600; color: var(--primary); margin-bottom: 3px; }
+    .a { margin: 0 0 4px 0; }
+    .a ul { margin: 4px 0 4px 18px; padding: 0; }
+    .a li { margin: 2px 0; }
+
+    .why {
+        font-size: 12.5px;
+        color: var(--muted);
+        margin: 4px 0 0 0;
+        font-style: italic;
+    }
+    .why b { color: var(--accent); font-style: normal; }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 12px 0;
+        font-size: 12.5px;
+    }
+    th, td { border: 1px solid var(--border); padding: 7px 10px; text-align: left; vertical-align: top; }
+    th { background: var(--primary); color: #fff; }
+    tr:nth-child(even) td { background: var(--light); }
+
+    .note {
+        background: #eaf2fb;
+        border-left: 4px solid var(--accent);
+        padding: 10px 16px;
+        margin: 14px 0;
+        font-size: 13px;
+    }
+    .tip {
+        background: #eafaf1;
+        border-left: 4px solid #1f8a52;
+        padding: 10px 16px;
+        margin: 14px 0;
+        font-size: 13px;
+    }
+    .filebox {
+        background: #fffaf0;
+        border: 1px solid #e6cf9c;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 12px 0;
+        font-family: "Consolas", "Courier New", monospace;
+        font-size: 12px;
+        white-space: pre;
+        overflow-x: auto;
+    }
+    .filebox .cap {
+        display: block;
+        font-family: "Segoe UI", Arial, sans-serif;
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .kw { color: #b03060; }
+    .cm { color: #6f7d52; font-style: italic; }
+    .st { color: #1f7a4d; }
+
+    .toc { columns: 2; column-gap: 36px; font-size: 13.5px; }
+    .toc a { color: var(--secondary); text-decoration: none; line-height: 1.9; }
+
+    footer {
+        margin-top: 50px;
+        border-top: 1px solid var(--border);
+        padding-top: 12px;
+        font-size: 12px;
+        color: var(--muted);
+        text-align: center;
+    }
+    @media print {
+        body { padding: 0 12px; }
+        h2 { page-break-after: avoid; page-break-before: always; }
+        .qa, table, .note, .tip, .filebox { page-break-inside: avoid; }
+        .cover { padding: 60px 0 40px 0; }
+        #toc-section { page-break-after: always; }
+    }
+</style>
+</head>
+<body>
+
+<div class="cover">
+    <h1>Maven, POM &amp; application.properties</h1>
+    <div class="subtitle">A Beginner Question &amp; Answer Guide &mdash; Explained in Simple Language</div>
+    <div style="margin-top:22px;">
+        <span class="badge">What is Maven</span>
+        <span class="badge">What is POM</span>
+        <span class="badge">Parent &amp; Starter Parent</span>
+        <span class="badge">Dependencies</span>
+        <span class="badge">Scope</span>
+        <span class="badge">Maven Lifecycle</span>
+        <span class="badge">application.properties</span>
+        <span class="badge">SQL Dialect &amp; ddl-auto</span>
+    </div>
+    <div class="meta">
+        Based on a real Spring Boot pom.xml and application.properties &bull; Scenario &amp; Frequently-Asked Questions
+    </div>
+</div>
+
+<div id="toc-section">
+<h2>Table of Contents</h2>
+<div class="toc">
+    <a href="#m1">1. Maven Basics</a><br>
+    <a href="#m2">2. POM - What and Why</a><br>
+    <a href="#m3">3. The Parent and Spring Boot Starter Parent</a><br>
+    <a href="#m4">4. Dependencies in the POM (Explained)</a><br>
+    <a href="#m5">5. Dependency Scope (Deep Dive)</a><br>
+    <a href="#m6">6. Other Dependency Parameters</a><br>
+    <a href="#m7">7. Maven Lifecycle and Commands</a><br>
+    <a href="#m8">8. Maven Scenario-Based Questions</a><br>
+    <a href="#m9">9. application.properties Explained Line by Line</a><br>
+    <a href="#m10">10. SQL Dialect, ddl-auto, Logging Q&amp;A</a><br>
+    <a href="#m11">11. More Frequently Asked Maven Questions</a><br>
+    <a href="#m12">12. Maven Plugins, Goals &amp; Profiles</a><br>
+    <a href="#m13">13. More Dependency &amp; Scope Scenarios</a><br>
+    <a href="#m14">14. More application.properties Questions</a><br>
+    <a href="#m15">15. Profiles &amp; Multiple Environments</a><br>
+    <a href="#m16">16. Rapid-Fire Practice (Quick Q&amp;A)</a><br>
+</div>
+</div>
+
+<!-- ============ 1. MAVEN BASICS ============ -->
+<h2 id="m1">1. Maven Basics</h2>
+
+<div class="qa"><div class="q">Q1. What is Maven?</div>
+<div class="a">Maven is a <b>build and dependency management tool</b> for Java projects. It compiles your code, runs tests, packages the app into a JAR or WAR file, and automatically downloads the libraries (JAR files) your project needs.</div>
+<div class="why"><b>Why this matters:</b> Without Maven you would download every library by hand and fix version clashes yourself. Maven does this for you.</div></div>
+
+<div class="qa"><div class="q">Q2. Why do we need Maven?</div>
+<div class="a"><ul>
+<li><b>Dependency management:</b> list a library once and Maven downloads it and everything it depends on.</li>
+<li><b>Standard build:</b> every Maven project builds the same way with <code>mvn clean package</code>.</li>
+<li><b>Standard folder layout:</b> code in <code>src/main/java</code>, tests in <code>src/test/java</code>.</li>
+<li><b>Repeatable:</b> the same build works on your machine, a teammate's machine, and the build server.</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q3. What is a Maven repository?</div>
+<div class="a">A storage location for libraries. There are three levels:
+<ul>
+<li><b>Local</b> &mdash; a folder on your machine called <code>.m2</code> where downloaded libraries are cached.</li>
+<li><b>Central</b> &mdash; the public online repository Maven downloads from by default.</li>
+<li><b>Remote</b> &mdash; a company's private repository (for example Nexus or Artifactory).</li>
+</ul></div>
+<div class="why"><b>Example:</b> The first time you build, Maven downloads libraries from Central into <code>.m2</code>. The next build reuses them from <code>.m2</code>, so it is faster.</div></div>
+
+<!-- ============ 2. POM ============ -->
+<h2 id="m2">2. POM - What and Why</h2>
+
+<div class="qa"><div class="q">Q1. What does POM stand for?</div>
+<div class="a">POM stands for <b>Project Object Model</b>. It is the "model" (description) of your project, written in a file named <code>pom.xml</code>.</div></div>
+
+<div class="qa"><div class="q">Q2. What is pom.xml?</div>
+<div class="a">It is the <b>central configuration file</b> of a Maven project. It tells Maven the project's name, version, Java version, the libraries it needs (dependencies), and how to build it (plugins).</div></div>
+
+<div class="qa"><div class="q">Q3. Why do we need a POM?</div>
+<div class="a">Because it is the single place where Maven reads everything it needs to build the project: which libraries to download, which Java version to use, and how to package the app. No POM means Maven cannot build the project.</div>
+<div class="why"><b>Why this question is asked:</b> Interviewers want to confirm you understand that the POM is the "control center" of a Maven build, not just a random config file.</div></div>
+
+<div class="qa"><div class="q">Q4. What are the most important parts of a POM?</div>
+<div class="a">
+<table>
+<tr><th>Element</th><th>What it does</th></tr>
+<tr><td><code>&lt;modelVersion&gt;</code></td><td>The POM format version. Always <code>4.0.0</code> for modern Maven.</td></tr>
+<tr><td><code>&lt;parent&gt;</code></td><td>A parent POM we inherit settings and versions from.</td></tr>
+<tr><td><code>&lt;groupId&gt;</code></td><td>The organization/group that owns the project (e.g. <code>com.springboot</code>).</td></tr>
+<tr><td><code>&lt;artifactId&gt;</code></td><td>The project's own name (e.g. <code>coolapp</code>).</td></tr>
+<tr><td><code>&lt;version&gt;</code></td><td>The project's version (e.g. <code>0.0.1-SNAPSHOT</code>).</td></tr>
+<tr><td><code>&lt;properties&gt;</code></td><td>Reusable values, such as <code>&lt;java.version&gt;21&lt;/java.version&gt;</code>.</td></tr>
+<tr><td><code>&lt;dependencies&gt;</code></td><td>The list of libraries the project needs.</td></tr>
+<tr><td><code>&lt;build&gt;</code> / <code>&lt;plugins&gt;</code></td><td>Tools that run during the build, such as the Spring Boot plugin.</td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q5. What are GAV coordinates?</div>
+<div class="a">GAV = <b>GroupId, ArtifactId, Version</b>. Together they uniquely identify any project or library in the Maven world, like a postal address.</div>
+<div class="why"><b>Example:</b> In the shared POM, the app's address is <code>com.springboot</code> : <code>coolapp</code> : <code>0.0.1-SNAPSHOT</code>.</div></div>
+
+<div class="qa"><div class="q">Q6. What does SNAPSHOT mean in the version?</div>
+<div class="a"><code>SNAPSHOT</code> means the project is <b>still in development</b> (not a final release). Maven treats snapshot versions as changeable, so it can pick up the latest build.</div></div>
+
+<!-- ============ 3. PARENT ============ -->
+<h2 id="m3">3. The Parent and Spring Boot Starter Parent</h2>
+
+<div class="filebox"><span class="cap">From the shared pom.xml</span>&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;4.0.6&lt;/version&gt;
+    &lt;relativePath/&gt;
+&lt;/parent&gt;</div>
+
+<div class="qa"><div class="q">Q1. What is a parent in Maven?</div>
+<div class="a">A parent is another POM that your project <b>inherits from</b>. Your project automatically gets the parent's settings, dependency versions, and plugin configuration, so you do not have to repeat them.</div></div>
+
+<div class="qa"><div class="q">Q2. What is the Spring Boot starter parent?</div>
+<div class="a"><code>spring-boot-starter-parent</code> is a special parent POM provided by Spring Boot. It gives your project:
+<ul>
+<li><b>Tested, compatible versions</b> for hundreds of libraries (so you do not write versions yourself).</li>
+<li><b>Sensible defaults</b> for the Java compiler, UTF-8 encoding, and common plugins.</li>
+<li><b>Plugin configuration</b> such as the Spring Boot Maven plugin settings.</li>
+</ul></div>
+<div class="why"><b>Why it is important:</b> This is why most dependencies in the POM have <b>no <code>&lt;version&gt;</code> tag</b> &mdash; the parent already decides the correct version, keeping all libraries compatible.</div></div>
+
+<div class="qa"><div class="q">Q3. Why do most dependencies have no version number?</div>
+<div class="a">Because the Spring Boot parent's <b>dependency management</b> already defines the right version for them. You only write a version when you use a library the parent does not manage.</div>
+<div class="why"><b>Example from the POM:</b> <code>spring-boot-starter-data-jpa</code> has no version (managed by the parent), but <code>spring-boot-starter-validation</code> has <code>&lt;version&gt;4.1.0-M4&lt;/version&gt;</code> because a specific version was forced.</div></div>
+
+<div class="qa"><div class="q">Q4. What does <code>&lt;relativePath/&gt;</code> mean in the parent?</div>
+<div class="a">An empty <code>&lt;relativePath/&gt;</code> tells Maven <b>not</b> to look for the parent POM in a local folder, and instead download it from the repository. The comment in the file says exactly this: "lookup parent from repository".</div></div>
+
+<div class="qa"><div class="q">Q5. Can I build a Spring Boot app without the starter parent?</div>
+<div class="a">Yes, but then you must import Spring Boot's dependency versions yourself using a <b>BOM</b> (Bill of Materials) inside <code>&lt;dependencyManagement&gt;</code>. The parent is simply the easiest way.</div></div>
+
+<!-- ============ 4. DEPENDENCIES ============ -->
+<h2 id="m4">4. Dependencies in the POM (Explained)</h2>
+
+<div class="qa"><div class="q">Q1. What is a dependency?</div>
+<div class="a">A dependency is a <b>library (JAR file) your project needs</b> to work. You list it once in the POM and Maven downloads it for you.</div></div>
+
+<div class="qa"><div class="q">Q2. What is a "starter" dependency?</div>
+<div class="a">A starter is a <b>bundle of related libraries</b> grouped under one name, so you add many things in one line.</div>
+<div class="why"><b>Example:</b> <code>spring-boot-starter-data-jpa</code> brings in JPA, Hibernate, and the database connection libraries together.</div></div>
+
+<div class="qa"><div class="q">Q3. What does each dependency in the shared POM do?</div>
+<div class="a">
+<table>
+<tr><th>Dependency</th><th>Purpose</th></tr>
+<tr><td><code>spring-boot-starter-webmvc</code></td><td>Build web apps and REST APIs; includes Spring MVC and an embedded Tomcat server.</td></tr>
+<tr><td><code>spring-boot-devtools</code></td><td>Developer convenience: automatic restart and live reload while coding.</td></tr>
+<tr><td><code>spring-boot-starter-thymeleaf</code></td><td>Thymeleaf template engine to build HTML pages on the server.</td></tr>
+<tr><td><code>spring-boot-starter-webmvc-test</code></td><td>Testing tools for web layers (used only in tests).</td></tr>
+<tr><td><code>mysql-connector-j</code></td><td>The MySQL JDBC driver, needed at runtime to talk to a MySQL database.</td></tr>
+<tr><td><code>spring-boot-starter-data-jpa</code></td><td>Spring Data JPA + Hibernate for saving and reading objects from the database.</td></tr>
+<tr><td><code>jakarta.persistence-api</code></td><td>The JPA annotations and interfaces (e.g. <code>@Entity</code>, <code>@Id</code>).</td></tr>
+<tr><td><code>spring-boot-starter-validation</code></td><td>Bean Validation (e.g. <code>@NotNull</code>, <code>@Size</code>) for checking input.</td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q4. What is the Spring Boot Maven plugin (in <code>&lt;build&gt;</code>)?</div>
+<div class="a">It packages the app into a single runnable "fat JAR" that contains your code, all libraries, and the embedded server, so you can run it with <code>java -jar app.jar</code>.</div></div>
+
+<!-- ============ 5. SCOPE ============ -->
+<h2 id="m5">5. Dependency Scope (Deep Dive)</h2>
+
+<div class="qa"><div class="q">Q1. What is a dependency scope?</div>
+<div class="a">A scope tells Maven <b>when</b> a dependency is needed &mdash; while compiling, while testing, while running, or all of these. It controls where the library is available and whether it is shipped in the final package.</div></div>
+
+<div class="qa"><div class="q">Q2. Why do we use scope? (commonly asked)</div>
+<div class="a">To keep the build <b>correct and the final package small</b>. For example, testing libraries should not be shipped inside your production JAR, and a database driver is only needed when the app runs, not when it compiles.</div>
+<div class="why"><b>Example from the POM:</b> <code>mysql-connector-j</code> uses <code>runtime</code> scope (needed to run, not to compile), and <code>spring-boot-starter-webmvc-test</code> uses <code>test</code> scope (only for tests).</div></div>
+
+<div class="qa"><div class="q">Q3. What values can scope take?</div>
+<div class="a">
+<table>
+<tr><th>Scope</th><th>Available during</th><th>Shipped in JAR?</th><th>Example</th></tr>
+<tr><td><code>compile</code> (default)</td><td>Compile, test, run</td><td>Yes</td><td>Spring Web, most libraries</td></tr>
+<tr><td><code>provided</code></td><td>Compile, test</td><td>No (the server provides it)</td><td>Servlet API on an external server</td></tr>
+<tr><td><code>runtime</code></td><td>Test, run</td><td>Yes</td><td>MySQL driver</td></tr>
+<tr><td><code>test</code></td><td>Test only</td><td>No</td><td>JUnit, Mockito</td></tr>
+<tr><td><code>system</code></td><td>Compile, test</td><td>No</td><td>A local JAR given by a fixed path (rarely used)</td></tr>
+<tr><td><code>import</code></td><td>Dependency management only</td><td>No</td><td>Importing a BOM in <code>&lt;dependencyManagement&gt;</code></td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q4. What is the default scope if I do not write one?</div>
+<div class="a">The default is <code>compile</code>. It means the library is available everywhere (compile, test, run) and is included in the final package.</div>
+<div class="why"><b>Example:</b> In the shared POM, <code>spring-boot-starter-validation</code> explicitly writes <code>&lt;scope&gt;compile&lt;/scope&gt;</code>, which is the same as the default.</div></div>
+
+<div class="qa"><div class="q">Q5. Difference between <code>provided</code> and <code>runtime</code>?</div>
+<div class="a"><ul>
+<li><code>provided</code>: needed to <b>compile</b>, but NOT packaged because the runtime environment already supplies it.</li>
+<li><code>runtime</code>: NOT needed to compile, but needed to <b>run</b> (and it is packaged).</li>
+</ul></div>
+<div class="why"><b>Simple way to remember:</b> A database driver is <code>runtime</code> (your code talks to interfaces at compile time, the driver is only needed when running). A servlet API on an external Tomcat is <code>provided</code> (compile against it, but the server brings its own at runtime).</div></div>
+
+<!-- ============ 6. OTHER PARAMETERS ============ -->
+<h2 id="m6">6. Other Dependency Parameters</h2>
+
+<div class="qa"><div class="q">Q1. Besides scope, what other tags can a dependency have?</div>
+<div class="a">
+<table>
+<tr><th>Tag</th><th>What it does</th></tr>
+<tr><td><code>&lt;groupId&gt;</code></td><td>The library's group/owner.</td></tr>
+<tr><td><code>&lt;artifactId&gt;</code></td><td>The library's name.</td></tr>
+<tr><td><code>&lt;version&gt;</code></td><td>The library's version (optional if a parent/BOM manages it).</td></tr>
+<tr><td><code>&lt;scope&gt;</code></td><td>When the library is needed (compile, test, runtime, etc.).</td></tr>
+<tr><td><code>&lt;optional&gt;</code></td><td>If <code>true</code>, the dependency is not passed on to projects that use yours.</td></tr>
+<tr><td><code>&lt;exclusions&gt;</code></td><td>Remove an unwanted library that comes in through this dependency.</td></tr>
+<tr><td><code>&lt;type&gt;</code></td><td>The package type, default <code>jar</code> (can be <code>pom</code>, <code>war</code>, etc.).</td></tr>
+<tr><td><code>&lt;classifier&gt;</code></td><td>Picks a specific variant of an artifact (e.g. <code>sources</code>, <code>javadoc</code>).</td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q2. What is an exclusion and when do you use it?</div>
+<div class="a">An exclusion removes a library that is pulled in automatically by another dependency, usually to avoid a conflict or to swap it for a different one.</div>
+<div class="filebox"><span class="cap">Example: exclude default logging to use another</span>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;exclusions&gt;
+        &lt;exclusion&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-logging&lt;/artifactId&gt;
+        &lt;/exclusion&gt;
+    &lt;/exclusions&gt;
+&lt;/dependency&gt;</div></div>
+
+<div class="qa"><div class="q">Q3. What is a transitive dependency?</div>
+<div class="a">A dependency that comes in <b>automatically</b> because a library you added needs it. You did not list it, but Maven downloads it for you.</div>
+<div class="why"><b>Example:</b> Adding <code>spring-boot-starter-data-jpa</code> also brings Hibernate, even though you never listed Hibernate yourself.</div></div>
+
+<!-- ============ 7. LIFECYCLE ============ -->
+<h2 id="m7">7. Maven Lifecycle and Commands</h2>
+
+<div class="qa"><div class="q">Q1. What is the Maven build lifecycle?</div>
+<div class="a">A fixed sequence of build steps called <b>phases</b>. When you run a phase, Maven also runs every phase before it, in order.</div>
+<div class="a">
+<table>
+<tr><th>Phase</th><th>What it does</th></tr>
+<tr><td><code>validate</code></td><td>Checks the project is correct and complete.</td></tr>
+<tr><td><code>compile</code></td><td>Compiles the source code into <code>.class</code> files.</td></tr>
+<tr><td><code>test</code></td><td>Runs unit tests (JUnit).</td></tr>
+<tr><td><code>package</code></td><td>Bundles compiled code into a JAR or WAR.</td></tr>
+<tr><td><code>verify</code></td><td>Runs checks on integration test results.</td></tr>
+<tr><td><code>install</code></td><td>Copies the JAR into your local <code>.m2</code> repository.</td></tr>
+<tr><td><code>deploy</code></td><td>Uploads the package to a remote repository for others.</td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q2. What does <code>mvn clean</code> do, and why combine it with package?</div>
+<div class="a"><code>clean</code> deletes the <code>target</code> folder (old build output). We often run <code>mvn clean package</code> so the build starts fresh and then creates a new JAR.</div></div>
+
+<div class="qa"><div class="q">Q3. Difference between <code>package</code> and <code>install</code>?</div>
+<div class="a"><ul>
+<li><code>package</code> creates the JAR inside the project's <code>target</code> folder.</li>
+<li><code>install</code> does everything package does, then also copies the JAR into your local <code>.m2</code> repository so other local projects can use it.</li>
+</ul></div></div>
+
+<!-- ============ 8. SCENARIOS ============ -->
+<h2 id="m8">8. Maven Scenario-Based Questions</h2>
+
+<div class="qa"><div class="q">Q1. Your build fails with "'dependencies.dependency.version' is missing". What is wrong?</div>
+<div class="a">The dependency has no version and nothing is managing it. Either add a <code>&lt;version&gt;</code> tag, or make sure a parent/BOM (like the Spring Boot parent) manages that library.</div></div>
+
+<div class="qa"><div class="q">Q2. Two libraries pull in different versions of the same JAR. How do you fix it?</div>
+<div class="a">Let the Spring Boot parent or a BOM manage the version centrally, or set the version once in <code>&lt;properties&gt;</code>, or use <code>&lt;exclusions&gt;</code> to remove the unwanted one.</div></div>
+
+<div class="qa"><div class="q">Q3. Your JAR is large and includes test libraries. What is the fix?</div>
+<div class="a">Check the scopes: give test-only libraries <code>test</code> scope and the database driver <code>runtime</code> scope, so they are not shipped where they are not needed.</div></div>
+
+<div class="qa"><div class="q">Q4. You changed the Java version. Where do you set it?</div>
+<div class="a">In <code>&lt;properties&gt;</code>, for example <code>&lt;java.version&gt;21&lt;/java.version&gt;</code> (which the Spring Boot parent reads to set the compiler).</div></div>
+
+<div class="qa"><div class="q">Q5. A new library is not downloading. What do you check?</div>
+<div class="a">Check the GAV spelling, your internet/proxy settings, that the version exists in the repository, and try <code>mvn clean install -U</code> to force an update of dependencies.</div></div>
+
+<div class="qa"><div class="q">Q6. Your teammate's build works but yours fails with "cannot find symbol". What could be wrong?</div>
+<div class="a">Your local libraries may be outdated or half-downloaded. Run <code>mvn clean install -U</code> to force-update dependencies, and confirm you both use the same Java version. A corrupted file in <code>.m2</code> can also cause this &mdash; deleting that library folder and rebuilding fixes it.</div></div>
+
+<div class="qa"><div class="q">Q7. The app runs in your IDE but <code>java -jar app.jar</code> fails with "no main manifest attribute". Why?</div>
+<div class="a">The Spring Boot Maven plugin was not used to package the JAR, so it is a plain JAR without a runnable manifest. Make sure the <code>spring-boot-maven-plugin</code> is in <code>&lt;build&gt;&lt;plugins&gt;</code>, then rebuild with <code>mvn clean package</code>.</div></div>
+
+<div class="qa"><div class="q">Q8. You want to skip tests during a quick build. How?</div>
+<div class="a">Run <code>mvn clean package -DskipTests</code> (compiles tests but does not run them) or <code>-Dmaven.test.skip=true</code> (does not even compile them).</div>
+<div class="why"><b>Tip:</b> Skipping tests is fine for a quick local check, but never skip them in the real build pipeline.</div></div>
+
+<div class="qa"><div class="q">Q9. Two team members get different results from the same build. How does Maven help avoid this?</div>
+<div class="a">Maven uses the same POM, the same fixed dependency versions, and the same standard folder layout for everyone, so builds are <b>repeatable</b>. Locking versions (via the parent/BOM) is what removes "works on my machine" problems.</div></div>
+
+<div class="qa"><div class="q">Q10. How do you see the full list of libraries your project actually uses (including transitive ones)?</div>
+<div class="a">Run <code>mvn dependency:tree</code>. It prints a tree showing every direct dependency and the transitive ones each pulls in &mdash; very useful to spot duplicate or conflicting versions.</div></div>
+
+<div class="qa"><div class="q">Q11. You added a dependency but the IDE still says "class not found". What do you do?</div>
+<div class="a">Reload/refresh the Maven project (so the IDE re-reads the POM), confirm the dependency downloaded into <code>.m2</code>, and check the scope is not <code>test</code> when you need it in main code.</div></div>
+
+<!-- ============ 9. application.properties ============ -->
+<h2 id="m9">9. application.properties Explained Line by Line</h2>
+
+<div class="filebox"><span class="cap">The shared application.properties</span>spring.datasource.url=jdbc:mysql://127.0.0.1:3306/home?createDatabaseIfNotExist=true
+spring.datasource.username=root
+spring.datasource.password=root
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
+spring.main.banner-mode=off
+logging.level.root=warn
+logging.level.org.hibernate.SQL=trace
+logging.level.org.orm.jdbc.bind=trace
+server.port=8088</div>
+
+<div class="qa"><div class="q">Q1. What is application.properties?</div>
+<div class="a">It is the main configuration file of a Spring Boot app, kept in <code>src/main/resources</code>. It holds settings as <code>key=value</code> pairs, so you can change behavior without editing Java code.</div></div>
+
+<div class="qa"><div class="q">Q2. What does each line mean?</div>
+<div class="a">
+<table>
+<tr><th>Property</th><th>Meaning</th></tr>
+<tr><td><code>spring.datasource.url</code></td><td>The database address. Here it connects to MySQL on <code>127.0.0.1:3306</code>, database <code>home</code>. <code>createDatabaseIfNotExist=true</code> tells MySQL to create the database if it is missing.</td></tr>
+<tr><td><code>spring.datasource.username</code></td><td>The database user (<code>root</code>).</td></tr>
+<tr><td><code>spring.datasource.password</code></td><td>The database password (<code>root</code>).</td></tr>
+<tr><td><code>spring.jpa.hibernate.ddl-auto</code></td><td>How Hibernate manages the tables. <code>update</code> creates/updates tables to match your entities.</td></tr>
+<tr><td><code>spring.jpa.show-sql</code></td><td><code>true</code> prints the SQL Hibernate runs, useful for learning and debugging.</td></tr>
+<tr><td><code>spring.jpa.database-platform</code></td><td>The SQL dialect, telling Hibernate to generate MySQL-style SQL.</td></tr>
+<tr><td><code>spring.main.banner-mode</code></td><td><code>off</code> hides the Spring Boot startup banner in the console.</td></tr>
+<tr><td><code>logging.level.root</code></td><td>Default log level for everything; <code>warn</code> shows only warnings and errors.</td></tr>
+<tr><td><code>logging.level.org.hibernate.SQL</code></td><td><code>trace</code> shows the SQL statements Hibernate runs.</td></tr>
+<tr><td><code>logging.level.org.orm.jdbc.bind</code></td><td><code>trace</code> aims to show the actual values bound into SQL parameters.</td></tr>
+<tr><td><code>server.port</code></td><td>The port the app runs on; here <code>8088</code> instead of the default <code>8080</code>.</td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q3. Why is this file read automatically?</div>
+<div class="a">Spring Boot follows "convention over configuration". By default it looks for a file named exactly <code>application.properties</code> (or <code>application.yml</code>) on the classpath, so it loads automatically with no extra setup.</div></div>
+
+<!-- ============ 10. DIALECT / DDL-AUTO ============ -->
+<h2 id="m10">10. SQL Dialect, ddl-auto, Logging Q&amp;A</h2>
+
+<div class="qa"><div class="q">Q1. What is a SQL dialect?</div>
+<div class="a">A dialect tells Hibernate <b>which database's SQL flavor to generate</b>. Different databases have small differences in their SQL (data types, functions, pagination). The dialect makes Hibernate produce SQL that the chosen database understands.</div>
+<div class="why"><b>Example:</b> <code>org.hibernate.dialect.MySQLDialect</code> makes Hibernate write MySQL-friendly SQL. For PostgreSQL you would use <code>PostgreSQLDialect</code> instead.</div></div>
+
+<div class="qa"><div class="q">Q2. Do I always need to set the dialect?</div>
+<div class="a">Usually no &mdash; modern Hibernate can detect it automatically from the database connection. You set it manually when you want to be explicit or override the detected one.</div></div>
+
+<div class="qa"><div class="q">Q3. What values can <code>ddl-auto</code> take?</div>
+<div class="a">
+<table>
+<tr><th>Value</th><th>What Hibernate does</th></tr>
+<tr><td><code>none</code></td><td>Does nothing to the schema (safest for production).</td></tr>
+<tr><td><code>validate</code></td><td>Checks that tables match your entities, but changes nothing.</td></tr>
+<tr><td><code>update</code></td><td>Creates missing tables/columns and updates the schema to match entities.</td></tr>
+<tr><td><code>create</code></td><td>Drops and re-creates the schema every time the app starts.</td></tr>
+<tr><td><code>create-drop</code></td><td>Like <code>create</code>, and also drops the schema when the app stops.</td></tr>
+</table>
+</div>
+<div class="why"><b>Tip:</b> Use <code>update</code> while learning. Use <code>validate</code> or <code>none</code> in production so the app never changes your tables by accident.</div></div>
+
+<div class="qa"><div class="q">Q4. What is the difference between <code>show-sql</code> and the Hibernate SQL log level?</div>
+<div class="a"><ul>
+<li><code>spring.jpa.show-sql=true</code> simply prints SQL to the console.</li>
+<li><code>logging.level.org.hibernate.SQL=trace</code> routes the SQL through the logging system, giving more control (format, destination, level).</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q5. What do logging levels mean?</div>
+<div class="a">From least to most detailed: <code>ERROR</code> &rarr; <code>WARN</code> &rarr; <code>INFO</code> &rarr; <code>DEBUG</code> &rarr; <code>TRACE</code>. Setting a level shows that level and everything more severe than it.</div>
+<div class="why"><b>Example:</b> <code>logging.level.root=warn</code> hides routine info messages and shows only warnings and errors, keeping the console clean.</div></div>
+
+<div class="qa"><div class="q">Q6. How do I see the actual values inside the SQL (the "?" parameters)?</div>
+<div class="a">Turn on trace logging for the parameter binder. The correct package in modern Hibernate is <code>org.hibernate.orm.jdbc.bind</code>:
+<div class="filebox"><span class="cap">Show bound parameter values</span>logging.level.org.hibernate.orm.jdbc.bind=trace</div></div>
+<div class="why"><b>Note:</b> The shared file uses <code>org.orm.jdbc.bind</code>, which is a small typo; the working package name is <code>org.hibernate.orm.jdbc.bind</code>.</div></div>
+
+<div class="qa"><div class="q">Q7. How do I change the server port and why would I?</div>
+<div class="a">Set <code>server.port=8088</code> (any free port). You change it to avoid clashing with another app already using the default <code>8080</code>, or to match a required environment.</div>
+<div class="why"><b>Example:</b> With <code>server.port=8088</code>, you open the app in a browser at <code>http://localhost:8088</code>.</div></div>
+
+<!-- ============ 11. MORE FAQ ============ -->
+<h2 id="m11">11. More Frequently Asked Maven Questions</h2>
+
+<div class="qa"><div class="q">Q1. What is the difference between a JAR and a WAR?</div>
+<div class="a">A <b>JAR</b> (Java ARchive) packs Java classes and resources; a Spring Boot app is usually a runnable "fat JAR" with an embedded server. A <b>WAR</b> (Web ARchive) is meant to be deployed inside an external server like Tomcat.</div>
+<div class="why"><b>Beginner tip:</b> With Spring Boot you normally build a JAR and just run <code>java -jar app.jar</code> &mdash; no separate server to install.</div></div>
+
+<div class="qa"><div class="q">Q2. What is the <code>.m2</code> folder?</div>
+<div class="a">It is your <b>local Maven repository</b> on your computer (usually in your user home folder). Every library Maven downloads is cached here so future builds are faster and can work offline.</div></div>
+
+<div class="qa"><div class="q">Q3. What is <code>settings.xml</code>?</div>
+<div class="a">A Maven configuration file (inside <code>.m2</code>) where you set machine-wide things like proxy settings, mirror repositories, and login credentials for private repositories. The POM describes the project; <code>settings.xml</code> describes your environment.</div></div>
+
+<div class="qa"><div class="q">Q4. What is a BOM (Bill of Materials)?</div>
+<div class="a">A special POM that only lists <b>versions</b> of related libraries. You import it so all those libraries use compatible versions without writing each version yourself.</div>
+<div class="why"><b>Example:</b> The Spring Boot parent works like a BOM &mdash; that is why most dependencies in your POM need no version number.</div></div>
+
+<div class="qa"><div class="q">Q5. What are <code>&lt;properties&gt;</code> used for?</div>
+<div class="a">They store reusable values in one place. You define a value once and reference it as <code>${name}</code> elsewhere, so updating it is a single change.</div>
+<div class="filebox"><span class="cap">Reusing a property</span>&lt;properties&gt;
+    &lt;java.version&gt;21&lt;/java.version&gt;
+&lt;/properties&gt;</div></div>
+
+<div class="qa"><div class="q">Q6. What does <code>mvn validate</code> do?</div>
+<div class="a">It checks that the project structure and POM are correct and that all needed information is available, without compiling anything. It is the very first phase of the build.</div></div>
+
+<div class="qa"><div class="q">Q7. Difference between <code>dependencies</code> and <code>dependencyManagement</code>?</div>
+<div class="a"><ul>
+<li><code>&lt;dependencies&gt;</code>: libraries that are <b>actually added</b> to the project.</li>
+<li><code>&lt;dependencyManagement&gt;</code>: only <b>declares versions</b> to use <em>if</em> a dependency is added; it does not add anything by itself. Great for keeping versions consistent across modules.</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q8. What is a multi-module Maven project?</div>
+<div class="a">A parent project that groups several sub-projects (modules), each with its own POM. The parent lists the modules and shared settings, so you build them all together.</div>
+<div class="why"><b>Example:</b> A project split into <code>user-service</code>, <code>order-service</code>, and a shared <code>common</code> module.</div></div>
+
+<div class="qa"><div class="q">Q9. What is the <code>packaging</code> element in a POM?</div>
+<div class="a">It tells Maven what to build: <code>jar</code> (default), <code>war</code>, or <code>pom</code> (for a parent/aggregator project that builds no code of its own).</div></div>
+
+<div class="qa"><div class="q">Q10. How do you run a Spring Boot app with Maven during development?</div>
+<div class="a">Use <code>mvn spring-boot:run</code>. It compiles and starts the app directly without first building a JAR, which is handy while coding.</div></div>
+
+<!-- ============ 12. PLUGINS / GOALS / PROFILES ============ -->
+<h2 id="m12">12. Maven Plugins, Goals &amp; Profiles</h2>
+
+<div class="qa"><div class="q">Q1. What is a Maven plugin?</div>
+<div class="a">A plugin is a tool that adds work to the build, such as compiling code, running tests, or packaging a JAR. Maven itself is small; plugins do the real tasks.</div></div>
+
+<div class="qa"><div class="q">Q2. What is a goal?</div>
+<div class="a">A goal is a single task a plugin can perform. You write it as <code>plugin:goal</code>.</div>
+<div class="why"><b>Example:</b> <code>spring-boot:run</code> &mdash; the <code>run</code> goal of the Spring Boot plugin. <code>dependency:tree</code> &mdash; the <code>tree</code> goal of the dependency plugin.</div></div>
+
+<div class="qa"><div class="q">Q3. What is the difference between a phase and a goal?</div>
+<div class="a">A <b>phase</b> is a step in the lifecycle (like <code>compile</code> or <code>package</code>). A <b>goal</b> is a specific task. Phases run the goals bound to them. For example, the <code>package</code> phase runs the goal that builds the JAR.</div></div>
+
+<div class="qa"><div class="q">Q4. What does the Spring Boot Maven plugin do exactly?</div>
+<div class="a">It repackages the normal JAR into an executable "fat JAR" that bundles all dependencies and the embedded server, and it provides the <code>spring-boot:run</code> goal to start the app during development.</div></div>
+
+<div class="qa"><div class="q">Q5. What is a Maven profile?</div>
+<div class="a">A profile is a set of settings you can switch on for a situation, such as <code>dev</code>, <code>test</code>, or <code>prod</code>. It lets one POM behave differently in different environments.</div>
+<div class="filebox"><span class="cap">A simple profile</span>&lt;profiles&gt;
+    &lt;profile&gt;
+        &lt;id&gt;dev&lt;/id&gt;
+        &lt;properties&gt;
+            &lt;env&gt;development&lt;/env&gt;
+        &lt;/properties&gt;
+    &lt;/profile&gt;
+&lt;/profiles&gt;</div>
+<div class="why"><b>Run it with:</b> <code>mvn package -Pdev</code> (the <code>-P</code> flag activates a profile).</div></div>
+
+<!-- ============ 13. MORE DEPENDENCY / SCOPE SCENARIOS ============ -->
+<h2 id="m13">13. More Dependency &amp; Scope Scenarios</h2>
+
+<div class="qa"><div class="q">Q1. Scenario: your JAR works but is missing the MySQL driver at runtime. What scope should the driver have?</div>
+<div class="a"><code>runtime</code>. The driver is not needed to compile (your code uses JDBC/JPA interfaces), but it must be present and packaged so the app can connect at run time. This matches <code>mysql-connector-j</code> in the shared POM.</div></div>
+
+<div class="qa"><div class="q">Q2. Scenario: JUnit appears in your production JAR. How do you stop that?</div>
+<div class="a">Give it <code>test</code> scope. Test libraries should only be available while running tests and must not be shipped in the final package.</div></div>
+
+<div class="qa"><div class="q">Q3. Scenario: you deploy a WAR to an external Tomcat that already has the Servlet API. What scope avoids a conflict?</div>
+<div class="a"><code>provided</code>. You compile against the Servlet API, but the server supplies it at runtime, so it is not packaged in your WAR.</div></div>
+
+<div class="qa"><div class="q">Q4. Scenario: two libraries bring two different Hibernate versions. How do you control which one wins?</div>
+<div class="a">Let the Spring Boot parent/BOM decide the version, or pin the version yourself in <code>&lt;dependencyManagement&gt;</code>, or use <code>&lt;exclusions&gt;</code> to drop the unwanted copy. Use <code>mvn dependency:tree</code> to see where each version comes from.</div></div>
+
+<div class="qa"><div class="q">Q5. Scenario: you only want a library while developing (like devtools), not in production. What helps?</div>
+<div class="a">Mark it <code>&lt;optional&gt;true&lt;/optional&gt;</code> so it is not passed on to other projects, and Spring Boot automatically disables devtools in a packaged production run. In the shared POM, <code>spring-boot-devtools</code> is exactly this kind of developer-only helper.</div></div>
+
+<div class="qa"><div class="q">Q6. Scenario: how do you add a library that is not in the parent's managed list?</div>
+<div class="a">Add it with an explicit <code>&lt;version&gt;</code>. In the shared POM this is why <code>spring-boot-starter-validation</code> includes its own <code>&lt;version&gt;4.1.0-M4&lt;/version&gt;</code>.</div></div>
+
+<div class="qa"><div class="q">Q7. Scenario: you need a library only to read a local JAR file by path. Which scope (rarely used)?</div>
+<div class="a"><code>system</code>, combined with a <code>&lt;systemPath&gt;</code> to the JAR. It is discouraged because the build then depends on a fixed file path, but it exists for special cases.</div></div>
+
+<!-- ============ 14. MORE application.properties ============ -->
+<h2 id="m14">14. More application.properties Questions</h2>
+
+<div class="qa"><div class="q">Q1. Where exactly does this file live, and can it be YAML instead?</div>
+<div class="a">It lives in <code>src/main/resources</code>. Yes &mdash; you can use <code>application.yml</code> instead, which uses indentation instead of dots. Both do the same job; pick one style.</div></div>
+
+<div class="qa"><div class="q">Q2. What does <code>createDatabaseIfNotExist=true</code> in the URL do?</div>
+<div class="a">It tells MySQL to create the database (here <code>home</code>) automatically if it does not already exist, so you do not have to create it by hand first. It is convenient for learning, but in production the database is usually created in advance.</div></div>
+
+<div class="qa"><div class="q">Q3. Is it safe to keep the database password in this file?</div>
+<div class="a">For learning it is fine. For real projects, avoid hard-coding secrets &mdash; use environment variables or a secrets manager. Spring can read them like <code>spring.datasource.password=${DB_PASSWORD}</code>.</div></div>
+
+<div class="qa"><div class="q">Q4. How do I reference an environment variable inside the file?</div>
+<div class="a">Use <code>${VARIABLE_NAME}</code>. Spring replaces it with the value from the environment at startup.</div>
+<div class="filebox"><span class="cap">Reading values from the environment</span>spring.datasource.username=${DB_USER}
+spring.datasource.password=${DB_PASSWORD}</div></div>
+
+<div class="qa"><div class="q">Q5. How can I add my own custom property and read it in code?</div>
+<div class="a">Add any <code>key=value</code> line, then read it in Java with <code>@Value</code>.</div>
+<div class="filebox"><span class="cap">application.properties</span>app.welcome-message=Hello from config
+
+<span class="cm">// In a Spring bean</span>
+@Value("${app.welcome-message}")
+private String welcomeMessage;</div></div>
+
+<div class="qa"><div class="q">Q6. What happens if two properties set the same key?</div>
+<div class="a">The last one wins within the same file. Across sources, more specific sources (like command-line arguments or environment variables) override the file, following Spring Boot's property order.</div></div>
+
+<div class="qa"><div class="q">Q7. What does <code>spring.main.banner-mode=off</code> actually change?</div>
+<div class="a">It hides the big Spring logo printed in the console at startup. It has no effect on how the app works &mdash; it just keeps the console output clean.</div></div>
+
+<div class="qa"><div class="q">Q8. How do I turn off SQL logging once I am done debugging?</div>
+<div class="a">Set <code>spring.jpa.show-sql=false</code> and raise the log levels back (for example remove the <code>trace</code> lines or set them to <code>warn</code>), so the console is not flooded with SQL.</div></div>
+
+<!-- ============ 15. PROFILES / ENVIRONMENTS ============ -->
+<h2 id="m15">15. Profiles &amp; Multiple Environments</h2>
+
+<div class="qa"><div class="q">Q1. How do I keep different settings for development and production?</div>
+<div class="a">Use profile-specific files: <code>application-dev.properties</code> and <code>application-prod.properties</code>, plus the shared <code>application.properties</code>. Spring loads the shared file always, then the file for the active profile.</div></div>
+
+<div class="qa"><div class="q">Q2. How do I choose which profile is active?</div>
+<div class="a">Set <code>spring.profiles.active=dev</code> in <code>application.properties</code>, or pass it at startup: <code>java -jar app.jar --spring.profiles.active=prod</code>.</div></div>
+
+<div class="qa"><div class="q">Q3. Scenario: dev uses a local database, prod uses a company server. How do you organize this?</div>
+<div class="a">Put the local database URL in <code>application-dev.properties</code> and the company URL in <code>application-prod.properties</code>. Keep common settings (like logging format) in the shared <code>application.properties</code>. Switch with the active profile.</div></div>
+
+<div class="qa"><div class="q">Q4. Why are profiles useful for beginners to know?</div>
+<div class="a">Because they avoid editing the same file every time you move between your laptop and a server. You set values once per environment and just switch the active profile.</div></div>
+
+<!-- ============ 16. RAPID FIRE ============ -->
+<h2 id="m16">16. Rapid-Fire Practice (Quick Q&amp;A)</h2>
+
+<div class="qa"><div class="q">Q1. POM full form?</div>
+<div class="a">Project Object Model.</div></div>
+
+<div class="qa"><div class="q">Q2. GAV full form?</div>
+<div class="a">GroupId, ArtifactId, Version.</div></div>
+
+<div class="qa"><div class="q">Q3. Default dependency scope?</div>
+<div class="a"><code>compile</code>.</div></div>
+
+<div class="qa"><div class="q">Q4. Scope for a database driver?</div>
+<div class="a"><code>runtime</code>.</div></div>
+
+<div class="qa"><div class="q">Q5. Scope for JUnit?</div>
+<div class="a"><code>test</code>.</div></div>
+
+<div class="qa"><div class="q">Q6. Command to build a JAR?</div>
+<div class="a"><code>mvn clean package</code>.</div></div>
+
+<div class="qa"><div class="q">Q7. Command to install the JAR into the local repository?</div>
+<div class="a"><code>mvn clean install</code>.</div></div>
+
+<div class="qa"><div class="q">Q8. Command to see all dependencies as a tree?</div>
+<div class="a"><code>mvn dependency:tree</code>.</div></div>
+
+<div class="qa"><div class="q">Q9. Command to run a Spring Boot app with Maven?</div>
+<div class="a"><code>mvn spring-boot:run</code>.</div></div>
+
+<div class="qa"><div class="q">Q10. Where are downloaded libraries cached?</div>
+<div class="a">In the local <code>.m2</code> repository.</div></div>
+
+<div class="qa"><div class="q">Q11. Property to change the server port?</div>
+<div class="a"><code>server.port</code>.</div></div>
+
+<div class="qa"><div class="q">Q12. Property to auto-create/update tables?</div>
+<div class="a"><code>spring.jpa.hibernate.ddl-auto</code>.</div></div>
+
+<div class="qa"><div class="q">Q13. Safest <code>ddl-auto</code> value for production?</div>
+<div class="a"><code>validate</code> or <code>none</code>.</div></div>
+
+<div class="qa"><div class="q">Q14. File name Spring Boot loads by default?</div>
+<div class="a"><code>application.properties</code> (or <code>application.yml</code>).</div></div>
+
+<div class="qa"><div class="q">Q15. Flag to activate a Maven profile?</div>
+<div class="a"><code>-P</code>, for example <code>mvn package -Pdev</code>.</div></div>
+
+<footer>
+Maven, POM &amp; application.properties &mdash; Beginner Q&amp;A Guide &bull; Based on a real Spring Boot configuration &bull; For learning and interview preparation.
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,2439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OOP in Java — Real-World Complete Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #080c14;
+  --bg2:      #0e1420;
+  --bg3:      #141b2a;
+  --card:     #171f30;
+  --card2:    #1c2538;
+  --border:   #232d42;
+  --border2:  #2d3a52;
+
+  --blue:     #4f8ef7;
+  --blue-dim: rgba(79,142,247,0.12);
+  --violet:   #9b7ff4;
+  --violet-dim:rgba(155,127,244,0.12);
+  --teal:     #2ec4a0;
+  --teal-dim: rgba(46,196,160,0.11);
+  --amber:    #f5a623;
+  --amber-dim:rgba(245,166,35,0.11);
+  --rose:     #f06292;
+  --rose-dim: rgba(240,98,146,0.11);
+  --green:    #5cb85c;
+  --green-dim:rgba(92,184,92,0.11);
+  --red:      #e05252;
+  --red-dim:  rgba(224,82,82,0.11);
+
+  --text:     #dde3ef;
+  --text2:    #a0acc2;
+  --text3:    #6b7a96;
+
+  /* code colors */
+  --ck: #9b7ff4;   /* keyword */
+  --ct: #4f8ef7;   /* type/class */
+  --cs: #2ec4a0;   /* string */
+  --cc: #4b5878;   /* comment */
+  --cn: #f5a623;   /* number */
+  --cf: #72b3fc;   /* function */
+  --ca: #f06292;   /* annotation */
+  --cx: #dde3ef;   /* plain text */
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.72;
+  font-size:15px;
+}
+
+/* ═══════ HERO ═══════ */
+.hero{
+  background: linear-gradient(160deg, #0a0f1c 0%, #0e1828 55%, #080c14 100%);
+  border-bottom:1px solid var(--border);
+  padding:72px 32px 60px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;
+  top:-80px;left:50%;transform:translateX(-50%);
+  width:700px;height:320px;
+  background:radial-gradient(ellipse,rgba(79,142,247,.10) 0%,transparent 68%);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(79,142,247,.1);
+  border:1px solid rgba(79,142,247,.28);
+  color:var(--blue);
+  font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  padding:5px 16px;border-radius:30px;margin-bottom:24px;
+}
+.hero h1{
+  font-size:clamp(30px,5.5vw,52px);
+  font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:16px;
+}
+.hero h1 em{color:var(--blue);font-style:normal;}
+.hero-sub{
+  color:var(--text2);font-size:15.5px;max-width:620px;
+  margin:0 auto 32px;line-height:1.7;
+}
+.domain-pills{
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+}
+.dpill{
+  padding:6px 16px;border-radius:30px;font-size:12px;font-weight:600;
+  border:1px solid;
+}
+.dpill.bank{background:rgba(79,142,247,.1);border-color:rgba(79,142,247,.3);color:var(--blue);}
+.dpill.edu {background:rgba(46,196,160,.1);border-color:rgba(46,196,160,.3);color:var(--teal);}
+.dpill.tel {background:rgba(155,127,244,.1);border-color:rgba(155,127,244,.3);color:var(--violet);}
+.dpill.ecom{background:rgba(245,166,35,.1);border-color:rgba(245,166,35,.3);color:var(--amber);}
+
+/* ═══════ LAYOUT ═══════ */
+.wrap{max-width:960px;margin:0 auto;padding:0 24px;}
+
+/* ═══════ TOC ═══════ */
+.toc-wrap{
+  max-width:960px;margin:44px auto;padding:0 24px;
+}
+.toc-box{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:30px 32px;
+}
+.toc-label{
+  font-size:10px;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--text3);margin-bottom:20px;
+}
+.toc-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;
+}
+.toc-link{
+  display:flex;align-items:center;gap:10px;
+  text-decoration:none;color:var(--text2);font-size:13px;
+  padding:9px 12px;border-radius:8px;border:1px solid transparent;
+  transition:all .18s;
+}
+.toc-link:hover{
+  background:var(--bg3);border-color:var(--border);color:var(--blue);
+}
+.toc-idx{
+  width:24px;height:24px;border-radius:6px;
+  background:var(--bg3);border:1px solid var(--border);
+  font-size:11px;font-weight:700;color:var(--text3);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+
+/* ═══════ SECTION ═══════ */
+.sec{max-width:960px;margin:0 auto 68px;padding:0 24px;}
+.sec-head{
+  display:flex;align-items:flex-start;gap:18px;
+  margin-bottom:32px;padding-bottom:24px;
+  border-bottom:1px solid var(--border);
+}
+.sec-badge{
+  width:48px;height:48px;border-radius:13px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:800;color:#fff;
+}
+.sec-badge.b{background:linear-gradient(135deg,var(--blue),#3266e0);}
+.sec-badge.v{background:linear-gradient(135deg,var(--violet),#6d4fc2);}
+.sec-badge.t{background:linear-gradient(135deg,var(--teal),#1a9a7d);}
+.sec-badge.a{background:linear-gradient(135deg,var(--amber),#c8831a);}
+.sec-badge.r{background:linear-gradient(135deg,var(--rose),#c0446d);}
+.sec-badge.g{background:linear-gradient(135deg,var(--green),#3d8f3d);}
+
+.sec-meta h2{font-size:26px;font-weight:800;letter-spacing:-.5px;margin-bottom:5px;}
+.sec-meta p{color:var(--text2);font-size:13.5px;}
+
+/* ═══════ DOMAIN BADGE ═══════ */
+.domain-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 12px;border-radius:20px;margin-bottom:14px;border:1px solid;
+}
+.domain-tag.bank{background:var(--blue-dim);border-color:rgba(79,142,247,.3);color:var(--blue);}
+.domain-tag.edu {background:var(--teal-dim);border-color:rgba(46,196,160,.3);color:var(--teal);}
+.domain-tag.tel {background:var(--violet-dim);border-color:rgba(155,127,244,.3);color:var(--violet);}
+.domain-tag.ecom{background:var(--amber-dim);border-color:rgba(245,166,35,.3);color:var(--amber);}
+
+/* ═══════ CALLOUT BOXES ═══════ */
+.box{
+  border-radius:11px;padding:17px 20px;margin:18px 0;
+  display:flex;gap:13px;align-items:flex-start;font-size:13.5px;
+}
+.box-icon{font-size:19px;flex-shrink:0;margin-top:1px;}
+.box-body strong{display:block;font-size:13px;font-weight:700;margin-bottom:5px;}
+.box-body p,.box-body li{color:var(--text2);font-size:13px;line-height:1.65;}
+.box-body ul{padding-left:18px;}
+.box-body li{margin-bottom:4px;}
+.box.what{background:var(--blue-dim);border:1px solid rgba(79,142,247,.25);}
+.box.why {background:var(--teal-dim);border:1px solid rgba(46,196,160,.25);}
+.box.when{background:var(--amber-dim);border:1px solid rgba(245,166,35,.25);}
+.box.prob{background:var(--red-dim);border:1px solid rgba(224,82,82,.25);}
+.box.tip {background:var(--violet-dim);border:1px solid rgba(155,127,244,.25);}
+.box.rule{background:var(--green-dim);border:1px solid rgba(92,184,92,.25);}
+
+/* ═══════ CODE BLOCKS ═══════ */
+.code{
+  background:#060910;border:1px solid var(--border);
+  border-radius:13px;overflow:hidden;margin:20px 0;
+  font-family:'Fira Code',monospace;
+}
+.code-top{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 18px;background:var(--bg3);
+  border-bottom:1px solid var(--border);
+}
+.dots{display:flex;gap:6px;}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot.r{background:#f87171;}.dot.y{background:#fbbf24;}.dot.g{background:#34d399;}
+.file-name{font-size:11.5px;color:var(--text3);font-family:'Plus Jakarta Sans',sans-serif;}
+.code-body{padding:22px 24px;overflow-x:auto;}
+pre{margin:0;font-size:13px;line-height:1.85;}
+.kw{color:var(--ck);font-weight:500;}
+.ty{color:var(--ct);}
+.st{color:var(--cs);}
+.cm{color:var(--cc);font-style:italic;}
+.nm{color:var(--cn);}
+.fn{color:var(--cf);}
+.an{color:var(--ca);}
+.tx{color:var(--cx);}
+.hl{background:rgba(79,142,247,.08);border-left:2px solid var(--blue);padding-left:6px;display:block;}
+
+/* ═══════ INFO GRID ═══════ */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:20px 0;}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px;margin:20px 0;}
+.icard{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:18px;
+}
+.icard-icon{font-size:22px;margin-bottom:10px;}
+.icard h4{font-size:13px;font-weight:700;margin-bottom:6px;}
+.icard p{font-size:12px;color:var(--text2);line-height:1.6;}
+.icard.b{border-color:rgba(79,142,247,.28);background:var(--blue-dim);}
+.icard.v{border-color:rgba(155,127,244,.28);background:var(--violet-dim);}
+.icard.t{border-color:rgba(46,196,160,.28);background:var(--teal-dim);}
+.icard.a{border-color:rgba(245,166,35,.28);background:var(--amber-dim);}
+.icard.r{border-color:rgba(224,82,82,.28);background:var(--red-dim);}
+
+/* ═══════ TABLE ═══════ */
+.tbl{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;}
+.tbl th{
+  background:var(--bg3);border:1px solid var(--border);
+  padding:11px 14px;text-align:left;
+  font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;color:var(--text3);
+}
+.tbl td{border:1px solid var(--border);padding:11px 14px;color:var(--text);}
+.tbl tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+.tbl code{
+  background:#060910;padding:2px 7px;border-radius:4px;
+  font-family:'Fira Code';font-size:12px;color:var(--blue);
+}
+
+/* ═══════ ANALOGY ═══════ */
+.analogy{
+  background:var(--card2);border:1px solid var(--border);
+  border-left:3px solid var(--violet);border-radius:10px;
+  padding:16px 20px;margin:18px 0;font-size:13.5px;
+}
+.analogy strong{
+  display:block;font-size:11px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--violet);margin-bottom:7px;
+}
+
+/* ═══════ RULES LIST ═══════ */
+.rules{list-style:none;display:grid;gap:8px;margin:16px 0;}
+.rule{
+  display:flex;align-items:flex-start;gap:11px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:8px;padding:12px 15px;font-size:13px;
+}
+.ri{font-size:15px;flex-shrink:0;margin-top:1px;}
+.rule code{
+  background:#060910;padding:1px 6px;border-radius:4px;
+  font-family:'Fira Code';font-size:12px;color:var(--blue);
+}
+
+/* ═══════ STEPS ═══════ */
+.steps{counter-reset:st;display:grid;gap:10px;margin:16px 0;}
+.step{
+  counter-increment:st;
+  display:flex;align-items:flex-start;gap:14px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:14px 16px;
+}
+.step::before{
+  content:counter(st);
+  width:28px;height:28px;border-radius:7px;
+  background:var(--blue);color:#fff;
+  font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.step h4{font-size:13.5px;font-weight:700;margin-bottom:4px;}
+.step p{font-size:12.5px;color:var(--text2);}
+
+/* ═══════ COMPARISON ═══════ */
+.compare{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0;
+}
+.compare-card{border-radius:12px;padding:18px;border:1px solid;}
+.compare-card h4{font-size:13px;font-weight:700;margin-bottom:10px;}
+.compare-card li{font-size:12.5px;color:var(--text2);margin-bottom:5px;}
+.compare-card ul{padding-left:16px;}
+.compare-card.bad{
+  background:var(--red-dim);border-color:rgba(224,82,82,.25);
+}
+.compare-card.bad h4{color:var(--red);}
+.compare-card.good{
+  background:var(--green-dim);border-color:rgba(92,184,92,.25);
+}
+.compare-card.good h4{color:var(--green);}
+
+/* ═══════ EXERCISE ═══════ */
+.ex{
+  background:var(--card);border:1px solid rgba(245,166,35,.3);
+  border-radius:14px;overflow:hidden;margin:26px 0;
+}
+.ex-head{
+  background:rgba(245,166,35,.07);padding:14px 22px;
+  display:flex;align-items:center;gap:14px;
+  border-bottom:1px solid rgba(245,166,35,.2);
+}
+.ex-level{
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:3px 10px;border-radius:20px;
+}
+.ex-level.easy{background:rgba(92,184,92,.2);color:var(--green);}
+.ex-level.med {background:rgba(245,166,35,.2);color:var(--amber);}
+.ex-level.hard{background:rgba(155,127,244,.2);color:var(--violet);}
+.ex-title{font-size:14px;font-weight:700;}
+.ex-body{padding:22px;}
+.ex-q{font-size:13.5px;margin-bottom:16px;line-height:1.7;}
+.sol-btn{
+  background:rgba(46,196,160,.1);border:1px solid rgba(46,196,160,.28);
+  color:var(--teal);padding:9px 20px;border-radius:8px;
+  cursor:pointer;font-size:13px;font-family:inherit;font-weight:600;
+  display:inline-flex;align-items:center;gap:8px;transition:all .18s;
+}
+.sol-btn:hover{background:rgba(46,196,160,.18);}
+.sol-panel{display:none;margin-top:16px;}
+.sol-panel.open{display:block;}
+
+/* ═══════ PILLAR CARDS ═══════ */
+.pillars{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0;}
+.pillar{border-radius:13px;padding:20px;border:1px solid;}
+.pillar h3{font-size:15px;font-weight:700;margin-bottom:8px;}
+.pillar p{font-size:12.5px;color:var(--text2);}
+.pillar.enc{border-color:rgba(79,142,247,.3);background:var(--blue-dim);}
+.pillar.enc h3{color:var(--blue);}
+.pillar.inh{border-color:rgba(46,196,160,.3);background:var(--teal-dim);}
+.pillar.inh h3{color:var(--teal);}
+.pillar.pol{border-color:rgba(155,127,244,.3);background:var(--violet-dim);}
+.pillar.pol h3{color:var(--violet);}
+.pillar.abs{border-color:rgba(245,166,35,.3);background:var(--amber-dim);}
+.pillar.abs h3{color:var(--amber);}
+
+/* ═══════ INLINE CODE ═══════ */
+code{
+  background:#060910;border:1px solid var(--border);
+  padding:2px 7px;border-radius:4px;
+  font-family:'Fira Code';font-size:12px;color:var(--blue);
+}
+
+h3{font-size:17px;font-weight:700;margin:26px 0 12px;color:var(--text);}
+p{margin-bottom:13px;}
+hr.divider{border:none;border-top:1px solid var(--border);margin:56px 0;}
+
+/* ═══════ FOOTER ═══════ */
+footer{
+  text-align:center;padding:44px 24px;
+  border-top:1px solid var(--border);
+  color:var(--text3);font-size:12px;
+}
+footer a{color:var(--blue);text-decoration:none;}
+
+@media(max-width:600px){
+  .pillars{grid-template-columns:1fr;}
+  .compare{grid-template-columns:1fr;}
+  .grid2,.grid3{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ HERO ══════════ -->
+<div class="hero">
+  <div class="hero-eyebrow">☕ Java Programming</div>
+  <h1>Object-Oriented Programming<br>in <em>Java</em> — Real World Edition</h1>
+  <p class="hero-sub">
+    Every concept explained with real-world domains — Banking, Telecom, Education, E-commerce.
+    No Dog/Cat examples. Just the things you'll actually build.
+  </p>
+  <div class="domain-pills">
+    <span class="dpill bank">🏦 SBI / ICICI Banking</span>
+    <span class="dpill edu">🎓 Student / Teacher / Course</span>
+    <span class="dpill tel">📱 Telecom / Recharge Plans</span>
+    <span class="dpill ecom">🛒 Orders / Payments / Products</span>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc-wrap">
+  <div class="toc-box">
+    <div class="toc-label">Table of Contents</div>
+    <div class="toc-grid">
+      <a href="#s0" class="toc-link"><div class="toc-idx">0</div>What is OOP?</a>
+      <a href="#s1" class="toc-link"><div class="toc-idx">1</div>Data Types</a>
+      <a href="#s2" class="toc-link"><div class="toc-idx">2</div>Variables (3 types)</a>
+      <a href="#s3" class="toc-link"><div class="toc-idx">3</div>Classes &amp; Objects</a>
+      <a href="#s4" class="toc-link"><div class="toc-idx">4</div>Constructors</a>
+      <a href="#s5" class="toc-link"><div class="toc-idx">5</div>Methods &amp; Void/Return</a>
+      <a href="#s6" class="toc-link"><div class="toc-idx">6</div>this &amp; super</a>
+      <a href="#s7" class="toc-link"><div class="toc-idx">7</div>Access Specifiers</a>
+      <a href="#s8" class="toc-link"><div class="toc-idx">8</div>Encapsulation</a>
+      <a href="#s9" class="toc-link"><div class="toc-idx">9</div>Inheritance</a>
+      <a href="#s10" class="toc-link"><div class="toc-idx">10</div>Polymorphism</a>
+      <a href="#s11" class="toc-link"><div class="toc-idx">11</div>Abstraction</a>
+      <a href="#s12" class="toc-link"><div class="toc-idx">12</div>Interfaces</a>
+      <a href="#s13" class="toc-link"><div class="toc-idx">13</div>Static Keyword</a>
+      <a href="#s14" class="toc-link"><div class="toc-idx">14</div>Exception Handling</a>
+      <a href="#s15" class="toc-link"><div class="toc-idx">15</div>Packages &amp; Imports</a>
+      <a href="#s16" class="toc-link"><div class="toc-idx">16</div>Naming Conventions</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SECTION 0 — WHAT IS OOP ══════════ -->
+<div class="sec" id="s0">
+  <div class="sec-head">
+    <div class="sec-badge b">0</div>
+    <div class="sec-meta">
+      <h2>What is OOP and Why Does It Exist?</h2>
+      <p>The philosophy behind the code — and why it matters in real projects</p>
+    </div>
+  </div>
+
+  <p>Before OOP, all software was written as a long sequence of commands — procedural code. It worked for small programs. When IBM built banking software in the 1970s, they had a single file with thousands of lines and no organisation. Changing one interest calculation formula broke five other things. Teams couldn't work in parallel. Bugs were nearly impossible to trace.</p>
+  <p><strong>OOP solves this by modelling software the way the real world works.</strong> Your banking system has <em>accounts</em>, <em>customers</em>, and <em>transactions</em>. Your telecom system has <em>customers</em>, <em>plans</em>, and <em>recharges</em>. OOP lets you build these as self-contained, reusable units of code called <strong>objects</strong>.</p>
+
+  <div class="pillars">
+    <div class="pillar enc">
+      <h3>🔒 Encapsulation</h3>
+      <p>Hide account balance from direct modification. Only allow changes through <code>deposit()</code> and <code>withdraw()</code>. Like a bank vault with controlled access.</p>
+    </div>
+    <div class="pillar inh">
+      <h3>🧬 Inheritance</h3>
+      <p><code>SavingsAccount</code> and <code>CurrentAccount</code> both extend <code>BankAccount</code>. They share common logic (owner, balance) without rewriting it.</p>
+    </div>
+    <div class="pillar pol">
+      <h3>🎭 Polymorphism</h3>
+      <p>One <code>processPayment()</code> method works for UPI, credit card, and net banking. The caller doesn't care which — it just calls the method.</p>
+    </div>
+    <div class="pillar abs">
+      <h3>🎨 Abstraction</h3>
+      <p>A teller uses a screen to transfer money. They don't know the SQL queries behind it. You define <em>what</em> can be done, not <em>how</em>.</p>
+    </div>
+  </div>
+
+  <div class="compare">
+    <div class="compare-card bad">
+      <h4>❌ Without OOP — Procedural style</h4>
+      <ul>
+        <li>Account balance stored as a loose variable</li>
+        <li>Any code can set <code>balance = -99999</code></li>
+        <li>Duplicate logic across functions</li>
+        <li>Adding a new account type means modifying existing functions</li>
+        <li>Impossible to have SBI and ICICI accounts with different rules</li>
+      </ul>
+    </div>
+    <div class="compare-card good">
+      <h4>✅ With OOP — Java style</h4>
+      <ul>
+        <li>Balance is <code>private</code> inside <code>BankAccount</code></li>
+        <li>Only <code>deposit()</code> and <code>withdraw()</code> can change it</li>
+        <li>Shared logic lives in the parent class once</li>
+        <li>New account types just <code>extend</code> the parent</li>
+        <li>Each bank can have its own rules in its own class</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 1 — DATA TYPES ══════════ -->
+<div class="sec" id="s1">
+  <div class="sec-head">
+    <div class="sec-badge t">1</div>
+    <div class="sec-meta">
+      <h2>Data Types</h2>
+      <p>Primitive vs Reference — what every variable holds</p>
+    </div>
+  </div>
+
+  <p>Every variable in Java has a <strong>type</strong> that tells the JVM how much memory to allocate and what operations are valid. Java has two categories:</p>
+
+  <div class="grid2">
+    <div class="icard b">
+      <div class="icard-icon">⚡</div>
+      <h4>Primitive Types</h4>
+      <p>Store actual values directly in memory. Fixed size. 8 types total.</p>
+    </div>
+    <div class="icard v">
+      <div class="icard-icon">📦</div>
+      <h4>Reference Types</h4>
+      <p>Store a <em>reference</em> (address) to an object in heap memory. Classes, arrays, interfaces.</p>
+    </div>
+  </div>
+
+  <h3>Primitive Types — with Banking use cases</h3>
+
+  <table class="tbl">
+    <tr><th>Type</th><th>Size</th><th>Default</th><th>Real-World Use</th><th>Example</th></tr>
+    <tr><td><code>int</code></td><td>4 bytes</td><td>0</td><td>Account number, age, OTP</td><td><code>int accountNo = 123456;</code></td></tr>
+    <tr><td><code>long</code></td><td>8 bytes</td><td>0L</td><td>Transaction ID, Aadhaar number</td><td><code>long txnId = 90000123456L;</code></td></tr>
+    <tr><td><code>double</code></td><td>8 bytes</td><td>0.0</td><td>Balance, interest rate, EMI</td><td><code>double balance = 15000.50;</code></td></tr>
+    <tr><td><code>float</code></td><td>4 bytes</td><td>0.0f</td><td>Discount percentage</td><td><code>float discount = 5.5f;</code></td></tr>
+    <tr><td><code>boolean</code></td><td>1 bit</td><td>false</td><td>Account active? Loan approved?</td><td><code>boolean isActive = true;</code></td></tr>
+    <tr><td><code>char</code></td><td>2 bytes</td><td>'\u0000'</td><td>Account type (S=Saving, C=Current)</td><td><code>char accType = 'S';</code></td></tr>
+    <tr><td><code>byte</code></td><td>1 byte</td><td>0</td><td>Age validation (0-127)</td><td><code>byte age = 25;</code></td></tr>
+    <tr><td><code>short</code></td><td>2 bytes</td><td>0</td><td>Branch code, year</td><td><code>short branchCode = 1104;</code></td></tr>
+  </table>
+
+  <h3>Reference Types — with real examples</h3>
+
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">DataTypesDemo.java</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="cm">// ── PRIMITIVE types: stored by VALUE</span>
+<span class="kw">int</span>     <span class="tx">accountNumber  = </span><span class="nm">10234567</span><span class="tx">;</span>
+<span class="kw">long</span>    <span class="tx">transactionId  = </span><span class="nm">9000123456789L</span><span class="tx">;</span>   <span class="cm">// L suffix for long</span>
+<span class="kw">double</span>  <span class="tx">balance        = </span><span class="nm">24500.75</span><span class="tx">;</span>
+<span class="kw">boolean</span> <span class="tx">isActive       = </span><span class="kw">true</span><span class="tx">;</span>
+<span class="kw">char</span>    <span class="tx">accountType    = </span><span class="st">'S'</span><span class="tx">;</span>             <span class="cm">// S = Savings</span>
+
+<span class="cm">// ── REFERENCE types: stored by REFERENCE (address)</span>
+<span class="ty">String</span>  <span class="tx">customerName   = </span><span class="st">"Rahul Sharma"</span><span class="tx">;</span>   <span class="cm">// String is a class</span>
+<span class="kw">int</span><span class="tx">[]   recentAmounts  = {</span><span class="nm">500</span><span class="tx">, </span><span class="nm">1000</span><span class="tx">, </span><span class="nm">250</span><span class="tx">};</span>  <span class="cm">// array is a reference type</span>
+
+<span class="cm">// ── TYPE CASTING</span>
+<span class="kw">int</span>    <span class="tx">rupees   = </span><span class="nm">1500</span><span class="tx">;</span>
+<span class="kw">double</span> <span class="tx">withGST  = rupees * </span><span class="nm">1.18</span><span class="tx">;</span>          <span class="cm">// int promoted to double automatically</span>
+<span class="kw">int</span>    <span class="tx">rounded  = (</span><span class="kw">int</span><span class="tx">) withGST;</span>          <span class="cm">// explicit cast: double → int (1770)</span>
+
+<span class="cm">// ── NULL — reference can be empty</span>
+<span class="ty">String</span> <span class="tx">email = </span><span class="kw">null</span><span class="tx">;</span>                      <span class="cm">// no email registered yet</span></pre>
+    </div>
+  </div>
+
+  <div class="box prob">
+    <span class="box-icon">⚠️</span>
+    <div class="box-body">
+      <strong>What goes wrong with wrong types?</strong>
+      <ul>
+        <li>Using <code>int</code> for balance → Rs 2,147,483,647 max. Large corporate accounts overflow silently.</li>
+        <li>Using <code>float</code> for money → floating-point errors: Rs 10.1 + Rs 0.2 = Rs 10.299999 (use <code>BigDecimal</code> for real financial apps)</li>
+        <li>Calling a method on a <code>null</code> reference → <code>NullPointerException</code> at runtime</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 2 — VARIABLES ══════════ -->
+<div class="sec" id="s2">
+  <div class="sec-head">
+    <div class="sec-badge a">2</div>
+    <div class="sec-meta">
+      <h2>Variables — 3 Types Explained</h2>
+      <p>Instance, Local, and Static — when each lives and why it matters</p>
+    </div>
+  </div>
+
+  <p>Not all variables work the same way. Where you <em>declare</em> a variable determines its <strong>scope</strong> (where it can be used), its <strong>lifetime</strong> (how long it exists), and what it belongs to.</p>
+
+  <div class="grid3">
+    <div class="icard b">
+      <div class="icard-icon">🏠</div>
+      <h4>Instance Variable</h4>
+      <p>Belongs to an <em>object</em>. Each object has its own copy. Lives as long as the object lives.</p>
+    </div>
+    <div class="icard a">
+      <div class="icard-icon">⚡</div>
+      <h4>Local Variable</h4>
+      <p>Declared inside a method. Only exists while that method is running. Must be initialised before use.</p>
+    </div>
+    <div class="icard v">
+      <div class="icard-icon">🌐</div>
+      <h4>Static Variable</h4>
+      <p>Belongs to the <em>class</em>, not any object. Shared by all objects. Exists from class load to program end.</p>
+    </div>
+  </div>
+
+  <div class="domain-tag bank">🏦 Banking Domain</div>
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">BankAccount.java — All 3 variable types</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">BankAccount</span> <span class="tx">{</span>
+
+    <span class="cm">// ══ STATIC variable — shared by ALL accounts ══</span>
+    <span class="cm">// Counts total accounts opened across the whole bank</span>
+    <span class="kw">private static int</span> <span class="tx">totalAccountsOpened = </span><span class="nm">0</span><span class="tx">;</span>
+    <span class="kw">public  static final double</span> <span class="tx">INTEREST_RATE = </span><span class="nm">3.5</span><span class="tx">;</span>  <span class="cm">// constant</span>
+
+    <span class="cm">// ══ INSTANCE variables — each account has its OWN copy ══</span>
+    <span class="kw">private int</span>    <span class="tx">accountNumber</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">accountHolder</span><span class="tx">;</span>
+    <span class="kw">private double</span> <span class="tx">balance</span><span class="tx">;</span>
+    <span class="kw">private boolean</span><span class="tx">isActive</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">BankAccount</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">accNo, </span><span class="ty">String</span> <span class="tx">holder, </span><span class="kw">double</span> <span class="tx">openingBalance) {</span>
+        <span class="kw">this</span><span class="tx">.accountNumber = accNo;</span>
+        <span class="kw">this</span><span class="tx">.accountHolder = holder;</span>
+        <span class="kw">this</span><span class="tx">.balance        = openingBalance;</span>
+        <span class="kw">this</span><span class="tx">.isActive       = </span><span class="kw">true</span><span class="tx">;</span>
+        <span class="tx">totalAccountsOpened++;</span>         <span class="cm">// every new account increments the counter</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">deposit</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="cm">// ══ LOCAL variable — exists only inside this method ══</span>
+        <span class="kw">double</span> <span class="tx">previousBalance = </span><span class="kw">this</span><span class="tx">.balance;</span>  <span class="cm">// local — for the receipt</span>
+        <span class="kw">this</span><span class="tx">.balance += amount;</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Deposited ₹"</span> <span class="tx">+ amount +</span>
+            <span class="st">". Balance: ₹"</span> <span class="tx">+ </span><span class="kw">this</span><span class="tx">.balance);</span>
+        <span class="cm">// previousBalance vanishes after method ends — we don't need it anymore</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// static method — called on the class, not an object</span>
+    <span class="kw">public static int</span> <span class="fn">getTotalAccounts</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="tx">totalAccountsOpened;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// In Main:</span>
+<span class="ty">BankAccount</span> <span class="tx">acc1 = </span><span class="kw">new</span> <span class="ty">BankAccount</span><span class="tx">(</span><span class="nm">101</span><span class="tx">, </span><span class="st">"Priya Patel"</span><span class="tx">, </span><span class="nm">10000</span><span class="tx">);</span>
+<span class="ty">BankAccount</span> <span class="tx">acc2 = </span><span class="kw">new</span> <span class="ty">BankAccount</span><span class="tx">(</span><span class="nm">102</span><span class="tx">, </span>"Arjun Mehta"<span class="tx">, </span><span class="nm">5000</span><span class="tx">);</span>
+
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(acc1.balance);          </span><span class="cm">// 10000 — acc1's OWN instance variable</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(acc2.balance);          </span><span class="cm">// 5000 — acc2's OWN instance variable</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="ty">BankAccount</span><span class="tx">.</span><span class="fn">getTotalAccounts</span><span class="tx">()); </span><span class="cm">// 2 — shared static</span></pre>
+    </div>
+  </div>
+
+  <table class="tbl">
+    <tr><th>Type</th><th>Declared inside</th><th>Belongs to</th><th>Lifetime</th><th>Banking Example</th></tr>
+    <tr><td>Instance</td><td>Class (outside methods)</td><td>Each object</td><td>As long as object exists</td><td><code>balance</code>, <code>accountHolder</code></td></tr>
+    <tr><td>Local</td><td>Method / block</td><td>That method only</td><td>Method execution only</td><td><code>previousBalance</code>, <code>taxAmount</code></td></tr>
+    <tr><td>Static</td><td>Class (with <code>static</code>)</td><td>The class itself</td><td>Entire program run</td><td><code>totalAccountsOpened</code>, <code>INTEREST_RATE</code></td></tr>
+  </table>
+
+  <div class="box prob">
+    <span class="box-icon">⚠️</span>
+    <div class="box-body">
+      <strong>Classic Mistakes</strong>
+      <ul>
+        <li>Using a <strong>static variable for balance</strong> → all accounts share the same balance. Depositing into one changes all of them!</li>
+        <li>Trying to use a <strong>local variable outside its method</strong> → compile error: "variable not found"</li>
+        <li>Forgetting to initialise a <strong>local variable</strong> before reading it → compile error (unlike instance vars which have defaults)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 3 — CLASSES & OBJECTS ══════════ -->
+<div class="sec" id="s3">
+  <div class="sec-head">
+    <div class="sec-badge b">3</div>
+    <div class="sec-meta">
+      <h2>Classes &amp; Objects</h2>
+      <p>Blueprint vs the real thing — the core of OOP</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>Class = Blueprint. Object = Instance of that blueprint.</strong>
+      <p>A <code>Customer</code> class defines what a customer is — name, phone, email. An object <code>customer1</code> is one actual customer with specific values. You can create millions of customer objects from one class definition.</p>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <strong>Real-World Analogy — HDFC Bank</strong>
+    When HDFC Bank opens a new branch, they don't invent a new "customer" from scratch. They have a standardised <strong>KYC form</strong> — that's the class. Each filled-in form (Rahul's form, Priya's form) is an <strong>object</strong>. Same structure, different data.
+  </div>
+
+  <div class="domain-tag tel">📱 Telecom Domain — Airtel</div>
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">Customer.java + Main.java</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="cm">// ══════ CLASS — the blueprint ══════</span>
+<span class="kw">public class</span> <span class="ty">Customer</span> <span class="tx">{</span>
+
+    <span class="cm">// Fields (instance variables)</span>
+    <span class="kw">private int</span>    <span class="tx">customerId</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">name</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">mobileNumber</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">activePlan</span><span class="tx">;</span>
+    <span class="kw">private double</span> <span class="tx">walletBalance</span><span class="tx">;</span>
+
+    <span class="cm">// Constructor</span>
+    <span class="kw">public</span> <span class="ty">Customer</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">id, </span><span class="ty">String</span> <span class="tx">name, </span><span class="ty">String</span> <span class="tx">mobile) {</span>
+        <span class="kw">this</span><span class="tx">.customerId    = id;</span>
+        <span class="kw">this</span><span class="tx">.name          = name;</span>
+        <span class="kw">this</span><span class="tx">.mobileNumber  = mobile;</span>
+        <span class="kw">this</span><span class="tx">.walletBalance  = </span><span class="nm">0.0</span><span class="tx">;</span>
+        <span class="kw">this</span><span class="tx">.activePlan     = </span><span class="st">"No Plan"</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Methods (behaviours)</span>
+    <span class="kw">public void</span> <span class="fn">recharge</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount, </span><span class="ty">String</span> <span class="tx">plan) {</span>
+        <span class="kw">this</span><span class="tx">.walletBalance += amount;</span>
+        <span class="kw">this</span><span class="tx">.activePlan     = plan;</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(name + </span><span class="st">" recharged ₹"</span> <span class="tx">+ amount +</span>
+            <span class="st">". Plan activated: "</span> <span class="tx">+ plan);</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">displayProfile</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"--- Customer Profile ---"</span><span class="tx">);</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"ID     : "</span> <span class="tx">+ customerId);</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Name   : "</span> <span class="tx">+ name);</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Mobile : "</span> <span class="tx">+ mobileNumber);</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Plan   : "</span> <span class="tx">+ activePlan);</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Wallet : ₹"</span> <span class="tx">+ walletBalance);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ══════ Creating OBJECTS in Main ══════</span>
+<span class="kw">public class</span> <span class="ty">Main</span> <span class="tx">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="ty">String</span><span class="tx">[] args) {</span>
+
+        <span class="cm">// new keyword creates an object on the HEAP</span>
+        <span class="ty">Customer</span> <span class="tx">c1 = </span><span class="kw">new</span> <span class="ty">Customer</span><span class="tx">(</span><span class="nm">1001</span><span class="tx">, </span><span class="st">"Rahul Sharma"</span><span class="tx">, </span><span class="st">"9876543210"</span><span class="tx">);</span>
+        <span class="ty">Customer</span> <span class="tx">c2 = </span><span class="kw">new</span> <span class="ty">Customer</span><span class="tx">(</span><span class="nm">1002</span><span class="tx">, </span><span class="st">"Priya Nair"</span><span class="tx">,   </span><span class="st">"9123456789"</span><span class="tx">);</span>
+
+        <span class="tx">c1.</span><span class="fn">recharge</span><span class="tx">(</span><span class="nm">299</span><span class="tx">, </span><span class="st">"Airtel 299 - 2GB/day, Unlimited calls"</span><span class="tx">);</span>
+        <span class="tx">c2.</span><span class="fn">recharge</span><span class="tx">(</span><span class="nm">149</span><span class="tx">, </span><span class="st">"Airtel 149 - 1GB/day"</span><span class="tx">);</span>
+
+        <span class="tx">c1.</span><span class="fn">displayProfile</span><span class="tx">();</span>
+        <span class="tx">c2.</span><span class="fn">displayProfile</span><span class="tx">();</span>
+
+        <span class="cm">// c1 and c2 are completely independent — changing one doesn't affect the other</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+    </div>
+  </div>
+
+  <div class="box rule">
+    <span class="box-icon">📋</span>
+    <div class="box-body">
+      <strong>Syntax Rules for Classes</strong>
+      <ul>
+        <li>Class name must match the filename: class <code>Customer</code> → file <code>Customer.java</code></li>
+        <li>Only one <code>public</code> class per file</li>
+        <li>Class name starts with Capital letter (PascalCase)</li>
+        <li>Fields should be <code>private</code>, methods usually <code>public</code></li>
+        <li><code>new ClassName(args)</code> creates the object and calls the constructor</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-head">
+      <span class="ex-level easy">Beginner</span>
+      <span class="ex-title">Exercise 1 — Create an Employee class</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-q">Create a class <code>Employee</code> with fields: <code>employeeId</code> (int), <code>name</code> (String), <code>department</code> (String), <code>basicSalary</code> (double). Add a method <code>calculateNetSalary()</code> that returns <code>basicSalary + HRA (20% of basic) - PF (12% of basic)</code>. Add a <code>displayDetails()</code> method. In Main, create 2 Employee objects and display their details and net salaries.</p>
+      <button class="sol-btn" onclick="toggleSol('sol1')">▶ Show Solution</button>
+      <div class="sol-panel" id="sol1">
+        <div class="code">
+          <div class="code-top">
+            <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+            <span class="file-name">Solution — Employee.java</span>
+          </div>
+          <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Employee</span> <span class="tx">{</span>
+    <span class="kw">private int</span>    <span class="tx">employeeId</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">name</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">department</span><span class="tx">;</span>
+    <span class="kw">private double</span> <span class="tx">basicSalary</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">Employee</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">id, </span><span class="ty">String</span> <span class="tx">name, </span><span class="ty">String</span> <span class="tx">dept, </span><span class="kw">double</span> <span class="tx">salary) {</span>
+        <span class="kw">this</span><span class="tx">.employeeId  = id;</span>
+        <span class="kw">this</span><span class="tx">.name        = name;</span>
+        <span class="kw">this</span><span class="tx">.department  = dept;</span>
+        <span class="kw">this</span><span class="tx">.basicSalary = salary;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public double</span> <span class="fn">calculateNetSalary</span><span class="tx">() {</span>
+        <span class="kw">double</span> <span class="tx">hra = basicSalary * </span><span class="nm">0.20</span><span class="tx">;</span>  <span class="cm">// HRA: 20%</span>
+        <span class="kw">double</span> <span class="tx">pf  = basicSalary * </span><span class="nm">0.12</span><span class="tx">;</span>  <span class="cm">// PF deduction: 12%</span>
+        <span class="kw">return</span> <span class="tx">basicSalary + hra - pf;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">displayDetails</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"ID: "</span> <span class="tx">+ employeeId + </span><span class="st">" | Name: "</span> <span class="tx">+ name +</span>
+            <span class="st">" | Dept: "</span> <span class="tx">+ department +</span>
+            <span class="st">" | Net Salary: ₹"</span> <span class="tx">+ </span><span class="fn">calculateNetSalary</span><span class="tx">());</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Main:</span>
+<span class="ty">Employee</span> <span class="tx">e1 = </span><span class="kw">new</span> <span class="ty">Employee</span><span class="tx">(</span><span class="nm">501</span><span class="tx">, </span><span class="st">"Ananya Singh"</span><span class="tx">, </span><span class="st">"Software"</span><span class="tx">, </span><span class="nm">60000</span><span class="tx">);</span>
+<span class="ty">Employee</span> <span class="tx">e2 = </span><span class="kw">new</span> <span class="ty">Employee</span><span class="tx">(</span><span class="nm">502</span><span class="tx">, </span><span class="st">"Vikram Rao"</span><span class="tx">,   </span><span class="st">"Finance"</span><span class="tx">,   </span><span class="nm">55000</span><span class="tx">);</span>
+<span class="tx">e1.</span><span class="fn">displayDetails</span><span class="tx">();</span>  <span class="cm">// Net: ₹64800.0</span>
+<span class="tx">e2.</span><span class="fn">displayDetails</span><span class="tx">();</span>  <span class="cm">// Net: ₹59400.0</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 4 — CONSTRUCTORS ══════════ -->
+<div class="sec" id="s4">
+  <div class="sec-head">
+    <div class="sec-badge v">4</div>
+    <div class="sec-meta">
+      <h2>Constructors</h2>
+      <p>Initialising objects at birth — the setup phase</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is a Constructor?</strong>
+      <p>A constructor is a special method that runs <strong>automatically when you create an object</strong> using <code>new</code>. It sets up the object's initial state. It has the <em>same name as the class</em> and <em>no return type</em>.</p>
+    </div>
+  </div>
+  <div class="box prob">
+    <span class="box-icon">⚠️</span>
+    <div class="box-body">
+      <strong>What if you don't use a proper constructor?</strong>
+      <p>Fields get default values (0, null, false). A bank account with <code>null</code> accountHolder and Rs 0 balance, with no validation — you'd allow creating invalid accounts that crash later when you call methods on null fields.</p>
+    </div>
+  </div>
+
+  <h3>Three kinds of constructors</h3>
+
+  <div class="domain-tag ecom">🛒 E-Commerce Domain — Flipkart</div>
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">Product.java — Constructor overloading</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Product</span> <span class="tx">{</span>
+    <span class="kw">private int</span>    <span class="tx">productId</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">name</span><span class="tx">;</span>
+    <span class="kw">private double</span> <span class="tx">price</span><span class="tx">;</span>
+    <span class="kw">private int</span>    <span class="tx">stock</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">category</span><span class="tx">;</span>
+
+    <span class="cm">// ── 1. Default constructor — Java provides one if you write none</span>
+    <span class="cm">//       But here we override it to set sensible defaults:</span>
+    <span class="kw">public</span> <span class="ty">Product</span><span class="tx">() {</span>
+        <span class="kw">this</span><span class="tx">.productId = </span><span class="nm">0</span><span class="tx">;</span>
+        <span class="kw">this</span><span class="tx">.name     = </span><span class="st">"Unnamed"</span><span class="tx">;</span>
+        <span class="kw">this</span><span class="tx">.price    = </span><span class="nm">0.0</span><span class="tx">;</span>
+        <span class="kw">this</span><span class="tx">.stock    = </span><span class="nm">0</span><span class="tx">;</span>
+        <span class="kw">this</span><span class="tx">.category = </span><span class="st">"Uncategorised"</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── 2. Parameterised constructor — set everything at creation</span>
+    <span class="kw">public</span> <span class="ty">Product</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">id, </span><span class="ty">String</span> <span class="tx">name, </span><span class="kw">double</span> <span class="tx">price, </span><span class="kw">int</span> <span class="tx">stock) {</span>
+        <span class="kw">this</span><span class="tx">.productId = id;</span>
+        <span class="kw">this</span><span class="tx">.name      = name;</span>
+        <span class="kw">this</span><span class="tx">.price     = (price > </span><span class="nm">0</span><span class="tx">) ? price : </span><span class="nm">0</span><span class="tx">;</span>   <span class="cm">// validation at birth</span>
+        <span class="kw">this</span><span class="tx">.stock     = (stock >= </span><span class="nm">0</span><span class="tx">) ? stock : </span><span class="nm">0</span><span class="tx">;</span>
+        <span class="kw">this</span><span class="tx">.category  = </span><span class="st">"General"</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── 3. Full parameterised constructor</span>
+    <span class="kw">public</span> <span class="ty">Product</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">id, </span><span class="ty">String</span> <span class="tx">name, </span><span class="kw">double</span> <span class="tx">price,</span>
+                   <span class="kw">int</span> <span class="tx">stock, </span><span class="ty">String</span> <span class="tx">category) {</span>
+        <span class="kw">this</span><span class="tx">(id, name, price, stock);</span>      <span class="cm">// calls constructor above (code reuse)</span>
+        <span class="kw">this</span><span class="tx">.category = category;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">displayProduct</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"["</span> <span class="tx">+ productId + </span><span class="st">"] "</span> <span class="tx">+ name +</span>
+            <span class="st">" | ₹"</span> <span class="tx">+ price + </span><span class="st">" | Stock: "</span> <span class="tx">+ stock +</span>
+            <span class="st">" | Category: "</span> <span class="tx">+ category);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Usage — Java picks the right constructor by matching parameters:</span>
+<span class="ty">Product</span> <span class="tx">p1 = </span><span class="kw">new</span> <span class="ty">Product</span><span class="tx">();</span>
+<span class="ty">Product</span> <span class="tx">p2 = </span><span class="kw">new</span> <span class="ty">Product</span><span class="tx">(</span><span class="nm">301</span><span class="tx">, </span><span class="st">"Samsung Galaxy S24"</span><span class="tx">, </span><span class="nm">79999</span><span class="tx">, </span><span class="nm">50</span><span class="tx">);</span>
+<span class="ty">Product</span> <span class="tx">p3 = </span><span class="kw">new</span> <span class="ty">Product</span><span class="tx">(</span><span class="nm">302</span><span class="tx">, </span><span class="st">"Nike Air Max"</span><span class="tx">, </span><span class="nm">8999</span><span class="tx">, </span><span class="nm">200</span><span class="tx">, </span><span class="st">"Footwear"</span><span class="tx">);</span>
+
+<span class="tx">p1.</span><span class="fn">displayProduct</span><span class="tx">();</span>  <span class="cm">// [0] Unnamed | ₹0.0 | Stock: 0 | Category: Uncategorised</span>
+<span class="tx">p2.</span><span class="fn">displayProduct</span><span class="tx">();</span>  <span class="cm">// [301] Samsung Galaxy S24 | ₹79999.0 | Stock: 50 | Category: General</span>
+<span class="tx">p3.</span><span class="fn">displayProduct</span><span class="tx">();</span>  <span class="cm">// [302] Nike Air Max | ₹8999.0 | Stock: 200 | Category: Footwear</span></pre>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 5 — METHODS ══════════ -->
+<div class="sec" id="s5">
+  <div class="sec-head">
+    <div class="sec-badge t">5</div>
+    <div class="sec-meta">
+      <h2>Methods — void, Return Types, Overloading &amp; Overriding</h2>
+      <p>Defining what objects can do — and how methods communicate results</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is a Method?</strong>
+      <p>A method is a named block of code inside a class that defines what an object <em>can do</em>. Methods can receive data (parameters), perform logic, and optionally return a result.</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="icard a">
+      <div class="icard-icon">🔇</div>
+      <h4>void method</h4>
+      <p>Does something but <strong>returns nothing</strong>. Like <code>printReceipt()</code> — it just prints, doesn't give you back a value.</p>
+    </div>
+    <div class="icard b">
+      <div class="icard-icon">📤</div>
+      <h4>Return-type method</h4>
+      <p><strong>Computes and gives back</strong> a value to the caller. Like <code>calculateInterest()</code> — returns a double the caller can use.</p>
+    </div>
+  </div>
+
+  <div class="domain-tag bank">🏦 Banking Domain — SBI</div>
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">SBIAccount.java — Methods in depth</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">SBIAccount</span> <span class="tx">{</span>
+    <span class="kw">private double</span> <span class="tx">balance</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">accountHolder</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">SBIAccount</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">holder, </span><span class="kw">double</span> <span class="tx">balance) {</span>
+        <span class="kw">this</span><span class="tx">.accountHolder = holder;</span>
+        <span class="kw">this</span><span class="tx">.balance       = balance;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── void method: performs action, returns nothing</span>
+    <span class="kw">public void</span> <span class="fn">printStatement</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Account: "</span> <span class="tx">+ accountHolder +</span>
+            <span class="st">" | Balance: ₹"</span> <span class="tx">+ balance);</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── return double: caller needs the computed value</span>
+    <span class="kw">public double</span> <span class="fn">calculateYearlyInterest</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="tx">balance * </span><span class="nm">0.035</span><span class="tx">;</span>   <span class="cm">// SBI savings: 3.5% p.a.</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── return boolean: validation check</span>
+    <span class="kw">public boolean</span> <span class="fn">withdraw</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="kw">if</span> <span class="tx">(amount > </span><span class="nm">0</span> <span class="tx">&amp;&amp; amount &lt;= balance) {</span>
+            <span class="tx">balance -= amount;</span>
+            <span class="kw">return true</span><span class="tx">;</span>   <span class="cm">// success</span>
+        <span class="tx">}</span>
+        <span class="kw">return false</span><span class="tx">;</span>      <span class="cm">// failed</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── return String: formatted data for display</span>
+    <span class="kw">public</span> <span class="ty">String</span> <span class="fn">getMiniStatement</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="st">"Holder: "</span> <span class="tx">+ accountHolder +</span>
+               <span class="st">" | Balance: ₹"</span> <span class="tx">+ balance +</span>
+               <span class="st">" | Interest/year: ₹"</span> <span class="tx">+ </span><span class="fn">calculateYearlyInterest</span><span class="tx">();</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ══ METHOD OVERLOADING — same name, different parameters ══</span>
+    <span class="cm">// transfer to another account by ID</span>
+    <span class="kw">public boolean</span> <span class="fn">transfer</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">toAccountId, </span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Transferred ₹"</span><span class="tx">+amount+</span><span class="st">" to account #"</span><span class="tx">+toAccountId);</span>
+        <span class="kw">return</span> <span class="fn">withdraw</span><span class="tx">(amount);</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// transfer to another account OBJECT</span>
+    <span class="kw">public boolean</span> <span class="fn">transfer</span><span class="tx">(</span><span class="ty">SBIAccount</span> <span class="tx">toAccount, </span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="kw">if</span> <span class="tx">(</span><span class="fn">withdraw</span><span class="tx">(amount)) {</span>
+            <span class="tx">toAccount.balance += amount;</span>
+            <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"₹"</span><span class="tx">+amount+</span><span class="st">" transferred to "</span><span class="tx">+toAccount.accountHolder);</span>
+            <span class="kw">return true</span><span class="tx">;</span>
+        <span class="tx">}</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Transfer failed: insufficient balance"</span><span class="tx">);</span>
+        <span class="kw">return false</span><span class="tx">;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Usage:</span>
+<span class="ty">SBIAccount</span> <span class="tx">myAcc   = </span><span class="kw">new</span> <span class="ty">SBIAccount</span><span class="tx">(</span><span class="st">"Ravi Kumar"</span><span class="tx">, </span><span class="nm">50000</span><span class="tx">);</span>
+<span class="ty">SBIAccount</span> <span class="tx">friendAcc = </span><span class="kw">new</span> <span class="ty">SBIAccount</span><span class="tx">(</span><span class="st">"Sita Devi"</span><span class="tx">, </span><span class="nm">10000</span><span class="tx">);</span>
+
+<span class="kw">double</span> <span class="tx">interest = myAcc.</span><span class="fn">calculateYearlyInterest</span><span class="tx">();</span>  <span class="cm">// 1750.0</span>
+<span class="kw">boolean</span> <span class="tx">ok = myAcc.</span><span class="fn">transfer</span><span class="tx">(friendAcc, </span><span class="nm">5000</span><span class="tx">);</span>         <span class="cm">// overloaded: object version</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(myAcc.</span><span class="fn">getMiniStatement</span><span class="tx">());</span></pre>
+    </div>
+  </div>
+
+  <table class="tbl">
+    <tr><th>Return Type</th><th>When to Use</th><th>Real Example</th></tr>
+    <tr><td><code>void</code></td><td>Method performs an action; caller doesn't need a value back</td><td><code>sendSMSAlert()</code>, <code>printReceipt()</code></td></tr>
+    <tr><td><code>double</code></td><td>Returns calculated numeric result</td><td><code>calculateEMI()</code>, <code>getInterest()</code></td></tr>
+    <tr><td><code>boolean</code></td><td>Returns success/failure</td><td><code>withdraw()</code>, <code>isEligibleForLoan()</code></td></tr>
+    <tr><td><code>String</code></td><td>Returns formatted text</td><td><code>getMiniStatement()</code>, <code>getStatus()</code></td></tr>
+    <tr><td>Class type</td><td>Returns an object</td><td><code>getAccountDetails()</code> returns <code>Account</code></td></tr>
+  </table>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 6 — this & super ══════════ -->
+<div class="sec" id="s6">
+  <div class="sec-head">
+    <div class="sec-badge a">6</div>
+    <div class="sec-meta">
+      <h2>The <code>this</code> and <code>super</code> Keywords</h2>
+      <p>Referring to the current object and the parent class</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="icard b">
+      <div class="icard-icon">👆</div>
+      <h4>this</h4>
+      <p>Refers to the <em>current object</em>. Used to disambiguate field names from parameters, call another constructor, or pass self as argument.</p>
+    </div>
+    <div class="icard v">
+      <div class="icard-icon">⬆️</div>
+      <h4>super</h4>
+      <p>Refers to the <em>parent class</em>. Used to call the parent's constructor (<code>super()</code>) or a parent method that's been overridden.</p>
+    </div>
+  </div>
+
+  <div class="domain-tag bank">🏦 Banking Domain — ICICI Bank</div>
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">this and super in Banking</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="cm">// ── this: resolves name clash between field and parameter ──</span>
+<span class="kw">public class</span> <span class="ty">ICICIAccount</span> <span class="tx">{</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">accountHolder</span><span class="tx">;</span>
+    <span class="kw">private double</span> <span class="tx">balance</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">ifscCode</span><span class="tx">;</span>
+
+    <span class="cm">// parameter 'accountHolder' shadows the field 'accountHolder'</span>
+    <span class="cm">// 'this.accountHolder' means the FIELD; 'accountHolder' means the PARAMETER</span>
+    <span class="kw">public</span> <span class="ty">ICICIAccount</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">accountHolder, </span><span class="kw">double</span> <span class="tx">balance) {</span>
+        <span class="kw">this</span><span class="tx">.accountHolder = accountHolder;</span>
+        <span class="kw">this</span><span class="tx">.balance       = balance;</span>
+        <span class="kw">this</span><span class="tx">.ifscCode      = </span><span class="st">"ICIC0001104"</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// this() — calls another constructor to avoid repeating code</span>
+    <span class="kw">public</span> <span class="ty">ICICIAccount</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">accountHolder) {</span>
+        <span class="kw">this</span><span class="tx">(accountHolder, </span><span class="nm">0.0</span><span class="tx">);</span>   <span class="cm">// reuses the 2-param constructor above</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── super: child uses parent's constructor and methods ──</span>
+<span class="kw">public class</span> <span class="ty">BankAccount</span> <span class="tx">{</span>
+    <span class="kw">protected</span> <span class="ty">String</span> <span class="tx">accountHolder</span><span class="tx">;</span>
+    <span class="kw">protected double</span> <span class="tx">balance</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">BankAccount</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">holder, </span><span class="kw">double</span> <span class="tx">balance) {</span>
+        <span class="kw">this</span><span class="tx">.accountHolder = holder;</span>
+        <span class="kw">this</span><span class="tx">.balance = balance;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">displayInfo</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Holder: "</span><span class="tx"> + accountHolder + </span><span class="st">" | Balance: ₹"</span><span class="tx"> + balance);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">SavingsAccount</span> <span class="kw">extends</span> <span class="ty">BankAccount</span> <span class="tx">{</span>
+    <span class="kw">private double</span> <span class="tx">interestRate</span><span class="tx">;</span>
+    <span class="kw">private int</span>    <span class="tx">minimumBalance</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">SavingsAccount</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">holder, </span><span class="kw">double</span> <span class="tx">balance) {</span>
+        <span class="kw">super</span><span class="tx">(holder, balance);</span>  <span class="cm">// MUST be first line — calls BankAccount constructor</span>
+        <span class="kw">this</span><span class="tx">.interestRate   = </span><span class="nm">3.5</span><span class="tx">;</span>
+        <span class="kw">this</span><span class="tx">.minimumBalance = </span><span class="nm">1000</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">displayInfo</span><span class="tx">() {</span>
+        <span class="kw">super</span><span class="tx">.</span><span class="fn">displayInfo</span><span class="tx">();</span>             <span class="cm">// prints holder & balance from parent</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span>              <span class="cm">// then adds savings-specific info</span>
+            <span class="st">"Interest Rate: "</span><span class="tx"> + interestRate +</span>
+            <span class="st">"% | Min Balance: ₹"</span><span class="tx"> + minimumBalance);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="ty">SavingsAccount</span> <span class="tx">sa = </span><span class="kw">new</span> <span class="ty">SavingsAccount</span><span class="tx">(</span><span class="st">"Meera Kapoor"</span><span class="tx">, </span><span class="nm">25000</span><span class="tx">);</span>
+<span class="tx">sa.</span><span class="fn">displayInfo</span><span class="tx">();</span>
+<span class="cm">// Holder: Meera Kapoor | Balance: ₹25000.0</span>
+<span class="cm">// Interest Rate: 3.5% | Min Balance: ₹1000</span></pre>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 7 — ACCESS SPECIFIERS ══════════ -->
+<div class="sec" id="s7">
+  <div class="sec-head">
+    <div class="sec-badge r">7</div>
+    <div class="sec-meta">
+      <h2>Access Specifiers</h2>
+      <p>Controlling who can see and modify what</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What are Access Specifiers?</strong>
+      <p>Keywords that control which other classes can access your fields and methods. This is the primary tool for enforcing encapsulation and data security in real systems.</p>
+    </div>
+  </div>
+
+  <table class="tbl">
+    <tr><th>Modifier</th><th>Same Class</th><th>Same Package</th><th>Subclass</th><th>Anywhere</th><th>Best for</th></tr>
+    <tr><td><code>private</code></td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>Sensitive fields: balance, password, PIN</td></tr>
+    <tr><td>default (none)</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td><td>Package-internal helpers</td></tr>
+    <tr><td><code>protected</code></td><td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>Fields child classes need to use</td></tr>
+    <tr><td><code>public</code></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>APIs, constructors, service methods</td></tr>
+  </table>
+
+  <div class="domain-tag bank">🏦 Banking Domain</div>
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">Access specifiers — real usage</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">BankAccount</span> <span class="tx">{</span>
+
+    <span class="cm">// private — ONLY this class can access. Not even subclasses.</span>
+    <span class="cm">// No one can directly set balance = -1000 from outside.</span>
+    <span class="kw">private double</span>  <span class="tx">balance</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span>  <span class="tx">pin</span><span class="tx">;</span>
+
+    <span class="cm">// protected — this class AND subclasses can access.</span>
+    <span class="cm">// SavingsAccount (child) can use accountHolder directly.</span>
+    <span class="kw">protected</span> <span class="ty">String</span> <span class="tx">accountHolder</span><span class="tx">;</span>
+    <span class="kw">protected int</span>    <span class="tx">accountNumber</span><span class="tx">;</span>
+
+    <span class="cm">// public — anyone can call these</span>
+    <span class="kw">public</span> <span class="ty">BankAccount</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">holder, </span><span class="kw">int</span> <span class="tx">accNo, </span><span class="kw">double</span> <span class="tx">initial) {</span>
+        <span class="kw">this</span><span class="tx">.accountHolder = holder;</span>
+        <span class="kw">this</span><span class="tx">.accountNumber  = accNo;</span>
+        <span class="kw">this</span><span class="tx">.balance        = initial;</span>
+        <span class="kw">this</span><span class="tx">.pin            = </span><span class="st">"0000"</span><span class="tx">;</span>  <span class="cm">// default PIN</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Public method — the ONLY way to change balance from outside</span>
+    <span class="kw">public boolean</span> <span class="fn">deposit</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="kw">if</span> <span class="tx">(amount &lt;= </span><span class="nm">0</span><span class="tx">) </span><span class="kw">return false</span><span class="tx">;</span>
+        <span class="tx">balance += amount;</span>
+        <span class="kw">return true</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Public getter — read-only access to balance</span>
+    <span class="kw">public double</span> <span class="fn">getBalance</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">balance; }</span>
+
+    <span class="cm">// Private helper — called internally only; not exposed outside</span>
+    <span class="kw">private void</span> <span class="fn">logTransaction</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">type, </span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"[LOG] "</span> <span class="tx">+ type + </span><span class="st">": ₹"</span> <span class="tx">+ amount);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// In another class:</span>
+<span class="ty">BankAccount</span> <span class="tx">acc = </span><span class="kw">new</span> <span class="ty">BankAccount</span><span class="tx">(</span><span class="st">"Ajay"</span><span class="tx">, </span><span class="nm">12345</span><span class="tx">, </span><span class="nm">5000</span><span class="tx">);</span>
+<span class="tx">acc.</span><span class="fn">deposit</span><span class="tx">(</span><span class="nm">1000</span><span class="tx">);</span>                  <span class="cm">// ✅ public — allowed</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(acc.</span><span class="fn">getBalance</span><span class="tx">());</span> <span class="cm">// ✅ public getter — allowed</span>
+<span class="cm">// acc.balance = -99999;    ← ❌ COMPILE ERROR: balance is private</span>
+<span class="cm">// acc.logTransaction(...); ← ❌ COMPILE ERROR: logTransaction is private</span></pre>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 8 — ENCAPSULATION ══════════ -->
+<div class="sec" id="s8">
+  <div class="sec-head">
+    <div class="sec-badge b">8</div>
+    <div class="sec-meta">
+      <h2>Encapsulation</h2>
+      <p>The bank vault principle — protect data, expose controlled access</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is Encapsulation?</strong>
+      <p>Bundling data (fields) and methods that operate on that data into a class, while <strong>hiding the internal state</strong> behind a controlled interface (getters/setters). The data can only change through the methods you allow — with validation and logic built in.</p>
+    </div>
+  </div>
+
+  <div class="domain-tag edu">🎓 Education Domain — University</div>
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">Student.java — Full encapsulation</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Student</span> <span class="tx">{</span>
+    <span class="kw">private int</span>    <span class="tx">studentId</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">name</span><span class="tx">;</span>
+    <span class="kw">private double</span> <span class="tx">cgpa</span><span class="tx">;</span>            <span class="cm">// 0.0 to 10.0</span>
+    <span class="kw">private int</span>    <span class="tx">attendancePercent</span><span class="tx">;</span> <span class="cm">// 0 to 100</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">course</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">Student</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">id, </span><span class="ty">String</span> <span class="tx">name, </span><span class="ty">String</span> <span class="tx">course) {</span>
+        <span class="kw">this</span><span class="tx">.studentId  = id;</span>
+        <span class="kw">this</span><span class="tx">.name       = name;</span>
+        <span class="kw">this</span><span class="tx">.course     = course;</span>
+        <span class="kw">this</span><span class="tx">.cgpa       = </span><span class="nm">0.0</span><span class="tx">;</span>
+        <span class="kw">this</span><span class="tx">.attendancePercent = </span><span class="nm">0</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ── Getters (read access) ──</span>
+    <span class="kw">public int</span>    <span class="fn">getStudentId</span><span class="tx">()   { </span><span class="kw">return</span> <span class="tx">studentId; }</span>
+    <span class="kw">public</span> <span class="ty">String</span> <span class="fn">getName</span><span class="tx">()         { </span><span class="kw">return</span> <span class="tx">name; }</span>
+    <span class="kw">public double</span> <span class="fn">getCgpa</span><span class="tx">()         { </span><span class="kw">return</span> <span class="tx">cgpa; }</span>
+    <span class="kw">public int</span>    <span class="fn">getAttendance</span><span class="tx">()   { </span><span class="kw">return</span> <span class="tx">attendancePercent; }</span>
+
+    <span class="cm">// ── Setters (write access with VALIDATION) ──</span>
+    <span class="kw">public void</span> <span class="fn">setCgpa</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">cgpa) {</span>
+        <span class="kw">if</span> <span class="tx">(cgpa >= </span><span class="nm">0.0</span> <span class="tx">&amp;&amp; cgpa &lt;= </span><span class="nm">10.0</span><span class="tx">) {</span>
+            <span class="kw">this</span><span class="tx">.cgpa = cgpa;</span>
+        <span class="tx">} </span><span class="kw">else</span> <span class="tx">{</span>
+            <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Invalid CGPA. Must be 0.0 to 10.0"</span><span class="tx">);</span>
+        <span class="tx">}</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">setAttendance</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">percent) {</span>
+        <span class="kw">if</span> <span class="tx">(percent >= </span><span class="nm">0</span> <span class="tx">&amp;&amp; percent &lt;= </span><span class="nm">100</span><span class="tx">) {</span>
+            <span class="kw">this</span><span class="tx">.attendancePercent = percent;</span>
+        <span class="tx">} </span><span class="kw">else</span> <span class="tx">{</span>
+            <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Attendance must be 0-100"</span><span class="tx">);</span>
+        <span class="tx">}</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Business logic method</span>
+    <span class="kw">public boolean</span> <span class="fn">isEligibleForExam</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="tx">attendancePercent >= </span><span class="nm">75</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public</span> <span class="ty">String</span> <span class="fn">getGrade</span><span class="tx">() {</span>
+        <span class="kw">if</span>      <span class="tx">(cgpa >= </span><span class="nm">9.0</span><span class="tx">)</span> <span class="kw">return</span> <span class="st">"O (Outstanding)"</span><span class="tx">;</span>
+        <span class="kw">else if</span> <span class="tx">(cgpa >= </span><span class="nm">8.0</span><span class="tx">)</span> <span class="kw">return</span> <span class="st">"A+ (Excellent)"</span><span class="tx">;</span>
+        <span class="kw">else if</span> <span class="tx">(cgpa >= </span><span class="nm">7.0</span><span class="tx">)</span> <span class="kw">return</span> <span class="st">"A  (Very Good)"</span><span class="tx">;</span>
+        <span class="kw">else if</span> <span class="tx">(cgpa >= </span><span class="nm">6.0</span><span class="tx">)</span> <span class="kw">return</span> <span class="st">"B  (Good)"</span><span class="tx">;</span>
+        <span class="kw">else</span>                   <span class="kw">return</span> <span class="st">"F  (Fail)"</span><span class="tx">;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Usage:</span>
+<span class="ty">Student</span> <span class="tx">s = </span><span class="kw">new</span> <span class="ty">Student</span><span class="tx">(</span><span class="nm">2024001</span><span class="tx">, </span><span class="st">"Divya Menon"</span><span class="tx">, </span><span class="st">"B.Tech CSE"</span><span class="tx">);</span>
+<span class="tx">s.</span><span class="fn">setCgpa</span><span class="tx">(</span><span class="nm">8.7</span><span class="tx">);</span>
+<span class="tx">s.</span><span class="fn">setCgpa</span><span class="tx">(</span><span class="nm">15</span><span class="tx">);</span>    <span class="cm">// → "Invalid CGPA. Must be 0.0 to 10.0" (protected!)</span>
+<span class="tx">s.</span><span class="fn">setAttendance</span><span class="tx">(</span><span class="nm">82</span><span class="tx">);</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(s.</span><span class="fn">getGrade</span><span class="tx">());</span>           <span class="cm">// A+ (Excellent)</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(s.</span><span class="fn">isEligibleForExam</span><span class="tx">());</span> <span class="cm">// true</span></pre>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-head">
+      <span class="ex-level med">Intermediate</span>
+      <span class="ex-title">Exercise 2 — BankAccount with full encapsulation</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-q">Build an <code>ICICIBankAccount</code> class with private fields: <code>accountNumber</code> (int), <code>holderName</code> (String), <code>balance</code> (double), <code>isActive</code> (boolean). Write a constructor. Add <code>deposit(double)</code> that rejects negative amounts. Add <code>withdraw(double)</code> that rejects if amount exceeds balance or is negative, and prints appropriate messages. Add a <code>getBalance()</code> getter and a <code>printStatement()</code> method. Test with a few transactions.</p>
+      <button class="sol-btn" onclick="toggleSol('sol2')">▶ Show Solution</button>
+      <div class="sol-panel" id="sol2">
+        <div class="code">
+          <div class="code-top">
+            <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+            <span class="file-name">Solution — ICICIBankAccount.java</span>
+          </div>
+          <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">ICICIBankAccount</span> <span class="tx">{</span>
+    <span class="kw">private int</span>     <span class="tx">accountNumber</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span>  <span class="tx">holderName</span><span class="tx">;</span>
+    <span class="kw">private double</span>  <span class="tx">balance</span><span class="tx">;</span>
+    <span class="kw">private boolean</span> <span class="tx">isActive</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">ICICIBankAccount</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">accNo, </span><span class="ty">String</span> <span class="tx">name, </span><span class="kw">double</span> <span class="tx">initialDeposit) {</span>
+        <span class="kw">this</span><span class="tx">.accountNumber = accNo;</span>
+        <span class="kw">this</span><span class="tx">.holderName    = name;</span>
+        <span class="kw">this</span><span class="tx">.balance       = initialDeposit;</span>
+        <span class="kw">this</span><span class="tx">.isActive      = </span><span class="kw">true</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">deposit</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="kw">if</span> <span class="tx">(amount &lt;= </span><span class="nm">0</span><span class="tx">) {</span>
+            <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"❌ Invalid deposit amount."</span><span class="tx">);</span>
+            <span class="kw">return</span><span class="tx">;</span>
+        <span class="tx">}</span>
+        <span class="tx">balance += amount;</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"✅ Deposited ₹"</span><span class="tx"> + amount +</span>
+            <span class="st">". New balance: ₹"</span><span class="tx"> + balance);</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">withdraw</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="kw">if</span> <span class="tx">(amount &lt;= </span><span class="nm">0</span><span class="tx">) {</span>
+            <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"❌ Invalid withdrawal amount."</span><span class="tx">);</span>
+        <span class="tx">} </span><span class="kw">else if</span> <span class="tx">(amount > balance) {</span>
+            <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"❌ Insufficient balance. Available: ₹"</span><span class="tx"> + balance);</span>
+        <span class="tx">} </span><span class="kw">else</span> <span class="tx">{</span>
+            <span class="tx">balance -= amount;</span>
+            <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"✅ Withdrawn ₹"</span><span class="tx"> + amount +</span>
+                <span class="st">". Remaining: ₹"</span><span class="tx"> + balance);</span>
+        <span class="tx">}</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public double</span> <span class="fn">getBalance</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">balance; }</span>
+
+    <span class="kw">public void</span> <span class="fn">printStatement</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"\n=== ICICI Bank Statement ==="</span><span class="tx">);</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Account: "</span> <span class="tx">+ accountNumber);</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Holder : "</span> <span class="tx">+ holderName);</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Balance: ₹"</span> <span class="tx">+ balance);</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Status : "</span> <span class="tx">+ (isActive ? </span><span class="st">"Active"</span> <span class="tx">: </span><span class="st">"Inactive"</span><span class="tx">));</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Main:</span>
+<span class="ty">ICICIBankAccount</span> <span class="tx">acc = </span><span class="kw">new</span> <span class="ty">ICICIBankAccount</span><span class="tx">(</span><span class="nm">5001</span><span class="tx">, </span><span class="st">"Suresh Babu"</span><span class="tx">, </span><span class="nm">20000</span><span class="tx">);</span>
+<span class="tx">acc.</span><span class="fn">deposit</span><span class="tx">(</span><span class="nm">5000</span><span class="tx">);</span>
+<span class="tx">acc.</span><span class="fn">withdraw</span><span class="tx">(</span><span class="nm">30000</span><span class="tx">);</span>  <span class="cm">// ❌ Insufficient</span>
+<span class="tx">acc.</span><span class="fn">withdraw</span><span class="tx">(</span><span class="nm">8000</span><span class="tx">);</span>
+<span class="tx">acc.</span><span class="fn">printStatement</span><span class="tx">();</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 9 — INHERITANCE ══════════ -->
+<div class="sec" id="s9">
+  <div class="sec-head">
+    <div class="sec-badge t">9</div>
+    <div class="sec-meta">
+      <h2>Inheritance</h2>
+      <p>Code reuse through parent-child class hierarchy</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is Inheritance?</strong>
+      <p>A child class (<em>subclass</em>) automatically gets all non-private fields and methods of a parent class (<em>superclass</em>). It can add new features and override existing ones. Uses the <code>extends</code> keyword.</p>
+    </div>
+  </div>
+  <div class="box why">
+    <span class="box-icon">💡</span>
+    <div class="box-body">
+      <strong>Why Inheritance? — Banking Example</strong>
+      <p>SBI offers Savings Accounts, Current Accounts, Salary Accounts, and NRI Accounts. All of them share: account number, holder name, balance, deposit(), withdraw(). Without inheritance, you repeat all that code 4 times. With inheritance, write it once in <code>BankAccount</code>, and each subclass just adds what's unique to it.</p>
+    </div>
+  </div>
+
+  <div class="domain-tag bank">🏦 Banking Domain — Account Hierarchy</div>
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">BankAccount.java + SavingsAccount.java + CurrentAccount.java</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="cm">// ══ PARENT CLASS — common to ALL account types ══</span>
+<span class="kw">public class</span> <span class="ty">BankAccount</span> <span class="tx">{</span>
+    <span class="kw">protected int</span>    <span class="tx">accountNumber</span><span class="tx">;</span>
+    <span class="kw">protected</span> <span class="ty">String</span> <span class="tx">accountHolder</span><span class="tx">;</span>
+    <span class="kw">protected double</span> <span class="tx">balance</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">BankAccount</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">accNo, </span><span class="ty">String</span> <span class="tx">holder, </span><span class="kw">double</span> <span class="tx">balance) {</span>
+        <span class="kw">this</span><span class="tx">.accountNumber = accNo;</span>
+        <span class="kw">this</span><span class="tx">.accountHolder = holder;</span>
+        <span class="kw">this</span><span class="tx">.balance       = balance;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public void</span> <span class="fn">deposit</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="kw">if</span> <span class="tx">(amount > </span><span class="nm">0</span><span class="tx">) balance += amount;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public</span> <span class="ty">String</span> <span class="fn">getAccountInfo</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="st">"Acc#"</span><span class="tx"> + accountNumber + </span><span class="st">" | "</span><span class="tx"> + accountHolder +</span>
+               <span class="st">" | ₹"</span><span class="tx"> + balance;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ══ CHILD CLASS 1: SavingsAccount — adds interest & min-balance rules ══</span>
+<span class="kw">public class</span> <span class="ty">SavingsAccount</span> <span class="kw">extends</span> <span class="ty">BankAccount</span> <span class="tx">{</span>
+    <span class="kw">private double</span> <span class="tx">interestRate</span><span class="tx">;</span>
+    <span class="kw">private double</span> <span class="tx">minimumBalance</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">SavingsAccount</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">accNo, </span><span class="ty">String</span> <span class="tx">holder, </span><span class="kw">double</span> <span class="tx">balance) {</span>
+        <span class="kw">super</span><span class="tx">(accNo, holder, balance);</span>   <span class="cm">// reuse parent constructor</span>
+        <span class="kw">this</span><span class="tx">.interestRate   = </span><span class="nm">3.5</span><span class="tx">;</span>
+        <span class="kw">this</span><span class="tx">.minimumBalance = </span><span class="nm">1000.0</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public double</span> <span class="fn">addYearlyInterest</span><span class="tx">() {</span>
+        <span class="kw">double</span> <span class="tx">interest = balance * (interestRate / </span><span class="nm">100</span><span class="tx">);</span>
+        <span class="tx">balance += interest;</span>
+        <span class="kw">return</span> <span class="tx">interest;</span>
+    <span class="tx">}</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public</span> <span class="ty">String</span> <span class="fn">getAccountInfo</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="st">"[SAVINGS] "</span><span class="tx"> + </span><span class="kw">super</span><span class="tx">.</span><span class="fn">getAccountInfo</span><span class="tx">() +</span>
+               <span class="st">" | Rate: "</span><span class="tx"> + interestRate + </span><span class="st">"%"</span><span class="tx">;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ══ CHILD CLASS 2: CurrentAccount — adds overdraft facility ══</span>
+<span class="kw">public class</span> <span class="ty">CurrentAccount</span> <span class="kw">extends</span> <span class="ty">BankAccount</span> <span class="tx">{</span>
+    <span class="kw">private double</span> <span class="tx">overdraftLimit</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">CurrentAccount</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">accNo, </span><span class="ty">String</span> <span class="tx">holder, </span><span class="kw">double</span> <span class="tx">balance, </span><span class="kw">double</span> <span class="tx">overdraft) {</span>
+        <span class="kw">super</span><span class="tx">(accNo, holder, balance);</span>
+        <span class="kw">this</span><span class="tx">.overdraftLimit = overdraft;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Override deposit for large businesses — requires cheque validation</span>
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">deposit</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="kw">super</span><span class="tx">.</span><span class="fn">deposit</span><span class="tx">(amount);</span>   <span class="cm">// parent logic first</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"[Current A/C] Cheque clearing initiated for ₹"</span><span class="tx">+amount);</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public boolean</span> <span class="fn">withdrawWithOverdraft</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="kw">if</span> <span class="tx">(amount &lt;= balance + overdraftLimit) {</span>
+            <span class="tx">balance -= amount;</span>
+            <span class="kw">return true</span><span class="tx">;</span>
+        <span class="tx">}</span>
+        <span class="kw">return false</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public</span> <span class="ty">String</span> <span class="fn">getAccountInfo</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="st">"[CURRENT] "</span><span class="tx"> + </span><span class="kw">super</span><span class="tx">.</span><span class="fn">getAccountInfo</span><span class="tx">() +</span>
+               <span class="st">" | Overdraft: ₹"</span><span class="tx"> + overdraftLimit;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Usage in Main:</span>
+<span class="ty">SavingsAccount</span> <span class="tx">savings = </span><span class="kw">new</span> <span class="ty">SavingsAccount</span><span class="tx">(</span><span class="nm">2001</span><span class="tx">, </span><span class="st">"Leela Devi"</span><span class="tx">,  </span><span class="nm">50000</span><span class="tx">);</span>
+<span class="ty">CurrentAccount</span> <span class="tx">current = </span><span class="kw">new</span> <span class="ty">CurrentAccount</span><span class="tx">(</span><span class="nm">3001</span><span class="tx">, </span><span class="st">"TechCorp Ltd"</span><span class="tx">, </span><span class="nm">100000</span><span class="tx">, </span><span class="nm">50000</span><span class="tx">);</span>
+
+<span class="tx">savings.</span><span class="fn">deposit</span><span class="tx">(</span><span class="nm">10000</span><span class="tx">);</span>            <span class="cm">// inherited from BankAccount</span>
+<span class="kw">double</span> <span class="tx">int_ = savings.</span><span class="fn">addYearlyInterest</span><span class="tx">();</span>   <span class="cm">// SavingsAccount's own method</span>
+
+<span class="tx">current.</span><span class="fn">deposit</span><span class="tx">(</span><span class="nm">25000</span><span class="tx">);</span>           <span class="cm">// overridden — includes cheque clearing</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(savings.</span><span class="fn">getAccountInfo</span><span class="tx">());</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(current.</span><span class="fn">getAccountInfo</span><span class="tx">());</span></pre>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 10 — POLYMORPHISM ══════════ -->
+<div class="sec" id="s10">
+  <div class="sec-head">
+    <div class="sec-badge v">10</div>
+    <div class="sec-meta">
+      <h2>Polymorphism</h2>
+      <p>One interface, many implementations — the power of runtime dispatch</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is Polymorphism?</strong>
+      <p>"Many forms." The same method call produces different behaviour depending on the actual object type. Java decides <em>which</em> version to call at runtime — this is called <strong>dynamic dispatch</strong>.</p>
+    </div>
+  </div>
+  <div class="box why">
+    <span class="box-icon">💡</span>
+    <div class="box-body">
+      <strong>Why it matters in real projects</strong>
+      <p>An E-commerce payment system must handle UPI, Credit Card, Net Banking, and Wallets. Without polymorphism, you'd write separate if-else blocks for every payment type. With polymorphism, call <code>processPayment()</code> on any payment object and the right implementation runs automatically. Adding a new payment method (say, BNPL) doesn't change existing code — just add a new class.</p>
+    </div>
+  </div>
+
+  <div class="domain-tag ecom">🛒 E-Commerce — Payment Gateway</div>
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">Polymorphism — Payment Gateway</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="cm">// Parent class</span>
+<span class="kw">public class</span> <span class="ty">Payment</span> <span class="tx">{</span>
+    <span class="kw">protected double</span> <span class="tx">amount</span><span class="tx">;</span>
+    <span class="kw">protected</span> <span class="ty">String</span> <span class="tx">orderId</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">Payment</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount, </span><span class="ty">String</span> <span class="tx">orderId) {</span>
+        <span class="kw">this</span><span class="tx">.amount  = amount;</span>
+        <span class="kw">this</span><span class="tx">.orderId = orderId;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Method to OVERRIDE — each payment type handles it differently</span>
+    <span class="kw">public void</span> <span class="fn">processPayment</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Processing generic payment of ₹"</span><span class="tx"> + amount);</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public</span> <span class="ty">String</span> <span class="fn">getPaymentSummary</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="st">"Order: "</span><span class="tx"> + orderId + </span><span class="st">" | Amount: ₹"</span><span class="tx"> + amount;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">UPIPayment</span> <span class="kw">extends</span> <span class="ty">Payment</span> <span class="tx">{</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">upiId</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">UPIPayment</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount, </span><span class="ty">String</span> <span class="tx">orderId, </span><span class="ty">String</span> <span class="tx">upiId) {</span>
+        <span class="kw">super</span><span class="tx">(amount, orderId);</span>
+        <span class="kw">this</span><span class="tx">.upiId = upiId;</span>
+    <span class="tx">}</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">processPayment</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"✅ UPI Payment: ₹"</span><span class="tx">+amount+</span><span class="st">" via "</span><span class="tx">+upiId+</span>
+            <span class="st">" | Order: "</span><span class="tx">+orderId+</span><span class="st">" | Instant transfer"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">CreditCardPayment</span> <span class="kw">extends</span> <span class="ty">Payment</span> <span class="tx">{</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">cardLastFour</span><span class="tx">;</span>
+    <span class="kw">private int</span>    <span class="tx">emiMonths</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">CreditCardPayment</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount, </span><span class="ty">String</span> <span class="tx">orderId,</span>
+                              <span class="ty">String</span> <span class="tx">last4, </span><span class="kw">int</span> <span class="tx">emi) {</span>
+        <span class="kw">super</span><span class="tx">(amount, orderId);</span>
+        <span class="kw">this</span><span class="tx">.cardLastFour = last4;</span>
+        <span class="kw">this</span><span class="tx">.emiMonths    = emi;</span>
+    <span class="tx">}</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">processPayment</span><span class="tx">() {</span>
+        <span class="kw">double</span> <span class="tx">emiAmount = amount / emiMonths;</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"✅ Credit Card ****"</span><span class="tx">+cardLastFour+</span>
+            <span class="st">": ₹"</span><span class="tx">+amount+</span><span class="st">" in "</span><span class="tx">+emiMonths+</span>
+            <span class="st">" EMIs of ₹"</span><span class="tx">+emiAmount);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">WalletPayment</span> <span class="kw">extends</span> <span class="ty">Payment</span> <span class="tx">{</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">walletName</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">WalletPayment</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount, </span><span class="ty">String</span> <span class="tx">orderId, </span><span class="ty">String</span> <span class="tx">wallet) {</span>
+        <span class="kw">super</span><span class="tx">(amount, orderId);</span>
+        <span class="kw">this</span><span class="tx">.walletName = wallet;</span>
+    <span class="tx">}</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">processPayment</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"✅ Wallet ("</span><span class="tx">+walletName+</span><span class="st">") Payment: ₹"</span><span class="tx">+amount);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ══ POLYMORPHISM IN ACTION ══</span>
+<span class="cm">// Store different types in a parent-type array</span>
+<span class="ty">Payment</span><span class="tx">[] checkoutPayments = {</span>
+    <span class="kw">new</span> <span class="ty">UPIPayment</span><span class="tx">(</span><span class="nm">3499</span><span class="tx">, </span><span class="st">"ORD001"</span><span class="tx">, </span><span class="st">"rahul@paytm"</span><span class="tx">),</span>
+    <span class="kw">new</span> <span class="ty">CreditCardPayment</span><span class="tx">(</span><span class="nm">59999</span><span class="tx">, </span><span class="st">"ORD002"</span><span class="tx">, </span><span class="st">"4231"</span><span class="tx">, </span><span class="nm">6</span><span class="tx">),</span>
+    <span class="kw">new</span> <span class="ty">WalletPayment</span><span class="tx">(</span><span class="nm">199</span><span class="tx">, </span><span class="st">"ORD003"</span><span class="tx">, </span><span class="st">"PhonePe"</span><span class="tx">)</span>
+<span class="tx">};</span>
+
+<span class="cm">// One loop, each calls its OWN processPayment() automatically</span>
+<span class="kw">for</span> <span class="tx">(</span><span class="ty">Payment</span> <span class="tx">p : checkoutPayments) {</span>
+    <span class="tx">p.</span><span class="fn">processPayment</span><span class="tx">();</span>   <span class="cm">// Java decides at RUNTIME which version to call</span>
+<span class="tx">}</span>
+<span class="cm">// ✅ UPI Payment: ₹3499.0 via rahul@paytm | Order: ORD001 | Instant transfer</span>
+<span class="cm">// ✅ Credit Card ****4231: ₹59999.0 in 6 EMIs of ₹9999.833333</span>
+<span class="cm">// ✅ Wallet (PhonePe) Payment: ₹199.0</span></pre>
+    </div>
+  </div>
+
+  <h3>Method Overloading (Compile-time Polymorphism)</h3>
+
+  <div class="domain-tag edu">🎓 Education Domain</div>
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">FeeCalculator.java — Overloading</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">FeeCalculator</span> <span class="tx">{</span>
+
+    <span class="cm">// Calculate fee — different signatures for different use cases</span>
+    <span class="kw">public double</span> <span class="fn">calculateFee</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">course) {</span>
+        <span class="kw">if</span> <span class="tx">(course.</span><span class="fn">equals</span><span class="tx">(</span><span class="st">"BTech"</span><span class="tx">)) </span><span class="kw">return</span> <span class="nm">120000</span><span class="tx">;</span>
+        <span class="kw">if</span> <span class="tx">(course.</span><span class="fn">equals</span><span class="tx">(</span><span class="st">"MBA"</span><span class="tx">))   </span><span class="kw">return</span> <span class="nm">180000</span><span class="tx">;</span>
+        <span class="kw">return</span> <span class="nm">50000</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public double</span> <span class="fn">calculateFee</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">course, </span><span class="kw">boolean</span> <span class="tx">hasScholarship) {</span>
+        <span class="kw">double</span> <span class="tx">base = </span><span class="fn">calculateFee</span><span class="tx">(course);</span>
+        <span class="kw">return</span> <span class="tx">hasScholarship ? base * </span><span class="nm">0.7</span> <span class="tx">: base;</span>   <span class="cm">// 30% waiver</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public double</span> <span class="fn">calculateFee</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">course, </span><span class="kw">int</span> <span class="tx">semester) {</span>
+        <span class="kw">return</span> <span class="fn">calculateFee</span><span class="tx">(course) / </span><span class="nm">8</span> <span class="tx">* semester;</span>  <span class="cm">// per-semester fee</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="ty">FeeCalculator</span> <span class="tx">fc = </span><span class="kw">new</span> <span class="ty">FeeCalculator</span><span class="tx">();</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(fc.</span><span class="fn">calculateFee</span><span class="tx">(</span><span class="st">"BTech"</span><span class="tx">));</span>              <span class="cm">// 120000.0</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(fc.</span><span class="fn">calculateFee</span><span class="tx">(</span><span class="st">"BTech"</span><span class="tx">, </span><span class="kw">true</span><span class="tx">));</span>       <span class="cm">// 84000.0</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(fc.</span><span class="fn">calculateFee</span><span class="tx">(</span><span class="st">"BTech"</span><span class="tx">, </span><span class="nm">3</span><span class="tx">));</span>           <span class="cm">// 45000.0</span></pre>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 11 — ABSTRACTION ══════════ -->
+<div class="sec" id="s11">
+  <div class="sec-head">
+    <div class="sec-badge a">11</div>
+    <div class="sec-meta">
+      <h2>Abstract Classes</h2>
+      <p>Defining the skeleton — enforcing what must be implemented</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is an Abstract Class?</strong>
+      <p>A class declared <code>abstract</code>. It may have both <strong>complete methods</strong> (shared code) and <strong>abstract methods</strong> (no body — subclasses MUST implement them). You cannot instantiate it directly.</p>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <strong>Real-World Analogy — Telecom Plan</strong>
+    Airtel says: every telecom plan MUST have a <code>getDataLimit()</code> and a <code>getValidity()</code>. But each plan calculates these differently. So <code>TelecomPlan</code> is abstract — it mandates that subclasses provide these, but each plan implements them in its own way.
+  </div>
+
+  <div class="domain-tag tel">📱 Telecom Domain — Airtel / Jio</div>
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">TelecomPlan.java (abstract) + concrete plans</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="cm">// Abstract class — cannot do: new TelecomPlan()</span>
+<span class="kw">public abstract class</span> <span class="ty">TelecomPlan</span> <span class="tx">{</span>
+    <span class="kw">protected</span> <span class="ty">String</span> <span class="tx">planName</span><span class="tx">;</span>
+    <span class="kw">protected double</span> <span class="tx">price</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">TelecomPlan</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">planName, </span><span class="kw">double</span> <span class="tx">price) {</span>
+        <span class="kw">this</span><span class="tx">.planName = planName;</span>
+        <span class="kw">this</span><span class="tx">.price    = price;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// ABSTRACT — subclasses MUST implement these</span>
+    <span class="kw">public abstract int</span>    <span class="fn">getDataLimitGB</span><span class="tx">();</span>
+    <span class="kw">public abstract int</span>    <span class="fn">getValidityDays</span><span class="tx">();</span>
+    <span class="kw">public abstract boolean</span> <span class="fn">hasUnlimitedCalls</span><span class="tx">();</span>
+
+    <span class="cm">// CONCRETE — shared by ALL plans</span>
+    <span class="kw">public void</span> <span class="fn">displayPlan</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span>
+            <span class="st">"Plan: "</span><span class="tx"> + planName +</span>
+            <span class="st">" | ₹"</span><span class="tx"> + price +</span>
+            <span class="st">" | Data: "</span><span class="tx"> + </span><span class="fn">getDataLimitGB</span><span class="tx">() + </span><span class="st">"GB"</span><span class="tx"> +</span>
+            <span class="st">" | Validity: "</span><span class="tx"> + </span><span class="fn">getValidityDays</span><span class="tx">() + </span><span class="st">"d"</span><span class="tx"> +</span>
+            <span class="st">" | Calls: "</span><span class="tx"> + (</span><span class="fn">hasUnlimitedCalls</span><span class="tx">() ? </span><span class="st">"Unlimited"</span> <span class="tx">: </span><span class="st">"Limited"</span><span class="tx">));</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Template method — uses abstract methods internally</span>
+    <span class="kw">public double</span> <span class="fn">getPricePerDay</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="tx">price / </span><span class="fn">getValidityDays</span><span class="tx">();</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Concrete plan 1</span>
+<span class="kw">public class</span> <span class="ty">AirtelPrepaid299</span> <span class="kw">extends</span> <span class="ty">TelecomPlan</span> <span class="tx">{</span>
+    <span class="kw">public</span> <span class="ty">AirtelPrepaid299</span><span class="tx">() { </span><span class="kw">super</span><span class="tx">(</span><span class="st">"Airtel 299"</span><span class="tx">, </span><span class="nm">299</span><span class="tx">); }</span>
+
+    <span class="tx">@</span><span class="an">Override</span> <span class="kw">public int</span>     <span class="fn">getDataLimitGB</span><span class="tx">()    { </span><span class="kw">return</span> <span class="nm">56</span><span class="tx">; }</span>   <span class="cm">// 2GB/day × 28 days</span>
+    <span class="tx">@</span><span class="an">Override</span> <span class="kw">public int</span>     <span class="fn">getValidityDays</span><span class="tx">()   { </span><span class="kw">return</span> <span class="nm">28</span><span class="tx">; }</span>
+    <span class="tx">@</span><span class="an">Override</span> <span class="kw">public boolean</span> <span class="fn">hasUnlimitedCalls</span><span class="tx">() { </span><span class="kw">return true</span><span class="tx">; }</span>
+<span class="tx">}</span>
+
+<span class="cm">// Concrete plan 2</span>
+<span class="kw">public class</span> <span class="ty">JioPostpaid499</span> <span class="kw">extends</span> <span class="ty">TelecomPlan</span> <span class="tx">{</span>
+    <span class="kw">public</span> <span class="ty">JioPostpaid499</span><span class="tx">() { </span><span class="kw">super</span><span class="tx">(</span><span class="st">"Jio Postpaid 499"</span><span class="tx">, </span><span class="nm">499</span><span class="tx">); }</span>
+
+    <span class="tx">@</span><span class="an">Override</span> <span class="kw">public int</span>     <span class="fn">getDataLimitGB</span><span class="tx">()    { </span><span class="kw">return</span> <span class="nm">75</span><span class="tx">; }</span>
+    <span class="tx">@</span><span class="an">Override</span> <span class="kw">public int</span>     <span class="fn">getValidityDays</span><span class="tx">()   { </span><span class="kw">return</span> <span class="nm">30</span><span class="tx">; }</span>
+    <span class="tx">@</span><span class="an">Override</span> <span class="kw">public boolean</span> <span class="fn">hasUnlimitedCalls</span><span class="tx">() { </span><span class="kw">return true</span><span class="tx">; }</span>
+<span class="tx">}</span>
+
+<span class="cm">// Usage:</span>
+<span class="ty">TelecomPlan</span><span class="tx">[] plans = { </span><span class="kw">new</span> <span class="ty">AirtelPrepaid299</span><span class="tx">(), </span><span class="kw">new</span> <span class="ty">JioPostpaid499</span><span class="tx">() };</span>
+<span class="kw">for</span> <span class="tx">(</span><span class="ty">TelecomPlan</span> <span class="tx">p : plans) {</span>
+    <span class="tx">p.</span><span class="fn">displayPlan</span><span class="tx">();</span>
+    <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">printf</span><span class="tx">(</span><span class="st">"  Cost per day: ₹%.2f%n"</span><span class="tx">, p.</span><span class="fn">getPricePerDay</span><span class="tx">());</span>
+<span class="tx">}</span></pre>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 12 — INTERFACES ══════════ -->
+<div class="sec" id="s12">
+  <div class="sec-head">
+    <div class="sec-badge r">12</div>
+    <div class="sec-meta">
+      <h2>Interfaces</h2>
+      <p>Pure contracts — define what must be done, not how</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is an Interface?</strong>
+      <p>An interface is a <strong>100% abstract contract</strong>. It declares method signatures that any implementing class must provide. A class can implement multiple interfaces (unlike inheritance where you can only extend one class).</p>
+    </div>
+  </div>
+
+  <div class="box when">
+    <span class="box-icon">📅</span>
+    <div class="box-body">
+      <strong>Abstract Class vs Interface — which to use?</strong>
+      <ul>
+        <li>Use <strong>abstract class</strong> when subclasses share common code/fields AND an "is-a" relationship exists (SavingsAccount IS-A BankAccount)</li>
+        <li>Use <strong>interface</strong> when you define a capability/behaviour that many unrelated classes might support (a <code>Transaction</code>, an <code>Order</code>, and a <code>Refund</code> can all be <code>Auditable</code>)</li>
+        <li>Use interfaces when a class needs to play multiple roles — Java doesn't allow multiple inheritance, but allows multiple interface implementation</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="domain-tag ecom">🛒 E-Commerce / Banking Domain</div>
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">Interfaces — Auditable, Refundable, Notifiable</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="cm">// Interface 1: anything that can be audited</span>
+<span class="kw">public interface</span> <span class="ty">Auditable</span> <span class="tx">{</span>
+    <span class="ty">String</span> <span class="fn">getAuditLog</span><span class="tx">();</span>      <span class="cm">// automatically public abstract</span>
+    <span class="kw">boolean</span> <span class="fn">isAuditComplete</span><span class="tx">();</span>
+<span class="tx">}</span>
+
+<span class="cm">// Interface 2: anything that supports refund</span>
+<span class="kw">public interface</span> <span class="ty">Refundable</span> <span class="tx">{</span>
+    <span class="kw">boolean</span> <span class="fn">initiateRefund</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount);</span>
+    <span class="ty">String</span>  <span class="fn">getRefundStatus</span><span class="tx">();</span>
+<span class="tx">}</span>
+
+<span class="cm">// Interface 3: anything that can send notifications</span>
+<span class="kw">public interface</span> <span class="ty">Notifiable</span> <span class="tx">{</span>
+    <span class="kw">void</span> <span class="fn">sendSMS</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">message);</span>
+    <span class="kw">void</span> <span class="fn">sendEmail</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">subject, </span><span class="ty">String</span> <span class="tx">body);</span>
+<span class="tx">}</span>
+
+<span class="cm">// An Order implements ALL THREE — it can be audited, refunded, and sends notifications</span>
+<span class="kw">public class</span> <span class="ty">FlipkartOrder</span> <span class="kw">implements</span> <span class="ty">Auditable</span><span class="tx">, </span><span class="ty">Refundable</span><span class="tx">, </span><span class="ty">Notifiable</span> <span class="tx">{</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">orderId</span><span class="tx">;</span>
+    <span class="kw">private double</span> <span class="tx">orderAmount</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">customerMobile</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">refundStatus</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">FlipkartOrder</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">id, </span><span class="kw">double</span> <span class="tx">amount, </span><span class="ty">String</span> <span class="tx">mobile) {</span>
+        <span class="kw">this</span><span class="tx">.orderId        = id;</span>
+        <span class="kw">this</span><span class="tx">.orderAmount    = amount;</span>
+        <span class="kw">this</span><span class="tx">.customerMobile = mobile;</span>
+        <span class="kw">this</span><span class="tx">.refundStatus   = </span><span class="st">"NONE"</span><span class="tx">;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Auditable implementation</span>
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public</span> <span class="ty">String</span> <span class="fn">getAuditLog</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="st">"[AUDIT] Order "</span><span class="tx">+orderId+</span><span class="st">" | ₹"</span><span class="tx">+orderAmount+</span><span class="st">" | Status: PLACED"</span><span class="tx">;</span>
+    <span class="tx">}</span>
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public boolean</span> <span class="fn">isAuditComplete</span><span class="tx">() { </span><span class="kw">return true</span><span class="tx">; }</span>
+
+    <span class="cm">// Refundable implementation</span>
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public boolean</span> <span class="fn">initiateRefund</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="kw">if</span> <span class="tx">(amount &lt;= orderAmount) {</span>
+            <span class="tx">refundStatus = </span><span class="st">"INITIATED"</span><span class="tx">;</span>
+            <span class="fn">sendSMS</span><span class="tx">(</span><span class="st">"Refund of ₹"</span><span class="tx">+amount+</span><span class="st">" initiated for order "</span><span class="tx">+orderId);</span>
+            <span class="kw">return true</span><span class="tx">;</span>
+        <span class="tx">}</span>
+        <span class="kw">return false</span><span class="tx">;</span>
+    <span class="tx">}</span>
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public</span> <span class="ty">String</span> <span class="fn">getRefundStatus</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">refundStatus; }</span>
+
+    <span class="cm">// Notifiable implementation</span>
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">sendSMS</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">message) {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"SMS → "</span><span class="tx">+customerMobile+</span><span class="st">": "</span><span class="tx">+message);</span>
+    <span class="tx">}</span>
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">sendEmail</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">subject, </span><span class="ty">String</span> <span class="tx">body) {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Email → Subj: "</span><span class="tx">+subject);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Usage:</span>
+<span class="ty">FlipkartOrder</span> <span class="tx">order = </span><span class="kw">new</span> <span class="ty">FlipkartOrder</span><span class="tx">(</span><span class="st">"FK20240501"</span><span class="tx">, </span><span class="nm">5999</span><span class="tx">, </span><span class="st">"9876543210"</span><span class="tx">);</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(order.</span><span class="fn">getAuditLog</span><span class="tx">());</span>
+<span class="tx">order.</span><span class="fn">initiateRefund</span><span class="tx">(</span><span class="nm">5999</span><span class="tx">);</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(order.</span><span class="fn">getRefundStatus</span><span class="tx">());</span></pre>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="ex-head">
+      <span class="ex-level hard">Advanced</span>
+      <span class="ex-title">Exercise 3 — Telecom Plan hierarchy using Abstract + Interface</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-q">Design a <code>Rechargeable</code> interface with methods <code>recharge(double amount)</code> and <code>getWalletBalance()</code>. Create an abstract class <code>MobilePlan</code> with abstract method <code>getBenefits()</code> and concrete method <code>displaySummary()</code>. Create two classes <code>PrepaidPlan</code> and <code>PostpaidPlan</code> that extend <code>MobilePlan</code> and implement <code>Rechargeable</code>. PrepaidPlan deducts from wallet; PostpaidPlan adds to bill. Test both.</p>
+      <button class="sol-btn" onclick="toggleSol('sol3')">▶ Show Solution</button>
+      <div class="sol-panel" id="sol3">
+        <div class="code">
+          <div class="code-top">
+            <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+            <span class="file-name">Solution</span>
+          </div>
+          <div class="code-body"><pre>
+<span class="kw">public interface</span> <span class="ty">Rechargeable</span> <span class="tx">{</span>
+    <span class="kw">void</span>   <span class="fn">recharge</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount);</span>
+    <span class="kw">double</span> <span class="fn">getWalletBalance</span><span class="tx">();</span>
+<span class="tx">}</span>
+
+<span class="kw">public abstract class</span> <span class="ty">MobilePlan</span> <span class="tx">{</span>
+    <span class="kw">protected</span> <span class="ty">String</span> <span class="tx">planName</span><span class="tx">;</span>
+    <span class="kw">protected</span> <span class="ty">String</span> <span class="tx">mobileNumber</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">MobilePlan</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">planName, </span><span class="ty">String</span> <span class="tx">mobile) {</span>
+        <span class="kw">this</span><span class="tx">.planName = planName;</span>
+        <span class="kw">this</span><span class="tx">.mobileNumber = mobile;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public abstract</span> <span class="ty">String</span> <span class="fn">getBenefits</span><span class="tx">();</span>
+
+    <span class="kw">public void</span> <span class="fn">displaySummary</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Plan: "</span><span class="tx">+planName+</span><span class="st">" | Mobile: "</span><span class="tx">+mobileNumber+</span>
+            <span class="st">" | Benefits: "</span><span class="tx">+</span><span class="fn">getBenefits</span><span class="tx">());</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">PrepaidPlan</span> <span class="kw">extends</span> <span class="ty">MobilePlan</span> <span class="kw">implements</span> <span class="ty">Rechargeable</span> <span class="tx">{</span>
+    <span class="kw">private double</span> <span class="tx">walletBalance</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">PrepaidPlan</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">mobile) {</span>
+        <span class="kw">super</span><span class="tx">(</span><span class="st">"Prepaid"</span><span class="tx">, mobile);</span>
+        <span class="tx">walletBalance = </span><span class="nm">0</span><span class="tx">;</span>
+    <span class="tx">}</span>
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public</span> <span class="ty">String</span> <span class="fn">getBenefits</span><span class="tx">() { </span><span class="kw">return</span> <span class="st">"2GB/day + Unlimited calls"</span><span class="tx">; }</span>
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">recharge</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="tx">walletBalance += amount;</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Prepaid recharged ₹"</span><span class="tx">+amount+</span><span class="st">". Wallet: ₹"</span><span class="tx">+walletBalance);</span>
+    <span class="tx">}</span>
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public double</span> <span class="fn">getWalletBalance</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">walletBalance; }</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">PostpaidPlan</span> <span class="kw">extends</span> <span class="ty">MobilePlan</span> <span class="kw">implements</span> <span class="ty">Rechargeable</span> <span class="tx">{</span>
+    <span class="kw">private double</span> <span class="tx">monthlyBill</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">PostpaidPlan</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">mobile) {</span>
+        <span class="kw">super</span><span class="tx">(</span><span class="st">"Postpaid 999"</span><span class="tx">, mobile);</span>
+        <span class="tx">monthlyBill = </span><span class="nm">999</span><span class="tx">;</span>
+    <span class="tx">}</span>
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public</span> <span class="ty">String</span> <span class="fn">getBenefits</span><span class="tx">() { </span><span class="kw">return</span> <span class="st">"75GB/month + International roaming"</span><span class="tx">; }</span>
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">recharge</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="tx">monthlyBill += amount;</span>  <span class="cm">// add-on charge</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Add-on ₹"</span><span class="tx">+amount+</span><span class="st">" added. Bill: ₹"</span><span class="tx">+monthlyBill);</span>
+    <span class="tx">}</span>
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public double</span> <span class="fn">getWalletBalance</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">-monthlyBill; }</span>  <span class="cm">// negative = bill</span>
+<span class="tx">}</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 13 — STATIC ══════════ -->
+<div class="sec" id="s13">
+  <div class="sec-head">
+    <div class="sec-badge g">13</div>
+    <div class="sec-meta">
+      <h2>The <code>static</code> Keyword</h2>
+      <p>Class-level members — shared state and utility methods</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What does static mean?</strong>
+      <p>A <code>static</code> field or method belongs to the <strong>class itself</strong>, not to any object. All objects share the same static field. You call static methods on the class name, not on an object.</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="icard b">
+      <div class="icard-icon">📊</div>
+      <h4>Static Variable</h4>
+      <p>Shared counter, constant rate, global configuration. E.g. total transactions processed, bank name, tax rate.</p>
+    </div>
+    <div class="icard t">
+      <div class="icard-icon">🔧</div>
+      <h4>Static Method</h4>
+      <p>Utility methods that don't need object state. E.g. <code>InterestCalculator.calculate()</code>, <code>DateUtil.formatDate()</code>.</p>
+    </div>
+  </div>
+
+  <div class="domain-tag bank">🏦 Banking Domain</div>
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">Static — Transaction counter + Utility class</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">Transaction</span> <span class="tx">{</span>
+    <span class="cm">// Shared by ALL Transaction objects — counts every transaction ever made</span>
+    <span class="kw">private static int</span>  <span class="tx">transactionCount = </span><span class="nm">0</span><span class="tx">;</span>
+    <span class="kw">private static final</span> <span class="ty">String</span> <span class="tx">BANK_NAME = </span><span class="st">"SBI Bank"</span><span class="tx">;</span>
+
+    <span class="cm">// Instance variables — each Transaction has its own</span>
+    <span class="kw">private int</span>    <span class="tx">txnId</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">type</span><span class="tx">;</span>
+    <span class="kw">private double</span> <span class="tx">amount</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">Transaction</span><span class="tx">(</span><span class="ty">String</span> <span class="tx">type, </span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="tx">transactionCount++;</span>                <span class="cm">// increments class-level counter</span>
+        <span class="kw">this</span><span class="tx">.txnId  = transactionCount;</span>
+        <span class="kw">this</span><span class="tx">.type   = type;</span>
+        <span class="kw">this</span><span class="tx">.amount = amount;</span>
+    <span class="tx">}</span>
+
+    <span class="cm">// Static method — no object needed</span>
+    <span class="kw">public static int</span> <span class="fn">getTransactionCount</span><span class="tx">() {</span>
+        <span class="kw">return</span> <span class="tx">transactionCount;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public static</span> <span class="ty">String</span> <span class="fn">getBankName</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">BANK_NAME; }</span>
+
+    <span class="kw">public void</span> <span class="fn">printReceipt</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(BANK_NAME + </span><span class="st">" | TXN#"</span><span class="tx">+txnId+</span><span class="st">" | "</span><span class="tx">+type+</span><span class="st">": ₹"</span><span class="tx">+amount);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Static utility class — no need to create objects</span>
+<span class="kw">public class</span> <span class="ty">EMICalculator</span> <span class="tx">{</span>
+    <span class="cm">// Standard EMI formula: P × r × (1+r)^n / ((1+r)^n - 1)</span>
+    <span class="kw">public static double</span> <span class="fn">calculateEMI</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">principal,</span>
+                                        <span class="kw">double</span> <span class="tx">annualRate, </span><span class="kw">int</span> <span class="tx">months) {</span>
+        <span class="kw">double</span> <span class="tx">r = annualRate / (</span><span class="nm">12</span> <span class="tx">* </span><span class="nm">100</span><span class="tx">);</span>
+        <span class="kw">double</span> <span class="tx">numerator   = principal * r * </span><span class="ty">Math</span><span class="tx">.</span><span class="fn">pow</span><span class="tx">(</span><span class="nm">1</span> <span class="tx">+ r, months);</span>
+        <span class="kw">double</span> <span class="tx">denominator = </span><span class="ty">Math</span><span class="tx">.</span><span class="fn">pow</span><span class="tx">(</span><span class="nm">1</span> <span class="tx">+ r, months) - </span><span class="nm">1</span><span class="tx">;</span>
+        <span class="kw">return</span> <span class="ty">Math</span><span class="tx">.</span><span class="fn">round</span><span class="tx">(numerator / denominator);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Usage:</span>
+<span class="ty">Transaction</span> <span class="tx">t1 = </span><span class="kw">new</span> <span class="ty">Transaction</span><span class="tx">(</span><span class="st">"DEPOSIT"</span><span class="tx">,  </span><span class="nm">10000</span><span class="tx">);</span>
+<span class="ty">Transaction</span> <span class="tx">t2 = </span><span class="kw">new</span> <span class="ty">Transaction</span><span class="tx">(</span><span class="st">"WITHDRAW"</span><span class="tx">, </span><span class="nm">3000</span><span class="tx">);</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="ty">Transaction</span><span class="tx">.</span><span class="fn">getTransactionCount</span><span class="tx">());</span>  <span class="cm">// 2 — called on CLASS</span>
+
+<span class="cm">// No object needed — pure utility</span>
+<span class="kw">double</span> <span class="tx">emi = </span><span class="ty">EMICalculator</span><span class="tx">.</span><span class="fn">calculateEMI</span><span class="tx">(</span><span class="nm">500000</span><span class="tx">, </span><span class="nm">8.5</span><span class="tx">, </span><span class="nm">60</span><span class="tx">);</span>
+<span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Home loan EMI: ₹"</span><span class="tx"> + emi);</span>  <span class="cm">// ₹10237.0</span></pre>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 14 — EXCEPTION HANDLING ══════════ -->
+<div class="sec" id="s14">
+  <div class="sec-head">
+    <div class="sec-badge r">14</div>
+    <div class="sec-meta">
+      <h2>Exception Handling</h2>
+      <p>Graceful failure — protecting your system when things go wrong</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What is Exception Handling?</strong>
+      <p>An exception is an event that disrupts normal program flow — network failure, invalid input, null reference, insufficient balance. Without handling, the JVM prints a stack trace and crashes. With <code>try-catch</code>, you catch errors and respond gracefully.</p>
+    </div>
+  </div>
+  <div class="box prob">
+    <span class="box-icon">⚠️</span>
+    <div class="box-body">
+      <strong>What happens without exception handling in banking?</strong>
+      <ul>
+        <li>A failed database connection during a fund transfer crashes the app — the money is deducted but never received</li>
+        <li>Invalid account number input causes a <code>NumberFormatException</code> that exposes stack traces to the user</li>
+        <li>A <code>null</code> customer reference in a loan approval loop crashes the entire batch job</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="domain-tag bank">🏦 Banking Domain — Fund Transfer</div>
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">Exception Handling — Banking Transactions</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="cm">// ══ Custom Exception — domain-specific error ══</span>
+<span class="kw">public class</span> <span class="ty">InsufficientFundsException</span> <span class="kw">extends</span> <span class="ty">Exception</span> <span class="tx">{</span>
+    <span class="kw">private double</span> <span class="tx">shortfall</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">InsufficientFundsException</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">shortfall) {</span>
+        <span class="kw">super</span><span class="tx">(</span><span class="st">"Insufficient funds. Shortfall: ₹"</span> <span class="tx">+ shortfall);</span>
+        <span class="kw">this</span><span class="tx">.shortfall = shortfall;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public double</span> <span class="fn">getShortfall</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">shortfall; }</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">BankTransferService</span> <span class="tx">{</span>
+
+    <span class="cm">// 'throws' declares that this method can throw the exception</span>
+    <span class="kw">public void</span> <span class="fn">transfer</span><span class="tx">(</span><span class="ty">SBIAccount</span> <span class="tx">from, </span><span class="ty">SBIAccount</span> <span class="tx">to, </span><span class="kw">double</span> <span class="tx">amount)</span>
+            <span class="kw">throws</span> <span class="ty">InsufficientFundsException</span> <span class="tx">{</span>
+
+        <span class="kw">if</span> <span class="tx">(amount &lt;= </span><span class="nm">0</span><span class="tx">) {</span>
+            <span class="kw">throw new</span> <span class="ty">IllegalArgumentException</span><span class="tx">(</span><span class="st">"Amount must be positive"</span><span class="tx">);</span>
+        <span class="tx">}</span>
+        <span class="kw">if</span> <span class="tx">(from.</span><span class="fn">getBalance</span><span class="tx">() &lt; amount) {</span>
+            <span class="kw">double</span> <span class="tx">shortfall = amount - from.</span><span class="fn">getBalance</span><span class="tx">();</span>
+            <span class="kw">throw new</span> <span class="ty">InsufficientFundsException</span><span class="tx">(shortfall);</span>  <span class="cm">// throw our custom exception</span>
+        <span class="tx">}</span>
+        <span class="cm">// If we reach here, transfer is safe</span>
+        from.<span class="fn">withdraw</span><span class="tx">(amount);</span>
+        to.<span class="fn">deposit</span><span class="tx">(amount);</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"✅ Transfer of ₹"</span><span class="tx">+amount+</span><span class="st">" successful."</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Using try-catch-finally</span>
+<span class="ty">BankTransferService</span> <span class="tx">service = </span><span class="kw">new</span> <span class="ty">BankTransferService</span><span class="tx">();</span>
+<span class="ty">SBIAccount</span> <span class="tx">a1 = </span><span class="kw">new</span> <span class="ty">SBIAccount</span><span class="tx">(</span><span class="st">"Raj"</span><span class="tx">, </span><span class="nm">5000</span><span class="tx">);</span>
+<span class="ty">SBIAccount</span> <span class="tx">a2 = </span><span class="kw">new</span> <span class="ty">SBIAccount</span><span class="tx">(</span><span class="st">"Priya"</span><span class="tx">, </span><span class="nm">1000</span><span class="tx">);</span>
+
+<span class="kw">try</span> <span class="tx">{</span>
+    <span class="tx">service.</span><span class="fn">transfer</span><span class="tx">(a1, a2, </span><span class="nm">3000</span><span class="tx">);</span>   <span class="cm">// ✅ succeeds</span>
+    <span class="tx">service.</span><span class="fn">transfer</span><span class="tx">(a1, a2, </span><span class="nm">9000</span><span class="tx">);</span>   <span class="cm">// ❌ throws InsufficientFundsException</span>
+<span class="tx">} </span><span class="kw">catch</span> <span class="tx">(</span><span class="ty">InsufficientFundsException</span> <span class="tx">e) {</span>
+    <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"❌ Transfer failed: "</span> <span class="tx">+ e.</span><span class="fn">getMessage</span><span class="tx">());</span>
+    <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"   Need ₹"</span> <span class="tx">+ e.</span><span class="fn">getShortfall</span><span class="tx">() + </span><span class="st">" more to complete transfer"</span><span class="tx">);</span>
+<span class="tx">} </span><span class="kw">catch</span> <span class="tx">(</span><span class="ty">IllegalArgumentException</span> <span class="tx">e) {</span>
+    <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"❌ Invalid input: "</span> <span class="tx">+ e.</span><span class="fn">getMessage</span><span class="tx">());</span>
+<span class="tx">} </span><span class="kw">finally</span> <span class="tx">{</span>
+    <span class="cm">// ALWAYS runs — use for cleanup: close DB connections, log the attempt</span>
+    <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"[LOG] Transfer attempt completed."</span><span class="tx">);</span>
+<span class="tx">}</span></pre>
+    </div>
+  </div>
+
+  <table class="tbl">
+    <tr><th>Keyword</th><th>Purpose</th><th>Banking Example</th></tr>
+    <tr><td><code>try</code></td><td>Wrap code that might throw</td><td>Fund transfer logic</td></tr>
+    <tr><td><code>catch</code></td><td>Handle specific exception type</td><td>Catch <code>InsufficientFundsException</code></td></tr>
+    <tr><td><code>finally</code></td><td>Always runs (cleanup)</td><td>Close DB connection, log the attempt</td></tr>
+    <tr><td><code>throw</code></td><td>Manually trigger an exception</td><td>Throw when balance is negative</td></tr>
+    <tr><td><code>throws</code></td><td>Declare checked exceptions</td><td>Method signature warning callers</td></tr>
+  </table>
+
+  <div class="ex">
+    <div class="ex-head">
+      <span class="ex-level med">Intermediate</span>
+      <span class="ex-title">Exercise 4 — ATM Withdrawal with Exception Handling</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-q">Create a custom exception <code>InvalidPINException</code>. Create a class <code>ATMMachine</code> with methods: <code>validatePIN(int entered, int actual)</code> that throws <code>InvalidPINException</code> if wrong, and <code>dispense(double balance, double amount)</code> that throws <code>InsufficientFundsException</code> if amount &gt; balance. In Main, demonstrate all exception cases using try-catch.</p>
+      <button class="sol-btn" onclick="toggleSol('sol4')">▶ Show Solution</button>
+      <div class="sol-panel" id="sol4">
+        <div class="code">
+          <div class="code-top">
+            <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+            <span class="file-name">Solution</span>
+          </div>
+          <div class="code-body"><pre>
+<span class="kw">public class</span> <span class="ty">InvalidPINException</span> <span class="kw">extends</span> <span class="ty">Exception</span> <span class="tx">{</span>
+    <span class="kw">public</span> <span class="ty">InvalidPINException</span><span class="tx">() { </span><span class="kw">super</span><span class="tx">(</span><span class="st">"Invalid PIN. Please try again."</span><span class="tx">); }</span>
+<span class="tx">}</span>
+
+<span class="kw">public class</span> <span class="ty">ATMMachine</span> <span class="tx">{</span>
+    <span class="kw">public void</span> <span class="fn">validatePIN</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">entered, </span><span class="kw">int</span> <span class="tx">actual)</span>
+            <span class="kw">throws</span> <span class="ty">InvalidPINException</span> <span class="tx">{</span>
+        <span class="kw">if</span> <span class="tx">(entered != actual) </span><span class="kw">throw new</span> <span class="ty">InvalidPINException</span><span class="tx">();</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"✅ PIN verified."</span><span class="tx">);</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public double</span> <span class="fn">dispense</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">balance, </span><span class="kw">double</span> <span class="tx">amount)</span>
+            <span class="kw">throws</span> <span class="ty">InsufficientFundsException</span> <span class="tx">{</span>
+        <span class="kw">if</span> <span class="tx">(amount > balance) </span><span class="kw">throw new</span> <span class="ty">InsufficientFundsException</span><span class="tx">(amount-balance);</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"💵 Dispensing ₹"</span><span class="tx">+amount);</span>
+        <span class="kw">return</span> <span class="tx">balance - amount;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Main:</span>
+<span class="ty">ATMMachine</span> <span class="tx">atm = </span><span class="kw">new</span> <span class="ty">ATMMachine</span><span class="tx">();</span>
+<span class="kw">double</span> <span class="tx">balance = </span><span class="nm">15000</span><span class="tx">;</span>
+
+<span class="kw">try</span> <span class="tx">{</span>
+    <span class="tx">atm.</span><span class="fn">validatePIN</span><span class="tx">(</span><span class="nm">1234</span><span class="tx">, </span><span class="nm">9999</span><span class="tx">);</span>  <span class="cm">// wrong PIN</span>
+<span class="tx">} </span><span class="kw">catch</span> <span class="tx">(</span><span class="ty">InvalidPINException</span> <span class="tx">e) {</span>
+    <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"❌ "</span><span class="tx"> + e.</span><span class="fn">getMessage</span><span class="tx">());</span>
+<span class="tx">}</span>
+
+<span class="kw">try</span> <span class="tx">{</span>
+    <span class="tx">atm.</span><span class="fn">validatePIN</span><span class="tx">(</span><span class="nm">9999</span><span class="tx">, </span><span class="nm">9999</span><span class="tx">);</span>  <span class="cm">// correct PIN</span>
+    <span class="tx">balance = atm.</span><span class="fn">dispense</span><span class="tx">(balance, </span><span class="nm">20000</span><span class="tx">);</span>  <span class="cm">// exceeds balance</span>
+<span class="tx">} </span><span class="kw">catch</span> <span class="tx">(</span><span class="ty">InvalidPINException</span> <span class="tx">| </span><span class="ty">InsufficientFundsException</span> <span class="tx">e) {</span>
+    <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"❌ "</span><span class="tx"> + e.</span><span class="fn">getMessage</span><span class="tx">());</span>
+<span class="tx">} </span><span class="kw">finally</span> <span class="tx">{</span>
+    <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"[ATM] Session ended."</span><span class="tx">);</span>
+<span class="tx">}</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 15 — PACKAGES ══════════ -->
+<div class="sec" id="s15">
+  <div class="sec-head">
+    <div class="sec-badge g">15</div>
+    <div class="sec-meta">
+      <h2>Packages &amp; Imports</h2>
+      <p>Organising code in large projects — the real-world folder structure</p>
+    </div>
+  </div>
+
+  <div class="box what">
+    <span class="box-icon">📘</span>
+    <div class="box-body">
+      <strong>What are Packages?</strong>
+      <p>A package is a namespace that organises related classes into folders. Like a filesystem for Java code. Prevents naming conflicts: two teams can both have a class named <code>Account</code> — as long as they're in different packages.</p>
+    </div>
+  </div>
+
+  <div class="code">
+    <div class="code-top">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-name">Real-World Project Structure — SBI Banking App</span>
+    </div>
+    <div class="code-body"><pre>
+<span class="cm">// Folder structure maps 1:1 to package names:</span>
+<span class="cm">//</span>
+<span class="cm">// sbi-banking/</span>
+<span class="cm">// └── src/</span>
+<span class="cm">//     └── com/sbi/</span>
+<span class="cm">//         ├── model/          ← data classes</span>
+<span class="cm">//         │   ├── Customer.java</span>
+<span class="cm">//         │   ├── Account.java</span>
+<span class="cm">//         │   └── Transaction.java</span>
+<span class="cm">//         ├── service/        ← business logic</span>
+<span class="cm">//         │   ├── TransferService.java</span>
+<span class="cm">//         │   └── LoanService.java</span>
+<span class="cm">//         ├── exception/      ← custom exceptions</span>
+<span class="cm">//         │   └── InsufficientFundsException.java</span>
+<span class="cm">//         └── util/           ← utilities</span>
+<span class="cm">//             └── EMICalculator.java</span>
+
+<span class="cm">// ── Customer.java ──</span>
+<span class="kw">package</span> <span class="ty">com.sbi.model</span><span class="tx">;</span>   <span class="cm">// declares which package this file belongs to</span>
+
+<span class="kw">public class</span> <span class="ty">Customer</span> <span class="tx">{</span>
+    <span class="kw">private int</span>    <span class="tx">customerId</span><span class="tx">;</span>
+    <span class="kw">private</span> <span class="ty">String</span> <span class="tx">name</span><span class="tx">;</span>
+    <span class="cm">// ...</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── TransferService.java ──</span>
+<span class="kw">package</span> <span class="ty">com.sbi.service</span><span class="tx">;</span>
+
+<span class="kw">import</span> <span class="ty">com.sbi.model.Customer</span><span class="tx">;</span>       <span class="cm">// import specific class</span>
+<span class="kw">import</span> <span class="ty">com.sbi.model.Account</span><span class="tx">;</span>
+<span class="kw">import</span> <span class="ty">com.sbi.exception.*</span><span class="tx">;</span>           <span class="cm">// import all classes in exception package</span>
+<span class="kw">import</span> <span class="ty">com.sbi.util.EMICalculator</span><span class="tx">;</span>
+
+<span class="kw">public class</span> <span class="ty">TransferService</span> <span class="tx">{</span>
+    <span class="kw">public void</span> <span class="fn">transfer</span><span class="tx">(</span><span class="ty">Account</span> <span class="tx">from, </span><span class="ty">Account</span> <span class="tx">to, </span><span class="kw">double</span> <span class="tx">amount)</span>
+            <span class="kw">throws</span> <span class="ty">InsufficientFundsException</span> <span class="tx">{</span>
+        <span class="cm">// ...</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// Common Java library imports you'll use:</span>
+<span class="kw">import</span> <span class="ty">java.util.ArrayList</span><span class="tx">;</span>       <span class="cm">// dynamic list</span>
+<span class="kw">import</span> <span class="ty">java.util.List</span><span class="tx">;</span>
+<span class="kw">import</span> <span class="ty">java.time.LocalDate</span><span class="tx">;</span>        <span class="cm">// date handling</span>
+<span class="kw">import</span> <span class="ty">java.math.BigDecimal</span><span class="tx">;</span>       <span class="cm">// precise money calculations</span>
+<span class="kw">import</span> <span class="ty">java.util.Scanner</span><span class="tx">;</span>         <span class="cm">// reading user input</span></pre>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════ SECTION 16 — NAMING ══════════ -->
+<div class="sec" id="s16">
+  <div class="sec-head">
+    <div class="sec-badge b">16</div>
+    <div class="sec-meta">
+      <h2>Naming Conventions &amp; Complete Rules</h2>
+      <p>Write Java code that any team can read and maintain</p>
+    </div>
+  </div>
+
+  <table class="tbl">
+    <tr><th>Element</th><th>Convention</th><th>Example</th><th>Avoid</th></tr>
+    <tr><td>Class</td><td>PascalCase — each word capitalised</td><td><code>BankAccount</code>, <code>CustomerService</code></td><td><code>bankaccount</code>, <code>bank_account</code></td></tr>
+    <tr><td>Interface</td><td>PascalCase — often an adjective</td><td><code>Auditable</code>, <code>Refundable</code>, <code>Payable</code></td><td><code>iauditable</code>, <code>IAuditable</code></td></tr>
+    <tr><td>Abstract class</td><td>PascalCase — noun, sometimes prefix Abstract</td><td><code>TelecomPlan</code>, <code>AbstractPayment</code></td><td></td></tr>
+    <tr><td>Method</td><td>camelCase — starts with a verb</td><td><code>calculateEMI()</code>, <code>processPayment()</code></td><td><code>CalculateEMI()</code>, <code>calculate_emi()</code></td></tr>
+    <tr><td>Variable</td><td>camelCase</td><td><code>accountBalance</code>, <code>customerName</code></td><td><code>AccountBalance</code>, <code>account_balance</code></td></tr>
+    <tr><td>Constant</td><td>ALL_CAPS with underscores</td><td><code>MAX_WITHDRAWAL</code>, <code>INTEREST_RATE</code></td><td><code>maxWithdrawal</code></td></tr>
+    <tr><td>Package</td><td>all lowercase, reverse domain</td><td><code>com.sbi.model</code>, <code>in.flipkart.order</code></td><td><code>com.SBI.Model</code></td></tr>
+    <tr><td>Getter</td><td>getFieldName()</td><td><code>getBalance()</code>, <code>getAccountHolder()</code></td><td><code>balance()</code>, <code>fetchBalance()</code></td></tr>
+    <tr><td>Setter</td><td>setFieldName(value)</td><td><code>setBalance(double b)</code></td><td><code>updateBalance()</code></td></tr>
+    <tr><td>Boolean getter</td><td>isX() or hasX()</td><td><code>isActive()</code>, <code>hasOverdraft()</code></td><td><code>getActive()</code></td></tr>
+    <tr><td>Constructor</td><td>Same name as class</td><td><code>BankAccount(...)</code></td><td>Any other name</td></tr>
+  </table>
+
+  <!-- FINAL PROJECT EXERCISE -->
+  <div class="ex" style="border-color:rgba(155,127,244,.35);">
+    <div class="ex-head" style="background:rgba(155,127,244,.07);border-color:rgba(155,127,244,.2);">
+      <span class="ex-level hard">Final Project</span>
+      <span class="ex-title">Complete Mini Banking System — Putting It All Together</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-q">
+        Build a mini banking system combining all concepts:<br><br>
+        1. Create interface <code>Transactable</code> with methods <code>credit(double)</code> and <code>debit(double) throws InsufficientFundsException</code><br>
+        2. Create abstract class <code>BankAccount</code> with protected fields, constructor, and abstract <code>getAccountType()</code>; implements <code>Transactable</code>; includes static <code>totalAccounts</code> counter<br>
+        3. Create <code>SavingsAccount</code> (adds interest logic) and <code>CurrentAccount</code> (adds overdraft)<br>
+        4. Create custom <code>InsufficientFundsException</code><br>
+        5. In Main: create accounts, perform deposits/withdrawals, transfer between accounts, print statements — wrap everything in try-catch
+      </p>
+      <button class="sol-btn" onclick="toggleSol('solFinal')">▶ Show Complete Solution</button>
+      <div class="sol-panel" id="solFinal">
+        <div class="code">
+          <div class="code-top">
+            <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+            <span class="file-name">Complete Mini Banking System Solution</span>
+          </div>
+          <div class="code-body"><pre>
+<span class="cm">// ── 1. Custom Exception ──</span>
+<span class="kw">class</span> <span class="ty">InsufficientFundsException</span> <span class="kw">extends</span> <span class="ty">Exception</span> <span class="tx">{</span>
+    <span class="kw">private double</span> <span class="tx">available</span><span class="tx">;</span>
+    <span class="kw">public</span> <span class="ty">InsufficientFundsException</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">avail) {</span>
+        <span class="kw">super</span><span class="tx">(</span><span class="st">"Insufficient funds. Available: ₹"</span><span class="tx"> + avail);</span>
+        <span class="kw">this</span><span class="tx">.available = avail;</span>
+    <span class="tx">}</span>
+    <span class="kw">public double</span> <span class="fn">getAvailable</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">available; }</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── 2. Interface ──</span>
+<span class="kw">interface</span> <span class="ty">Transactable</span> <span class="tx">{</span>
+    <span class="kw">void</span>   <span class="fn">credit</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount);</span>
+    <span class="kw">void</span>   <span class="fn">debit</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) </span><span class="kw">throws</span> <span class="ty">InsufficientFundsException</span><span class="tx">;</span>
+    <span class="kw">double</span> <span class="fn">getBalance</span><span class="tx">();</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── 3. Abstract Class ──</span>
+<span class="kw">abstract class</span> <span class="ty">BankAccount</span> <span class="kw">implements</span> <span class="ty">Transactable</span> <span class="tx">{</span>
+    <span class="kw">private static int</span>    <span class="tx">totalAccounts = </span><span class="nm">0</span><span class="tx">;</span>
+    <span class="kw">protected int</span>         <span class="tx">accountNumber</span><span class="tx">;</span>
+    <span class="kw">protected</span> <span class="ty">String</span>      <span class="tx">accountHolder</span><span class="tx">;</span>
+    <span class="kw">protected double</span>      <span class="tx">balance</span><span class="tx">;</span>
+
+    <span class="kw">public</span> <span class="ty">BankAccount</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">accNo, </span><span class="ty">String</span> <span class="tx">holder, </span><span class="kw">double</span> <span class="tx">opening) {</span>
+        <span class="kw">this</span><span class="tx">.accountNumber = accNo;</span>
+        <span class="kw">this</span><span class="tx">.accountHolder = holder;</span>
+        <span class="kw">this</span><span class="tx">.balance       = opening;</span>
+        <span class="tx">totalAccounts++;</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public abstract</span> <span class="ty">String</span> <span class="fn">getAccountType</span><span class="tx">();</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">credit</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) {</span>
+        <span class="kw">if</span> <span class="tx">(amount > </span><span class="nm">0</span><span class="tx">) { balance += amount; </span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"✅ Credited ₹"</span><span class="tx">+amount+</span><span class="st">" to "</span><span class="tx">+accountHolder); }</span>
+    <span class="tx">}</span>
+
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">debit</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) </span><span class="kw">throws</span> <span class="ty">InsufficientFundsException</span> <span class="tx">{</span>
+        <span class="kw">if</span> <span class="tx">(amount > balance) </span><span class="kw">throw new</span> <span class="ty">InsufficientFundsException</span><span class="tx">(balance);</span>
+        <span class="tx">balance -= amount;</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"✅ Debited ₹"</span><span class="tx">+amount+</span><span class="st">" from "</span><span class="tx">+accountHolder);</span>
+    <span class="tx">}</span>
+
+    <span class="tx">@</span><span class="an">Override</span> <span class="kw">public double</span> <span class="fn">getBalance</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">balance; }</span>
+
+    <span class="kw">public void</span> <span class="fn">printStatement</span><span class="tx">() {</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"\n━━━ Statement ━━━"</span><span class="tx">);</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Type   : "</span><span class="tx">+</span><span class="fn">getAccountType</span><span class="tx">());</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Acc#   : "</span><span class="tx">+accountNumber);</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Holder : "</span><span class="tx">+accountHolder);</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Balance: ₹"</span><span class="tx">+balance);</span>
+    <span class="tx">}</span>
+
+    <span class="kw">public static int</span> <span class="fn">getTotalAccounts</span><span class="tx">() { </span><span class="kw">return</span> <span class="tx">totalAccounts; }</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── 4. SavingsAccount ──</span>
+<span class="kw">class</span> <span class="ty">SavingsAccount</span> <span class="kw">extends</span> <span class="ty">BankAccount</span> <span class="tx">{</span>
+    <span class="kw">private double</span> <span class="tx">interestRate = </span><span class="nm">3.5</span><span class="tx">;</span>
+    <span class="kw">public</span> <span class="ty">SavingsAccount</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">no, </span><span class="ty">String</span> <span class="tx">h, </span><span class="kw">double</span> <span class="tx">b) { </span><span class="kw">super</span><span class="tx">(no,h,b); }</span>
+    <span class="tx">@</span><span class="an">Override</span> <span class="kw">public</span> <span class="ty">String</span> <span class="fn">getAccountType</span><span class="tx">() { </span><span class="kw">return</span> <span class="st">"Savings Account"</span><span class="tx">; }</span>
+    <span class="kw">public double</span> <span class="fn">applyInterest</span><span class="tx">() {</span>
+        <span class="kw">double</span> <span class="tx">interest = balance * interestRate / </span><span class="nm">100</span><span class="tx">;</span>
+        <span class="tx">balance += interest;</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Interest ₹"</span><span class="tx">+interest+</span><span class="st">" added."</span><span class="tx">);</span>
+        <span class="kw">return</span> <span class="tx">interest;</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── 5. CurrentAccount ──</span>
+<span class="kw">class</span> <span class="ty">CurrentAccount</span> <span class="kw">extends</span> <span class="ty">BankAccount</span> <span class="tx">{</span>
+    <span class="kw">private double</span> <span class="tx">overdraftLimit</span><span class="tx">;</span>
+    <span class="kw">public</span> <span class="ty">CurrentAccount</span><span class="tx">(</span><span class="kw">int</span> <span class="tx">no, </span><span class="ty">String</span> <span class="tx">h, </span><span class="kw">double</span> <span class="tx">b, </span><span class="kw">double</span> <span class="tx">od) {</span>
+        <span class="kw">super</span><span class="tx">(no,h,b); overdraftLimit=od;</span>
+    <span class="tx">}</span>
+    <span class="tx">@</span><span class="an">Override</span> <span class="kw">public</span> <span class="ty">String</span> <span class="fn">getAccountType</span><span class="tx">() { </span><span class="kw">return</span> <span class="st">"Current Account"</span><span class="tx">; }</span>
+    <span class="tx">@</span><span class="an">Override</span>
+    <span class="kw">public void</span> <span class="fn">debit</span><span class="tx">(</span><span class="kw">double</span> <span class="tx">amount) </span><span class="kw">throws</span> <span class="ty">InsufficientFundsException</span> <span class="tx">{</span>
+        <span class="kw">if</span> <span class="tx">(amount > balance + overdraftLimit)</span>
+            <span class="kw">throw new</span> <span class="ty">InsufficientFundsException</span><span class="tx">(balance + overdraftLimit);</span>
+        <span class="tx">balance -= amount;</span>
+        <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"✅ Debited ₹"</span><span class="tx">+amount+</span><span class="st">" (overdraft may apply)"</span><span class="tx">);</span>
+    <span class="tx">}</span>
+<span class="tx">}</span>
+
+<span class="cm">// ── Main ──</span>
+<span class="kw">public class</span> <span class="ty">Main</span> <span class="tx">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="tx">(</span><span class="ty">String</span><span class="tx">[] args) {</span>
+        <span class="ty">SavingsAccount</span> <span class="tx">sav = </span><span class="kw">new</span> <span class="ty">SavingsAccount</span><span class="tx">(</span><span class="nm">1001</span><span class="tx">, </span><span class="st">"Leela Devi"</span><span class="tx">,  </span><span class="nm">50000</span><span class="tx">);</span>
+        <span class="ty">CurrentAccount</span> <span class="tx">cur = </span><span class="kw">new</span> <span class="ty">CurrentAccount</span><span class="tx">(</span><span class="nm">2001</span><span class="tx">, </span><span class="st">"TechCorp"</span><span class="tx">, </span><span class="nm">100000</span><span class="tx">, </span><span class="nm">50000</span><span class="tx">);</span>
+
+        <span class="kw">try</span> <span class="tx">{</span>
+            <span class="tx">sav.</span><span class="fn">credit</span><span class="tx">(</span><span class="nm">10000</span><span class="tx">);</span>
+            <span class="tx">sav.</span><span class="fn">debit</span><span class="tx">(</span><span class="nm">5000</span><span class="tx">);</span>
+            <span class="tx">sav.</span><span class="fn">applyInterest</span><span class="tx">();</span>
+            <span class="tx">cur.</span><span class="fn">credit</span><span class="tx">(</span><span class="nm">25000</span><span class="tx">);</span>
+            <span class="tx">cur.</span><span class="fn">debit</span><span class="tx">(</span><span class="nm">140000</span><span class="tx">);</span>   <span class="cm">// uses overdraft</span>
+            <span class="tx">sav.</span><span class="fn">debit</span><span class="tx">(</span><span class="nm">999999</span><span class="tx">);</span>  <span class="cm">// ← throws exception</span>
+        <span class="tx">} </span><span class="kw">catch</span> <span class="tx">(</span><span class="ty">InsufficientFundsException</span> <span class="tx">e) {</span>
+            <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"❌ "</span><span class="tx"> + e.</span><span class="fn">getMessage</span><span class="tx">());</span>
+        <span class="tx">} </span><span class="kw">finally</span> <span class="tx">{</span>
+            <span class="tx">sav.</span><span class="fn">printStatement</span><span class="tx">();</span>
+            <span class="tx">cur.</span><span class="fn">printStatement</span><span class="tx">();</span>
+            <span class="ty">System</span><span class="tx">.</span><span class="fn">out</span><span class="tx">.</span><span class="fn">println</span><span class="tx">(</span><span class="st">"Total accounts: "</span><span class="tx">+</span><span class="ty">BankAccount</span><span class="tx">.</span><span class="fn">getTotalAccounts</span><span class="tx">());</span>
+        <span class="tx">}</span>
+    <span class="tx">}</span>
+<span class="tx">}</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>OOP in Java — Real-World Complete Guide</p>
+  <p style="margin-top:8px;">
+    Banking · Telecom · Education · E-Commerce ·
+    Classes · Objects · Constructors · this · super ·
+    Encapsulation · Inheritance · Polymorphism · Abstraction ·
+    Interfaces · Static · Exceptions · Packages
+  </p>
+</footer>
+
+<script>
+function toggleSol(id) {
+  const p = document.getElementById(id);
+  const b = p.previousElementSibling;
+  const open = p.classList.contains('open');
+  p.classList.toggle('open');
+  b.textContent = open ? '▶ Show Solution' : '▼ Hide Solution';
+}
+</script>
+</body>
+</html>

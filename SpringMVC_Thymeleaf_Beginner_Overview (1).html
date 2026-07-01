@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spring MVC with Thymeleaf — Beginner Overview</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f8f6f1;--paper:#fff;--ink:#1e1b18;--muted:#6b6560;
+  --line:#e0dbd4;--soft:#ede8e0;
+  --green:#2d6a4f;--green-lt:#d8f0e6;
+  --navy:#1e3a5f;--navy-lt:#ddeaf6;
+  --rust:#9b3922;--rust-lt:#fbe8e3;
+  --amber:#8a6000;--amber-lt:#fef3cd;
+  --plum:#5a2a6a;--plum-lt:#f0e8f8;
+  --teal:#1a6060;--teal-lt:#d4efef;
+  --code-bg:#1a1e2e;--code-fg:#e2dfd8;
+  --kw:#c792ea;--tp:#82aaff;--fn:#ffcb6b;--st:#c3e88d;
+  --cm:#697098;--an:#f78c6c;--tag:#89ddff;--att:#80cbc4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--ink);font-size:16.5px;line-height:1.8}
+#prog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--green),var(--navy),var(--plum));z-index:999;transition:width .1s}
+
+/* NAV */
+.nav{position:sticky;top:0;background:rgba(248,246,241,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:100;padding:11px 0}
+.nav-in{max-width:1060px;margin:0 auto;padding:0 28px;display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center}
+.nav .logo{font-family:'Lora',serif;font-style:italic;font-size:16px;color:var(--ink);margin-right:auto}
+.nav a{color:var(--muted);text-decoration:none;font-size:12px;font-weight:600;letter-spacing:.3px;padding:3px 0;border-bottom:2px solid transparent;transition:all .2s}
+.nav a:hover,.nav a.on{color:var(--green);border-bottom-color:var(--green)}
+
+/* HERO */
+.hero{background:var(--paper);border-bottom:1px solid var(--line);padding:62px 28px 50px;text-align:center}
+.hero-in{max-width:740px;margin:0 auto}
+.eyebrow{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:18px}
+.hero h1{font-family:'Lora',serif;font-size:44px;font-weight:600;line-height:1.18;margin-bottom:20px}
+.hero h1 em{color:var(--green);font-style:italic;font-weight:400}
+.hero p.sub{font-size:17px;color:var(--muted);line-height:1.7;margin-bottom:30px}
+.hero-meta{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;padding-top:24px;border-top:1px solid var(--soft);font-size:13.5px;color:var(--muted)}
+.hero-meta strong{display:block;font-size:16px;font-weight:600;font-family:'Lora',serif;font-style:italic;color:var(--ink);margin-bottom:2px}
+
+/* PAGE */
+.page{max-width:860px;margin:0 auto;padding:0 28px 70px}
+
+/* SECTION */
+.sec{padding:50px 0 28px;border-bottom:1px solid var(--soft)}
+.sec:last-of-type{border-bottom:none}
+.sec-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:8px}
+.sec h2{font-family:'Lora',serif;font-size:29px;font-weight:600;line-height:1.25;margin-bottom:14px}
+.sec h3{font-family:'Lora',serif;font-size:20px;font-weight:500;margin:28px 0 10px;color:var(--navy)}
+.sec h4{font-weight:700;font-size:15px;margin:18px 0 7px}
+.sec p{margin-bottom:13px;color:var(--ink)}
+.sec p:last-child{margin-bottom:0}
+.sec ul,.sec ol{margin:9px 0 13px 22px}
+.sec li{margin-bottom:6px;line-height:1.65}
+code.il{font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--soft);color:var(--rust);padding:2px 6px;border-radius:3px}
+
+/* CONCEPT PANEL */
+.panel{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--green);padding:18px 22px;margin:14px 0 22px;border-radius:4px}
+.panel.n{border-left-color:var(--navy)}.panel.r{border-left-color:var(--rust)}
+.panel.a{border-left-color:var(--amber)}.panel.p{border-left-color:var(--plum)}.panel.t{border-left-color:var(--teal)}
+.panel h4:first-child{margin-top:0}
+
+/* REALLIFE */
+.rl{background:#eef5ee;border:1px solid #b8d4b8;border-radius:6px;padding:14px 18px;margin:12px 0}
+.rl-label{font-size:10.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:5px}
+.rl p{margin:0;font-size:15px;line-height:1.6}
+
+/* ANNOTATION CARD */
+.anno-wrap{margin:22px 0}
+.anno-card{background:var(--paper);border:1px solid var(--line);border-radius:8px;margin-bottom:22px;overflow:hidden}
+.anno-head{display:flex;align-items:center;gap:14px;padding:14px 20px;background:var(--soft);border-bottom:1px solid var(--line)}
+.anno-badge{font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:500;color:#fff;padding:5px 12px;border-radius:4px;flex-shrink:0;white-space:nowrap}
+.bg-green{background:var(--green)}.bg-navy{background:var(--navy)}.bg-rust{background:var(--rust)}
+.bg-plum{background:var(--plum)}.bg-amber{background:var(--amber)}.bg-teal{background:var(--teal)}
+.anno-tagline{font-weight:600;font-size:15px;color:var(--ink)}
+.anno-body{padding:18px 20px}
+.anno-body p{font-size:15px;margin-bottom:10px;line-height:1.6}
+.anno-body p:last-child{margin-bottom:0}
+.anno-body .why{font-size:13.5px;color:var(--muted);background:var(--soft);padding:8px 12px;border-radius:4px;margin-bottom:12px;line-height:1.55}
+
+/* COMPARE */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.cbox{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:14px 18px}
+.cbox.bad{border-top:4px solid var(--rust)}.cbox.good{border-top:4px solid var(--green)}
+.cbox-lbl{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:7px}
+.cbox.bad .cbox-lbl{color:var(--rust)}.cbox.good .cbox-lbl{color:var(--green)}
+.cbox p,.cbox li{font-size:14px;margin-bottom:4px;line-height:1.5}
+.cbox ul{margin-left:16px}
+@media(max-width:620px){.compare{grid-template-columns:1fr}}
+
+/* CODE */
+.cw{margin:12px 0;border-radius:5px;overflow:hidden;border:1px solid #2a2f45}
+.cbar{background:#252a3d;color:#9ca3b8;padding:7px 13px;font-family:'JetBrains Mono',monospace;font-size:11px;display:flex;justify-content:space-between;border-bottom:1px solid #1a1e2e}
+.cfile{font-weight:500;color:#c4cadd}.clang{font-size:9.5px;text-transform:uppercase;letter-spacing:1px}
+.cbody{background:var(--code-bg);color:var(--code-fg);padding:14px 16px;overflow-x:auto}
+.cbody pre{font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.65;white-space:pre}
+.kw{color:var(--kw)}.tp{color:var(--tp)}.fn{color:var(--fn)}.st{color:var(--st)}
+.cm{color:var(--cm);font-style:italic}.an{color:var(--an)}.tag{color:var(--tag)}.att{color:var(--att)}
+
+/* OUTPUT */
+.out{background:#0d1117;color:#b0c4de;font-family:'JetBrains Mono',monospace;font-size:12.5px;padding:12px 16px;border-radius:4px;border:1px solid #2a2f45;margin:10px 0;line-height:1.6;white-space:pre-wrap}
+.out .ok{color:#c3e88d}.out .hi{color:#ffcb6b}
+
+/* FLOW */
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;margin:16px 0}
+.flow-step{flex:1;min-width:100px;background:var(--paper);border:1px solid var(--line);padding:12px 13px;text-align:center;position:relative}
+.flow-step:not(:last-child)::after{content:'→';position:absolute;right:-14px;top:50%;transform:translateY(-50%);color:var(--green);font-size:16px;font-weight:900;z-index:1}
+.fs-num{font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.fs-name{font-weight:700;font-size:13px;color:var(--navy)}
+.fs-note{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.35}
+
+/* CALLOUT */
+.tip{display:flex;gap:11px;padding:13px 16px;margin:12px 0;border-radius:4px;border:1px solid var(--line);border-left:4px solid var(--amber);background:var(--amber-lt)}
+.tip.info{border-left-color:var(--navy);background:var(--navy-lt)}
+.tip.good{border-left-color:var(--green);background:var(--green-lt)}
+.tip .ico{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--amber);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;margin-top:1px}
+.tip.info .ico{background:var(--navy)}.tip.good .ico{background:var(--green)}
+.tip strong{display:block;margin-bottom:2px;font-weight:600;font-size:14px}
+.tip p{margin:0;font-size:14px;line-height:1.5}
+
+/* TABLE */
+.tw{overflow-x:auto;margin:14px 0}
+.tw table{width:100%;border-collapse:collapse;background:var(--paper);border:1px solid var(--line);font-size:14px}
+.tw th{background:var(--soft);text-align:left;padding:10px 13px;font-weight:600;border-bottom:1px solid var(--line)}
+.tw td{padding:10px 13px;border-bottom:1px solid var(--soft);vertical-align:top;line-height:1.55}
+.tw tr:last-child td{border-bottom:none}
+.tw code{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--rust);background:var(--soft);padding:1px 5px;border-radius:2px}
+
+/* STEPS */
+.steps{margin:16px 0}
+.step-item{display:flex;gap:14px;margin-bottom:12px;background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:14px 18px}
+.step-num{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;margin-top:2px}
+.step-body h4{margin-top:0;font-size:14.5px}.step-body p{font-size:14.5px;margin-bottom:4px}
+
+/* SUMMARY */
+.summary{background:linear-gradient(135deg,#eaf4ee,#dff0ea);border:1px solid #b8d8c8;border-radius:6px;padding:20px 24px;margin:28px 0 0}
+.summary h4{font-family:'Lora',serif;font-style:italic;font-size:19px;color:var(--green);margin:0 0 10px}
+.summary ul{margin-left:18px}.summary li{margin-bottom:5px;font-size:14.5px}
+
+footer{background:var(--paper);border-top:1px solid var(--line);padding:30px 28px;text-align:center;color:var(--muted);font-size:14px}
+footer strong{display:block;font-family:'Lora',serif;font-style:italic;font-size:18px;color:var(--ink);margin-bottom:4px}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<nav class="nav">
+  <div class="nav-in">
+    <span class="logo">Spring MVC · Beginner Overview</span>
+    <a href="#what-is">What is Spring MVC</a>
+    <a href="#thymeleaf">Thymeleaf</a>
+    <a href="#advantages">Advantages</a>
+    <a href="#annotations">Annotations</a>
+    <a href="#example">Full Example</a>
+    <a href="#lifecycle">Lifecycle</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-in">
+    <div class="eyebrow">Beginner Guide · Why · What · How · Examples</div>
+    <h1>Spring MVC with <em>Thymeleaf</em></h1>
+    <p class="sub">
+      Everything a beginner needs in one page. What Spring MVC is and why it exists. What each annotation does and when to use it. How Thymeleaf connects your Java code to HTML. One complete working example that ties it all together. No experience required.
+    </p>
+    <div class="hero-meta">
+      <div><strong>7 Annotations</strong>each with a focused example</div>
+      <div><strong>Why + What + How</strong>for every concept</div>
+      <div><strong>One Complete Example</strong>form to controller and back</div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- ══════════════════════════════════
+     SECTION 1 — WHAT IS SPRING MVC
+══════════════════════════════════════ -->
+<section class="sec" id="what-is">
+  <div class="sec-label">Section 1</div>
+  <h2>What is Spring MVC?</h2>
+
+  <p>
+    When someone opens your web application in a browser, they type a URL and hit Enter. Something on the server has to receive that request, figure out what to do, get some data, and send back a web page. Spring MVC is the part of Spring that handles all of this.
+  </p>
+
+  <div class="rl">
+    <div class="rl-label">Real life analogy</div>
+    <p>Think of a restaurant. The customer (browser) places an order (HTTP request). The waiter (Spring MVC) takes the order to the kitchen (your Java code), collects the food (data), and brings it back to the customer as a finished meal (HTML page).</p>
+  </div>
+
+  <h3>The three letters — MVC</h3>
+
+  <p>MVC stands for <strong>Model, View, Controller</strong>. It is a design pattern — a proven way to keep three separate concerns from getting mixed together.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Letter</th><th>Name</th><th>Job</th><th>In Spring MVC</th></tr></thead>
+    <tbody>
+      <tr><td><strong>M</strong></td><td>Model</td><td>Holds the data</td><td>A Java object or list that carries data to the template</td></tr>
+      <tr><td><strong>V</strong></td><td>View</td><td>Displays the data</td><td>A Thymeleaf HTML template that the user sees</td></tr>
+      <tr><td><strong>C</strong></td><td>Controller</td><td>Connects the two</td><td>A Java class that receives requests and decides what to show</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Why use Spring MVC?</h3>
+
+  <div class="compare">
+    <div class="cbox bad">
+      <div class="cbox-lbl">Without a framework</div>
+      <ul>
+        <li>Write raw Servlet code for every URL</li>
+        <li>Parse request parameters manually</li>
+        <li>Build HTML strings in Java (ugly and error-prone)</li>
+        <li>No structure — code becomes one giant mess</li>
+        <li>Re-invent the same patterns every project</li>
+      </ul>
+    </div>
+    <div class="cbox good">
+      <div class="cbox-lbl">With Spring MVC</div>
+      <ul>
+        <li>Map a URL to a method with one annotation</li>
+        <li>Parameters injected automatically</li>
+        <li>Templates render HTML cleanly</li>
+        <li>Clear structure — everyone knows where to look</li>
+        <li>Validation, error handling, security built-in</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>Spring MVC is part of the Spring Framework — the most widely used Java framework in enterprise software. Learning it opens the door to professional Java web development.</p>
+
+</section>
+
+<!-- ══════════════════════════════════
+     SECTION 2 — THYMELEAF
+══════════════════════════════════════ -->
+<section class="sec" id="thymeleaf">
+  <div class="sec-label">Section 2</div>
+  <h2>Why Use Thymeleaf?</h2>
+
+  <p>
+    Thymeleaf is the template engine Spring MVC uses to build HTML pages. You write normal HTML files, add special <code class="il">th:</code> attributes, and at runtime Thymeleaf fills in the real data from your Java code.
+  </p>
+
+  <h3>What makes Thymeleaf special</h3>
+
+  <div class="panel">
+    <h4>It is valid HTML — always</h4>
+    <p>A Thymeleaf file is a normal HTML file. You can open it in a browser right now — without running Spring — and it looks fine. The <code class="il">th:</code> attributes are simply ignored by the browser. This means designers can work on templates without running the whole application.</p>
+    <p>Compare: old-style JSP files have <code class="il">&lt;% ... %&gt;</code> Java code mixed into HTML. If you open a JSP file directly in a browser, you see broken garbage. Thymeleaf files always look clean.</p>
+  </div>
+
+  <div class="tw"><table>
+    <thead><tr><th>Feature</th><th>Plain HTML</th><th>JSP (old way)</th><th>Thymeleaf</th></tr></thead>
+    <tbody>
+      <tr><td>Can show dynamic data</td><td>No</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td>Valid HTML in browser without server</td><td>Yes</td><td>No</td><td>Yes</td></tr>
+      <tr><td>Designer-friendly</td><td>Yes</td><td>No</td><td>Yes</td></tr>
+      <tr><td>Spring integration</td><td>None</td><td>Good</td><td>Excellent</td></tr>
+      <tr><td>Recommended by Spring Boot</td><td>—</td><td>No (deprecated)</td><td>Yes</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>The most used Thymeleaf attributes</h3>
+
+  <div class="tw"><table>
+    <thead><tr><th>Attribute</th><th>What it does</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>th:text</code></td><td>Sets the text content of an element</td><td><code>&lt;p th:text="${name}"&gt;</code></td></tr>
+      <tr><td><code>th:each</code></td><td>Loops through a list</td><td><code>&lt;tr th:each="s : ${students}"&gt;</code></td></tr>
+      <tr><td><code>th:if</code></td><td>Shows element only when condition is true</td><td><code>&lt;p th:if="${isPassed}"&gt;</code></td></tr>
+      <tr><td><code>th:href</code></td><td>Sets a link URL dynamically</td><td><code>&lt;a th:href="@{/students}"&gt;</code></td></tr>
+      <tr><td><code>th:action</code></td><td>Sets the form submission URL</td><td><code>&lt;form th:action="@{/save}"&gt;</code></td></tr>
+      <tr><td><code>th:object</code></td><td>Binds a form to a Java object</td><td><code>&lt;form th:object="${student}"&gt;</code></td></tr>
+      <tr><td><code>th:field</code></td><td>Binds an input to a Java object field</td><td><code>&lt;input th:field="*{name}"&gt;</code></td></tr>
+      <tr><td><code>th:errors</code></td><td>Shows validation error message</td><td><code>&lt;span th:errors="*{name}"&gt;</code></td></tr>
+      <tr><td><code>#{key}</code></td><td>Reads from message/translation files</td><td><code>&lt;h1 th:text="#{app.title}"&gt;</code></td></tr>
+    </tbody>
+  </table></div>
+
+</section>
+
+<!-- ══════════════════════════════════
+     SECTION 3 — ADVANTAGES
+══════════════════════════════════════ -->
+<section class="sec" id="advantages">
+  <div class="sec-label">Section 3</div>
+  <h2>Advantages of Spring MVC with Thymeleaf</h2>
+
+  <div class="panel">
+    <h4>1. Clean separation of work</h4>
+    <p>The Controller handles logic, the Model holds data, the Thymeleaf template handles display. A Java developer can change business logic without touching HTML. A designer can change the look without touching Java code. No more one-giant-file chaos.</p>
+  </div>
+
+  <div class="panel n">
+    <h4>2. Annotations replace configuration files</h4>
+    <p>In older Java web frameworks you needed large XML files describing every URL mapping. In Spring MVC you write <code class="il">@GetMapping("/students")</code> directly on the method. The URL and the method are in one place, easy to read and change.</p>
+  </div>
+
+  <div class="panel r">
+    <h4>3. Validation is built in</h4>
+    <p>Add <code class="il">@NotBlank</code> or <code class="il">@Email</code> on a model field, add <code class="il">@Valid</code> in the Controller, and Spring checks the data automatically. If it fails, Thymeleaf shows error messages next to each bad field. No manual if-else chains needed.</p>
+  </div>
+
+  <div class="panel a">
+    <h4>4. Automatic type conversion</h4>
+    <p>HTTP sends everything as plain text strings. If your form has an age field and your Java class has <code class="il">int age</code>, Spring converts <code class="il">"22"</code> to <code class="il">22</code> automatically. Same for dates, booleans, and custom types.</p>
+  </div>
+
+  <div class="panel p">
+    <h4>5. Thymeleaf files are always valid HTML</h4>
+    <p>Open a Thymeleaf template in a browser without running Spring — it looks like a normal HTML page. This makes it easy for the whole team to view and work on designs. JSP files cannot do this.</p>
+  </div>
+
+  <div class="panel t">
+    <h4>6. Works with the whole Spring ecosystem</h4>
+    <p>Spring MVC sits inside Spring Boot, which means you automatically get Spring Security (authentication), Spring Data JPA (database), Spring Validation, DevTools (auto-restart), and more — all working together with zero extra wiring.</p>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════
+     SECTION 4 — ANNOTATIONS
+══════════════════════════════════════ -->
+<section class="sec" id="annotations">
+  <div class="sec-label">Section 4</div>
+  <h2>Important Annotations — Why, What, and How</h2>
+
+  <p>
+    An annotation in Java is a label you put on a class, method, or parameter (it starts with <code class="il">@</code>). Spring reads these labels and does the right thing automatically. You write less code, Spring does more work. Below, every annotation is explained with a tiny, focused program.
+  </p>
+
+  <div class="anno-wrap">
+
+    <!-- @Controller -->
+    <div class="anno-card">
+      <div class="anno-head">
+        <span class="anno-badge bg-green">@Controller</span>
+        <span class="anno-tagline">Marks a class as a web request handler</span>
+      </div>
+      <div class="anno-body">
+        <div class="why">WHY we need it — Without @Controller, Spring does not know this class is supposed to handle web requests. It is just a plain Java class that nobody calls.</div>
+        <p><strong>What it does:</strong> When you add <code class="il">@Controller</code> to a class, Spring registers it and scans all methods inside it for URL mapping annotations. Spring creates one instance of the class and keeps it ready to handle requests.</p>
+        <p><strong>Return value rule:</strong> A @Controller method returns a String — the name of the Thymeleaf template to display. Return <code class="il">"home"</code> and Spring renders <code class="il">templates/home.html</code>. Return <code class="il">"redirect:/students"</code> and the browser navigates to that URL.</p>
+        <div class="cw">
+          <div class="cbar"><span class="cfile">HomeController.java</span><span class="clang">java</span></div>
+          <div class="cbody"><pre><span class="kw">import</span> org.springframework.stereotype.Controller;
+<span class="kw">import</span> org.springframework.ui.Model;
+<span class="kw">import</span> org.springframework.web.bind.annotation.GetMapping;
+
+<span class="an">@Controller</span>   <span class="cm">// ← Spring: "this class handles web requests"</span>
+<span class="kw">public class</span> <span class="tp">HomeController</span> {
+
+    <span class="an">@GetMapping</span>(<span class="st">"/"</span>)
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">home</span>(<span class="tp">Model</span> model) {
+        model.<span class="fn">addAttribute</span>(<span class="st">"message"</span>, <span class="st">"Hello from Spring MVC!"</span>);
+        <span class="kw">return</span> <span class="st">"home"</span>;  <span class="cm">// renders templates/home.html</span>
+    }
+}</pre></div>
+        </div>
+        <div class="cw">
+          <div class="cbar"><span class="cfile">templates/home.html</span><span class="clang">html</span></div>
+          <div class="cbody"><pre><span class="tag">&lt;html</span> <span class="att">xmlns:th</span>=<span class="st">"http://www.thymeleaf.org"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+    <span class="tag">&lt;h1</span> <span class="att">th:text</span>=<span class="st">"${message}"</span><span class="tag">&gt;</span>Loading...<span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;/body&gt;</span><span class="tag">&lt;/html&gt;</span></pre></div>
+        </div>
+        <div class="out"><span class="ok">Page shows: Hello from Spring MVC!</span></div>
+      </div>
+    </div>
+
+    <!-- @GetMapping / @PostMapping -->
+    <div class="anno-card">
+      <div class="anno-head">
+        <span class="anno-badge bg-navy">@GetMapping &amp; @PostMapping</span>
+        <span class="anno-tagline">Connect a URL and HTTP method to a Java method</span>
+      </div>
+      <div class="anno-body">
+        <div class="why">WHY we need them — Without these, Spring does not know which method to call when a request arrives. The URL alone is not enough; the same URL with GET should load a form, while the same URL with POST should save the data.</div>
+        <p><strong>HTTP GET</strong> is used for loading pages and reading data — no data is being changed. <strong>HTTP POST</strong> is used for submitting forms and saving data — something is being created or updated.</p>
+        <p><strong>Simple rule:</strong> GET = "give me something to look at". POST = "save something I just submitted".</p>
+        <div class="cw">
+          <div class="cbar"><span class="cfile">RegistrationController.java</span><span class="clang">java</span></div>
+          <div class="cbody"><pre><span class="an">@Controller</span>
+<span class="kw">public class</span> <span class="tp">RegistrationController</span> {
+
+    <span class="cm">// Browser requests GET /register → show the empty form</span>
+    <span class="an">@GetMapping</span>(<span class="st">"/register"</span>)
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">showForm</span>() {
+        <span class="kw">return</span> <span class="st">"register"</span>;    <span class="cm">// renders templates/register.html</span>
+    }
+
+    <span class="cm">// User fills form and clicks Submit → browser sends POST /register</span>
+    <span class="an">@PostMapping</span>(<span class="st">"/register"</span>)
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">handleForm</span>() {
+        <span class="cm">// save the data ...</span>
+        <span class="kw">return</span> <span class="st">"redirect:/register"</span>;  <span class="cm">// go back to the form</span>
+    }
+}</pre></div>
+        </div>
+        <div class="tip info">
+          <span class="ico">i</span>
+          <div>
+            <strong>Same URL, different jobs</strong>
+            <p>Both methods here map to <code class="il">/register</code>. Spring picks the right one based on the HTTP method. GET calls showForm(). POST calls handleForm(). They can share a URL because they do different things.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- @RequestParam -->
+    <div class="anno-card">
+      <div class="anno-head">
+        <span class="anno-badge bg-rust">@RequestParam</span>
+        <span class="anno-tagline">Reads one value from the URL query string or form body</span>
+      </div>
+      <div class="anno-body">
+        <div class="why">WHY we need it — When a form field or URL parameter arrives at the server, it is just a plain string in the HTTP request. @RequestParam reads one named value and injects it as a method parameter — with automatic type conversion.</div>
+        <p><strong>Where values come from:</strong> A URL like <code class="il">/search?name=Ravi&amp;page=2</code> has two parameters: <code class="il">name</code> and <code class="il">page</code>. @RequestParam reads them by name.</p>
+        <div class="cw">
+          <div class="cbar"><span class="cfile">SearchController.java</span><span class="clang">java</span></div>
+          <div class="cbody"><pre><span class="an">@Controller</span>
+<span class="kw">public class</span> <span class="tp">SearchController</span> {
+
+    <span class="cm">// URL: GET /search?name=Ravi&amp;page=2</span>
+    <span class="an">@GetMapping</span>(<span class="st">"/search"</span>)
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">search</span>(
+            <span class="an">@RequestParam</span> <span class="tp">String</span> name,           <span class="cm">// reads ?name=Ravi</span>
+            <span class="an">@RequestParam</span>(defaultValue = <span class="st">"1"</span>) <span class="kw">int</span> page,   <span class="cm">// reads ?page=2, default 1</span>
+            <span class="tp">Model</span> model) {
+
+        model.<span class="fn">addAttribute</span>(<span class="st">"searchName"</span>, name);
+        model.<span class="fn">addAttribute</span>(<span class="st">"pageNumber"</span>,  page);
+        <span class="kw">return</span> <span class="st">"search-results"</span>;
+    }
+}
+<span class="cm">// Visit: /search?name=Ravi     → name="Ravi", page=1 (default)</span>
+<span class="cm">// Visit: /search?name=Ravi&amp;page=3 → name="Ravi", page=3</span></pre></div>
+        </div>
+        <div class="tip">
+          <span class="ico">!</span>
+          <div>
+            <strong>Use defaultValue for optional parameters</strong>
+            <p>If a parameter is missing and has no <code class="il">defaultValue</code>, Spring throws an error. Add <code class="il">defaultValue="something"</code> or <code class="il">required=false</code> to make it optional.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- @PathVariable -->
+    <div class="anno-card">
+      <div class="anno-head">
+        <span class="anno-badge bg-plum">@PathVariable</span>
+        <span class="anno-tagline">Reads a value embedded inside the URL path itself</span>
+      </div>
+      <div class="anno-body">
+        <div class="why">WHY we need it — Sometimes the value you need IS the URL. To view student number 5, the clean URL is <code class="il">/students/5</code> — not <code class="il">/students?id=5</code>. @PathVariable reads the <code class="il">5</code> directly from the path.</div>
+        <p><strong>How to set it up:</strong> Put curly braces in the URL pattern — <code class="il">{id}</code> — and match the name in <code class="il">@PathVariable int id</code>. Spring extracts whatever is in that position and gives it to your method. Type conversion happens automatically.</p>
+        <div class="cw">
+          <div class="cbar"><span class="cfile">StudentController.java</span><span class="clang">java</span></div>
+          <div class="cbody"><pre><span class="an">@Controller</span>
+<span class="kw">public class</span> <span class="tp">StudentController</span> {
+
+    <span class="cm">// URL: GET /students/5 → id = 5</span>
+    <span class="cm">// URL: GET /students/12 → id = 12</span>
+    <span class="an">@GetMapping</span>(<span class="st">"/students/{id}"</span>)
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">viewStudent</span>(
+            <span class="an">@PathVariable</span> <span class="kw">int</span> id,   <span class="cm">// reads the {id} part of the URL</span>
+            <span class="tp">Model</span> model) {
+
+        <span class="cm">// normally: Student s = studentService.findById(id);</span>
+        model.<span class="fn">addAttribute</span>(<span class="st">"studentId"</span>, id);
+        <span class="kw">return</span> <span class="st">"student-profile"</span>;
+    }
+
+    <span class="cm">// Multiple path variables in one URL</span>
+    <span class="cm">// URL: GET /courses/java/students/3</span>
+    <span class="an">@GetMapping</span>(<span class="st">"/courses/{course}/students/{studentId}"</span>)
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">viewCourseStudent</span>(
+            <span class="an">@PathVariable</span> <span class="tp">String</span> course,
+            <span class="an">@PathVariable</span> <span class="kw">int</span> studentId,
+            <span class="tp">Model</span> model) {
+
+        model.<span class="fn">addAttribute</span>(<span class="st">"course"</span>,    course);
+        model.<span class="fn">addAttribute</span>(<span class="st">"studentId"</span>, studentId);
+        <span class="kw">return</span> <span class="st">"course-student"</span>;
+    }
+}</pre></div>
+        </div>
+        <div class="tip info">
+          <span class="ico">i</span>
+          <div>
+            <strong>@PathVariable vs @RequestParam — when to use which</strong>
+            <p>Use <code class="il">@PathVariable</code> when the value identifies a specific resource: <code class="il">/students/5</code>, <code class="il">/products/42</code>.<br>
+            Use <code class="il">@RequestParam</code> when the value filters or sorts: <code class="il">/students?course=Java</code>, <code class="il">/products?sort=price</code>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- @ModelAttribute -->
+    <div class="anno-card">
+      <div class="anno-head">
+        <span class="anno-badge bg-amber">@ModelAttribute</span>
+        <span class="anno-tagline">Automatically fills a Java object from all form fields at once</span>
+      </div>
+      <div class="anno-body">
+        <div class="why">WHY we need it — A registration form might have 10 fields. Without @ModelAttribute you would write 10 @RequestParam parameters and 10 setter calls. With @ModelAttribute you write one parameter and Spring fills the whole object for you.</div>
+        <p><strong>How it works:</strong> Spring takes every field in the submitted form, finds the matching setter in your Java class (e.g., form field <code class="il">name</code> → calls <code class="il">setName()</code>), and calls it. By the time your method runs, the object is fully populated.</p>
+        <p><strong>One rule:</strong> Your model class MUST have a no-argument constructor. Spring calls <code class="il">new Student()</code> first, then fills the fields.</p>
+        <div class="cw">
+          <div class="cbar"><span class="cfile">Without @ModelAttribute — painful</span><span class="clang">java</span></div>
+          <div class="cbody"><pre><span class="an">@PostMapping</span>(<span class="st">"/save"</span>)
+<span class="kw">public</span> <span class="tp">String</span> <span class="fn">save</span>(<span class="an">@RequestParam</span> <span class="tp">String</span> name,
+                     <span class="an">@RequestParam</span> <span class="tp">String</span> email,
+                     <span class="an">@RequestParam</span> <span class="kw">int</span> age,
+                     <span class="an">@RequestParam</span> <span class="tp">String</span> course) {
+    <span class="tp">Student</span> s = <span class="kw">new</span> <span class="tp">Student</span>();
+    s.<span class="fn">setName</span>(name);   s.<span class="fn">setEmail</span>(email);
+    s.<span class="fn">setAge</span>(age);     s.<span class="fn">setCourse</span>(course);
+    <span class="cm">// ... add more fields → nightmare</span>
+    <span class="kw">return</span> <span class="st">"success"</span>;
+}</pre></div>
+        </div>
+        <div class="cw">
+          <div class="cbar"><span class="cfile">With @ModelAttribute — clean</span><span class="clang">java</span></div>
+          <div class="cbody"><pre><span class="an">@PostMapping</span>(<span class="st">"/save"</span>)
+<span class="kw">public</span> <span class="tp">String</span> <span class="fn">save</span>(<span class="an">@ModelAttribute</span> <span class="tp">Student</span> student, <span class="tp">Model</span> model) {
+    <span class="cm">// Spring has already called setName(), setEmail(), setAge(), setCourse()</span>
+    <span class="cm">// student is fully populated — just use it</span>
+    model.<span class="fn">addAttribute</span>(<span class="st">"student"</span>, student);
+    <span class="kw">return</span> <span class="st">"confirmation"</span>;
+}
+
+<span class="cm">// GET: show the empty form — put a blank Student in the model</span>
+<span class="cm">// so th:object in the template has something to bind to</span>
+<span class="an">@GetMapping</span>(<span class="st">"/register"</span>)
+<span class="kw">public</span> <span class="tp">String</span> <span class="fn">showForm</span>(<span class="tp">Model</span> model) {
+    model.<span class="fn">addAttribute</span>(<span class="st">"student"</span>, <span class="kw">new</span> <span class="tp">Student</span>());
+    <span class="kw">return</span> <span class="st">"register"</span>;
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- @RequestBody -->
+    <div class="anno-card">
+      <div class="anno-head">
+        <span class="anno-badge bg-teal">@RequestBody</span>
+        <span class="anno-tagline">Reads JSON data sent by JavaScript or mobile apps</span>
+      </div>
+      <div class="anno-body">
+        <div class="why">WHY we need it — HTML forms send data as plain text pairs (name=Ravi&amp;age=22). But JavaScript apps and mobile apps send data as JSON ({"name":"Ravi","age":22}). These are two completely different formats. @RequestBody reads the JSON format. @ModelAttribute reads the form format. You cannot swap them.</div>
+        <p><strong>What happens internally:</strong> Spring uses a library called <strong>Jackson</strong> (included automatically with Spring Boot) to parse the JSON string into a Java object. Jackson reads each JSON key, finds the matching setter in your class, and calls it. You get a fully populated object.</p>
+        <div class="cw">
+          <div class="cbar"><span class="cfile">StudentApiController.java</span><span class="clang">java</span></div>
+          <div class="cbody"><pre><span class="an">@RestController</span>
+<span class="an">@RequestMapping</span>(<span class="st">"/api"</span>)
+<span class="kw">public class</span> <span class="tp">StudentApiController</span> {
+
+    <span class="cm">// A JavaScript app sends: POST /api/students</span>
+    <span class="cm">// with body: {"name":"Ravi","email":"ravi@x.com","age":22}</span>
+    <span class="an">@PostMapping</span>(<span class="st">"/students"</span>)
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">createStudent</span>(<span class="an">@RequestBody</span> <span class="tp">Student</span> student) {
+        <span class="cm">// Jackson parses the JSON and calls setName(), setEmail(), setAge()</span>
+        <span class="cm">// student is ready to use</span>
+        <span class="kw">return</span> <span class="st">"Saved: "</span> + student.<span class="fn">getName</span>();
+    }
+}</pre></div>
+        </div>
+        <div class="tw"><table>
+          <thead><tr><th>Sends this format</th><th>Use this annotation</th></tr></thead>
+          <tbody>
+            <tr><td>HTML form (<code>name=Ravi&amp;age=22</code>)</td><td><code>@ModelAttribute</code></td></tr>
+            <tr><td>JSON body (<code>{"name":"Ravi","age":22}</code>)</td><td><code>@RequestBody</code></td></tr>
+            <tr><td>Single URL value (<code>?name=Ravi</code>)</td><td><code>@RequestParam</code></td></tr>
+            <tr><td>URL path value (<code>/students/5</code>)</td><td><code>@PathVariable</code></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- @ResponseBody -->
+    <div class="anno-card">
+      <div class="anno-head">
+        <span class="anno-badge bg-green">@ResponseBody</span>
+        <span class="anno-tagline">Returns data as JSON instead of rendering a Thymeleaf template</span>
+      </div>
+      <div class="anno-body">
+        <div class="why">WHY we need it — Normally a @Controller method returns a template name (a String) and Spring renders an HTML page. But sometimes you just want to return data — for example to a JavaScript app or a mobile app that will display it in its own way. @ResponseBody tells Spring: skip the template, send this object directly as JSON.</div>
+        <p><strong>@RestController is the shortcut:</strong> Adding <code class="il">@ResponseBody</code> to every method in a class is repetitive. <code class="il">@RestController</code> = <code class="il">@Controller</code> + <code class="il">@ResponseBody</code> on every method. Use <code class="il">@RestController</code> for classes that only return JSON, and <code class="il">@Controller</code> for classes that render Thymeleaf templates.</p>
+        <div class="cw">
+          <div class="cbar"><span class="cfile">Using @ResponseBody on one method</span><span class="clang">java</span></div>
+          <div class="cbody"><pre><span class="an">@Controller</span>
+<span class="kw">public class</span> <span class="tp">MixedController</span> {
+
+    <span class="cm">// Returns an HTML page (uses Thymeleaf)</span>
+    <span class="an">@GetMapping</span>(<span class="st">"/students/page"</span>)
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">listPage</span>(<span class="tp">Model</span> model) {
+        <span class="kw">return</span> <span class="st">"students/list"</span>;   <span class="cm">// template name</span>
+    }
+
+    <span class="cm">// Returns JSON (no template involved)</span>
+    <span class="an">@GetMapping</span>(<span class="st">"/api/students"</span>)
+    <span class="an">@ResponseBody</span>
+    <span class="kw">public</span> <span class="tp">List</span>&lt;<span class="tp">Student</span>&gt; <span class="fn">listJson</span>() {
+        <span class="kw">return</span> <span class="tp">List</span>.<span class="fn">of</span>(
+            <span class="kw">new</span> <span class="tp">Student</span>(<span class="st">"Ravi"</span>,  <span class="st">"Java"</span>, <span class="nm">22</span>),
+            <span class="kw">new</span> <span class="tp">Student</span>(<span class="st">"Priya"</span>, <span class="st">"Cloud"</span>, <span class="nm">24</span>)
+        );
+        <span class="cm">// Jackson converts the List to JSON automatically:</span>
+        <span class="cm">// [{"name":"Ravi","course":"Java","age":22}, ...]</span>
+    }
+}</pre></div>
+        </div>
+        <div class="cw">
+          <div class="cbar"><span class="cfile">@RestController — shortcut for all-JSON controllers</span><span class="clang">java</span></div>
+          <div class="cbody"><pre><span class="an">@RestController</span>          <span class="cm">// = @Controller + @ResponseBody on every method</span>
+<span class="an">@RequestMapping</span>(<span class="st">"/api/students"</span>)
+<span class="kw">public class</span> <span class="tp">StudentApiController</span> {
+
+    <span class="an">@GetMapping</span>              <span class="cm">// GET /api/students → JSON array</span>
+    <span class="kw">public</span> <span class="tp">List</span>&lt;<span class="tp">Student</span>&gt; <span class="fn">getAll</span>() { <span class="kw">return</span> studentService.<span class="fn">findAll</span>(); }
+
+    <span class="an">@GetMapping</span>(<span class="st">"/{id}"</span>)     <span class="cm">// GET /api/students/5 → one JSON object</span>
+    <span class="kw">public</span> <span class="tp">Student</span> <span class="fn">getOne</span>(<span class="an">@PathVariable</span> <span class="kw">int</span> id) {
+        <span class="kw">return</span> studentService.<span class="fn">findById</span>(id);
+    }
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end anno-wrap -->
+
+  <!-- Quick reference table -->
+  <h3>All 7 annotations — quick reference</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Annotation</th><th>Put on</th><th>Does</th><th>Use when</th></tr></thead>
+    <tbody>
+      <tr><td><code>@Controller</code></td><td>Class</td><td>Marks it as a web request handler. Methods can return template names.</td><td>Pages that render Thymeleaf HTML</td></tr>
+      <tr><td><code>@GetMapping("/url")</code></td><td>Method</td><td>Maps HTTP GET requests to this method.</td><td>Loading a page, viewing data</td></tr>
+      <tr><td><code>@PostMapping("/url")</code></td><td>Method</td><td>Maps HTTP POST requests to this method.</td><td>Submitting a form, saving data</td></tr>
+      <tr><td><code>@RequestParam</code></td><td>Parameter</td><td>Reads one named value from URL query string or form body.</td><td>Simple single values, filters, search terms</td></tr>
+      <tr><td><code>@PathVariable</code></td><td>Parameter</td><td>Reads a value from inside the URL path like <code>/students/{id}</code>.</td><td>Resource identity — view/edit/delete by ID</td></tr>
+      <tr><td><code>@ModelAttribute</code></td><td>Parameter</td><td>Fills a whole Java object from all form fields at once.</td><td>Form submissions with multiple fields</td></tr>
+      <tr><td><code>@RequestBody</code></td><td>Parameter</td><td>Parses the JSON request body into a Java object using Jackson.</td><td>REST APIs called by JS or mobile apps</td></tr>
+      <tr><td><code>@ResponseBody</code></td><td>Method</td><td>Sends the return value as JSON instead of rendering a template.</td><td>REST API responses — skip the template</td></tr>
+    </tbody>
+  </table></div>
+
+</section>
+
+<!-- ══════════════════════════════════
+     SECTION 5 — FULL EXAMPLE
+══════════════════════════════════════ -->
+<section class="sec" id="example">
+  <div class="sec-label">Section 5</div>
+  <h2>A Complete Working Example — Student Registration</h2>
+
+  <p>
+    This example connects everything: a Student model class, a Controller with GET and POST, and a Thymeleaf form using <code class="il">th:object</code> and <code class="il">th:field</code>. We trace the full data journey — from the empty form to the filled object and back to a confirmation page.
+  </p>
+
+  <h3 style="color:var(--green)">Step 1 — The Student model class</h3>
+
+  <div class="cw">
+    <div class="cbar"><span class="cfile">model/Student.java</span><span class="clang">java</span></div>
+    <div class="cbody"><pre><span class="kw">public class</span> <span class="tp">Student</span> {
+
+    <span class="kw">private</span> <span class="tp">String</span> name;
+    <span class="kw">private</span> <span class="tp">String</span> email;
+    <span class="kw">private</span> <span class="tp">String</span> course;
+    <span class="kw">private int</span>    age;
+
+    <span class="kw">public</span> <span class="fn">Student</span>() {}   <span class="cm">// REQUIRED — Spring calls new Student() to create an empty one</span>
+
+    <span class="cm">// Getters — Thymeleaf calls these to READ values into the template</span>
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">getName</span>()           { <span class="kw">return</span> name; }
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">getEmail</span>()          { <span class="kw">return</span> email; }
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">getCourse</span>()         { <span class="kw">return</span> course; }
+    <span class="kw">public int</span>    <span class="fn">getAge</span>()            { <span class="kw">return</span> age; }
+
+    <span class="cm">// Setters — DataBinder calls these to WRITE form values into this object</span>
+    <span class="kw">public void</span>   <span class="fn">setName</span>(<span class="tp">String</span> n)   { <span class="kw">this</span>.name   = n; }
+    <span class="kw">public void</span>   <span class="fn">setEmail</span>(<span class="tp">String</span> e)  { <span class="kw">this</span>.email  = e; }
+    <span class="kw">public void</span>   <span class="fn">setCourse</span>(<span class="tp">String</span> c) { <span class="kw">this</span>.course = c; }
+    <span class="kw">public void</span>   <span class="fn">setAge</span>(<span class="kw">int</span> a)       { <span class="kw">this</span>.age    = a; }
+}</pre></div>
+  </div>
+
+  <h3 style="color:var(--navy)">Step 2 — The Controller</h3>
+
+  <div class="cw">
+    <div class="cbar"><span class="cfile">controller/StudentController.java</span><span class="clang">java</span></div>
+    <div class="cbody"><pre><span class="kw">import</span> org.springframework.stereotype.Controller;
+<span class="kw">import</span> org.springframework.ui.Model;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+
+<span class="an">@Controller</span>
+<span class="kw">public class</span> <span class="tp">StudentController</span> {
+
+    <span class="cm">// ─── Step A: User visits /register ───────────────────────────</span>
+    <span class="an">@GetMapping</span>(<span class="st">"/register"</span>)
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">showForm</span>(<span class="tp">Model</span> model) {
+
+        <span class="cm">// Put an EMPTY Student into the model.</span>
+        <span class="cm">// Thymeleaf's th:object="${student}" needs this to bind the form.</span>
+        model.<span class="fn">addAttribute</span>(<span class="st">"student"</span>, <span class="kw">new</span> <span class="tp">Student</span>());
+        <span class="kw">return</span> <span class="st">"register"</span>;   <span class="cm">// renders templates/register.html</span>
+    }
+
+    <span class="cm">// ─── Step B: User fills form and clicks Save ─────────────────</span>
+    <span class="an">@PostMapping</span>(<span class="st">"/register"</span>)
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">submitForm</span>(<span class="an">@ModelAttribute</span> <span class="tp">Student</span> student,
+                                <span class="tp">Model</span> model) {
+
+        <span class="cm">// Spring has already filled student.name, student.email,</span>
+        <span class="cm">// student.course, student.age from the form fields.</span>
+        <span class="cm">// studentService.save(student); ← in a real app</span>
+
+        model.<span class="fn">addAttribute</span>(<span class="st">"student"</span>, student);
+        <span class="kw">return</span> <span class="st">"confirmation"</span>;   <span class="cm">// renders templates/confirmation.html</span>
+    }
+}</pre></div>
+  </div>
+
+  <h3 style="color:var(--rust)">Step 3 — The registration form template</h3>
+
+  <div class="cw">
+    <div class="cbar"><span class="cfile">templates/register.html</span><span class="clang">html</span></div>
+    <div class="cbody"><pre><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="att">xmlns:th</span>=<span class="st">"http://www.thymeleaf.org"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;&lt;meta</span> <span class="att">charset</span>=<span class="st">"UTF-8"</span><span class="tag">&gt;&lt;title&gt;</span>Register<span class="tag">&lt;/title&gt;&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+<span class="tag">&lt;h1&gt;</span>Student Registration<span class="tag">&lt;/h1&gt;</span>
+
+<span class="cm">&lt;!--
+  th:action — where the form submits to (POST /register)
+  th:object — binds this form to the "student" object in the Model
+  method    — HTTP method to use when submitting
+--&gt;</span>
+<span class="tag">&lt;form</span> <span class="att">th:action</span>=<span class="st">"@{/register}"</span>
+      <span class="att">th:object</span>=<span class="st">"${student}"</span>
+      <span class="att">method</span>=<span class="st">"post"</span><span class="tag">&gt;</span>
+
+    <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;label&gt;</span>Name:<span class="tag">&lt;/label&gt;</span>
+        <span class="cm">&lt;!--
+          th:field="*{name}"
+          The * means "look inside the th:object (student)"
+          This generates:  id="name"  name="name"  value=""
+          On an edit form it pre-fills value with student.getName()
+        --&gt;</span>
+        <span class="tag">&lt;input</span> <span class="att">type</span>=<span class="st">"text"</span> <span class="att">th:field</span>=<span class="st">"*{name}"</span> <span class="tag">/&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+
+    <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;label&gt;</span>Email:<span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;input</span> <span class="att">type</span>=<span class="st">"email"</span> <span class="att">th:field</span>=<span class="st">"*{email}"</span> <span class="tag">/&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+
+    <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;label&gt;</span>Age:<span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;input</span> <span class="att">type</span>=<span class="st">"number"</span> <span class="att">th:field</span>=<span class="st">"*{age}"</span> <span class="tag">/&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+
+    <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;label&gt;</span>Course:<span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;select</span> <span class="att">th:field</span>=<span class="st">"*{course}"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;option</span> <span class="att">value</span>=<span class="st">""</span><span class="tag">&gt;</span>-- Select --<span class="tag">&lt;/option&gt;</span>
+            <span class="tag">&lt;option</span> <span class="att">value</span>=<span class="st">"Java Full Stack"</span><span class="tag">&gt;</span>Java Full Stack<span class="tag">&lt;/option&gt;</span>
+            <span class="tag">&lt;option</span> <span class="att">value</span>=<span class="st">"Cloud DevOps"</span><span class="tag">&gt;</span>Cloud DevOps<span class="tag">&lt;/option&gt;</span>
+        <span class="tag">&lt;/select&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+
+    <span class="tag">&lt;button</span> <span class="att">type</span>=<span class="st">"submit"</span><span class="tag">&gt;</span>Register<span class="tag">&lt;/button&gt;</span>
+
+<span class="tag">&lt;/form&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></pre></div>
+  </div>
+
+  <h3 style="color:var(--plum)">Step 4 — The confirmation page</h3>
+
+  <div class="cw">
+    <div class="cbar"><span class="cfile">templates/confirmation.html</span><span class="clang">html</span></div>
+    <div class="cbody"><pre><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="att">xmlns:th</span>=<span class="st">"http://www.thymeleaf.org"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+<span class="tag">&lt;h1&gt;</span>Registration Successful<span class="tag">&lt;/h1&gt;</span>
+
+<span class="cm">&lt;!-- Read back the student data from the Model --&gt;</span>
+<span class="tag">&lt;p&gt;</span>Name:   <span class="tag">&lt;strong</span> <span class="att">th:text</span>=<span class="st">"${student.name}"</span><span class="tag">&gt;&lt;/strong&gt;&lt;/p&gt;</span>
+<span class="tag">&lt;p&gt;</span>Email:  <span class="tag">&lt;strong</span> <span class="att">th:text</span>=<span class="st">"${student.email}"</span><span class="tag">&gt;&lt;/strong&gt;&lt;/p&gt;</span>
+<span class="tag">&lt;p&gt;</span>Age:    <span class="tag">&lt;strong</span> <span class="att">th:text</span>=<span class="st">"${student.age}"</span><span class="tag">&gt;&lt;/strong&gt;&lt;/p&gt;</span>
+<span class="tag">&lt;p&gt;</span>Course: <span class="tag">&lt;strong</span> <span class="att">th:text</span>=<span class="st">"${student.course}"</span><span class="tag">&gt;&lt;/strong&gt;&lt;/p&gt;</span>
+
+<span class="tag">&lt;a</span> <span class="att">th:href</span>=<span class="st">"@{/register}"</span><span class="tag">&gt;</span>Register another student<span class="tag">&lt;/a&gt;</span>
+
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></pre></div>
+  </div>
+
+  <h3 style="color:var(--amber)">What th:field does — explained clearly</h3>
+
+  <div class="panel a">
+    <h4><code class="il">th:field="*{name}"</code> generates THREE HTML attributes at once</h4>
+    <div class="cw">
+      <div class="cbar"><span class="cfile">You write this one line</span><span class="clang">html</span></div>
+      <div class="cbody"><pre><span class="tag">&lt;input</span> <span class="att">type</span>=<span class="st">"text"</span> <span class="att">th:field</span>=<span class="st">"*{name}"</span> <span class="tag">/&gt;</span></pre></div>
+    </div>
+    <div class="cw">
+      <div class="cbar"><span class="cfile">Thymeleaf renders this in the final HTML</span><span class="clang">html</span></div>
+      <div class="cbody"><pre><span class="tag">&lt;input</span> <span class="att">type</span>=<span class="st">"text"</span>
+       <span class="att">id</span>=<span class="st">"name"</span>       <span class="cm">← generated from the field name</span>
+       <span class="att">name</span>=<span class="st">"name"</span>     <span class="cm">← THIS is what Spring reads to call setName()</span>
+       <span class="att">value</span>=<span class="st">""</span> <span class="tag">/&gt;</span>     <span class="cm">← blank on a new form; pre-filled on an edit form</span></pre></div>
+    </div>
+    <p style="margin-top:10px">The <code class="il">name</code> attribute is the critical one. When the form submits, the browser sends <code class="il">name=Ravi</code>. Spring reads this and calls <code class="il">student.setName("Ravi")</code>. If the name attribute were wrong, the field would be silently ignored.</p>
+    <p>Using <code class="il">th:field</code> means you can never get this wrong — it always generates the correct name from the Java field name.</p>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════
+     SECTION 6 — LIFECYCLE
+══════════════════════════════════════ -->
+<section class="sec" id="lifecycle">
+  <div class="sec-label">Section 6</div>
+  <h2>How a Request Flows Through the System</h2>
+
+  <p>
+    Understanding the complete flow from the user's click to the page they see is the key to understanding Spring MVC. Here is the full journey, traced step by step for both a GET request (loading the form) and a POST request (submitting the form).
+  </p>
+
+  <h3 style="color:var(--green)">Journey A — Loading the form (GET /register)</h3>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="fs-num">1</div>
+      <div class="fs-name">Browser</div>
+      <div class="fs-note">User visits /register. Browser sends GET /register.</div>
+    </div>
+    <div class="flow-step">
+      <div class="fs-num">2</div>
+      <div class="fs-name">DispatcherServlet</div>
+      <div class="fs-note">Spring's front door. Receives every request. Finds the right Controller method.</div>
+    </div>
+    <div class="flow-step">
+      <div class="fs-num">3</div>
+      <div class="fs-name">showForm()</div>
+      <div class="fs-note">@GetMapping("/register") method runs. Adds empty Student to Model. Returns "register".</div>
+    </div>
+    <div class="flow-step">
+      <div class="fs-num">4</div>
+      <div class="fs-name">Thymeleaf</div>
+      <div class="fs-note">Finds register.html. Reads Student from Model. Renders the empty form.</div>
+    </div>
+    <div class="flow-step">
+      <div class="fs-num">5</div>
+      <div class="fs-name">Browser</div>
+      <div class="fs-note">Receives HTML page. Shows the empty form to the user.</div>
+    </div>
+  </div>
+
+  <h3 style="color:var(--navy)">Journey B — Submitting the form (POST /register)</h3>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="fs-num">1</div>
+      <div class="fs-name">Browser</div>
+      <div class="fs-note">User fills form, clicks Register. Browser sends POST /register with name=Ravi&amp;email=...&amp;age=22</div>
+    </div>
+    <div class="flow-step">
+      <div class="fs-num">2</div>
+      <div class="fs-name">DispatcherServlet</div>
+      <div class="fs-note">Receives POST request. Finds submitForm() method in StudentController.</div>
+    </div>
+    <div class="flow-step">
+      <div class="fs-num">3</div>
+      <div class="fs-name">DataBinder</div>
+      <div class="fs-note">Creates new Student(). Reads each field. Calls setName(), setEmail(), setAge(). Converts "22" to int.</div>
+    </div>
+    <div class="flow-step">
+      <div class="fs-num">4</div>
+      <div class="fs-name">submitForm()</div>
+      <div class="fs-note">Your method runs with a fully populated Student. Saves it. Adds it to Model. Returns "confirmation".</div>
+    </div>
+    <div class="flow-step">
+      <div class="fs-num">5</div>
+      <div class="fs-name">Thymeleaf</div>
+      <div class="fs-note">Reads Student from Model. Renders confirmation.html with the real values filled in.</div>
+    </div>
+    <div class="flow-step">
+      <div class="fs-num">6</div>
+      <div class="fs-name">Browser</div>
+      <div class="fs-note">Receives HTML page. Shows "Registration Successful" with the student's details.</div>
+    </div>
+  </div>
+
+  <div class="tip good">
+    <span class="ico">+</span>
+    <div>
+      <strong>The pattern repeats for every feature</strong>
+      <p>Every Spring MVC feature you build — student list, product search, order form, login page — follows this exact same pattern. Browser → DispatcherServlet → Controller method → Model → Thymeleaf → Browser. Once you understand this flow, new features become straightforward to build.</p>
+    </div>
+  </div>
+
+  <div class="summary">
+    <h4>Complete Series Summary</h4>
+    <ul>
+      <li><strong>Spring MVC</strong> structures your app into Model (data), View (templates), Controller (logic). DispatcherServlet is the single entry point that routes every request.</li>
+      <li><strong>Thymeleaf</strong> templates are valid HTML that display dynamic data from the Model using <code class="il">th:</code> attributes. They look good even without running Spring.</li>
+      <li><strong>@Controller</strong> marks a class as a request handler. Methods return template names or redirect URLs.</li>
+      <li><strong>@GetMapping</strong> and <strong>@PostMapping</strong> connect URLs and HTTP methods to specific methods. GET = read. POST = write.</li>
+      <li><strong>@RequestParam</strong> reads one value from the URL query string — <code class="il">?name=Ravi</code>.</li>
+      <li><strong>@PathVariable</strong> reads a value from inside the URL path — <code class="il">/students/{id}</code>.</li>
+      <li><strong>@ModelAttribute</strong> fills a whole Java object from all submitted form fields at once. Requires a no-arg constructor.</li>
+      <li><strong>@RequestBody</strong> parses a JSON request body into a Java object — for REST API calls from JavaScript or mobile apps.</li>
+      <li><strong>@ResponseBody</strong> sends a Java object as JSON directly — no template involved. <code class="il">@RestController</code> applies it to every method in the class.</li>
+      <li><strong>th:object + th:field</strong> bind a form to a Java object. <code class="il">th:field</code> generates the correct id, name, and value attributes automatically.</li>
+      <li><strong>DataBinder</strong> runs between the request and your method. It creates the object, reads form fields, calls setters, and converts types. You never write this code.</li>
+    </ul>
+  </div>
+
+</section>
+
+</div>
+
+<footer>
+  <strong>Spring MVC with Thymeleaf — Beginner Overview</strong>
+  What is · Why need · What each annotation does · How to use · Complete example
+  <br><br>
+  This document is the foundation. The five-part series builds on every concept shown here with full working projects and advanced topics.
+</footer>
+
+<script>
+var p=document.getElementById('prog');
+window.addEventListener('scroll',function(){
+  var d=document.documentElement,b=document.body;
+  var pct=(d.scrollTop||b.scrollTop)/((d.scrollHeight||b.scrollHeight)-d.clientHeight)*100;
+  p.style.width=pct+'%';
+});
+var secs=document.querySelectorAll('section.sec');
+var links=document.querySelectorAll('.nav a');
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting&&e.target.id){
+      links.forEach(function(l){l.classList.remove('on')});
+      var a=document.querySelector('.nav a[href="#'+e.target.id+'"]');
+      if(a)a.classList.add('on');
+    }
+  });
+},{rootMargin:'-40% 0px -55% 0px'});
+secs.forEach(function(s){obs.observe(s)});
+</script>
+</body>
+</html>

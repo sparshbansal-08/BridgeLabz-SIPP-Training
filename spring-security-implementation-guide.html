@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building Spring Security Step by Step: A Complete Beginner Implementation Guide</title>
+<style>
+:root{
+  --ink:#16243d;--body:#3c4858;--muted:#6c7888;--faint:#9aa6b4;
+  --brand:#2557a7;--brand-dk:#1b3f7a;--brand-2:#0e7c86;--accent:#bd831a;
+  --bg:#eceff4;--paper:#fff;--line:#e2e7ef;--line-2:#eef1f6;
+  --ok:#1f8a4c;--ok-bg:#e9f6ee;--ok-line:#bfe5cd;
+  --bad:#c0392b;--bad-bg:#fbece9;--bad-line:#f0c9c2;
+  --warn:#9a6b10;--warn-bg:#fbf3e0;--warn-line:#ecd8a6;
+  --note:#2557a7;--note-bg:#ebf1fb;--note-line:#cadbf3;
+  --purple:#6d3fb0;--purple-bg:#f1ecfa;--purple-line:#d8c9f5;
+  --code-bg:#1e2533;--code-fg:#e4ecf2;
+  --mono:"SF Mono","Cascadia Code",Consolas,"Courier New",monospace;
+  --sans:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);font-size:16px;line-height:1.7;color:var(--body);background:var(--bg);}
+
+/* HERO */
+.hero{background:linear-gradient(150deg,#0d1a30 0%,#16243d 50%,#1b3260 100%);color:#fff;padding:54px 24px 48px;}
+.hero-in{max-width:1180px;margin:0 auto;}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#e6b860;margin-bottom:14px;}
+.hero h1{margin:0 0 14px;font-size:2.4rem;font-weight:800;line-height:1.12;letter-spacing:-.02em;max-width:22ch;}
+.hero p{margin:0;font-size:1.08rem;color:#cdd9e8;max-width:64ch;}
+.chips{margin-top:22px;display:flex;flex-wrap:wrap;gap:9px;}
+.chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#eaf1f9;border-radius:30px;padding:5px 14px;font-size:.82rem;}
+
+/* LAYOUT */
+.wrap{display:flex;max-width:1180px;margin:0 auto;gap:30px;padding:30px 24px 60px;align-items:flex-start;}
+nav.toc{flex:0 0 244px;position:sticky;top:24px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 1px 3px rgba(22,36,61,.05);max-height:calc(100vh - 48px);overflow-y:auto;}
+nav.toc h2{font-size:.68rem;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);margin:0 0 12px;}
+nav.toc ol{margin:0;padding:0;list-style:none;}
+nav.toc li{margin:0 0 2px;}
+nav.toc a{display:block;color:var(--body);text-decoration:none;font-size:.855rem;padding:5px 9px;border-radius:7px;}
+nav.toc a:hover{background:var(--note-bg);color:var(--brand);}
+main{flex:1 1 auto;min-width:0;max-width:840px;}
+
+/* CARDS */
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:28px 32px;margin-bottom:24px;box-shadow:0 1px 3px rgba(22,36,61,.05);}
+.card.lead{border-left:5px solid var(--accent);}
+h2.sec{font-size:1.5rem;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin:0 0 6px;}
+.sec-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--brand);margin-bottom:7px;}
+h3{font-size:1.05rem;color:var(--ink);font-weight:700;margin:24px 0 6px;}
+p{margin:0 0 12px;}p:last-child{margin-bottom:0;}
+strong{color:var(--ink);font-weight:650;}
+code{font-family:var(--mono);font-size:.85em;background:#eef1f6;color:#2c3e57;padding:2px 6px;border-radius:5px;border:1px solid var(--line);}
+ul,ol{padding-left:22px;margin:0 0 12px;}
+li{margin-bottom:5px;}
+
+/* CONCEPT CARD */
+.concept{background:var(--paper);border:1px solid var(--line);border-radius:16px;margin-bottom:28px;box-shadow:0 1px 3px rgba(22,36,61,.05);overflow:hidden;}
+.concept-head{display:flex;align-items:center;gap:16px;padding:22px 30px 18px;border-bottom:1px solid var(--line-2);}
+.badge{flex-shrink:0;width:50px;height:50px;border-radius:13px;background:linear-gradient(150deg,var(--brand),var(--brand-dk));color:#fff;font-size:1.4rem;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(37,87,167,.25);}
+.badge.amber{background:linear-gradient(150deg,#bd831a,#8a5e12);}
+.badge.teal{background:linear-gradient(150deg,#0e7c86,#0a5a61);}
+.concept-head .meta .cat{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:2px;}
+.concept-head h2{font-size:1.42rem;font-weight:800;color:var(--ink);margin:0;}
+.concept-body{padding:6px 30px 30px;}
+
+/* KICKERS */
+.kicker{display:block;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:22px 0 6px;color:var(--brand);}
+.kicker.k-why{color:var(--brand-2);}
+.kicker.k-ann{color:var(--purple);}
+.kicker.k-test{color:var(--ok);}
+.kicker.k-what{color:var(--accent);}
+
+/* CONTEXT BOX */
+.context{background:var(--warn-bg);border:1px solid var(--warn-line);border-left:4px solid var(--accent);border-radius:12px;padding:14px 18px;margin:0 0 18px;}
+.context .ct{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;}
+.context p{margin:0;font-size:.97rem;}
+
+/* STATUS */
+.status-row{display:flex;align-items:center;gap:10px;background:var(--line-2);border-radius:10px;padding:10px 15px;margin:10px 0;font-size:.94rem;}
+.tag{border-radius:6px;padding:3px 11px;font-size:.7rem;font-weight:700;letter-spacing:.03em;color:#fff;white-space:nowrap;}
+.t-must{background:var(--bad);}
+.t-opt{background:var(--muted);}
+.t-auto{background:var(--ok);}
+
+/* DUO */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;}
+.pane{border-radius:12px;padding:13px 16px;border:1px solid;}
+.pane .pt{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+.pane p{margin:0;font-size:.94rem;}
+.pane.without{background:var(--bad-bg);border-color:var(--bad-line);}.pane.without .pt{color:var(--bad);}
+.pane.gain{background:var(--ok-bg);border-color:var(--ok-line);}.pane.gain .pt{color:var(--ok);}
+
+/* CALLOUTS */
+.callout{border-radius:12px;padding:13px 17px;margin:14px 0;border:1px solid;}
+.callout .ct{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;}
+.callout p{margin:0;font-size:.96rem;}
+.c-note{background:var(--note-bg);border-color:var(--note-line);}.c-note .ct{color:var(--note);}
+.c-warn{background:var(--warn-bg);border-color:var(--warn-line);}.c-warn .ct{color:var(--warn);}
+.c-ok{background:var(--ok-bg);border-color:var(--ok-line);}.c-ok .ct{color:var(--ok);}
+.c-bad{background:var(--bad-bg);border-color:var(--bad-line);}.c-bad .ct{color:var(--bad);}
+
+/* CODE */
+.code-file{background:#2d3748;color:#9cdcfe;font-family:var(--mono);font-size:.8rem;padding:7px 16px;border-radius:9px 9px 0 0;display:block;border-bottom:1px solid #444;}
+pre{background:var(--code-bg);color:var(--code-fg);padding:16px;border-radius:0 0 9px 9px;overflow-x:auto;font-family:var(--mono);font-size:.83rem;line-height:1.65;margin:0 0 16px;}
+pre.solo{border-radius:9px;}
+pre code{background:none;color:inherit;padding:0;font-size:inherit;border:none;}
+.cm{color:#7e93a6;}
+.ck{color:#c678dd;}
+.ca{color:#e6b860;}
+.cs{color:#98c379;}
+
+/* POSTMAN BLOCK */
+.pm{background:#1a2535;border-radius:11px;padding:16px 18px;margin:12px 0;}
+.pm-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px;font-family:var(--mono);font-size:.83rem;}
+.pm-row:last-child{margin-bottom:0;}
+.pm-label{flex:0 0 90px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding-top:2px;}
+.pm-label.method-get{color:#61affe;}
+.pm-label.method-post{color:#49cc90;}
+.pm-val{color:#e4ecf2;flex:1;word-break:break-all;}
+.pm-result{background:#243040;border-radius:8px;padding:10px 14px;margin-top:8px;font-family:var(--mono);font-size:.82rem;}
+.pm-ok{color:#98c379;}
+.pm-bad{color:#e06c75;}
+.pm-head{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#7e93a6;margin-bottom:5px;}
+
+/* DIAGRAM */
+.diagram{background:#fafbfd;border:1px solid var(--line);border-radius:13px;padding:18px 18px 12px;margin:16px 0;}
+.diagram svg{display:block;width:100%;height:auto;}
+.diagram .cap{font-size:.82rem;color:var(--muted);text-align:center;margin-top:10px;font-style:italic;}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.87rem;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+th,td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top;}
+th{background:var(--ink);color:#fff;font-size:.74rem;letter-spacing:.03em;text-transform:uppercase;}
+tr:last-child td{border-bottom:none;}
+tbody tr:nth-child(even) td{background:#f8fafc;}
+td code{white-space:nowrap;}
+
+/* ARCH */
+.arch{background:#fafbfd;border:1px dashed var(--line);border-radius:10px;padding:16px;font-family:var(--mono);font-size:.8rem;white-space:pre;overflow-x:auto;color:var(--ink);line-height:1.5;margin:12px 0;}
+
+footer{background:var(--ink);color:#9fb0c4;text-align:center;font-size:.84rem;padding:26px;}
+footer b{color:#dde6f0;}
+
+@media(max-width:900px){
+  .wrap{flex-direction:column;}
+  nav.toc{position:static;width:100%;flex-basis:auto;max-height:none;}
+  .hero h1{font-size:1.9rem;}
+  .duo{grid-template-columns:1fr;}
+  .concept-head,.concept-body,.card{padding-left:18px;padding-right:18px;}
+}
+@media print{
+  body{background:#fff;}
+  .hero{background:#0d1a30!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  nav.toc{display:none;}
+  .wrap{display:block;padding:0;}
+  .card,.concept{break-inside:avoid;box-shadow:none;}
+  .diagram,pre,.pm,.duo,table{break-inside:avoid;}
+  pre{background:#fff;color:#1e2533;border:1px solid var(--line);}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-in">
+    <div class="eyebrow">Implementation guide &middot; One concept at a time &middot; Spring Security 6.x</div>
+    <h1>Building Spring Security Step by Step</h1>
+    <p>Every concept built in order, every file explained line by line, every dependency named before it appears. Start with nothing and end with a complete JWT-secured REST API.</p>
+    <div class="chips">
+      <span class="chip">Java 17</span>
+      <span class="chip">Spring Boot 3.x</span>
+      <span class="chip">Spring Security 6.x</span>
+      <span class="chip">H2 then MySQL</span>
+      <span class="chip">7 concepts</span>
+      <span class="chip">Test every step</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+<nav class="toc">
+  <h2>On this page</h2>
+  <ol>
+    <li><a href="#intro">How this guide works</a></li>
+    <li><a href="#c1">Concept 1 &mdash; Default behaviour</a></li>
+    <li><a href="#c2">Concept 2 &mdash; SecurityFilterChain</a></li>
+    <li><a href="#c3">Concept 3 &mdash; UserDetailsService</a></li>
+    <li><a href="#c4">Concept 4 &mdash; BCrypt passwords</a></li>
+    <li><a href="#c5">Concept 5 &mdash; Roles &amp; Authorisation</a></li>
+    <li><a href="#c6">Concept 6 &mdash; JWT</a></li>
+    <li><a href="#c7">Concept 7 &mdash; CSRF &amp; CORS</a></li>
+    <li><a href="#structure">Project structure</a></li>
+    <li><a href="#testflow">Full test sequence</a></li>
+    <li><a href="#annotations">Annotations reference</a></li>
+    <li><a href="#summary">What we built</a></li>
+    <li><a href="#errors">Common errors</a></li>
+  </ol>
+</nav>
+<main>
+
+<!-- INTRO -->
+<section class="card lead" id="intro">
+  <div class="sec-eyebrow">Before you begin</div>
+  <h2 class="sec">How this guide works</h2>
+  <p>This guide builds a complete, secure Spring Boot REST API concept by concept. Each concept adds one new idea. Before every concept, you will see <strong>why the previous step is not enough</strong> and <strong>what problem the new step solves</strong>. After every concept you will run the application and test it with Postman to confirm the idea works before moving on.</p>
+  <p>The application is a simple online banking system with three endpoints that grow more secure at each step:</p>
+  <table>
+    <thead><tr><th>Endpoint</th><th>Who should access it</th></tr></thead>
+    <tbody>
+    <tr><td><code>GET /home</code></td><td>Anyone &mdash; public, no login needed</td></tr>
+    <tr><td><code>GET /account</code></td><td>Any logged-in user</td></tr>
+    <tr><td><code>GET /admin</code></td><td>Only users with the ADMIN role</td></tr>
+    </tbody>
+  </table>
+  <div class="callout c-note">
+    <div class="ct">One rule above all</div>
+    <p>Do not skip ahead. Each concept depends on what was built before it. If you skip concept 3, concept 4 will not work. If you skip concept 5, concept 6 will not work. Build in order, test after each one.</p>
+  </div>
+</section>
+
+<!-- ===================== CONCEPT 1 ===================== -->
+<section class="concept" id="c1">
+  <div class="concept-head">
+    <span class="badge">1</span>
+    <div class="meta">
+      <div class="cat">Start here</div>
+      <h2>Project Creation and Default Spring Security Behaviour</h2>
+    </div>
+  </div>
+  <div class="concept-body">
+
+    <div class="context">
+      <div class="ct">Before we start &mdash; state of the application</div>
+      <p><strong>Where we are:</strong> Nothing exists yet. We are creating the project from scratch.<br>
+      <strong>What we are doing:</strong> Adding Spring Security for the very first time and watching what it does before we configure anything.<br>
+      <strong>Why this matters:</strong> Understanding the default behaviour shows us what Spring Security protects automatically, and why we must then customise it.</p>
+    </div>
+
+    <span class="kicker">1 &middot; The idea</span>
+    <p>When you add the Spring Security dependency to a Spring Boot project, it immediately locks down every URL, generates a random password, and shows a login form &mdash; all without a single line of your code. This is the safe default: everything is protected until you say otherwise.</p>
+
+    <span class="kicker">2 &middot; What we are going to add</span>
+    <ol>
+      <li>Create the Spring Boot project with the <code>spring-boot-starter-security</code> dependency.</li>
+      <li>Add a temporary controller with one endpoint so we have something to test.</li>
+      <li>Run the application and observe the automatic behaviour.</li>
+    </ol>
+
+    <div class="diagram">
+      <svg viewBox="0 0 560 110" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+        <defs><marker id="bi1" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker><marker id="bi1r" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c0392b"/></marker></defs>
+        <rect x="10" y="38" width="100" height="36" rx="9" fill="#eef1f6" stroke="#6c7888" stroke-width="1.4"/><text x="60" y="61" text-anchor="middle" font-size="12.5" fill="#3c4858">HTTP Request</text>
+        <line x1="112" y1="56" x2="148" y2="56" stroke="#3c4858" stroke-width="1.8" marker-end="url(#bi1)"/>
+        <rect x="150" y="24" width="200" height="66" rx="12" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.8"/>
+        <text x="250" y="50" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1b3f7a">Spring Security</text>
+        <text x="250" y="70" text-anchor="middle" font-size="11.5" fill="#2557a7">default: lock EVERYTHING</text>
+        <text x="250" y="84" text-anchor="middle" font-size="11" fill="#9aa6b4">auto-generated password in console</text>
+        <line x1="352" y1="56" x2="436" y2="56" stroke="#c0392b" stroke-width="2" marker-end="url(#bi1r)"/>
+        <rect x="438" y="38" width="106" height="36" rx="9" fill="#fbece9" stroke="#c0392b" stroke-width="1.5"/><text x="491" y="61" text-anchor="middle" font-size="12" font-weight="650" fill="#c0392b">redirect /login</text>
+      </svg>
+      <div class="cap">Concept 1: every request is blocked and redirected to the login page. No configuration written yet.</div>
+    </div>
+
+    <span class="kicker">3 &middot; Step-by-step implementation</span>
+    <p><strong>Step 1.</strong> Go to <code>start.spring.io</code>. Choose: Maven, Java 17, Spring Boot 3.x. Group: <code>com.banking</code>. Artifact: <code>banking-security</code>. Add one dependency: <strong>Spring Web</strong> and <strong>Spring Security</strong>. Download and open in your IDE.</p>
+    <p><strong>Step 2.</strong> The generated project already has the security dependency. Confirm it in pom.xml.</p>
+    <span class="code-file">pom.xml (the two key dependencies for this step)</span>
+    <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    <span class="cm">&lt;!-- Spring Web: lets this app receive HTTP requests --&gt;</span>
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
+    <span class="cm">&lt;!-- Spring Security: adds the entire security layer automatically --&gt;</span>
+&lt;/dependency&gt;</code></pre>
+
+    <p><strong>Step 3.</strong> Create a temporary test controller so we have something to request.</p>
+    <span class="code-file">src/main/java/com/banking/controller/TestController.java</span>
+    <pre><code><span class="ck">package</span> com.banking.controller;
+
+<span class="ck">import</span> org.springframework.web.bind.annotation.GetMapping;
+<span class="ck">import</span> org.springframework.web.bind.annotation.RestController;
+
+<span class="ca">@RestController</span>
+<span class="cm">// @RestController: marks this class as a web controller that returns data
+//   (not HTML pages). Every method's return value goes directly to the caller.
+//   It is mandatory for any class that handles HTTP requests in a REST API.</span>
+<span class="ck">public class</span> TestController {
+
+    <span class="ca">@GetMapping</span>(<span class="cs">"/home"</span>)
+    <span class="cm">// @GetMapping("/home"): maps HTTP GET requests for /home to this method.
+    //   Mandatory on each method you want to expose as an endpoint.</span>
+    <span class="ck">public</span> String home() {
+        <span class="ck">return</span> <span class="cs">"Welcome to the public home page"</span>;
+    }
+}</code></pre>
+
+    <span class="kicker k-ann">4 &middot; Annotations in this step</span>
+    <table>
+      <thead><tr><th>Annotation</th><th>What it does</th><th>Where</th><th>Status</th></tr></thead>
+      <tbody>
+      <tr><td><code>@RestController</code></td><td>Marks the class as a web controller; method return values become the HTTP response body (as JSON or plain text).</td><td>Class</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      <tr><td><code>@GetMapping</code></td><td>Maps this method to HTTP GET requests at the given path.</td><td>Method</td><td><span class="tag t-must">MANDATORY</span> per endpoint</td></tr>
+      </tbody>
+    </table>
+
+    <span class="kicker k-test">5 &middot; Run and test</span>
+    <p>Run the application. Look at the console output. You will see a line like this:</p>
+    <pre class="solo"><span class="cm">Using generated security password: a1b2c3d4-e5f6-...</span></pre>
+    <p>Copy that password. Now test with Postman:</p>
+    <div class="pm">
+      <div class="pm-head">Test 1 &mdash; access /home without logging in</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/home</span></div>
+      <div class="pm-row"><span class="pm-label">Headers</span><span class="pm-val">(none)</span></div>
+      <div class="pm-result"><span class="pm-bad">Result: 401 Unauthorized</span><br>Spring Security blocked the request. It does not know who you are.</div>
+    </div>
+    <div class="pm">
+      <div class="pm-head">Test 2 &mdash; login with the generated password</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/home</span></div>
+      <div class="pm-row"><span class="pm-label">Auth</span><span class="pm-val">Basic Auth &mdash; Username: <code>user</code> &nbsp; Password: (the generated password from console)</span></div>
+      <div class="pm-result"><span class="pm-ok">Result: 200 OK</span><br>"Welcome to the public home page"</div>
+    </div>
+
+    <span class="kicker k-what">6 &middot; What just happened</span>
+    <p>The moment you added <code>spring-boot-starter-security</code>, Spring automatically inserted a filter chain in front of every endpoint. That chain has one rule by default: nobody gets through without a valid username and password. When you provided the generated credentials, the chain verified them against an in-memory user called <code>user</code> and allowed the request. The entire login form, session, and password generation happened without you writing a single line of security code.</p>
+
+    <div class="callout c-warn">
+      <div class="ct">7 &middot; What is still missing</div>
+      <p>Spring locked <strong>everything</strong>, including our public home page. We need to open some URLs and restrict others based on roles. We do that next by defining our own security rules.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== CONCEPT 2 ===================== -->
+<section class="concept" id="c2">
+  <div class="concept-head">
+    <span class="badge amber">2</span>
+    <div class="meta">
+      <div class="cat">Access rules</div>
+      <h2>SecurityFilterChain &mdash; Taking Control of Access Rules</h2>
+    </div>
+  </div>
+  <div class="concept-body">
+
+    <div class="context">
+      <div class="ct">Depends on concept 1</div>
+      <p><strong>Where we are:</strong> Spring Security is active and locks everything.<br>
+      <strong>What is missing:</strong> We cannot open <code>/home</code> to the public, and we have no way to say "/admin needs the ADMIN role." The default locks everything equally.<br>
+      <strong>What we are adding:</strong> A <code>SecurityFilterChain</code> bean that lets us write our own URL rules: open, login-required, or role-required.</p>
+    </div>
+
+    <span class="kicker">1 &middot; The idea</span>
+    <p>A <code>SecurityFilterChain</code> is a configuration object that defines which URLs are public, which require a login, and which require a specific role. Defining one replaces Spring's lock-everything default with your own rules.</p>
+
+    <span class="kicker">2 &middot; What we are going to add</span>
+    <ol>
+      <li>Create <code>SecurityConfig.java</code> with URL rules.</li>
+      <li>Expand <code>TestController.java</code> with all three endpoints.</li>
+    </ol>
+
+    <div class="diagram">
+      <svg viewBox="0 0 640 130" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+        <defs><marker id="bi2" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker><marker id="bi2g" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#1f8a4c"/></marker><marker id="bi2r" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c0392b"/></marker></defs>
+        <rect x="10" y="50" width="100" height="36" rx="9" fill="#eef1f6" stroke="#6c7888" stroke-width="1.4"/><text x="60" y="73" text-anchor="middle" font-size="12.5" fill="#3c4858">Request</text>
+        <line x1="112" y1="68" x2="148" y2="68" stroke="#3c4858" stroke-width="1.8" marker-end="url(#bi2)"/>
+        <rect x="150" y="22" width="220" height="94" rx="12" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.8"/>
+        <text x="260" y="46" text-anchor="middle" font-size="13.5" font-weight="700" fill="#6b5417">SecurityFilterChain</text>
+        <text x="260" y="65" text-anchor="middle" font-size="11.5" fill="#9a6b10">/home &rarr; permitAll</text>
+        <text x="260" y="82" text-anchor="middle" font-size="11.5" fill="#9a6b10">/account &rarr; authenticated</text>
+        <text x="260" y="99" text-anchor="middle" font-size="11.5" fill="#9a6b10">/admin &rarr; hasRole ADMIN</text>
+        <line x1="372" y1="55" x2="438" y2="42" stroke="#1f8a4c" stroke-width="1.8" marker-end="url(#bi2g)"/><rect x="440" y="28" width="90" height="26" rx="7" fill="#e9f6ee" stroke="#1f8a4c"/><text x="485" y="46" text-anchor="middle" font-size="11.5" font-weight="650" fill="#1f6a3a">200 OK</text>
+        <line x1="372" y1="68" x2="438" y2="68" stroke="#1f8a4c" stroke-width="1.8" marker-end="url(#bi2g)"/><rect x="440" y="55" width="90" height="26" rx="7" fill="#e9f6ee" stroke="#1f8a4c"/><text x="485" y="73" text-anchor="middle" font-size="11.5" font-weight="650" fill="#1f6a3a">200 OK</text>
+        <line x1="372" y1="86" x2="438" y2="96" stroke="#c0392b" stroke-width="1.8" marker-end="url(#bi2r)"/><rect x="440" y="84" width="90" height="26" rx="7" fill="#fbece9" stroke="#c0392b"/><text x="485" y="102" text-anchor="middle" font-size="11.5" font-weight="650" fill="#c0392b">403</text>
+      </svg>
+      <div class="cap">Concept 2 adds: the SecurityFilterChain (amber) with three URL rules. Right side shows the result for each path.</div>
+    </div>
+
+    <span class="kicker">3 &middot; Step-by-step implementation</span>
+    <p><strong>Step 1.</strong> Create the security configuration class.</p>
+    <span class="code-file">src/main/java/com/banking/config/SecurityConfig.java</span>
+    <pre><code><span class="ck">package</span> com.banking.config;
+
+<span class="ck">import</span> org.springframework.context.annotation.Bean;
+<span class="ck">import</span> org.springframework.context.annotation.Configuration;
+<span class="ck">import</span> org.springframework.security.config.annotation.web.builders.HttpSecurity;
+<span class="ck">import</span> org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+<span class="ck">import</span> org.springframework.security.web.SecurityFilterChain;
+
+<span class="ca">@Configuration</span>
+<span class="cm">// @Configuration: tells Spring this class provides setup beans.
+//   Mandatory for any class that contains @Bean methods Spring should use.</span>
+
+<span class="ca">@EnableWebSecurity</span>
+<span class="cm">// @EnableWebSecurity: activates Spring Security for the web layer and
+//   tells it to use OUR SecurityFilterChain instead of the default.
+//   Without this, Spring ignores our filterChain bean.</span>
+
+<span class="ck">public class</span> SecurityConfig {
+
+    <span class="ca">@Bean</span>
+    <span class="cm">// @Bean: tells Spring to manage the object returned by this method.
+    //   Without @Bean, Spring never picks up this SecurityFilterChain.</span>
+    <span class="ck">public</span> SecurityFilterChain filterChain(HttpSecurity http) <span class="ck">throws</span> Exception {
+        http
+            .authorizeHttpRequests(auth -&gt; auth
+                .requestMatchers(<span class="cs">"/home"</span>).permitAll()
+                <span class="cm">// permitAll(): anyone can access /home, no login needed</span>
+                .requestMatchers(<span class="cs">"/account"</span>).authenticated()
+                <span class="cm">// authenticated(): must be logged in, any role</span>
+                .requestMatchers(<span class="cs">"/admin"</span>).hasRole(<span class="cs">"ADMIN"</span>)
+                <span class="cm">// hasRole("ADMIN"): must be logged in AND have ROLE_ADMIN</span>
+                .anyRequest().authenticated()
+                <span class="cm">// anyRequest(): everything else also needs a login</span>
+            )
+            .httpBasic(org.springframework.security.config.Customizer.withDefaults());
+            <span class="cm">// httpBasic: allow username+password in the Authorization header.
+            //   This keeps testing simple. We will replace this with JWT in concept 6.</span>
+        <span class="ck">return</span> http.build();
+    }
+}</code></pre>
+
+    <p><strong>Step 2.</strong> Expand the controller with all three endpoints.</p>
+    <span class="code-file">src/main/java/com/banking/controller/TestController.java</span>
+    <pre><code><span class="ck">package</span> com.banking.controller;
+
+<span class="ck">import</span> org.springframework.web.bind.annotation.GetMapping;
+<span class="ck">import</span> org.springframework.web.bind.annotation.RestController;
+
+<span class="ca">@RestController</span>
+<span class="ck">public class</span> TestController {
+
+    <span class="ca">@GetMapping</span>(<span class="cs">"/home"</span>)
+    <span class="ck">public</span> String home() { <span class="ck">return</span> <span class="cs">"Public home page - no login needed"</span>; }
+
+    <span class="ca">@GetMapping</span>(<span class="cs">"/account"</span>)
+    <span class="ck">public</span> String account() { <span class="ck">return</span> <span class="cs">"Your account - login required"</span>; }
+
+    <span class="ca">@GetMapping</span>(<span class="cs">"/admin"</span>)
+    <span class="ck">public</span> String admin() { <span class="ck">return</span> <span class="cs">"Admin panel - ADMIN role required"</span>; }
+}</code></pre>
+
+    <span class="kicker k-ann">4 &middot; Annotations in this step</span>
+    <table>
+      <thead><tr><th>Annotation</th><th>What it does</th><th>Where</th><th>Status</th></tr></thead>
+      <tbody>
+      <tr><td><code>@Configuration</code></td><td>Declares this class as a source of Spring beans.</td><td>SecurityConfig class</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      <tr><td><code>@EnableWebSecurity</code></td><td>Activates Spring Security and makes Spring use our SecurityFilterChain instead of its default.</td><td>SecurityConfig class</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      <tr><td><code>@Bean</code></td><td>Tells Spring to manage the returned SecurityFilterChain object.</td><td>filterChain method</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      </tbody>
+    </table>
+
+    <span class="kicker k-test">5 &middot; Run and test</span>
+    <p>Restart the app. The generated password is still in the console (username: <code>user</code>).</p>
+    <div class="pm">
+      <div class="pm-head">Test 1 &mdash; /home with no credentials</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/home</span></div>
+      <div class="pm-result"><span class="pm-ok">200 OK: "Public home page - no login needed"</span></div>
+    </div>
+    <div class="pm">
+      <div class="pm-head">Test 2 &mdash; /account with credentials</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/account</span></div>
+      <div class="pm-row"><span class="pm-label">Auth</span><span class="pm-val">Basic Auth &mdash; user / (generated password)</span></div>
+      <div class="pm-result"><span class="pm-ok">200 OK: "Your account - login required"</span></div>
+    </div>
+    <div class="pm">
+      <div class="pm-head">Test 3 &mdash; /admin with credentials (but user is not an admin)</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/admin</span></div>
+      <div class="pm-row"><span class="pm-label">Auth</span><span class="pm-val">Basic Auth &mdash; user / (generated password)</span></div>
+      <div class="pm-result"><span class="pm-bad">403 Forbidden</span><br>The user is known, but does not have ROLE_ADMIN.</div>
+    </div>
+
+    <span class="kicker k-what">6 &middot; What just happened</span>
+    <p>Spring Security read our <code>SecurityFilterChain</code> bean and replaced its lock-everything default with our three rules. For Test 1, the chain matched <code>/home</code> to <code>permitAll()</code> and let the request through immediately. For Test 2, it matched <code>/account</code> to <code>authenticated()</code>, checked our credentials against the in-memory user, confirmed our identity, and allowed access. For Test 3, it matched <code>/admin</code> to <code>hasRole("ADMIN")</code>, found that the default <code>user</code> has no roles, and returned 403 without reaching the controller.</p>
+
+    <div class="callout c-warn">
+      <div class="ct">7 &middot; What is still missing</div>
+      <p>We are still using Spring's auto-generated in-memory user. A real app has many users stored in a database. Next we connect Spring Security to our own database.</p>
+    </div>
+
+  </div>
+</section>
+
+</main>
+</div>
+<div class="wrap" style="padding-top:0;">
+<div style="flex:0 0 244px;"></div>
+<main style="max-width:840px;">
+
+<!-- ===================== CONCEPT 3 ===================== -->
+<section class="concept" id="c3">
+  <div class="concept-head">
+    <span class="badge teal">3</span>
+    <div class="meta">
+      <div class="cat">Real users</div>
+      <h2>UserDetails &amp; UserDetailsService &mdash; Connecting to a Database</h2>
+    </div>
+  </div>
+  <div class="concept-body">
+
+    <div class="context">
+      <div class="ct">Builds on concept 2</div>
+      <p><strong>Where we are:</strong> We have access rules (concept 2), but only one hardcoded in-memory user with a generated password. Every restart changes the password.<br>
+      <strong>What is missing:</strong> Real users stored in a database. Spring Security does not know your table structure, so it cannot load them on its own.<br>
+      <strong>What we are adding:</strong> A <code>UserDetailsService</code> &mdash; a bridge that loads your User from your database and hands it to Spring Security in the shape it understands.</p>
+    </div>
+
+    <span class="kicker">1 &middot; The idea</span>
+    <p><code>UserDetailsService</code> is an interface with one method: given a username, return the user's security details. You implement it so Spring Security can look up users in your database during every login attempt.</p>
+
+    <span class="kicker">2 &middot; What we are going to add</span>
+    <ol>
+      <li>Add H2 (in-memory database) and JPA dependencies to pom.xml.</li>
+      <li>Create the <code>User</code> entity.</li>
+      <li>Create <code>UserRepository</code>.</li>
+      <li>Create <code>CustomUserDetailsService</code> implementing <code>UserDetailsService</code>.</li>
+      <li>Update <code>SecurityConfig</code> to use our service.</li>
+      <li>Add <code>application.properties</code> settings for H2.</li>
+      <li>Add <code>data.sql</code> with a test user (plain-text password for now &mdash; we fix this in concept 4).</li>
+    </ol>
+
+    <div class="diagram">
+      <svg viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+        <defs><marker id="bi3" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker></defs>
+        <rect x="10" y="62" width="100" height="36" rx="9" fill="#eef1f6" stroke="#6c7888" stroke-width="1.4"/><text x="60" y="85" text-anchor="middle" font-size="12" fill="#3c4858">Login request</text>
+        <line x1="112" y1="80" x2="148" y2="80" stroke="#3c4858" stroke-width="1.8" marker-end="url(#bi3)"/>
+        <rect x="150" y="50" width="164" height="60" rx="11" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.8"/><text x="232" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="#6b5417">Authentication</text><text x="232" y="95" text-anchor="middle" font-size="11" fill="#9a6b10">calls loadUserByUsername()</text>
+        <line x1="316" y1="80" x2="362" y2="80" stroke="#3c4858" stroke-width="1.8" marker-end="url(#bi3)"/>
+        <rect x="364" y="38" width="180" height="84" rx="11" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.8"/><text x="454" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#0c6a6e">CustomUserDetails</text><text x="454" y="86" text-anchor="middle" font-size="11.5" fill="#0e7c86">Service</text><text x="454" y="104" text-anchor="middle" font-size="10.5" fill="#6c7888">queries UserRepository</text>
+        <g transform="translate(556,50)">
+          <ellipse cx="56" cy="10" rx="52" ry="9" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.3"/>
+          <path d="M4,10 v38 a52,9 0 0 0 104,0 v-38" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.3"/>
+          <ellipse cx="56" cy="10" rx="52" ry="9" fill="#eafaf8" stroke="#0e7c86" stroke-width="1.3"/>
+          <text x="56" y="36" text-anchor="middle" font-size="11" font-weight="650" fill="#0c6a6e">H2 users table</text>
+        </g>
+        <line x1="544" y1="78" x2="558" y2="78" stroke="#3c4858" stroke-width="1.6" marker-end="url(#bi3)"/>
+      </svg>
+      <div class="cap">Concept 3 adds: the UserDetailsService (teal) which queries the H2 database. Authentication now loads real users instead of the in-memory default.</div>
+    </div>
+
+    <span class="kicker">3 &middot; Step-by-step implementation</span>
+    <p><strong>Step 1.</strong> Add H2 and JPA to pom.xml.</p>
+    <span class="code-file">pom.xml (add these two dependencies)</span>
+    <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+    <span class="cm">&lt;!-- JPA: lets us map Java classes to database tables --&gt;</span>
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.h2database&lt;/groupId&gt;
+    &lt;artifactId&gt;h2&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+    <span class="cm">&lt;!-- H2: a lightweight in-memory database. No installation needed. --&gt;</span>
+&lt;/dependency&gt;</code></pre>
+
+    <p><strong>Step 2.</strong> Configure H2 in application.properties.</p>
+    <span class="code-file">src/main/resources/application.properties</span>
+    <pre><code>spring.datasource.url=jdbc:h2:mem:bankingdb  <span class="cm"># use an in-memory database named bankingdb</span>
+spring.datasource.driver-class-name=org.h2.Driver  <span class="cm"># H2's JDBC driver</span>
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect  <span class="cm"># SQL dialect for H2</span>
+spring.jpa.hibernate.ddl-auto=create-drop  <span class="cm"># create tables on start, drop on stop</span>
+spring.sql.init.mode=always  <span class="cm"># run data.sql every startup</span></code></pre>
+
+    <p><strong>Step 3.</strong> Create the User entity (the database table definition).</p>
+    <span class="code-file">src/main/java/com/banking/model/User.java</span>
+    <pre><code><span class="ck">package</span> com.banking.model;
+
+<span class="ck">import</span> jakarta.persistence.*;
+
+<span class="ca">@Entity</span>
+<span class="cm">// @Entity: tells JPA this class maps to a database table. Mandatory for stored objects.</span>
+<span class="ca">@Table</span>(name = <span class="cs">"users"</span>)
+<span class="cm">// @Table(name="users"): the actual table name in the database. Optional; defaults to class name.</span>
+<span class="ck">public class</span> User {
+
+    <span class="ca">@Id</span>
+    <span class="cm">// @Id: marks this field as the primary key (the unique identifier for each row).</span>
+    <span class="ca">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)
+    <span class="cm">// @GeneratedValue: the database auto-generates the id (1, 2, 3...). We never set it.</span>
+    <span class="ck">private</span> Long id;
+
+    <span class="ca">@Column</span>(unique = <span class="ck">true</span>, nullable = <span class="ck">false</span>)
+    <span class="cm">// @Column: fine-tunes the column. unique=true prevents duplicate usernames.</span>
+    <span class="ck">private</span> String username;
+
+    <span class="ck">private</span> String password;  <span class="cm">// stored as plain text for now; we fix this in concept 4</span>
+
+    <span class="cm">// getters and setters</span>
+    <span class="ck">public</span> Long getId() { <span class="ck">return</span> id; }
+    <span class="ck">public</span> String getUsername() { <span class="ck">return</span> username; }
+    <span class="ck">public void</span> setUsername(String u) { <span class="ck">this</span>.username = u; }
+    <span class="ck">public</span> String getPassword() { <span class="ck">return</span> password; }
+    <span class="ck">public void</span> setPassword(String p) { <span class="ck">this</span>.password = p; }
+}</code></pre>
+
+    <p><strong>Step 4.</strong> Create the repository (the database query interface).</p>
+    <span class="code-file">src/main/java/com/banking/repository/UserRepository.java</span>
+    <pre><code><span class="ck">package</span> com.banking.repository;
+
+<span class="ck">import</span> com.banking.model.User;
+<span class="ck">import</span> org.springframework.data.jpa.repository.JpaRepository;
+<span class="ck">import</span> java.util.Optional;
+
+<span class="ck">public interface</span> UserRepository <span class="ck">extends</span> JpaRepository&lt;User, Long&gt; {
+    <span class="cm">// JpaRepository gives us findAll, save, delete, etc. for free.
+    // We only need to add the specific query Spring Security requires:</span>
+    Optional&lt;User&gt; findByUsername(String username);
+    <span class="cm">// Spring Data reads the method name and writes the SQL automatically:
+    //   SELECT * FROM users WHERE username = ?
+    // No implementation needed from us.</span>
+}</code></pre>
+
+    <p><strong>Step 5.</strong> Create the bridge: CustomUserDetailsService.</p>
+    <span class="code-file">src/main/java/com/banking/service/CustomUserDetailsService.java</span>
+    <pre><code><span class="ck">package</span> com.banking.service;
+
+<span class="ck">import</span> com.banking.repository.UserRepository;
+<span class="ck">import</span> org.springframework.security.core.userdetails.*;
+<span class="ck">import</span> org.springframework.stereotype.Service;
+<span class="ck">import java.util</span>.Collections;
+
+<span class="ca">@Service</span>
+<span class="cm">// @Service: marks this as a business logic component. Spring manages it and
+//   we can inject it with @Autowired. Mandatory for Spring to find and use it.</span>
+<span class="ck">public class</span> CustomUserDetailsService <span class="ck">implements</span> UserDetailsService {
+    <span class="cm">// Implementing UserDetailsService is the contract that connects us to Spring Security.
+    //   There is exactly one method to implement: loadUserByUsername.</span>
+
+    <span class="ck">private final</span> UserRepository userRepository;
+
+    <span class="ck">public</span> CustomUserDetailsService(UserRepository userRepository) {
+        <span class="ck">this</span>.userRepository = userRepository;
+        <span class="cm">// Constructor injection: Spring automatically provides the UserRepository.</span>
+    }
+
+    <span class="ca">@Override</span>
+    <span class="ck">public</span> UserDetails loadUserByUsername(String username) <span class="ck">throws</span> UsernameNotFoundException {
+        <span class="cm">// Spring Security calls this method on every login attempt.
+        //   It passes the username entered on the login form.</span>
+        com.banking.model.User user = userRepository.findByUsername(username)
+            .orElseThrow(() -&gt; <span class="ck">new</span> UsernameNotFoundException(<span class="cs">"User not found: "</span> + username));
+        <span class="cm">// If no user is found, we throw UsernameNotFoundException. Spring Security
+        //   catches this and returns a 401 Unauthorized response automatically.</span>
+
+        <span class="ck">return new</span> org.springframework.security.core.userdetails.User(
+            user.getUsername(),
+            user.getPassword(),  <span class="cm">// plain text for now; fixed in concept 4</span>
+            Collections.emptyList()  <span class="cm">// no roles yet; we add them in concept 5</span>
+        );
+        <span class="cm">// We return Spring's built-in User class (which implements UserDetails).
+        //   It carries the username, password, and list of roles for this request.</span>
+    }
+}</code></pre>
+
+    <p><strong>Step 6.</strong> Tell SecurityConfig to use our service. Add this method to SecurityConfig.java.</p>
+    <span class="code-file">src/main/java/com/banking/config/SecurityConfig.java (add this method)</span>
+    <pre><code><span class="cm">// Add this import at the top of SecurityConfig.java:</span>
+<span class="ck">import</span> org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+
+<span class="cm">// Add this method inside the SecurityConfig class:</span>
+<span class="ca">@Bean</span>
+<span class="ck">public</span> DaoAuthenticationProvider authenticationProvider(
+        CustomUserDetailsService userDetailsService) {
+
+    DaoAuthenticationProvider provider = <span class="ck">new</span> DaoAuthenticationProvider();
+    provider.setUserDetailsService(userDetailsService);
+    <span class="cm">// Tell the provider to use our CustomUserDetailsService to load users.</span>
+    provider.setPasswordEncoder(
+        org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance());
+    <span class="cm">// NoOpPasswordEncoder: compares passwords as plain text. ONLY for temporary testing.
+    //   We replace this with BCrypt in concept 4. Never use this in production.</span>
+    <span class="ck">return</span> provider;
+}</code></pre>
+
+    <p><strong>Step 7.</strong> Add a test user to the database on startup.</p>
+    <span class="code-file">src/main/resources/data.sql</span>
+    <pre><code><span class="cm">-- This file runs automatically when the app starts (because spring.sql.init.mode=always)</span>
+INSERT INTO users (username, password) VALUES (<span class="cs">'alice'</span>, <span class="cs">'password123'</span>);
+<span class="cm">-- Plain-text password for now. We replace this with a BCrypt hash in concept 4.</span></code></pre>
+
+    <span class="kicker k-ann">4 &middot; Annotations in this step</span>
+    <table>
+      <thead><tr><th>Annotation</th><th>What it does</th><th>Where</th><th>Status</th></tr></thead>
+      <tbody>
+      <tr><td><code>@Entity</code></td><td>Maps this Java class to a database table.</td><td>User class</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      <tr><td><code>@Table</code></td><td>Sets the table name. Defaults to the class name if omitted.</td><td>User class</td><td><span class="tag t-opt">OPTIONAL</span></td></tr>
+      <tr><td><code>@Id</code></td><td>Marks the primary key field.</td><td>id field</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      <tr><td><code>@GeneratedValue</code></td><td>Database auto-generates the id value.</td><td>id field</td><td><span class="tag t-opt">OPTIONAL</span> (recommended)</td></tr>
+      <tr><td><code>@Column</code></td><td>Customises the column (e.g. unique, nullable).</td><td>Field</td><td><span class="tag t-opt">OPTIONAL</span></td></tr>
+      <tr><td><code>@Service</code></td><td>Marks as a Spring-managed service component.</td><td>CustomUserDetailsService class</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      </tbody>
+    </table>
+
+    <span class="kicker k-test">5 &middot; Run and test</span>
+    <div class="pm">
+      <div class="pm-head">Test &mdash; /account with the real database user</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/account</span></div>
+      <div class="pm-row"><span class="pm-label">Auth</span><span class="pm-val">Basic Auth &mdash; alice / password123</span></div>
+      <div class="pm-result"><span class="pm-ok">200 OK: "Your account - login required"</span><br>Spring loaded alice from the H2 database, not from memory.</div>
+    </div>
+    <div class="pm">
+      <div class="pm-head">Test &mdash; wrong password</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/account</span></div>
+      <div class="pm-row"><span class="pm-label">Auth</span><span class="pm-val">Basic Auth &mdash; alice / wrongpassword</span></div>
+      <div class="pm-result"><span class="pm-bad">401 Unauthorized</span></div>
+    </div>
+
+    <span class="kicker k-what">6 &middot; What just happened</span>
+    <p>When the request arrived with alice's credentials, Spring Security called our <code>loadUserByUsername("alice")</code> method. That method used <code>UserRepository</code> to query the H2 database, found alice's row, and returned a <code>UserDetails</code> object with her username and password. Spring's <code>DaoAuthenticationProvider</code> then compared the submitted password against the stored one using the password encoder. Because we used <code>NoOpPasswordEncoder</code> (plain-text comparison), it matched and the request was allowed.</p>
+
+    <div class="callout c-bad">
+      <div class="ct">7 &middot; What is still missing</div>
+      <p>Alice's password is stored as plain text in the database. If the database is ever leaked, every password is immediately visible. We fix this now in concept 4.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== CONCEPT 4 ===================== -->
+<section class="concept" id="c4">
+  <div class="concept-head">
+    <span class="badge amber">4</span>
+    <div class="meta">
+      <div class="cat">Password safety</div>
+      <h2>Password Encoding with BCrypt</h2>
+    </div>
+  </div>
+  <div class="concept-body">
+
+    <div class="context">
+      <div class="ct">Builds on concept 3</div>
+      <p><strong>Where we are:</strong> Users load from a real database (concept 3). But passwords are stored as plain text. One database leak exposes everyone's passwords immediately.<br>
+      <strong>What we are adding:</strong> BCryptPasswordEncoder &mdash; a one-way hashing algorithm. From this point forward, no plain password is ever stored.<br>
+      <strong>Why now:</strong> Every password written from this concept onward must be a BCrypt hash. If we add more users later with plain text, they will not work.</p>
+    </div>
+
+    <span class="kicker">1 &middot; The idea</span>
+    <p>BCrypt takes a plain password and produces a scrambled, irreversible string (a hash). Spring Security never stores or compares plain passwords &mdash; it hashes the login attempt and compares the two hashes. The original is never needed again.</p>
+
+    <span class="kicker">2 &middot; What we are going to change</span>
+    <ol>
+      <li>Replace <code>NoOpPasswordEncoder</code> with <code>BCryptPasswordEncoder</code> in SecurityConfig.</li>
+      <li>Update data.sql to store a BCrypt hash instead of plain text.</li>
+    </ol>
+
+    <span class="kicker">3 &middot; Step-by-step implementation</span>
+    <p><strong>Step 1.</strong> Replace the password encoder bean in SecurityConfig. Find the line with <code>NoOpPasswordEncoder</code> and change the entire <code>authenticationProvider</code> method.</p>
+    <span class="code-file">src/main/java/com/banking/config/SecurityConfig.java (updated authenticationProvider)</span>
+    <pre><code><span class="ca">@Bean</span>
+<span class="ck">public</span> PasswordEncoder passwordEncoder() {
+    <span class="ck">return new</span> BCryptPasswordEncoder();
+    <span class="cm">// BCryptPasswordEncoder: hashes passwords using the BCrypt algorithm.
+    //   We declare it as a @Bean so it can be injected anywhere that needs it.
+    //   We never call encode() ourselves at login; Spring does that automatically.</span>
+}
+
+<span class="ca">@Bean</span>
+<span class="ck">public</span> DaoAuthenticationProvider authenticationProvider(
+        CustomUserDetailsService userDetailsService,
+        PasswordEncoder passwordEncoder) {
+    DaoAuthenticationProvider provider = <span class="ck">new</span> DaoAuthenticationProvider();
+    provider.setUserDetailsService(userDetailsService);
+    provider.setPasswordEncoder(passwordEncoder);
+    <span class="cm">// We now tell the provider to use BCrypt for password comparison.
+    //   At login, Spring calls passwordEncoder.matches(rawPassword, storedHash).
+    //   If they match, login succeeds. The raw password is never stored.</span>
+    <span class="ck">return</span> provider;
+}</code></pre>
+
+    <p><strong>Step 2.</strong> Generate a BCrypt hash for alice's password. Open a quick Java class or use an online BCrypt tool. The hash looks like this:</p>
+    <pre class="solo"><span class="cs">password123</span>  hashes to  <span class="cm">$2a$10$7EqJtq98hPqEX7fNZaFWoO3KnPMBqllEp.MN7U5LzFqE.7MfXjM7m</span>
+<span class="cm"># Every BCrypt hash starts with $2a$ or $2b$, followed by the work factor (10 rounds here).
+# The same password produces a different hash each time due to the random salt.
+# That is intentional and expected.</span></pre>
+
+    <span class="code-file">src/main/resources/data.sql</span>
+    <pre><code><span class="cm">-- Replace the previous INSERT with this one:</span>
+INSERT INTO users (username, password)
+VALUES (<span class="cs">'alice'</span>, <span class="cs">'$2a$10$7EqJtq98hPqEX7fNZaFWoO3KnPMBqllEp.MN7U5LzFqE.7MfXjM7m'</span>);
+<span class="cm">-- The stored value is the BCrypt hash of 'password123', not the password itself.
+-- Spring's BCryptPasswordEncoder.matches("password123", storedHash) returns true at login.</span></code></pre>
+
+    <span class="kicker k-ann">4 &middot; Annotations in this step</span>
+    <table>
+      <thead><tr><th>Annotation</th><th>What it does</th><th>Where</th><th>Status</th></tr></thead>
+      <tbody>
+      <tr><td><code>@Bean</code></td><td>Registers <code>BCryptPasswordEncoder</code> as a Spring-managed object that can be injected anywhere.</td><td>passwordEncoder method</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      </tbody>
+    </table>
+
+    <span class="kicker k-test">5 &middot; Run and test</span>
+    <div class="pm">
+      <div class="pm-head">Test 1 &mdash; login with correct password</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/account</span></div>
+      <div class="pm-row"><span class="pm-label">Auth</span><span class="pm-val">Basic Auth &mdash; alice / password123</span></div>
+      <div class="pm-result"><span class="pm-ok">200 OK</span><br>Spring hashed "password123" and compared it to the stored BCrypt hash. They matched.</div>
+    </div>
+    <div class="pm">
+      <div class="pm-head">Test 2 &mdash; login with wrong password</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/account</span></div>
+      <div class="pm-row"><span class="pm-label">Auth</span><span class="pm-val">Basic Auth &mdash; alice / wrongpassword</span></div>
+      <div class="pm-result"><span class="pm-bad">401 Unauthorized</span><br>The hash of "wrongpassword" does not match the stored hash.</div>
+    </div>
+
+    <span class="kicker k-what">6 &middot; What just happened</span>
+    <p>Spring Security called <code>passwordEncoder.matches("password123", "$2a$10$...")</code>. BCrypt re-hashed the submitted password using the salt embedded in the stored hash and compared the result. They matched, so login succeeded. The plain password "password123" was never stored anywhere &mdash; not in the database, not in memory, not in any log file.</p>
+
+    <div class="callout c-warn">
+      <div class="ct">7 &middot; What is still missing</div>
+      <p>Every logged-in user can reach <code>/admin</code>, because all users have the same level. We need to attach roles to users and enforce them &mdash; that is concept 5.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== CONCEPT 5 ===================== -->
+<section class="concept" id="c5">
+  <div class="concept-head">
+    <span class="badge">5</span>
+    <div class="meta">
+      <div class="cat">Access levels</div>
+      <h2>Roles and Authorisation &mdash; Controlling What Each User Can Do</h2>
+    </div>
+  </div>
+  <div class="concept-body">
+
+    <div class="context">
+      <div class="ct">Builds on concepts 3 and 4</div>
+      <p><strong>Where we are:</strong> Authentication works (concept 3) with safe passwords (concept 4). But all users are equal &mdash; any logged-in user could reach <code>/admin</code>.<br>
+      <strong>What is missing:</strong> Roles. Our <code>SecurityConfig</code> already says <code>hasRole("ADMIN")</code>, but no user carries a role yet, so the rule never matches.<br>
+      <strong>What we are adding:</strong> A <code>role</code> field on the User entity and wiring it into <code>UserDetailsService</code> as a <code>GrantedAuthority</code> (the technical term for a role or permission in Spring Security).</p>
+    </div>
+
+    <span class="kicker">1 &middot; The idea</span>
+    <p>Roles are labels stored on the user record. When the user logs in, <code>loadUserByUsername()</code> includes their role. Spring Security reads that role from the Security Context on every request and compares it to the access rules in <code>SecurityConfig</code>.</p>
+
+    <span class="kicker">2 &middot; What we are going to change</span>
+    <ol>
+      <li>Add a <code>role</code> field to the <code>User</code> entity.</li>
+      <li>Update <code>data.sql</code> with two users: one ROLE_USER and one ROLE_ADMIN.</li>
+      <li>Update <code>CustomUserDetailsService</code> to include the role in the returned <code>UserDetails</code>.</li>
+    </ol>
+
+    <div class="diagram">
+      <svg viewBox="0 0 700 170" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+        <defs><marker id="bi5" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker><marker id="bi5g" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#1f8a4c"/></marker><marker id="bi5r" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c0392b"/></marker></defs>
+        <rect x="10" y="70" width="100" height="36" rx="9" fill="#eef1f6" stroke="#6c7888" stroke-width="1.4"/><text x="60" y="90" text-anchor="middle" font-size="11.5" fill="#3c4858">Login request</text>
+        <line x1="112" y1="88" x2="148" y2="88" stroke="#3c4858" stroke-width="1.8" marker-end="url(#bi5)"/>
+        <rect x="150" y="58" width="160" height="60" rx="11" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.8"/><text x="230" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="#0c6a6e">UserDetails</text><text x="230" y="100" text-anchor="middle" font-size="11" fill="#0c6a6e">+ ROLE_USER or ROLE_ADMIN</text>
+        <line x1="312" y1="88" x2="356" y2="88" stroke="#3c4858" stroke-width="1.8" marker-end="url(#bi5)"/>
+        <rect x="358" y="46" width="162" height="84" rx="11" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.8"/><text x="439" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#6b5417">SecurityFilterChain</text><text x="439" y="88" text-anchor="middle" font-size="11" fill="#9a6b10">reads role from context</text><text x="439" y="106" text-anchor="middle" font-size="11" fill="#9a6b10">compares to rules</text>
+        <line x1="522" y1="72" x2="576" y2="56" stroke="#1f8a4c" stroke-width="1.8" marker-end="url(#bi5g)"/><text x="600" y="50" text-anchor="middle" font-size="11" fill="#1f8a4c">ADMIN: 200</text>
+        <line x1="522" y1="104" x2="576" y2="120" stroke="#c0392b" stroke-width="1.8" marker-end="url(#bi5r)"/><text x="598" y="134" text-anchor="middle" font-size="11" fill="#c0392b">USER: 403</text>
+      </svg>
+      <div class="cap">Concept 5 adds: the role flows from the database through UserDetails into the Security Context. The filter chain now enforces role-based access.</div>
+    </div>
+
+    <span class="kicker">3 &middot; Step-by-step implementation</span>
+    <p><strong>Step 1.</strong> Add the role field to the User entity.</p>
+    <span class="code-file">src/main/java/com/banking/model/User.java (add this field)</span>
+    <pre><code><span class="ck">private</span> String role;
+<span class="cm">// Stores the role name as a string, e.g. "ROLE_USER" or "ROLE_ADMIN".
+// Spring Security expects role names to start with "ROLE_" when using hasRole().</span>
+
+<span class="cm">// Add getter and setter:</span>
+<span class="ck">public</span> String getRole() { <span class="ck">return</span> role; }
+<span class="ck">public void</span> setRole(String r) { <span class="ck">this</span>.role = r; }</code></pre>
+
+    <p><strong>Step 2.</strong> Update data.sql with two users, different roles.</p>
+    <span class="code-file">src/main/resources/data.sql</span>
+    <pre><code>INSERT INTO users (username, password, role) VALUES
+  (<span class="cs">'alice'</span>, <span class="cs">'$2a$10$7EqJtq98hPqEX7fNZaFWoO3KnPMBqllEp.MN7U5LzFqE.7MfXjM7m'</span>, <span class="cs">'ROLE_USER'</span>),
+  (<span class="cs">'bob'</span>,   <span class="cs">'$2a$10$7EqJtq98hPqEX7fNZaFWoO3KnPMBqllEp.MN7U5LzFqE.7MfXjM7m'</span>, <span class="cs">'ROLE_ADMIN'</span>);
+<span class="cm">-- Both use the same hash for simplicity (both have password 'password123').
+-- alice is a regular user. bob is an admin.
+-- ROLE_USER and ROLE_ADMIN must start with "ROLE_" for hasRole("USER") / hasRole("ADMIN") to work.</span></code></pre>
+
+    <p><strong>Step 3.</strong> Update CustomUserDetailsService to include the role.</p>
+    <span class="code-file">src/main/java/com/banking/service/CustomUserDetailsService.java (updated return)</span>
+    <pre><code><span class="ck">import</span> org.springframework.security.core.authority.SimpleGrantedAuthority;
+<span class="ck">import java.util</span>.List;
+
+<span class="cm">// Replace the Collections.emptyList() line with:</span>
+<span class="ck">return new</span> org.springframework.security.core.userdetails.User(
+    user.getUsername(),
+    user.getPassword(),
+    List.of(<span class="ck">new</span> SimpleGrantedAuthority(user.getRole()))
+    <span class="cm">// SimpleGrantedAuthority wraps the role string ("ROLE_ADMIN") as a GrantedAuthority.
+    // A GrantedAuthority is what Spring Security calls any permission or role.
+    // Spring's hasRole("ADMIN") check looks for a GrantedAuthority named "ROLE_ADMIN".</span>
+);</code></pre>
+
+    <span class="kicker k-test">5 &middot; Run and test</span>
+    <div class="pm">
+      <div class="pm-head">Test 1 &mdash; alice (ROLE_USER) tries /admin</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/admin</span></div>
+      <div class="pm-row"><span class="pm-label">Auth</span><span class="pm-val">Basic Auth &mdash; alice / password123</span></div>
+      <div class="pm-result"><span class="pm-bad">403 Forbidden</span><br>Alice is authenticated but lacks ROLE_ADMIN.</div>
+    </div>
+    <div class="pm">
+      <div class="pm-head">Test 2 &mdash; bob (ROLE_ADMIN) reaches /admin</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/admin</span></div>
+      <div class="pm-row"><span class="pm-label">Auth</span><span class="pm-val">Basic Auth &mdash; bob / password123</span></div>
+      <div class="pm-result"><span class="pm-ok">200 OK: "Admin panel - ADMIN role required"</span></div>
+    </div>
+    <div class="pm">
+      <div class="pm-head">Test 3 &mdash; public /home still works for anyone</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/home</span></div>
+      <div class="pm-result"><span class="pm-ok">200 OK (no credentials needed)</span></div>
+    </div>
+
+    <span class="kicker k-what">6 &middot; What just happened</span>
+    <p>When bob logged in, <code>loadUserByUsername("bob")</code> returned a <code>UserDetails</code> object with one <code>GrantedAuthority</code>: <code>ROLE_ADMIN</code>. Spring Security stored that in the Security Context. When bob's request hit <code>/admin</code>, the filter chain read the context, found <code>ROLE_ADMIN</code>, matched it against the <code>hasRole("ADMIN")</code> rule, and allowed the request. Alice's context held <code>ROLE_USER</code>, which did not satisfy the rule, so her request was blocked with 403.</p>
+
+    <div class="callout c-warn">
+      <div class="ct">7 &middot; What is still missing</div>
+      <p>Authentication still uses session cookies. Every request after login sends a cookie that the server uses to remember the session. This does not work well for REST APIs or microservices. In concept 6 we replace sessions with JWT tokens.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== CONCEPT 6 ===================== -->
+<section class="concept" id="c6">
+  <div class="concept-head">
+    <span class="badge teal">6</span>
+    <div class="meta">
+      <div class="cat">Stateless auth</div>
+      <h2>JWT &mdash; Stateless Authentication</h2>
+    </div>
+  </div>
+  <div class="concept-body">
+
+    <div class="context">
+      <div class="ct">Builds on concepts 2, 3, 4, and 5</div>
+      <p><strong>Where we are:</strong> Full role-based authentication and authorisation work with sessions. A session cookie is created at login and sent with every request.<br>
+      <strong>What is missing:</strong> For a REST API, session cookies are problematic &mdash; mobile apps do not handle cookies naturally, and multiple servers cannot share one session store without extra infrastructure.<br>
+      <strong>What we are adding:</strong> JWT (JSON Web Token) &mdash; a signed self-contained ticket issued at login. The server stores nothing. Every request proves its own identity by sending the token.</p>
+    </div>
+
+    <span class="kicker">1 &middot; The idea</span>
+    <p>At login, the server creates a JWT containing the username and role, signs it with a secret key, and returns it. On every future request, the client sends the token in the <code>Authorization</code> header. A filter verifies the signature and writes the identity to the Security Context &mdash; the same context from concept 3, just populated differently.</p>
+
+    <div class="callout c-note">
+      <div class="ct">JWT has six sub-steps with dependencies between them. Read the dependency note before each one.</div>
+      <p>Steps 6a through 6f must be built in order. Each step explains what the previous step cannot do on its own.</p>
+    </div>
+
+    <span class="kicker">2 &middot; Step 6a &mdash; Add the jjwt library</span>
+    <p>Before writing any JWT code, we need a library that can create and verify tokens. <code>jjwt</code> (Java JWT) is the standard choice.</p>
+    <span class="code-file">pom.xml (add these three dependencies)</span>
+    <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;
+    &lt;artifactId&gt;jjwt-api&lt;/artifactId&gt;
+    &lt;version&gt;0.12.6&lt;/version&gt;
+    <span class="cm">&lt;!-- The API: the types we code against (Jwts, Claims, etc.) --&gt;</span>
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;
+    &lt;artifactId&gt;jjwt-impl&lt;/artifactId&gt;
+    &lt;version&gt;0.12.6&lt;/version&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+    <span class="cm">&lt;!-- The implementation: the actual classes that do the work at runtime --&gt;</span>
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;
+    &lt;artifactId&gt;jjwt-jackson&lt;/artifactId&gt;
+    &lt;version&gt;0.12.6&lt;/version&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+    <span class="cm">&lt;!-- Jackson integration: lets jjwt read and write the JSON inside the token --&gt;</span>
+&lt;/dependency&gt;</code></pre>
+
+    <span class="kicker">2 &middot; Step 6b &mdash; Create JwtService</span>
+    <p><strong>Depends on:</strong> the jjwt library (6a). JwtService is responsible for two things only: creating a token and verifying one. Nothing else touches JWT logic.</p>
+    <span class="code-file">src/main/java/com/banking/security/JwtService.java</span>
+    <pre><code><span class="ck">package</span> com.banking.security;
+
+<span class="ck">import</span> io.jsonwebtoken.*;
+<span class="ck">import</span> io.jsonwebtoken.security.Keys;
+<span class="ck">import</span> org.springframework.stereotype.Service;
+<span class="ck">import java.security.Key;
+import java.util</span>.Date;
+
+<span class="ca">@Service</span>
+<span class="ck">public class</span> JwtService {
+
+    <span class="ck">private static final</span> String SECRET_KEY =
+        <span class="cs">"my-very-secret-key-that-is-at-least-32-bytes!!"</span>;
+    <span class="cm">// The secret key signs the token. Anyone who knows this key can forge tokens.
+    //   Keep it in environment variables or a secrets manager in production.
+    //   Must be at least 32 bytes (256 bits) for HS256 signing.</span>
+
+    <span class="ck">private static final long</span> EXPIRATION_MS = 1000 * 60 * 60;
+    <span class="cm">// Token expiry: 1 hour (in milliseconds). After this, the token is rejected.
+    //   Expiry is critical: if a token is stolen, it only works until it expires.</span>
+
+    <span class="ck">private</span> Key getSigningKey() {
+        <span class="ck">return</span> Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+        <span class="cm">// Creates a cryptographic key from our secret string.
+        //   HS256 (HMAC-SHA256) is the signing algorithm: fast and sufficient for most APIs.</span>
+    }
+
+    <span class="ck">public</span> String generateToken(String username, String role) {
+        <span class="ck">return</span> Jwts.builder()
+            .subject(username)
+            <span class="cm">// subject: the "who is this token for?" field (the username)</span>
+            .claim(<span class="cs">"role"</span>, role)
+            <span class="cm">// claim: a custom field we add. We store the role so the JWT filter can read it.</span>
+            .issuedAt(<span class="ck">new</span> Date())
+            <span class="cm">// issuedAt: when the token was created</span>
+            .expiration(<span class="ck">new</span> Date(System.currentTimeMillis() + EXPIRATION_MS))
+            <span class="cm">// expiration: when the token stops being valid</span>
+            .signWith(getSigningKey())
+            <span class="cm">// signWith: creates the signature using our secret key. This is what prevents forgery.</span>
+            .compact();
+            <span class="cm">// compact(): produces the final token string: header.payload.signature</span>
+    }
+
+    <span class="ck">public</span> String extractUsername(String token) {
+        <span class="ck">return</span> parseClaims(token).getSubject();
+        <span class="cm">// Reads the username (the "subject") out of the token payload.</span>
+    }
+
+    <span class="ck">public</span> String extractRole(String token) {
+        <span class="ck">return</span> parseClaims(token).get(<span class="cs">"role"</span>, String.class);
+        <span class="cm">// Reads our custom "role" claim out of the token payload.</span>
+    }
+
+    <span class="ck">public boolean</span> isTokenValid(String token) {
+        <span class="ck">try</span> {
+            parseClaims(token);
+            <span class="cm">// If this does not throw, the token has a valid signature and is not expired.</span>
+            <span class="ck">return true</span>;
+        } <span class="ck">catch</span> (JwtException e) {
+            <span class="ck">return false</span>;
+            <span class="cm">// JwtException covers: invalid signature, expired token, malformed token.</span>
+        }
+    }
+
+    <span class="ck">private</span> Claims parseClaims(String token) {
+        <span class="ck">return</span> Jwts.parser()
+            .verifyWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
+        <span class="cm">// Verifies the signature with our key, then extracts the payload (claims).
+        //   If the signature is wrong, this throws a SignatureException.
+        //   If the token is expired, this throws an ExpiredJwtException.</span>
+    }
+}</code></pre>
+
+    <span class="kicker">2 &middot; Step 6c &mdash; Create JwtAuthFilter</span>
+    <p><strong>Depends on:</strong> JwtService (6b) to verify tokens, and the Security Context from concept 3 to store identity. This filter runs on every request and populates the context if a valid token is found.</p>
+    <span class="code-file">src/main/java/com/banking/security/JwtAuthFilter.java</span>
+    <pre><code><span class="ck">package</span> com.banking.security;
+
+<span class="ck">import</span> jakarta.servlet.*;
+<span class="ck">import</span> jakarta.servlet.http.*;
+<span class="ck">import</span> org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+<span class="ck">import</span> org.springframework.security.core.authority.SimpleGrantedAuthority;
+<span class="ck">import</span> org.springframework.security.core.context.SecurityContextHolder;
+<span class="ck">import</span> org.springframework.stereotype.Component;
+<span class="ck">import</span> org.springframework.web.filter.OncePerRequestFilter;
+<span class="ck">import java.io</span>.IOException;
+<span class="ck">import java.util</span>.List;
+
+<span class="ca">@Component</span>
+<span class="cm">// @Component: registers this filter as a Spring-managed bean so it can be
+//   injected into SecurityConfig. Mandatory for Spring to find it.</span>
+<span class="ck">public class</span> JwtAuthFilter <span class="ck">extends</span> OncePerRequestFilter {
+    <span class="cm">// OncePerRequestFilter: guarantees this filter runs exactly once per request.
+    //   We extend it so we only need to implement doFilterInternal().</span>
+
+    <span class="ck">private final</span> JwtService jwtService;
+
+    <span class="ck">public</span> JwtAuthFilter(JwtService jwtService) {
+        <span class="ck">this</span>.jwtService = jwtService;
+    }
+
+    <span class="ca">@Override</span>
+    <span class="ck">protected void</span> doFilterInternal(HttpServletRequest request,
+                                      HttpServletResponse response,
+                                      FilterChain filterChain)
+                                <span class="ck">throws</span> ServletException, IOException {
+
+        String authHeader = request.getHeader(<span class="cs">"Authorization"</span>);
+        <span class="cm">// Read the Authorization header. Valid JWT requests look like:
+        //   Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...</span>
+
+        <span class="ck">if</span> (authHeader == <span class="ck">null</span> || !authHeader.startsWith(<span class="cs">"Bearer "</span>)) {
+            filterChain.doFilter(request, response);
+            <span class="cm">// No token present. Pass the request to the next filter without authenticating.
+            //   The next filter (authorisation) will block it if the URL requires login.</span>
+            <span class="ck">return</span>;
+        }
+
+        String token = authHeader.substring(7);
+        <span class="cm">// Remove "Bearer " (7 characters) to get just the token string.</span>
+
+        <span class="ck">if</span> (jwtService.isTokenValid(token)) {
+            String username = jwtService.extractUsername(token);
+            String role     = jwtService.extractRole(token);
+
+            UsernamePasswordAuthenticationToken authentication =
+                <span class="ck">new</span> UsernamePasswordAuthenticationToken(
+                    username, <span class="ck">null</span>,
+                    List.of(<span class="ck">new</span> SimpleGrantedAuthority(role))
+                );
+            <span class="cm">// UsernamePasswordAuthenticationToken: the standard object that represents
+            //   "this user is authenticated." We pass username, no credentials (null),
+            //   and the role. Spring Security reads the role for authorisation checks.</span>
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            <span class="cm">// Write the authenticated identity into the Security Context.
+            //   This is the SAME Security Context from concept 3.
+            //   From this point, every part of the request knows who the user is.</span>
+        }
+
+        filterChain.doFilter(request, response);
+        <span class="cm">// Pass the request on to the next filter in the chain, then to the controller.</span>
+    }
+}</code></pre>
+
+    <span class="kicker">2 &middot; Step 6d &mdash; Create AuthController (the login endpoint)</span>
+    <p><strong>Depends on:</strong> AuthService (6e, created next). This controller exposes <code>POST /auth/login</code>. Correct credentials go in; a JWT comes out.</p>
+    <span class="code-file">src/main/java/com/banking/controller/AuthController.java</span>
+    <pre><code><span class="ck">package</span> com.banking.controller;
+
+<span class="ck">import</span> com.banking.service.AuthService;
+<span class="ck">import</span> org.springframework.web.bind.annotation.*;
+
+<span class="ca">@RestController</span>
+<span class="ca">@RequestMapping</span>(<span class="cs">"/auth"</span>)
+<span class="cm">// @RequestMapping("/auth"): all endpoints in this class start with /auth</span>
+<span class="ck">public class</span> AuthController {
+
+    <span class="ck">private final</span> AuthService authService;
+    <span class="ck">public</span> AuthController(AuthService authService) { <span class="ck">this</span>.authService = authService; }
+
+    <span class="ca">@PostMapping</span>(<span class="cs">"/login"</span>)
+    <span class="ck">public</span> String login(<span class="ca">@RequestBody</span> LoginRequest request) {
+        <span class="ck">return</span> authService.login(request.username(), request.password());
+        <span class="cm">// Receives {username, password} as JSON.
+        //   Delegates to AuthService, which verifies credentials and returns a JWT string.</span>
+    }
+
+    <span class="ck">public record</span> LoginRequest(String username, String password) {}
+    <span class="cm">// A Java record: a concise way to hold two fields (username and password).
+    //   Jackson automatically maps the JSON body { "username":"...", "password":"..." } to this.</span>
+}</code></pre>
+
+    <span class="kicker">2 &middot; Step 6e &mdash; Create AuthService</span>
+    <p><strong>Depends on:</strong> AuthenticationManager from concept 2 (which knows how to verify credentials using UserDetailsService from concept 3 and BCrypt from concept 4), and JwtService from 6b (which creates the token).</p>
+    <span class="code-file">src/main/java/com/banking/service/AuthService.java</span>
+    <pre><code><span class="ck">package</span> com.banking.service;
+
+<span class="ck">import</span> com.banking.security.JwtService;
+<span class="ck">import</span> org.springframework.security.authentication.*;
+<span class="ck">import</span> org.springframework.security.core.Authentication;
+<span class="ck">import</span> org.springframework.security.core.userdetails.UserDetails;
+<span class="ck">import</span> org.springframework.stereotype.Service;
+
+<span class="ca">@Service</span>
+<span class="ck">public class</span> AuthService {
+
+    <span class="ck">private final</span> AuthenticationManager authenticationManager;
+    <span class="cm">// AuthenticationManager: the coordinator built in concept 2.
+    //   It delegates to DaoAuthenticationProvider, which uses our UserDetailsService
+    //   (concept 3) and BCryptPasswordEncoder (concept 4).</span>
+
+    <span class="ck">private final</span> JwtService jwtService;
+
+    <span class="ck">public</span> AuthService(AuthenticationManager authenticationManager,
+                       JwtService jwtService) {
+        <span class="ck">this</span>.authenticationManager = authenticationManager;
+        <span class="ck">this</span>.jwtService = jwtService;
+    }
+
+    <span class="ck">public</span> String login(String username, String password) {
+        Authentication auth = authenticationManager.authenticate(
+            <span class="ck">new</span> UsernamePasswordAuthenticationToken(username, password)
+        );
+        <span class="cm">// authenticate() either succeeds and returns an Authentication object,
+        //   or throws BadCredentialsException if the password is wrong.
+        //   Internally it calls loadUserByUsername() and BCrypt.matches() for us.</span>
+
+        UserDetails userDetails = (UserDetails) auth.getPrincipal();
+        <span class="cm">// getPrincipal(): the authenticated user as a UserDetails object.
+        //   We cast it to UserDetails so we can read the username and roles.</span>
+
+        String role = userDetails.getAuthorities().iterator().next().getAuthority();
+        <span class="cm">// getAuthorities(): the list of roles. We take the first one (users have one role here).
+        //   getAuthority() returns the string e.g. "ROLE_ADMIN".</span>
+
+        <span class="ck">return</span> jwtService.generateToken(userDetails.getUsername(), role);
+        <span class="cm">// Generate and return the JWT. This is the string the client must store
+        //   and send with every future request in the Authorization header.</span>
+    }
+}</code></pre>
+
+    <span class="kicker">2 &middot; Step 6f &mdash; Update SecurityConfig for JWT</span>
+    <p><strong>Depends on:</strong> JwtAuthFilter (6c) to add to the chain, and the AuthenticationManager which now needs to be exposed as a bean.</p>
+    <span class="code-file">src/main/java/com/banking/config/SecurityConfig.java (full updated version)</span>
+    <pre><code><span class="ck">package</span> com.banking.config;
+
+<span class="ck">import</span> com.banking.security.JwtAuthFilter;
+<span class="ck">import</span> com.banking.service.CustomUserDetailsService;
+<span class="ck">import</span> org.springframework.context.annotation.*;
+<span class="ck">import</span> org.springframework.security.authentication.*;
+<span class="ck">import</span> org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+<span class="ck">import</span> org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+<span class="ck">import</span> org.springframework.security.config.annotation.web.builders.HttpSecurity;
+<span class="ck">import</span> org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+<span class="ck">import</span> org.springframework.security.config.http.SessionCreationPolicy;
+<span class="ck">import</span> org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+<span class="ck">import</span> org.springframework.security.crypto.password.PasswordEncoder;
+<span class="ck">import</span> org.springframework.security.web.SecurityFilterChain;
+<span class="ck">import</span> org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+<span class="ca">@Configuration</span>
+<span class="ca">@EnableWebSecurity</span>
+<span class="ck">public class</span> SecurityConfig {
+
+    <span class="ck">private final</span> JwtAuthFilter jwtAuthFilter;
+    <span class="ck">public</span> SecurityConfig(JwtAuthFilter jwtAuthFilter) {
+        <span class="ck">this</span>.jwtAuthFilter = jwtAuthFilter;
+    }
+
+    <span class="ca">@Bean</span>
+    <span class="ck">public</span> SecurityFilterChain filterChain(HttpSecurity http) <span class="ck">throws</span> Exception {
+        http
+            .csrf(csrf -&gt; csrf.disable())
+            <span class="cm">// csrf.disable(): safe for stateless JWT APIs. The browser never sends the
+            //   JWT automatically (unlike session cookies), so CSRF attacks are not possible.
+            //   NEVER disable CSRF on a form-login, session-based application.</span>
+
+            .sessionManagement(session -&gt;
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            <span class="cm">// STATELESS: tells Spring Security to create NO sessions.
+            //   Every request must carry its own JWT. Nothing is remembered between requests.</span>
+
+            .authorizeHttpRequests(auth -&gt; auth
+                .requestMatchers(<span class="cs">"/auth/login"</span>).permitAll()
+                <span class="cm">// The login endpoint must be public, otherwise nobody could ever log in.</span>
+                .requestMatchers(<span class="cs">"/home"</span>).permitAll()
+                .requestMatchers(<span class="cs">"/account"</span>).authenticated()
+                .requestMatchers(<span class="cs">"/admin"</span>).hasRole(<span class="cs">"ADMIN"</span>)
+                .anyRequest().authenticated()
+            )
+
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            <span class="cm">// addFilterBefore: insert our JwtAuthFilter BEFORE Spring's default login filter.
+            //   This ensures the token is read and the identity is set BEFORE
+            //   the authorisation check runs. Order matters.</span>
+
+        <span class="ck">return</span> http.build();
+    }
+
+    <span class="ca">@Bean</span>
+    <span class="ck">public</span> PasswordEncoder passwordEncoder() { <span class="ck">return new</span> BCryptPasswordEncoder(); }
+
+    <span class="ca">@Bean</span>
+    <span class="ck">public</span> DaoAuthenticationProvider authenticationProvider(
+            CustomUserDetailsService userDetailsService) {
+        DaoAuthenticationProvider p = <span class="ck">new</span> DaoAuthenticationProvider();
+        p.setUserDetailsService(userDetailsService);
+        p.setPasswordEncoder(passwordEncoder());
+        <span class="ck">return</span> p;
+    }
+
+    <span class="ca">@Bean</span>
+    <span class="ck">public</span> AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config) <span class="ck">throws</span> Exception {
+        <span class="ck">return</span> config.getAuthenticationManager();
+        <span class="cm">// Expose the AuthenticationManager as a bean so AuthService can inject it.
+        //   Without this @Bean, AuthService cannot get hold of the manager.</span>
+    }
+}</code></pre>
+
+    <span class="kicker k-ann">4 &middot; Annotations in this step</span>
+    <table>
+      <thead><tr><th>Annotation</th><th>What it does</th><th>Where</th><th>Status</th></tr></thead>
+      <tbody>
+      <tr><td><code>@Component</code></td><td>Registers JwtAuthFilter as a Spring-managed bean so it can be injected into SecurityConfig.</td><td>JwtAuthFilter</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      <tr><td><code>@RequestMapping</code></td><td>Sets the URL prefix for all endpoints in AuthController.</td><td>AuthController</td><td><span class="tag t-opt">OPTIONAL</span></td></tr>
+      <tr><td><code>@PostMapping</code></td><td>Maps HTTP POST requests at /auth/login to the login method.</td><td>login method</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      <tr><td><code>@RequestBody</code></td><td>Converts the JSON request body into a LoginRequest object.</td><td>login parameter</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      </tbody>
+    </table>
+
+    <span class="kicker k-test">5 &middot; Run and test (6 scenarios)</span>
+    <div class="pm">
+      <div class="pm-head">Step 1 &mdash; Login and get a JWT</div>
+      <div class="pm-row"><span class="pm-label method-post">POST</span><span class="pm-val">http://localhost:8080/auth/login</span></div>
+      <div class="pm-row"><span class="pm-label">Body (JSON)</span><span class="pm-val">{ "username": "alice", "password": "password123" }</span></div>
+      <div class="pm-result"><span class="pm-ok">200 OK</span><br>eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljZSIsInJvbGUiOiJST0xFX1VTRVIiLCJpYXQi...<br><span style="color:#7e93a6;font-size:.8rem;">Copy this entire string. It is your token.</span></div>
+    </div>
+    <div class="pm">
+      <div class="pm-head">Step 2 &mdash; Access /account with the token</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/account</span></div>
+      <div class="pm-row"><span class="pm-label">Header</span><span class="pm-val">Authorization: Bearer eyJhbGci...(paste your full token here)</span></div>
+      <div class="pm-result"><span class="pm-ok">200 OK: "Your account - login required"</span></div>
+    </div>
+    <div class="pm">
+      <div class="pm-head">Step 3 &mdash; Access /account with NO token</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/account</span></div>
+      <div class="pm-result"><span class="pm-bad">403 Forbidden &mdash; No token means no identity in the Security Context.</span></div>
+    </div>
+    <div class="pm">
+      <div class="pm-head">Step 4 &mdash; /account with a tampered token</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/account</span></div>
+      <div class="pm-row"><span class="pm-label">Header</span><span class="pm-val">Authorization: Bearer eyJhbGci...CHANGE_ONE_CHARACTER_HERE</span></div>
+      <div class="pm-result"><span class="pm-bad">403 Forbidden &mdash; Signature verification fails. isTokenValid() returns false.</span></div>
+    </div>
+    <div class="pm">
+      <div class="pm-head">Step 5 &mdash; alice (ROLE_USER) tries /admin</div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/admin</span></div>
+      <div class="pm-row"><span class="pm-label">Header</span><span class="pm-val">Authorization: Bearer (alice's token)</span></div>
+      <div class="pm-result"><span class="pm-bad">403 Forbidden &mdash; Token is valid but ROLE_USER does not satisfy hasRole("ADMIN").</span></div>
+    </div>
+    <div class="pm">
+      <div class="pm-head">Step 6 &mdash; bob (ROLE_ADMIN) reaches /admin</div>
+      <div class="pm-row"><span class="pm-label method-post">POST</span><span class="pm-val">First: login as bob &mdash; { "username": "bob", "password": "password123" }</span></div>
+      <div class="pm-row"><span class="pm-label method-get">GET</span><span class="pm-val">http://localhost:8080/admin &mdash; Authorization: Bearer (bob's token)</span></div>
+      <div class="pm-result"><span class="pm-ok">200 OK: "Admin panel - ADMIN role required"</span></div>
+    </div>
+
+    <span class="kicker k-what">6 &middot; What just happened (the invisible flow)</span>
+    <p>When alice logged in, <code>AuthService</code> called <code>AuthenticationManager.authenticate()</code>, which used <code>CustomUserDetailsService</code> to load alice from the database and <code>BCryptPasswordEncoder</code> to verify the password. On success, <code>JwtService.generateToken()</code> created a signed token containing alice's username and role, which was returned to the client. On every subsequent request, <code>JwtAuthFilter</code> read the token from the header, called <code>jwtService.isTokenValid()</code> to verify the signature, extracted the username and role, and wrote an <code>Authentication</code> object into the <code>SecurityContextHolder</code>. The filter chain then read alice's role from the context and compared it to the access rules &mdash; exactly as it did in concept 5, just with the identity arriving via a token rather than a session.</p>
+
+    <div class="callout c-warn">
+      <div class="ct">7 &middot; What is still missing</div>
+      <p>The API works for Postman and server-to-server calls. But when a browser-based front-end (on a different address like localhost:3000) tries to use it, the browser will block the request with a CORS error. We address that next.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== CONCEPT 7 ===================== -->
+<section class="concept" id="c7">
+  <div class="concept-head">
+    <span class="badge amber">7</span>
+    <div class="meta">
+      <div class="cat">API hygiene</div>
+      <h2>CSRF and CORS &mdash; The Two Issues Every REST API Hits</h2>
+    </div>
+  </div>
+  <div class="concept-body">
+
+    <div class="context">
+      <div class="ct">Builds on concept 6</div>
+      <p><strong>Where we are:</strong> A fully working JWT REST API (concept 6).<br>
+      <strong>What is missing:</strong> CSRF is already handled (disabled in 6f). CORS needs explaining and configuring so a browser front-end can call our API.<br>
+      <strong>What we are adding:</strong> A clear understanding of why CSRF is safe to disable here, and a global CORS configuration for a front-end running on a different address.</p>
+    </div>
+
+    <h3>Part A &mdash; CSRF: why we disabled it and when that is safe</h3>
+    <p>CSRF (Cross-Site Request Forgery) is an attack where a malicious website tricks your logged-in browser into sending a request to your bank. It works because the browser automatically includes your session cookie with every request to that domain.</p>
+    <div class="duo">
+      <div class="pane without">
+        <div class="pt">CSRF attack requires</div>
+        <p>The browser automatically attaching the credential (a session cookie). The malicious site does not need the cookie value &mdash; the browser sends it silently.</p>
+      </div>
+      <div class="pane gain">
+        <div class="pt">Why JWT is safe without CSRF</div>
+        <p>JWT is sent in the <code>Authorization</code> header, not a cookie. The browser never sends headers automatically to other sites. A malicious site cannot make a request with your JWT because it does not have it.</p>
+      </div>
+    </div>
+    <div class="callout c-bad">
+      <div class="ct">When you must NOT disable CSRF</div>
+      <p>If your application uses session cookies and a browser login form (like a traditional web app), CSRF protection is essential. Only disable it for stateless JWT APIs where credentials are sent via headers, never cookies.</p>
+    </div>
+
+    <h3>Part B &mdash; CORS: what it is and why the browser blocks you</h3>
+    <p>CORS (Cross-Origin Resource Sharing) is a browser security rule. When a web page at <code>http://localhost:3000</code> tries to call an API at <code>http://localhost:8080</code>, the browser notices these are different origins (different ports count) and blocks the request by default. The API must explicitly say "I allow requests from localhost:3000."</p>
+    <p>Add a global CORS configuration inside <code>SecurityConfig.filterChain()</code>:</p>
+    <span class="code-file">src/main/java/com/banking/config/SecurityConfig.java (add inside filterChain, before return)</span>
+    <pre><code><span class="ck">import</span> org.springframework.web.cors.*;
+<span class="ck">import</span> org.springframework.web.filter.CorsFilter;
+
+<span class="cm">// Add inside filterChain(), after the .addFilterBefore(...) line and before return:</span>
+http.cors(cors -&gt; cors.configurationSource(request -&gt; {
+    CorsConfiguration config = <span class="ck">new</span> CorsConfiguration();
+    config.addAllowedOrigin(<span class="cs">"http://localhost:3000"</span>);
+    <span class="cm">// Allow requests from the React dev server. Add your production domain here too.</span>
+    config.addAllowedMethod(<span class="cs">"*"</span>);
+    <span class="cm">// Allow all HTTP methods: GET, POST, PUT, DELETE, etc.</span>
+    config.addAllowedHeader(<span class="cs">"*"</span>);
+    <span class="cm">// Allow all headers, including our Authorization header which carries the JWT.</span>
+    config.setAllowCredentials(<span class="ck">true</span>);
+    <span class="cm">// Allow the browser to include credentials (needed if you ever use cookies alongside JWT).</span>
+    <span class="ck">return</span> config;
+}));</code></pre>
+
+    <span class="kicker k-test">5 &middot; Test CORS with curl</span>
+    <p>This curl command simulates a browser making a CORS preflight request from <code>http://localhost:3000</code>:</p>
+    <pre class="solo">curl -I -X OPTIONS http://localhost:8080/account \
+  -H "Origin: http://localhost:3000" \
+  -H "Access-Control-Request-Method: GET"</pre>
+    <div class="pm">
+      <div class="pm-head">Expected response headers (confirming CORS is configured)</div>
+      <div class="pm-result"><span class="pm-ok">Access-Control-Allow-Origin: http://localhost:3000</span><br><span class="pm-ok">Access-Control-Allow-Methods: GET,POST,PUT,DELETE</span><br>Without CORS config, these headers would be absent and the browser would block the request.</div>
+    </div>
+
+    <span class="kicker k-what">6 &middot; What just happened</span>
+    <p>The browser always sends a CORS "preflight" OPTIONS request before the real request to ask "will you accept a request from my origin?" Our configuration returned the <code>Access-Control-Allow-Origin</code> header with our allowed origin. The browser saw this, considered it safe, and proceeded with the actual request. Without this configuration, the browser would have silently swallowed the response and shown a CORS error in the console, even though the API itself returned 200.</p>
+
+    <div class="callout c-ok">
+      <div class="ct">The application is now complete</div>
+      <p>Authentication, authorisation, BCrypt passwords, JWT, CSRF safety, and CORS are all in place. The API is ready for a real front-end to use.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECT STRUCTURE -->
+<section class="card" id="structure">
+  <div class="sec-eyebrow">Reference</div>
+  <h2 class="sec">Complete project structure</h2>
+  <p>Every file created in this guide, showing which concept introduced it.</p>
+  <div class="arch">banking-security/
+├── pom.xml                                        (concepts 1, 3, 6a)
+├── src/main/resources/
+│   ├── application.properties                     (concept 3)
+│   └── data.sql                                   (concepts 3, 4, 5)
+└── src/main/java/com/banking/
+    ├── BankingSecurityApplication.java            (concept 1 - auto-generated)
+    ├── config/
+    │   └── SecurityConfig.java                    (concepts 2, 4, 5, 6f, 7)
+    ├── controller/
+    │   ├── TestController.java                    (concepts 1, 2)
+    │   └── AuthController.java                    (concept 6d)
+    ├── model/
+    │   └── User.java                              (concepts 3, 5)
+    ├── repository/
+    │   └── UserRepository.java                    (concept 3)
+    ├── security/
+    │   ├── JwtService.java                        (concept 6b)
+    │   └── JwtAuthFilter.java                     (concept 6c)
+    └── service/
+        ├── CustomUserDetailsService.java          (concepts 3, 5)
+        └── AuthService.java                       (concept 6e)</div>
+</section>
+
+<!-- FULL TEST SEQUENCE -->
+<section class="card" id="testflow">
+  <div class="sec-eyebrow">End-to-end verification</div>
+  <h2 class="sec">Full Postman test sequence</h2>
+  <p>Run these calls in order to verify the complete system. Start the application first.</p>
+  <table>
+    <thead><tr><th>#</th><th>Method + URL</th><th>Credentials / Header</th><th>Expected result</th></tr></thead>
+    <tbody>
+    <tr><td>1</td><td>GET /home</td><td>None</td><td>200 &mdash; public page, no login</td></tr>
+    <tr><td>2</td><td>GET /account</td><td>None</td><td>403 &mdash; no token</td></tr>
+    <tr><td>3</td><td>POST /auth/login</td><td>Body: {username:alice, password:password123}</td><td>200 &mdash; JWT string returned (copy it)</td></tr>
+    <tr><td>4</td><td>GET /account</td><td>Authorization: Bearer &lt;alice token&gt;</td><td>200 &mdash; logged in as alice</td></tr>
+    <tr><td>5</td><td>GET /admin</td><td>Authorization: Bearer &lt;alice token&gt;</td><td>403 &mdash; alice lacks ADMIN role</td></tr>
+    <tr><td>6</td><td>POST /auth/login</td><td>Body: {username:bob, password:password123}</td><td>200 &mdash; JWT string for bob (copy it)</td></tr>
+    <tr><td>7</td><td>GET /admin</td><td>Authorization: Bearer &lt;bob token&gt;</td><td>200 &mdash; bob is ADMIN</td></tr>
+    <tr><td>8</td><td>GET /account</td><td>Authorization: Bearer tampered_token</td><td>403 &mdash; invalid signature</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ANNOTATIONS TABLE -->
+<section class="card" id="annotations">
+  <div class="sec-eyebrow">Quick reference</div>
+  <h2 class="sec">Complete annotations reference</h2>
+  <table>
+    <thead><tr><th>Annotation</th><th>What it does</th><th>Which class</th><th>Concept</th><th>Status</th></tr></thead>
+    <tbody>
+    <tr><td><code>@RestController</code></td><td>Marks class as REST controller; return values become HTTP response body.</td><td>All controllers</td><td>1</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>@GetMapping</code> / <code>@PostMapping</code></td><td>Maps method to HTTP GET / POST at a given path.</td><td>Controllers</td><td>1, 6d</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>@RequestBody</code></td><td>Converts JSON request body into a Java object.</td><td>AuthController.login</td><td>6d</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>@RequestMapping</code></td><td>Sets URL prefix for all endpoints in a controller.</td><td>AuthController</td><td>6d</td><td><span class="tag t-opt">OPT</span></td></tr>
+    <tr><td><code>@Configuration</code></td><td>Declares class as a source of Spring @Bean definitions.</td><td>SecurityConfig</td><td>2</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>@EnableWebSecurity</code></td><td>Activates Spring Security and uses our SecurityFilterChain.</td><td>SecurityConfig</td><td>2</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>@Bean</code></td><td>Registers the returned object as a Spring-managed bean.</td><td>SecurityConfig methods</td><td>2, 4, 6f</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>@Entity</code></td><td>Maps Java class to a database table.</td><td>User</td><td>3</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>@Table</code></td><td>Sets custom table name. Defaults to class name if omitted.</td><td>User</td><td>3</td><td><span class="tag t-opt">OPT</span></td></tr>
+    <tr><td><code>@Id</code></td><td>Marks the primary key field.</td><td>User.id</td><td>3</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>@GeneratedValue</code></td><td>Database auto-generates the id.</td><td>User.id</td><td>3</td><td><span class="tag t-opt">OPT</span></td></tr>
+    <tr><td><code>@Column</code></td><td>Customises a column (unique, nullable, etc.).</td><td>User.username</td><td>3</td><td><span class="tag t-opt">OPT</span></td></tr>
+    <tr><td><code>@Service</code></td><td>Marks class as a Spring-managed service; enables injection.</td><td>CustomUserDetailsService, AuthService</td><td>3, 6e</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>@Component</code></td><td>Registers class as a Spring-managed component; used for filters.</td><td>JwtAuthFilter</td><td>6c</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>@Override</code></td><td>Signals this method overrides a superclass/interface method. Compile-time safety check.</td><td>loadUserByUsername, doFilterInternal</td><td>3, 6c</td><td><span class="tag t-opt">OPT</span> (recommended)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- SUMMARY -->
+<section class="card lead" id="summary">
+  <div class="sec-eyebrow">What we built</div>
+  <h2 class="sec">The complete flow, in plain words</h2>
+  <p>Every HTTP request enters the <strong>SecurityFilterChain</strong> (concept 2). The <strong>JwtAuthFilter</strong> (concept 6c) runs first: it reads the <code>Authorization</code> header, calls <code>JwtService.isTokenValid()</code> to verify the signature, and if valid, writes the username and role into the <strong>Security Context</strong> as a trusted <code>Authentication</code> object. The chain then checks the URL against the access rules: <code>/home</code> is public (passes immediately), <code>/account</code> requires an authenticated identity in the context, and <code>/admin</code> requires the context to hold <code>ROLE_ADMIN</code>. If the rules are not met, the request is blocked with 401 or 403 before the controller is ever called. At login (<code>POST /auth/login</code>), the <strong>AuthService</strong> (concept 6e) calls the <strong>AuthenticationManager</strong>, which uses <strong>CustomUserDetailsService</strong> (concept 3) to load the user from H2 and <strong>BCryptPasswordEncoder</strong> (concept 4) to compare the submitted password against the stored hash. On success, <strong>JwtService</strong> (concept 6b) creates a signed token containing the username and role, which the client stores and sends with every future request. CSRF protection is safely disabled because JWT travels in a header (not a cookie), and a CORS configuration (concept 7) tells the browser which front-end origins are permitted to call the API.</p>
+</section>
+
+<!-- ERRORS TABLE -->
+<section class="card" id="errors">
+  <div class="sec-eyebrow">Troubleshooting</div>
+  <h2 class="sec">Ten common errors and their fixes</h2>
+  <table>
+    <thead><tr><th>Error / Symptom</th><th>Likely cause</th><th>Fix</th></tr></thead>
+    <tbody>
+    <tr><td>401 even with correct password</td><td>data.sql has plain-text password but BCrypt encoder is active</td><td>Replace the stored password with a BCrypt hash in data.sql</td></tr>
+    <tr><td>403 on /admin even with ADMIN user</td><td>Role stored as "ADMIN" not "ROLE_ADMIN"</td><td>Ensure data.sql has "ROLE_ADMIN" and loadUserByUsername passes it as a SimpleGrantedAuthority</td></tr>
+    <tr><td>No bean of type AuthenticationManager</td><td>AuthenticationManager not exposed as a @Bean in SecurityConfig</td><td>Add the authenticationManager() @Bean method shown in concept 6f</td></tr>
+    <tr><td>CORS error in browser console</td><td>Front-end origin not in allowed origins list</td><td>Add the correct origin to config.addAllowedOrigin() in SecurityConfig</td></tr>
+    <tr><td>Token validation fails immediately</td><td>SECRET_KEY is shorter than 32 bytes (256 bits required for HS256)</td><td>Make the secret key at least 32 characters long</td></tr>
+    <tr><td>H2 data.sql not running</td><td>Missing spring.sql.init.mode=always in application.properties</td><td>Add that property; also check spring.jpa.hibernate.ddl-auto=create-drop</td></tr>
+    <tr><td>NullPointerException on getAuthorities()</td><td>loadUserByUsername returned Collections.emptyList() (concept 3 placeholder)</td><td>Update to return List.of(new SimpleGrantedAuthority(user.getRole()))</td></tr>
+    <tr><td>JwtAuthFilter runs twice</td><td>Filter registered both as @Component and manually in filterChain</td><td>Keep @Component on JwtAuthFilter; use addFilterBefore() in SecurityConfig only</td></tr>
+    <tr><td>POST /auth/login returns 403</td><td>/auth/login is not in the permitAll() list</td><td>Add .requestMatchers("/auth/login").permitAll() before other rules in SecurityConfig</td></tr>
+    <tr><td>ExpiredJwtException at server restart</td><td>Token from before restart is expired or the secret key changed</td><td>Log in again to get a fresh token; keep the SECRET_KEY constant across restarts</td></tr>
+    </tbody>
+  </table>
+</section>
+
+</main>
+</div>
+
+<footer>
+  <b>Building Spring Security Step by Step</b> &mdash; Java 17 &middot; Spring Boot 3.x &middot; Spring Security 6.x &middot; H2 &middot; BCrypt &middot; JWT &middot; 7 concepts &middot; every line explained.
+</footer>
+
+</body>
+</html>

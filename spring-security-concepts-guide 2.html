@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Understanding Spring Security: A Visual Beginner Guide (Concepts Before Code)</title>
+<style>
+:root{
+  --ink:#16243d;--body:#3c4858;--muted:#6c7888;--faint:#9aa6b4;
+  --brand:#2557a7;--brand-dk:#1b3f7a;--brand-2:#0e7c86;--accent:#bd831a;
+  --bg:#eceff4;--paper:#fff;--line:#e2e7ef;--line-2:#eef1f6;
+  --ok:#1f8a4c;--ok-bg:#e9f6ee;--ok-line:#bfe5cd;
+  --bad:#c0392b;--bad-bg:#fbece9;--bad-line:#f0c9c2;
+  --warn:#9a6b10;--warn-bg:#fbf3e0;--warn-line:#ecd8a6;
+  --note:#2557a7;--note-bg:#ebf1fb;--note-line:#cadbf3;
+  --purple:#6d3fb0;--purple-bg:#f1ecfa;--purple-line:#d8c9f5;
+  --mono:"SF Mono","Cascadia Code",Consolas,"Courier New",monospace;
+  --sans:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);font-size:16px;line-height:1.7;color:var(--body);background:var(--bg);}
+
+/* HERO */
+.hero{background:linear-gradient(150deg,#0d1a30 0%,#16243d 50%,#1b3260 100%);color:#fff;padding:56px 24px 50px;}
+.hero-in{max-width:1180px;margin:0 auto;}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#e6b860;margin-bottom:14px;}
+.hero h1{margin:0 0 14px;font-size:2.5rem;font-weight:800;line-height:1.12;letter-spacing:-.02em;max-width:20ch;}
+.hero p{margin:0;font-size:1.1rem;color:#cdd9e8;max-width:64ch;}
+.chips{margin-top:22px;display:flex;flex-wrap:wrap;gap:9px;}
+.chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#eaf1f9;border-radius:30px;padding:5px 14px;font-size:.82rem;font-weight:500;}
+
+/* LAYOUT */
+.wrap{display:flex;max-width:1180px;margin:0 auto;gap:30px;padding:30px 24px 60px;align-items:flex-start;}
+nav.toc{flex:0 0 248px;position:sticky;top:24px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 1px 3px rgba(22,36,61,.05);}
+nav.toc h2{font-size:.68rem;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);margin:0 0 12px;}
+nav.toc ol{margin:0;padding:0;list-style:none;}
+nav.toc li{margin:0 0 2px;}
+nav.toc a{display:block;color:var(--body);text-decoration:none;font-size:.855rem;padding:5px 9px;border-radius:7px;transition:background .14s,color .14s;}
+nav.toc a:hover{background:var(--note-bg);color:var(--brand);}
+nav.toc .toc-sub{font-size:.8rem;color:var(--muted);padding-left:20px;}
+main{flex:1 1 auto;min-width:0;max-width:840px;}
+
+/* CARDS */
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:28px 32px;margin-bottom:24px;box-shadow:0 1px 3px rgba(22,36,61,.05);}
+.card.lead{border-left:5px solid var(--accent);}
+.card.lead-blue{border-left:5px solid var(--brand);}
+h2.sec{font-size:1.5rem;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin:0 0 6px;}
+.sec-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--brand);margin-bottom:7px;}
+h3{font-size:1.08rem;color:var(--ink);font-weight:700;margin:24px 0 7px;}
+p{margin:0 0 12px;}
+p:last-child{margin-bottom:0;}
+strong{color:var(--ink);font-weight:650;}
+code{font-family:var(--mono);font-size:.85em;background:#eef1f6;color:#2c3e57;padding:2px 7px;border-radius:5px;border:1px solid var(--line);}
+
+/* CONCEPT CARD */
+.concept{background:var(--paper);border:1px solid var(--line);border-radius:16px;margin-bottom:24px;box-shadow:0 1px 3px rgba(22,36,61,.05);overflow:hidden;}
+.concept-head{display:flex;align-items:center;gap:16px;padding:22px 30px 18px;border-bottom:1px solid var(--line-2);}
+.badge{flex-shrink:0;width:50px;height:50px;border-radius:13px;background:linear-gradient(150deg,var(--brand),var(--brand-dk));color:#fff;font-size:1.45rem;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(37,87,167,.25);}
+.badge.amber{background:linear-gradient(150deg,#bd831a,#8a5e12);}
+.badge.teal{background:linear-gradient(150deg,#0e7c86,#0a5a61);}
+.badge.purple{background:linear-gradient(150deg,#6d3fb0,#4e2d80);}
+.concept-head .meta .cat{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:2px;}
+.concept-head h2{font-size:1.45rem;font-weight:800;color:var(--ink);margin:0;letter-spacing:-.01em;}
+.concept-body{padding:6px 30px 28px;}
+
+/* KICKERS */
+.kicker{display:block;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:22px 0 5px;color:var(--brand);}
+.kicker.k-why{color:var(--brand-2);}
+.kicker.k-ann{color:var(--purple);}
+.kicker.k-link{color:var(--muted);}
+
+/* ANALOGY */
+.analogy{background:var(--purple-bg);border:1px solid var(--purple-line);border-radius:12px;padding:13px 17px;margin:12px 0;}
+.analogy .t{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--purple);margin-bottom:4px;}
+.analogy p{margin:0;color:#3f3357;font-size:.97rem;}
+
+/* STATUS */
+.status{display:flex;align-items:center;gap:10px;background:var(--line-2);border-radius:10px;padding:10px 15px;margin:10px 0;font-size:.94rem;}
+.tag{border-radius:6px;padding:3px 11px;font-size:.7rem;font-weight:700;letter-spacing:.03em;color:#fff;white-space:nowrap;}
+.t-must{background:var(--bad);}
+.t-opt{background:var(--muted);}
+.t-auto{background:var(--ok);}
+.t-core{background:var(--brand);}
+
+/* DUO */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;}
+.pane{border-radius:12px;padding:13px 16px;border:1px solid;}
+.pane .pt{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.pane p{margin:0;font-size:.94rem;}
+.pane.without{background:var(--bad-bg);border-color:var(--bad-line);}
+.pane.without .pt{color:var(--bad);}
+.pane.gain{background:var(--ok-bg);border-color:var(--ok-line);}
+.pane.gain .pt{color:var(--ok);}
+.pane .ic{font-weight:800;font-family:var(--mono);}
+
+/* CALLOUTS */
+.callout{border-radius:12px;padding:13px 17px;margin:14px 0;border:1px solid;}
+.callout .ct{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;}
+.callout p{margin:0;font-size:.96rem;}
+.c-note{background:var(--note-bg);border-color:var(--note-line);}.c-note .ct{color:var(--note);}
+.c-warn{background:var(--warn-bg);border-color:var(--warn-line);}.c-warn .ct{color:var(--warn);}
+.c-ok{background:var(--ok-bg);border-color:var(--ok-line);}.c-ok .ct{color:var(--ok);}
+.c-bad{background:var(--bad-bg);border-color:var(--bad-line);}.c-bad .ct{color:var(--bad);}
+
+/* DIAGRAM */
+.diagram{background:#fafbfd;border:1px solid var(--line);border-radius:13px;padding:18px 18px 12px;margin:16px 0;}
+.diagram svg{display:block;width:100%;height:auto;}
+.diagram .cap{font-size:.82rem;color:var(--muted);text-align:center;margin-top:10px;font-style:italic;}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.89rem;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+th,td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top;}
+th{background:var(--ink);color:#fff;font-size:.76rem;letter-spacing:.03em;text-transform:uppercase;}
+tr:last-child td{border-bottom:none;}
+tbody tr:nth-child(even) td{background:#f8fafc;}
+td code{white-space:nowrap;}
+
+/* GLOSSARY GRID */
+.gloss{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+.term{background:#fafbfd;border:1px solid var(--line);border-radius:11px;padding:12px 15px;}
+.term b{display:block;color:var(--ink);font-size:.93rem;margin-bottom:2px;}
+.term span{font-size:.88rem;color:var(--body);}
+
+/* CONFUSION CARDS */
+.conf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+.conf{border-radius:12px;border:1px solid var(--line);padding:14px 16px;background:#fafbfd;}
+.conf .ct{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:7px;}
+.conf-row{display:flex;gap:10px;margin-bottom:7px;}
+.conf-row:last-child{margin-bottom:0;}
+.conf-lbl{flex:0 0 46%;font-weight:700;color:var(--brand-dk);font-size:.9rem;border-right:2px solid var(--line);padding-right:10px;}
+.conf-txt{flex:1;font-size:.88rem;color:var(--body);}
+
+/* MAP ROWS */
+.maprow{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line-2);}
+.maprow:last-child{border-bottom:none;}
+.maprow .ml{flex-shrink:0;}.maprow .mt{font-size:.96rem;}
+
+footer{background:var(--ink);color:#9fb0c4;text-align:center;font-size:.84rem;padding:26px 24px;}
+footer b{color:#dde6f0;}
+
+@media(max-width:900px){
+  .wrap{flex-direction:column;}.hero h1{font-size:2rem;}
+  nav.toc{position:static;width:100%;flex-basis:auto;}
+  .duo,.gloss,.conf-grid{grid-template-columns:1fr;}
+  .concept-head,.concept-body,.card{padding-left:18px;padding-right:18px;}
+}
+@media print{
+  body{background:#fff;}
+  .hero{background:#0d1a30!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  nav.toc{display:none;}
+  .wrap{display:block;padding:0;}
+  .card,.concept{break-inside:avoid;box-shadow:none;}
+  .diagram,.duo,.callout,table{break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-in">
+    <div class="eyebrow">Concepts before code &middot; Beginner friendly &middot; Spring Security</div>
+    <h1>Understanding Spring Security, One Picture at a Time</h1>
+    <p>A clear, visual walkthrough of every core idea &mdash; what it means, why it exists, and which keyword stands for it &mdash; using an online banking example so the stakes always feel real.</p>
+    <div class="chips">
+      <span class="chip">No code required</span>
+      <span class="chip">Plain language</span>
+      <span class="chip">A diagram for every concept</span>
+      <span class="chip">Online banking example</span>
+      <span class="chip">9 core concepts</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+<nav class="toc">
+  <h2>On this page</h2>
+  <ol>
+    <li><a href="#howto">How to use this guide</a></li>
+    <li><a href="#glossary">The words you will meet</a></li>
+    <li><a href="#authz">Authentication vs Authorisation</a></li>
+    <li><a href="#what">What Spring Security is</a></li>
+    <li><a href="#mandatory">Is it mandatory?</a></li>
+    <li><a href="#map">What matters most</a></li>
+    <li><a href="#overview">How it all fits together</a></li>
+    <li><a href="#c1">1 &middot; Filter Chain</a></li>
+    <li><a href="#c2">2 &middot; Authentication</a></li>
+    <li><a href="#c3">3 &middot; Security Context</a></li>
+    <li><a href="#c4">4 &middot; UserDetails &amp; Service</a></li>
+    <li><a href="#c5">5 &middot; Password Encoding</a></li>
+    <li><a href="#c6">6 &middot; Authorisation &amp; Roles</a></li>
+    <li><a href="#c7">7 &middot; JWT</a></li>
+    <li><a href="#c8">8 &middot; SecurityFilterChain Config</a></li>
+    <li><a href="#c9">9 &middot; CSRF, CORS &amp; Sessions</a></li>
+    <li><a href="#keywords">Keyword reference table</a></li>
+    <li><a href="#confusions">Common confusions</a></li>
+    <li><a href="#whole">The whole idea</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- HOW TO USE -->
+<section class="card lead" id="howto">
+  <div class="sec-eyebrow">Start here</div>
+  <h2 class="sec">How to use this guide</h2>
+  <p>This is a <strong>thinking guide, not a build guide</strong>. There is no code to copy and nothing to install. The single goal is to make each security idea click &mdash; what it is, why it exists, and which keyword stands for it &mdash; so when you later build a project, every step already feels obvious.</p>
+  <p>One example runs through the whole guide: a simple <strong>online banking application</strong>. It has three kinds of pages: a public home page anyone can see, an account details page only the logged-in account owner can see, and an admin panel only staff can access. Every concept here protects exactly that kind of system.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 760 120" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+      <defs><marker id="am0" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker></defs>
+      <rect x="20" y="38" width="130" height="44" rx="10" fill="#eef1f6" stroke="#6c7888" stroke-width="1.5"/>
+      <text x="85" y="65" text-anchor="middle" font-size="13" fill="#3c4858">You (the user)</text>
+      <rect x="220" y="28" width="148" height="28" rx="8" fill="#e9f6ee" stroke="#1f8a4c" stroke-width="1.5"/>
+      <text x="294" y="47" text-anchor="middle" font-size="12" fill="#1f6a3a">/ (public home page)</text>
+      <rect x="220" y="64" width="148" height="28" rx="8" fill="#fbece9" stroke="#c0392b" stroke-width="1.5"/>
+      <text x="294" y="83" text-anchor="middle" font-size="12" fill="#8b2a1f">/account (login required)</text>
+      <rect x="440" y="64" width="148" height="28" rx="8" fill="#fbece9" stroke="#c0392b" stroke-width="1.5"/>
+      <text x="514" y="83" text-anchor="middle" font-size="12" fill="#8b2a1f">/admin (staff only)</text>
+      <line x1="152" y1="60" x2="216" y2="42" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am0)"/>
+      <line x1="152" y1="60" x2="216" y2="78" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am0)"/>
+      <line x1="370" y1="78" x2="436" y2="78" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am0)"/>
+      <text x="403" y="70" text-anchor="middle" font-size="10.5" fill="#6c7888">admin role?</text>
+    </svg>
+    <div class="cap">The banking app our example uses throughout. Three pages, three different access levels. Spring Security protects each one.</div>
+  </div>
+  <p>Every concept follows the same seven headings: <strong>what it is</strong> (with an analogy), <strong>why we need it</strong>, <strong>whether it is mandatory</strong>, <strong>what happens without it</strong>, <strong>what we gain</strong>, the <strong>keyword</strong> that represents it, and <strong>how it connects</strong> to the rest.</p>
+</section>
+
+<!-- GLOSSARY -->
+<section class="card" id="glossary">
+  <div class="sec-eyebrow">Vocabulary</div>
+  <h2 class="sec">The words you will meet</h2>
+  <p>Read each one once. Come back whenever a term feels fuzzy.</p>
+  <div class="gloss">
+    <div class="term"><b>Authentication</b><span>Proving who you are &mdash; login with a username and password.</span></div>
+    <div class="term"><b>Authorisation</b><span>Deciding what you are allowed to do once your identity is confirmed.</span></div>
+    <div class="term"><b>Credential</b><span>The proof you present to confirm your identity, usually a password.</span></div>
+    <div class="term"><b>Principal</b><span>The currently identified user &mdash; the "who" behind this request.</span></div>
+    <div class="term"><b>Role</b><span>A label that groups what a user is allowed to do, like USER or ADMIN.</span></div>
+    <div class="term"><b>Permission / Authority</b><span>A fine-grained right, like "can delete accounts", attached to a user.</span></div>
+    <div class="term"><b>Token</b><span>A self-contained digital pass the server issues after successful login.</span></div>
+    <div class="term"><b>Session</b><span>A server-side record that remembers a logged-in user between requests.</span></div>
+    <div class="term"><b>Filter</b><span>A checkpoint that inspects every request before it reaches the application.</span></div>
+    <div class="term"><b>Filter Chain</b><span>The ordered row of filters every request must pass through.</span></div>
+    <div class="term"><b>Request</b><span>A message from a browser or app asking the server for something.</span></div>
+    <div class="term"><b>Response</b><span>The server's reply to a request.</span></div>
+    <div class="term"><b>Security Context</b><span>The place where the current user's identity is stored during a request.</span></div>
+    <div class="term"><b>Password Hashing</b><span>Turning a password into a scrambled string that cannot be reversed.</span></div>
+    <div class="term"><b>Public resource</b><span>A page or endpoint anyone can access without logging in.</span></div>
+    <div class="term"><b>Protected resource</b><span>A page or endpoint that requires login or a specific role.</span></div>
+    <div class="term"><b>Stateless</b><span>The server stores nothing between requests; each request proves its own identity.</span></div>
+    <div class="term"><b>Stateful</b><span>The server keeps a session so it remembers who is logged in.</span></div>
+  </div>
+</section>
+
+<!-- AUTH VS AUTHZ -->
+<section class="card lead-blue" id="authz">
+  <div class="sec-eyebrow">The most important distinction</div>
+  <h2 class="sec">Authentication vs Authorisation</h2>
+  <p>These two words sound similar and are often confused. Get them straight now and the rest of the guide will fall into place. They are two separate checks that happen one after the other.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 760 190" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+      <defs>
+        <marker id="am1" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker>
+        <marker id="am1r" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c0392b"/></marker>
+        <marker id="am1g" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#1f8a4c"/></marker>
+      </defs>
+      <!-- user -->
+      <rect x="20" y="75" width="110" height="50" rx="10" fill="#eef1f6" stroke="#6c7888" stroke-width="1.5"/>
+      <text x="75" y="103" text-anchor="middle" font-size="13" fill="#3c4858">User request</text>
+      <!-- step 1 -->
+      <rect x="195" y="55" width="155" height="90" rx="12" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.8"/>
+      <text x="272" y="82" text-anchor="middle" font-size="14" font-weight="700" fill="#1b3f7a">Step 1</text>
+      <text x="272" y="100" text-anchor="middle" font-size="13" fill="#2557a7">AUTHENTICATION</text>
+      <text x="272" y="118" text-anchor="middle" font-size="11.5" fill="#6c7888">"Who are you?"</text>
+      <text x="272" y="133" text-anchor="middle" font-size="11" fill="#9aa6b4">check username + password</text>
+      <!-- step 2 -->
+      <rect x="425" y="55" width="155" height="90" rx="12" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.8"/>
+      <text x="502" y="82" text-anchor="middle" font-size="14" font-weight="700" fill="#6b5417">Step 2</text>
+      <text x="502" y="100" text-anchor="middle" font-size="13" fill="#bd831a">AUTHORISATION</text>
+      <text x="502" y="118" text-anchor="middle" font-size="11.5" fill="#6c7888">"What can you do?"</text>
+      <text x="502" y="133" text-anchor="middle" font-size="11" fill="#9aa6b4">check role / permission</text>
+      <!-- arrows -->
+      <line x1="132" y1="100" x2="191" y2="100" stroke="#3c4858" stroke-width="2" marker-end="url(#am1)"/>
+      <line x1="352" y1="100" x2="421" y2="100" stroke="#3c4858" stroke-width="2" marker-end="url(#am1)"/>
+      <text x="386" y="92" text-anchor="middle" font-size="11" fill="#1f8a4c">identity confirmed</text>
+      <!-- outcomes -->
+      <line x1="580" y1="88" x2="700" y2="60" stroke="#1f8a4c" stroke-width="1.8" marker-end="url(#am1g)"/>
+      <rect x="678" y="40" width="74" height="26" rx="7" fill="#e9f6ee" stroke="#1f8a4c"/>
+      <text x="715" y="58" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1f6a3a">ALLOWED</text>
+      <line x1="580" y1="120" x2="700" y2="148" stroke="#c0392b" stroke-width="1.8" marker-end="url(#am1r)"/>
+      <rect x="672" y="135" width="78" height="26" rx="7" fill="#fbece9" stroke="#c0392b"/>
+      <text x="711" y="153" text-anchor="middle" font-size="11.5" font-weight="700" fill="#c0392b">BLOCKED</text>
+    </svg>
+    <div class="cap">Authentication always happens first. Authorisation only runs after identity is confirmed. They are two different questions.</div>
+  </div>
+  <table>
+    <thead><tr><th>Question</th><th>Authentication</th><th>Authorisation</th></tr></thead>
+    <tbody>
+    <tr><td>What it asks</td><td>"Who are you?"</td><td>"What are you allowed to do?"</td></tr>
+    <tr><td>What it checks</td><td>Username and password (or token)</td><td>Role or permission</td></tr>
+    <tr><td>Banking example</td><td>You log in as user@bank.com</td><td>You can see YOUR account, not someone else's</td></tr>
+    <tr><td>Failure result</td><td>401 Unauthorised &mdash; "I do not know who you are"</td><td>403 Forbidden &mdash; "I know who you are, but no"</td></tr>
+    <tr><td>Happens when</td><td>First, on every request</td><td>Second, after identity is confirmed</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- WHAT IS SPRING SECURITY -->
+<section class="card" id="what">
+  <div class="sec-eyebrow">The big picture</div>
+  <h2 class="sec">What Spring Security is</h2>
+  <p><strong>Spring Security</strong> is a framework that adds security to a Spring Boot application. Its two jobs are exactly the two steps above: Authentication (who are you?) and Authorisation (what can you do?).</p>
+  <p>The moment you add Spring Security to a project, it <strong>immediately does several things automatically</strong> &mdash; without you writing a single line:</p>
+  <ul>
+    <li>Every single URL in the application becomes protected. Nobody can access anything without logging in.</li>
+    <li>A basic login form appears at <code>/login</code>.</li>
+    <li>A random password is generated and printed in the console for a default user.</li>
+    <li>Logout is handled at <code>/logout</code>.</li>
+    <li>Sessions are managed between requests.</li>
+  </ul>
+  <h3>What you would have to build by hand without it</h3>
+  <p>Without Spring Security, every protected endpoint would need its own manual check: "Is there a logged-in session? Does this user have the right role?" &mdash; written in every controller, every method. You would also need to build the login form, session management, password hashing, token validation, CSRF protection, and CORS handling yourself. That is hundreds of lines of security-critical code where one mistake creates a real vulnerability.</p>
+  <div class="callout c-ok">
+    <div class="ct">The simplest way to understand it</div>
+    <p>Spring Security is a layer that sits in front of your application and handles all the "who can get in?" questions in one place, so your controllers can focus entirely on their job.</p>
+  </div>
+</section>
+
+<!-- MANDATORY -->
+<section class="card" id="mandatory">
+  <div class="sec-eyebrow">An honest answer</div>
+  <h2 class="sec">Is Spring Security mandatory for every project?</h2>
+  <p class="lead" style="font-size:1.05rem;color:var(--body);">No &mdash; but for most real applications it is the right choice. Here is the honest picture.</p>
+  <div class="duo">
+    <div class="pane gain">
+      <div class="pt">Use it when</div>
+      <p>Users log in. Data belongs to specific people. Some pages need roles. You store passwords. Any of these is enough reason.</p>
+    </div>
+    <div class="pane" style="background:var(--warn-bg);border-color:var(--warn-line);">
+      <div class="pt" style="color:var(--warn);">You can skip it when</div>
+      <p>A tiny internal tool, a fully public API with no user accounts, or a quick learning prototype where security does not matter yet.</p>
+    </div>
+  </div>
+  <div class="callout c-warn">
+    <div class="ct">The real risk of skipping it</div>
+    <p>If you skip Spring Security and later try to add security manually, you will almost certainly miss something. Security is one of those things that is far easier to build in from the start than to bolt on later. For any application that touches real user data, treat it as mandatory.</p>
+  </div>
+</section>
+
+<!-- MAP -->
+<section class="card" id="map">
+  <div class="sec-eyebrow">Priorities</div>
+  <h2 class="sec">What matters most for a beginner</h2>
+  <p>Not all nine concepts carry equal weight at the start. Here is the honest grouping.</p>
+  <div class="maprow"><span class="ml"><span class="tag t-core">CORE</span></span><span class="mt"><strong>Filter Chain, Authentication, Security Context, Password Encoding, Authorisation and Roles</strong> &mdash; the heart of Spring Security. Understand these first.</span></div>
+  <div class="maprow"><span class="ml"><span class="tag t-core">CORE+</span></span><span class="mt"><strong>UserDetails and UserDetailsService, SecurityFilterChain Configuration</strong> &mdash; you need these to connect Spring Security to your own database and rules.</span></div>
+  <div class="maprow"><span class="ml"><span class="tag t-opt">LATER</span></span><span class="mt"><strong>JWT, CSRF, CORS, and Session Management</strong> &mdash; important for production and microservices, but you can understand the core ideas without them at first.</span></div>
+</section>
+
+<!-- OVERVIEW DIAGRAM -->
+<section class="card" id="overview">
+  <div class="sec-eyebrow">The map</div>
+  <h2 class="sec">How it all fits together</h2>
+  <p>Every concept after this is one piece of this diagram, explained slowly. A request enters on the left and either reaches the application on the right or is blocked at a checkpoint.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 760 260" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+      <defs>
+        <marker id="am2" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker>
+        <marker id="am2r" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c0392b"/></marker>
+        <marker id="am2g" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#1f8a4c"/></marker>
+      </defs>
+      <!-- request -->
+      <rect x="12" y="100" width="90" height="44" rx="9" fill="#eef1f6" stroke="#6c7888" stroke-width="1.5"/>
+      <text x="57" y="127" text-anchor="middle" font-size="12.5" fill="#3c4858">HTTP Request</text>
+      <line x1="104" y1="122" x2="128" y2="122" stroke="#3c4858" stroke-width="2" marker-end="url(#am2)"/>
+      <!-- filter chain box -->
+      <rect x="130" y="40" width="244" height="168" rx="12" fill="#f4f7fb" stroke="#2557a7" stroke-width="1.6" stroke-dasharray="6 4"/>
+      <text x="252" y="62" text-anchor="middle" font-size="12" font-weight="700" fill="#2557a7">FILTER CHAIN</text>
+      <!-- filters inside -->
+      <rect x="148" y="74" width="208" height="30" rx="7" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.3"/>
+      <text x="252" y="94" text-anchor="middle" font-size="11.5" fill="#1b3f7a">Filter 1: read token / session</text>
+      <rect x="148" y="112" width="208" height="30" rx="7" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.3"/>
+      <text x="252" y="132" text-anchor="middle" font-size="11.5" fill="#1b3f7a">Filter 2: Authentication check</text>
+      <rect x="148" y="150" width="208" height="30" rx="7" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.3"/>
+      <text x="252" y="170" text-anchor="middle" font-size="11.5" fill="#1b3f7a">Filter 3: Authorisation check</text>
+      <line x1="374" y1="122" x2="398" y2="122" stroke="#3c4858" stroke-width="2" marker-end="url(#am2)"/>
+      <!-- security context -->
+      <rect x="400" y="56" width="148" height="44" rx="10" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.6"/>
+      <text x="474" y="76" text-anchor="middle" font-size="12.5" font-weight="700" fill="#6b5417">Security Context</text>
+      <text x="474" y="93" text-anchor="middle" font-size="11" fill="#9a6b10">stores "who is logged in"</text>
+      <!-- db -->
+      <g transform="translate(402,116)">
+        <ellipse cx="58" cy="10" rx="46" ry="9" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.3"/>
+        <path d="M12,10 v32 a46,9 0 0 0 92,0 v-32" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.3"/>
+        <ellipse cx="58" cy="10" rx="46" ry="9" fill="#eafaf8" stroke="#0e7c86" stroke-width="1.3"/>
+        <text x="58" y="34" text-anchor="middle" font-size="11" font-weight="650" fill="#0c6a6e">UserDetailsService</text>
+        <text x="58" y="48" text-anchor="middle" font-size="10" fill="#0c6a6e">loads user from DB</text>
+      </g>
+      <!-- arrows to context and db -->
+      <line x1="252" y1="127" x2="396" y2="86" stroke="#9aa6b4" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <line x1="252" y1="142" x2="398" y2="148" stroke="#9aa6b4" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <!-- application -->
+      <line x1="556" y1="122" x2="596" y2="100" stroke="#1f8a4c" stroke-width="2" marker-end="url(#am2g)"/>
+      <line x1="556" y1="136" x2="596" y2="158" stroke="#c0392b" stroke-width="2" marker-end="url(#am2r)"/>
+      <rect x="598" y="80" width="130" height="36" rx="9" fill="#e9f6ee" stroke="#1f8a4c" stroke-width="1.5"/>
+      <text x="663" y="103" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1f6a3a">Application (200)</text>
+      <rect x="598" y="140" width="130" height="36" rx="9" fill="#fbece9" stroke="#c0392b" stroke-width="1.5"/>
+      <text x="663" y="163" text-anchor="middle" font-size="12.5" font-weight="700" fill="#c0392b">Blocked (401/403)</text>
+      <text x="570" y="118" text-anchor="middle" font-size="10.5" fill="#1f8a4c">pass</text>
+      <text x="570" y="158" text-anchor="middle" font-size="10.5" fill="#c0392b">fail</text>
+    </svg>
+    <div class="cap">Every HTTP request passes through the Filter Chain. The chain checks identity and access, stores the result in the Security Context, and either lets the request through or blocks it.</div>
+  </div>
+</section>
+
+</main>
+</div>
+<div class="wrap" style="padding-top:0;">
+<div style="flex:0 0 248px;"></div>
+<main style="max-width:840px;">
+
+<!-- C1 FILTER CHAIN -->
+<section class="concept" id="c1">
+  <div class="concept-head"><span class="badge">1</span><div class="meta"><div class="cat">The foundation</div><h2>The Filter Chain</h2></div></div>
+  <div class="concept-body">
+    <p>The Filter Chain is an ordered row of checkpoints that every HTTP request must pass through before it ever reaches your application code. Think of it as a series of security gates at an airport.</p>
+    <div class="analogy"><div class="t">Analogy &mdash; Airport security</div><p>Before boarding a flight, you pass through check-in (who are you?), then passport control (is this document valid?), then the security scanner (are you carrying anything dangerous?). Each gate does one job. Miss one gate and you cannot board. The Filter Chain works exactly the same way for web requests.</p></div>
+    <div class="diagram">
+      <svg viewBox="0 0 760 130" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+        <defs><marker id="am3" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker><marker id="am3r" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c0392b"/></marker></defs>
+        <rect x="10" y="50" width="80" height="36" rx="8" fill="#eef1f6" stroke="#6c7888" stroke-width="1.4"/><text x="50" y="73" text-anchor="middle" font-size="12" fill="#3c4858">Request</text>
+        <line x1="92" y1="68" x2="118" y2="68" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am3)"/>
+        <rect x="120" y="44" width="108" height="48" rx="9" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.5"/><text x="174" y="65" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1b3f7a">Filter 1</text><text x="174" y="83" text-anchor="middle" font-size="10.5" fill="#6c7888">read token/session</text>
+        <line x1="230" y1="68" x2="254" y2="68" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am3)"/>
+        <rect x="256" y="44" width="108" height="48" rx="9" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.5"/><text x="310" y="65" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1b3f7a">Filter 2</text><text x="310" y="83" text-anchor="middle" font-size="10.5" fill="#6c7888">authenticate</text>
+        <line x1="366" y1="68" x2="390" y2="68" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am3)"/>
+        <rect x="392" y="44" width="108" height="48" rx="9" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.5"/><text x="446" y="65" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1b3f7a">Filter 3</text><text x="446" y="83" text-anchor="middle" font-size="10.5" fill="#6c7888">authorise</text>
+        <line x1="502" y1="60" x2="580" y2="50" stroke="#1f8a4c" stroke-width="1.8" marker-end="url(#am3)"/><text x="546" y="46" text-anchor="middle" font-size="11" fill="#1f8a4c">pass</text>
+        <line x1="502" y1="80" x2="580" y2="90" stroke="#c0392b" stroke-width="1.8" marker-end="url(#am3r)"/><text x="546" y="103" text-anchor="middle" font-size="11" fill="#c0392b">blocked (401/403)</text>
+        <rect x="582" y="36" width="100" height="28" rx="8" fill="#e9f6ee" stroke="#1f8a4c" stroke-width="1.4"/><text x="632" y="55" text-anchor="middle" font-size="11.5" font-weight="650" fill="#1f6a3a">Application</text>
+      </svg>
+      <div class="cap">Each filter does one job. The request passes all three or is stopped. Order matters: you cannot authorise before authenticating.</div>
+    </div>
+    <span class="kicker k-why">Why we need it</span>
+    <p>Without a filter chain, security checks would have to be copy-pasted into every controller method. With the chain, security is handled once, in one place, before any application code even runs. The chain is also where Spring Security adds its automatic protections &mdash; even before you write any configuration.</p>
+    <div class="status"><span class="tag t-must">MANDATORY</span> The Filter Chain is the entire mechanism Spring Security runs on. Everything else is part of it.</div>
+    <div class="duo">
+      <div class="pane without"><div class="pt"><span class="ic">&#10007;</span> Without it</div><p>Security logic must be repeated in every controller. One forgotten check and a protected page becomes public. Maintenance is a nightmare.</p></div>
+      <div class="pane gain"><div class="pt"><span class="ic">&#10003;</span> What we gain</div><p>All security in one ordered pipeline. Add or remove a filter and every request is instantly affected. Controllers stay clean.</p></div>
+    </div>
+    <span class="kicker k-ann">The keyword that represents it</span>
+    <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+      <tr><td><code>SecurityFilterChain</code></td><td>The Java type that represents the ordered list of filters for your application. Defining one is how you customise what the chain does.</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      <tr><td><code>OncePerRequestFilter</code></td><td>A base class for writing your own custom filter that runs exactly once per request. You extend this when adding JWT or custom checks.</td><td><span class="tag t-opt">OPTIONAL</span></td></tr>
+    </tbody></table>
+    <span class="kicker k-link">How it connects</span>
+    <p>The Filter Chain is the container. Every other concept in this guide &mdash; Authentication, Authorisation, JWT &mdash; is a filter inside this chain. Understanding the chain first means the rest fits naturally.</p>
+  </div>
+</section>
+
+<!-- C2 AUTHENTICATION -->
+<section class="concept" id="c2">
+  <div class="concept-head"><span class="badge">2</span><div class="meta"><div class="cat">Core concept</div><h2>Authentication</h2></div></div>
+  <div class="concept-body">
+    <p>Authentication is the process of confirming who you are. In Spring Security it has two steps: collect what the user claims (username and password), then verify that claim against a trusted source (the database).</p>
+    <div class="analogy"><div class="t">Analogy &mdash; Hotel check-in</div><p>You arrive at a hotel and say "I have a reservation under Smith." The receptionist does not just take your word for it &mdash; they look up "Smith" in the system and check that your ID matches. If it does, they hand you a key card. If not, they turn you away. Spring Security does exactly this for every login.</p></div>
+    <div class="diagram">
+      <svg viewBox="0 0 760 170" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+        <defs><marker id="am4" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker><marker id="am4r" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c0392b"/></marker><marker id="am4g" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#1f8a4c"/></marker></defs>
+        <rect x="14" y="68" width="100" height="40" rx="9" fill="#eef1f6" stroke="#6c7888" stroke-width="1.4"/><text x="64" y="88" text-anchor="middle" font-size="11.5" fill="#3c4858">User sends</text><text x="64" y="103" text-anchor="middle" font-size="11" fill="#6c7888">user+password</text>
+        <line x1="116" y1="88" x2="152" y2="88" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am4)"/>
+        <rect x="154" y="56" width="160" height="68" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.7"/><text x="234" y="80" text-anchor="middle" font-size="13" font-weight="700" fill="#1b3f7a">Authentication</text><text x="234" y="98" text-anchor="middle" font-size="11.5" fill="#2557a7">Manager</text><text x="234" y="115" text-anchor="middle" font-size="10.5" fill="#6c7888">delegates to provider</text>
+        <line x1="316" y1="88" x2="352" y2="88" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am4)"/>
+        <rect x="354" y="56" width="150" height="68" rx="11" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.7"/><text x="429" y="80" text-anchor="middle" font-size="13" font-weight="700" fill="#6b5417">Authentication</text><text x="429" y="98" text-anchor="middle" font-size="11.5" fill="#bd831a">Provider</text><text x="429" y="115" text-anchor="middle" font-size="10.5" fill="#6c7888">loads user, checks password</text>
+        <line x1="506" y1="76" x2="572" y2="54" stroke="#1f8a4c" stroke-width="1.8" marker-end="url(#am4g)"/><text x="544" y="48" text-anchor="middle" font-size="11" fill="#1f8a4c">success &rarr; store in context</text>
+        <line x1="506" y1="106" x2="572" y2="128" stroke="#c0392b" stroke-width="1.8" marker-end="url(#am4r)"/><text x="548" y="148" text-anchor="middle" font-size="11" fill="#c0392b">failure &rarr; 401 Unauthorised</text>
+      </svg>
+      <div class="cap">The Manager coordinates; the Provider does the actual check. On success, identity is stored in the Security Context for this request.</div>
+    </div>
+    <span class="kicker k-why">Why we need it</span>
+    <p>Without authentication, any request could claim to be anyone. In the banking app, without authentication anyone could reach <code>/account</code> and see all accounts. Authentication is the lock on the door.</p>
+    <div class="status"><span class="tag t-must">MANDATORY</span> Authentication is one of the two core jobs of Spring Security. Every protected application needs it.</div>
+    <div class="duo">
+      <div class="pane without"><div class="pt"><span class="ic">&#10007;</span> Without it</div><p>All URLs are effectively public. Anyone can access any page by just visiting the address, regardless of whether they should.</p></div>
+      <div class="pane gain"><div class="pt"><span class="ic">&#10003;</span> What we gain</div><p>Only users who prove their identity can access protected pages. The identity is stored so the rest of the request does not need to re-verify.</p></div>
+    </div>
+    <h3>Stateful vs Stateless &mdash; two ways to remember a login</h3>
+    <table><thead><tr><th></th><th>Stateful (session-based)</th><th>Stateless (token-based)</th></tr></thead><tbody>
+      <tr><td><strong>How it works</strong></td><td>Server creates a session and stores it. Browser sends a session cookie each time.</td><td>Server issues a token (JWT). Client stores it and sends it with every request.</td></tr>
+      <tr><td><strong>Server memory</strong></td><td>Server must remember the session.</td><td>Server remembers nothing &mdash; the token is self-contained.</td></tr>
+      <tr><td><strong>Best for</strong></td><td>Traditional web apps with a browser.</td><td>REST APIs and microservices.</td></tr>
+      <tr><td><strong>Banking example</strong></td><td>Login once; browser cookie keeps you in for the session.</td><td>Login once; every API call sends the token in the header.</td></tr>
+    </tbody></table>
+    <span class="kicker k-ann">The keyword that represents it</span>
+    <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+      <tr><td><code>AuthenticationManager</code></td><td>The coordinator that receives a login request and hands it to the right provider to verify. It is the entry point for the authentication process.</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      <tr><td><code>AuthenticationProvider</code></td><td>The actual verifier. The default one loads a user and checks the password. You rarely need to write your own.</td><td><span class="tag t-auto">AUTOMATIC</span></td></tr>
+      <tr><td><code>UsernamePasswordAuthenticationToken</code></td><td>The object that holds "username + password" during the authentication process. It is the standard way to carry credentials inside the filter chain.</td><td><span class="tag t-auto">AUTOMATIC</span></td></tr>
+    </tbody></table>
+    <span class="kicker k-link">How it connects</span>
+    <p>Authentication stores the confirmed identity in the Security Context (concept 3). It needs UserDetailsService (concept 4) to load the user from the database, and PasswordEncoder (concept 5) to check the password safely.</p>
+  </div>
+</section>
+
+<!-- C3 SECURITY CONTEXT -->
+<section class="concept" id="c3">
+  <div class="concept-head"><span class="badge amber">3</span><div class="meta"><div class="cat">Core concept</div><h2>Security Context &amp; SecurityContextHolder</h2></div></div>
+  <div class="concept-body">
+    <p>The Security Context is a small storage space that holds the identity of the currently logged-in user for the duration of one request. The SecurityContextHolder is the class that owns that storage space and makes it available everywhere.</p>
+    <div class="analogy"><div class="t">Analogy &mdash; Staff ID badge while inside the building</div><p>Once you scan your badge at the entrance and security confirms who you are, you wear your badge all day. Any colleague or locked door can check your badge without you having to re-prove your identity at every step. At the end of the day you hand the badge back. The Security Context is that badge, held in memory for the duration of your visit (the request).</p></div>
+    <div class="diagram">
+      <svg viewBox="0 0 760 150" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+        <defs><marker id="am5" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker><marker id="am5r" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c0392b"/></marker></defs>
+        <rect x="12" y="60" width="96" height="36" rx="8" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.4"/><text x="60" y="82" text-anchor="middle" font-size="12" fill="#1b3f7a">Auth filter</text>
+        <line x1="110" y1="78" x2="148" y2="78" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am5)"/>
+        <rect x="150" y="46" width="172" height="66" rx="11" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.8"/><text x="236" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#6b5417">Security Context</text><text x="236" y="89" text-anchor="middle" font-size="11.5" fill="#9a6b10">stores: "user@bank.com, ROLE_USER"</text><text x="236" y="104" text-anchor="middle" font-size="10.5" fill="#9a6b10">lives for ONE request only</text>
+        <line x1="324" y1="65" x2="394" y2="65" stroke="#3c4858" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#am5)"/><text x="360" y="56" text-anchor="middle" font-size="10.5" fill="#6c7888">any filter can read</text>
+        <line x1="324" y1="90" x2="394" y2="90" stroke="#3c4858" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#am5)"/><text x="360" y="110" text-anchor="middle" font-size="10.5" fill="#6c7888">any controller can read</text>
+        <rect x="396" y="50" width="130" height="60" rx="10" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.4"/><text x="461" y="75" text-anchor="middle" font-size="12" fill="#1b3f7a">Application code</text><text x="461" y="93" text-anchor="middle" font-size="10.5" fill="#6c7888">knows who the user is</text>
+        <line x1="556" y1="78" x2="630" y2="78" stroke="#c0392b" stroke-width="1.8" marker-end="url(#am5r)"/><text x="592" y="68" text-anchor="middle" font-size="10.5" fill="#c0392b">request ends</text>
+        <rect x="632" y="60" width="110" height="36" rx="8" fill="#fbece9" stroke="#c0392b" stroke-width="1.4"/><text x="687" y="82" text-anchor="middle" font-size="11" fill="#c0392b">context cleared</text>
+      </svg>
+      <div class="cap">After authentication, identity is stored in the Security Context for this request. Filters and controllers can all read it. When the request ends, it is wiped.</div>
+    </div>
+    <span class="kicker k-why">Why we need it</span>
+    <p>After authentication confirms who the user is, that information needs to be available to every part of the application for the rest of that request &mdash; the authorisation filter, the controller, and any service method. Without a shared context, each would have to re-verify the user separately.</p>
+    <div class="status"><span class="tag t-must">MANDATORY</span> The Security Context is how identity flows through a request. Spring Security uses it constantly behind the scenes.</div>
+    <div class="duo">
+      <div class="pane without"><div class="pt"><span class="ic">&#10007;</span> Without it</div><p>There is no shared way to know "who is this request from?" Each part of the code would need its own identity-checking logic, leading to repetition and inconsistency.</p></div>
+      <div class="pane gain"><div class="pt"><span class="ic">&#10003;</span> What we gain</div><p>One place holds the identity for the whole request. Any controller can ask "who is the current user?" with one line, and always gets the same answer.</p></div>
+    </div>
+    <span class="kicker k-ann">The keyword that represents it</span>
+    <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+      <tr><td><code>SecurityContextHolder</code></td><td>The class that owns the Security Context. Think of it as the badge rack. You call <code>SecurityContextHolder.getContext()</code> to read who is logged in.</td><td><span class="tag t-auto">AUTOMATIC</span></td></tr>
+      <tr><td><code>Authentication</code> (the interface)</td><td>The object stored in the context that represents "the current user and their roles." It is what you read when you want to know who made this request.</td><td><span class="tag t-auto">AUTOMATIC</span></td></tr>
+    </tbody></table>
+    <span class="kicker k-link">How it connects</span>
+    <p>Authentication (concept 2) writes to the Security Context. Authorisation (concept 6) reads from it to decide what the user is allowed to do. The context is the handoff point between the two.</p>
+  </div>
+</section>
+
+<!-- C4 USERDETAILS -->
+<section class="concept" id="c4">
+  <div class="concept-head"><span class="badge teal">4</span><div class="meta"><div class="cat">Core concept</div><h2>UserDetails &amp; UserDetailsService</h2></div></div>
+  <div class="concept-body">
+    <p>UserDetails is the shape (the "mould") that Spring Security uses to understand a user. UserDetailsService is the bridge that loads a user from <em>your</em> database and fits them into that mould. Spring Security does not know how your database is structured, so it needs you to provide this bridge.</p>
+    <div class="analogy"><div class="t">Analogy &mdash; The standard ID card format</div><p>A government office accepts ID cards in one standard format: name, photo, ID number, expiry date. Your bank card, driving licence, and passport are all different shapes &mdash; but a translator can read yours and fill in the standard form. UserDetailsService is that translator.</p></div>
+    <div class="diagram">
+      <svg viewBox="0 0 760 160" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+        <defs><marker id="am6" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker></defs>
+        <rect x="12" y="60" width="130" height="48" rx="10" fill="#eef1f6" stroke="#6c7888" stroke-width="1.4"/>
+        <text x="77" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="#3c4858">Your User entity</text>
+        <text x="77" y="100" text-anchor="middle" font-size="11" fill="#6c7888">id, email, hashedPwd, role</text>
+        <line x1="144" y1="84" x2="208" y2="84" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am6)"/>
+        <rect x="210" y="46" width="190" height="80" rx="11" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.8"/>
+        <text x="305" y="72" text-anchor="middle" font-size="13" font-weight="700" fill="#0c6a6e">UserDetailsService</text>
+        <text x="305" y="92" text-anchor="middle" font-size="11.5" fill="#0e7c86">loadUserByUsername(email)</text>
+        <text x="305" y="110" text-anchor="middle" font-size="10.5" fill="#6c7888">the bridge you write</text>
+        <line x1="402" y1="84" x2="466" y2="84" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am6)"/>
+        <rect x="468" y="46" width="180" height="80" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.8"/>
+        <text x="558" y="72" text-anchor="middle" font-size="13" font-weight="700" fill="#1b3f7a">UserDetails</text>
+        <text x="558" y="92" text-anchor="middle" font-size="11.5" fill="#2557a7">username, password, roles</text>
+        <text x="558" y="110" text-anchor="middle" font-size="10.5" fill="#6c7888">Spring Security's standard shape</text>
+        <text x="231" y="38" text-anchor="middle" font-size="10.5" fill="#0c6a6e">your DB</text>
+        <text x="648" y="38" text-anchor="middle" font-size="10.5" fill="#2557a7">Spring knows this</text>
+      </svg>
+      <div class="cap">Your User entity (your shape) is loaded by your UserDetailsService and converted into a UserDetails (Spring's shape). Spring Security only ever sees UserDetails.</div>
+    </div>
+    <span class="kicker k-why">Why we need it</span>
+    <p>Spring Security does not know that your database has a table called <code>app_users</code> with a column called <code>email</code>. It only knows one standard shape: UserDetails. You write the bridge (UserDetailsService) that loads your entity and returns it in that standard shape.</p>
+    <div class="status"><span class="tag t-must">MANDATORY</span> You must provide a UserDetailsService to connect Spring Security to your own database. Without it, Spring cannot load your users.</div>
+    <div class="duo">
+      <div class="pane without"><div class="pt"><span class="ic">&#10007;</span> Without it</div><p>Spring Security does not know where your users live. It cannot verify a login because it cannot look anyone up. You get a default in-memory user with a generated password, which is useless for a real application.</p></div>
+      <div class="pane gain"><div class="pt"><span class="ic">&#10003;</span> What we gain</div><p>Spring Security can load any user from any database by name. Authentication works against your real data, with your real roles.</p></div>
+    </div>
+    <div class="callout c-note">
+      <div class="ct">Your User entity vs UserDetails</div>
+      <p>Your User entity (a JPA class) is for your application &mdash; it can have anything: address, date of birth, profile picture. UserDetails is for Spring Security &mdash; it only carries what security needs: username, password, roles, and account status. You map one to the other inside your UserDetailsService.</p>
+    </div>
+    <span class="kicker k-ann">The keyword that represents it</span>
+    <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+      <tr><td><code>UserDetailsService</code></td><td>An interface with one method: "given a username, return a UserDetails object." You implement this to tell Spring how to find a user in your database.</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      <tr><td><code>UserDetails</code></td><td>An interface describing what a security user looks like: username, password, list of roles, and four account-status flags. Your implementation must provide all of these.</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+    </tbody></table>
+    <span class="kicker k-link">How it connects</span>
+    <p>The AuthenticationProvider (concept 2) calls UserDetailsService to load a user, then uses PasswordEncoder (concept 5) to compare passwords. These three always work together during a login.</p>
+  </div>
+</section>
+
+<!-- C5 PASSWORD ENCODING -->
+<section class="concept" id="c5">
+  <div class="concept-head"><span class="badge amber">5</span><div class="meta"><div class="cat">Core concept</div><h2>Password Encoding (BCrypt)</h2></div></div>
+  <div class="concept-body">
+    <p>Password encoding means turning a plain-text password into a scrambled string before storing it, using a one-way mathematical process called <strong>hashing</strong>. BCrypt is the standard hashing algorithm Spring Security recommends.</p>
+    <div class="analogy"><div class="t">Analogy &mdash; A combination lock that forgets</div><p>You set a combination lock to 4729. From now on, to prove you know the combination you must produce 4729. But the lock never stores "4729" written on it &mdash; it only keeps a scrambled form it can check against. Even the locksmith who built it cannot tell you the combination from looking at the lock. BCrypt works the same way.</p></div>
+    <div class="diagram">
+      <svg viewBox="0 0 760 170" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+        <defs><marker id="am7" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker><marker id="am7r" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c0392b"/></marker></defs>
+        <text x="60" y="36" text-anchor="middle" font-size="12" font-weight="700" fill="#16243d">STORING a password</text>
+        <rect x="12" y="48" width="96" height="34" rx="8" fill="#fbece9" stroke="#c0392b" stroke-width="1.4"/><text x="60" y="70" text-anchor="middle" font-size="12" fill="#8b2a1f">"mypassword"</text>
+        <line x1="110" y1="65" x2="148" y2="65" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am7)"/>
+        <rect x="150" y="44" width="118" height="42" rx="9" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.7"/><text x="209" y="62" text-anchor="middle" font-size="12" font-weight="700" fill="#0c6a6e">BCrypt.encode</text><text x="209" y="78" text-anchor="middle" font-size="10.5" fill="#0c6a6e">+ random salt</text>
+        <line x1="270" y1="65" x2="308" y2="65" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am7)"/>
+        <rect x="310" y="44" width="148" height="42" rx="9" fill="#e9f6ee" stroke="#1f8a4c" stroke-width="1.7"/><text x="384" y="62" text-anchor="middle" font-size="11" fill="#1f6a3a">$2a$10$xJkP9...oQ5z</text><text x="384" y="78" text-anchor="middle" font-size="10.5" fill="#6c7888">stored in database</text>
+        <text x="60" y="130" text-anchor="middle" font-size="12" font-weight="700" fill="#16243d">CHECKING a password at login</text>
+        <rect x="12" y="142" width="96" height="28" rx="7" fill="#eef1f6" stroke="#6c7888" stroke-width="1.4"/><text x="60" y="161" text-anchor="middle" font-size="11.5" fill="#3c4858">"mypassword"</text>
+        <line x1="110" y1="156" x2="148" y2="156" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am7)"/>
+        <rect x="150" y="136" width="118" height="40" rx="9" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.7"/><text x="209" y="154" text-anchor="middle" font-size="12" font-weight="700" fill="#0c6a6e">BCrypt.matches</text><text x="209" y="170" text-anchor="middle" font-size="10.5" fill="#0e7c86">re-hash &amp; compare</text>
+        <line x1="270" y1="156" x2="308" y2="148" stroke="#1f8a4c" stroke-width="1.8" marker-end="url(#am7)"/><text x="374" y="138" text-anchor="middle" font-size="11.5" fill="#1f8a4c">match &rarr; login success</text>
+        <line x1="270" y1="166" x2="308" y2="174" stroke="#c0392b" stroke-width="1.8" marker-end="url(#am7r)"/><text x="378" y="182" text-anchor="middle" font-size="11.5" fill="#c0392b">no match &rarr; login fails</text>
+      </svg>
+      <div class="cap">Top: the plain password is hashed before storage. Bottom: at login, the plain password is re-hashed and compared to the stored hash. The original is never stored.</div>
+    </div>
+    <span class="kicker k-why">Why we need it</span>
+    <p>If passwords are stored as plain text and the database is ever stolen, every user's password is immediately exposed &mdash; including their passwords for other websites, since people reuse passwords. Hashing means a stolen database reveals nothing usable.</p>
+    <div class="callout c-bad">
+      <div class="ct">Hashing vs Encryption &mdash; a critical difference</div>
+      <p><strong>Encryption</strong> is reversible &mdash; a key can decrypt the message back. <strong>Hashing</strong> is one-way &mdash; there is no key and no way to reverse it. Passwords must be hashed, not encrypted. If they were encrypted, whoever holds the key can decrypt all passwords.</p>
+    </div>
+    <p>BCrypt also adds a <strong>salt</strong> &mdash; a random value mixed into the hash before storing. This means two users with the same password produce completely different hashes, so an attacker cannot use a pre-computed lookup table to crack them.</p>
+    <div class="status"><span class="tag t-must">MANDATORY</span> Always use a PasswordEncoder. Storing plain text passwords is a serious security vulnerability.</div>
+    <div class="duo">
+      <div class="pane without"><div class="pt"><span class="ic">&#10007;</span> Without it</div><p>Passwords stored in plain text. One database breach exposes every user's password immediately. This is the single most common cause of mass credential leaks.</p></div>
+      <div class="pane gain"><div class="pt"><span class="ic">&#10003;</span> What we gain</div><p>Even if the database is stolen, the stored hashes are computationally infeasible to reverse. User passwords remain safe.</p></div>
+    </div>
+    <span class="kicker k-ann">The keyword that represents it</span>
+    <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+      <tr><td><code>PasswordEncoder</code></td><td>The interface Spring Security uses for hashing. It has two methods: encode (hash it) and matches (compare a plain password to a stored hash).</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      <tr><td><code>BCryptPasswordEncoder</code></td><td>The standard implementation of PasswordEncoder. It uses the BCrypt algorithm with a built-in salt and work factor. This is what you use unless you have a special reason.</td><td><span class="tag t-must">MANDATORY</span> (recommended)</td></tr>
+    </tbody></table>
+    <span class="kicker k-link">How it connects</span>
+    <p>PasswordEncoder is used by the AuthenticationProvider (concept 2) when comparing a login attempt against the stored hash. UserDetailsService (concept 4) returns the stored hash; PasswordEncoder checks it.</p>
+  </div>
+</section>
+
+<!-- C6 AUTHORISATION -->
+<section class="concept" id="c6">
+  <div class="concept-head"><span class="badge">6</span><div class="meta"><div class="cat">Core concept</div><h2>Authorisation &amp; Roles</h2></div></div>
+  <div class="concept-body">
+    <p>Authorisation is the second check &mdash; deciding what an authenticated user is allowed to do. A <strong>Role</strong> is a broad label that groups what a user can access (like <code>ROLE_USER</code> or <code>ROLE_ADMIN</code>). A <strong>Permission / Authority</strong> is a fine-grained specific right (like <code>account:delete</code>).</p>
+    <div class="analogy"><div class="t">Analogy &mdash; Access levels in an office building</div><p>Showing your employee badge at the front door is authentication (you proved you work here). But once inside, your badge may not open the server room &mdash; that requires a different level. Authorisation is what decides which doors your badge opens.</p></div>
+    <div class="diagram">
+      <svg viewBox="0 0 760 160" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+        <defs><marker id="am8" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker><marker id="am8g" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#1f8a4c"/></marker><marker id="am8r" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c0392b"/></marker></defs>
+        <rect x="12" y="62" width="118" height="42" rx="9" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.5"/><text x="71" y="79" text-anchor="middle" font-size="12" font-weight="700" fill="#1b3f7a">Authenticated</text><text x="71" y="96" text-anchor="middle" font-size="11" fill="#2557a7">ROLE_USER</text>
+        <line x1="132" y1="83" x2="168" y2="83" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am8)"/>
+        <rect x="170" y="48" width="160" height="74" rx="11" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.8"/><text x="250" y="72" text-anchor="middle" font-size="13" font-weight="700" fill="#6b5417">Authorisation</text><text x="250" y="90" text-anchor="middle" font-size="11.5" fill="#9a6b10">check: what role?</text><text x="250" y="108" text-anchor="middle" font-size="11" fill="#9a6b10">what does this URL need?</text>
+        <line x1="332" y1="70" x2="388" y2="52" stroke="#1f8a4c" stroke-width="1.8" marker-end="url(#am8g)"/>
+        <rect x="390" y="36" width="160" height="30" rx="8" fill="#e9f6ee" stroke="#1f8a4c" stroke-width="1.4"/><text x="470" y="56" text-anchor="middle" font-size="12" fill="#1f6a3a">/home &mdash; allowed (public)</text>
+        <line x1="332" y1="83" x2="388" y2="83" stroke="#1f8a4c" stroke-width="1.8" marker-end="url(#am8g)"/>
+        <rect x="390" y="70" width="160" height="30" rx="8" fill="#e9f6ee" stroke="#1f8a4c" stroke-width="1.4"/><text x="470" y="90" text-anchor="middle" font-size="12" fill="#1f6a3a">/account &mdash; allowed</text>
+        <line x1="332" y1="100" x2="388" y2="118" stroke="#c0392b" stroke-width="1.8" marker-end="url(#am8r)"/>
+        <rect x="390" y="104" width="160" height="30" rx="8" fill="#fbece9" stroke="#c0392b" stroke-width="1.4"/><text x="470" y="124" text-anchor="middle" font-size="12" fill="#c0392b">/admin &mdash; BLOCKED (403)</text>
+      </svg>
+      <div class="cap">The user is authenticated as ROLE_USER. /home and /account are allowed. /admin requires ROLE_ADMIN &mdash; access denied with a 403 Forbidden.</div>
+    </div>
+    <span class="kicker k-why">Why we need it</span>
+    <p>Authentication only confirms identity. Without authorisation, any logged-in user could reach any page, including the admin panel. Authorisation adds the rule layer: identity is necessary but not sufficient for access.</p>
+    <div class="status"><span class="tag t-must">MANDATORY</span> Without authorisation, any logged-in user can access everything.</div>
+    <div class="duo">
+      <div class="pane without"><div class="pt"><span class="ic">&#10007;</span> Without it</div><p>All logged-in users are equal. A regular customer can reach the admin panel and manage other accounts. Roles are meaningless without enforcement.</p></div>
+      <div class="pane gain"><div class="pt"><span class="ic">&#10003;</span> What we gain</div><p>Fine-grained control: each URL can require a specific role. An admin page simply cannot be reached by a regular user, no matter what they try.</p></div>
+    </div>
+    <h3>Role vs Permission &mdash; what is the difference?</h3>
+    <table><thead><tr><th></th><th>Role</th><th>Permission / Authority</th></tr></thead><tbody>
+      <tr><td>What it is</td><td>A broad label: USER, ADMIN, STAFF</td><td>A specific right: <code>account:delete</code>, <code>report:read</code></td></tr>
+      <tr><td>Spring prefix</td><td>Spring adds <code>ROLE_</code> automatically: <code>ROLE_ADMIN</code></td><td>No prefix; used as-is</td></tr>
+      <tr><td>When to use</td><td>Simple access levels (most apps)</td><td>Fine-grained per-action control</td></tr>
+      <tr><td>Banking example</td><td><code>ROLE_USER</code> vs <code>ROLE_ADMIN</code></td><td><code>account:view</code>, <code>account:transfer</code></td></tr>
+    </tbody></table>
+    <span class="kicker k-ann">The keyword that represents it</span>
+    <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+      <tr><td><code>@PreAuthorize</code></td><td>A label on a method that means "only allow this if the caller has this role or permission." It is the most flexible way to protect a specific method.</td><td><span class="tag t-opt">OPTIONAL</span></td></tr>
+      <tr><td><code>@Secured</code></td><td>An older, simpler label for the same idea: "only this role can call this method." Less flexible than <code>@PreAuthorize</code>.</td><td><span class="tag t-opt">OPTIONAL</span></td></tr>
+      <tr><td><code>hasRole()</code> / <code>hasAuthority()</code></td><td>Expressions used inside security configuration to say "this URL requires this role." The building blocks of access rules.</td><td><span class="tag t-must">MANDATORY</span> in config</td></tr>
+    </tbody></table>
+    <span class="kicker k-link">How it connects</span>
+    <p>Authorisation reads the role from the Security Context (concept 3), which was populated by Authentication (concept 2). The rules themselves are written in the SecurityFilterChain Configuration (concept 8).</p>
+  </div>
+</section>
+
+<!-- C7 JWT -->
+<section class="concept" id="c7">
+  <div class="concept-head"><span class="badge teal">7</span><div class="meta"><div class="cat">Important add-on</div><h2>JWT &mdash; JSON Web Token</h2></div></div>
+  <div class="concept-body">
+    <p>A JWT (JSON Web Token) is a small, self-contained digital ticket. After a user logs in, the server creates a JWT, signs it (proves it came from this server), and gives it to the client. The client sends it back with every future request. The server verifies the signature and trusts the identity inside without needing to look anything up.</p>
+    <div class="analogy"><div class="t">Analogy &mdash; A signed concert wristband</div><p>At the entrance, staff check your ticket and give you a wristband stamped with a unique mark only they can create. For the rest of the night, any staff member can see your wristband and know you are allowed in &mdash; without calling the box office every time. If someone fakes the mark, the stamp does not match and they are turned away. That is exactly how a JWT works.</p></div>
+    <div class="diagram">
+      <svg viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+        <defs><marker id="am9" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker><marker id="am9g" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#1f8a4c"/></marker><marker id="am9r" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c0392b"/></marker></defs>
+        <!-- step 1 login -->
+        <rect x="12" y="24" width="104" height="36" rx="8" fill="#eef1f6" stroke="#6c7888" stroke-width="1.4"/><text x="64" y="46" text-anchor="middle" font-size="12" fill="#3c4858">User logs in</text>
+        <line x1="118" y1="42" x2="170" y2="42" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am9)"/>
+        <rect x="172" y="18" width="130" height="52" rx="10" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.7"/><text x="237" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1b3f7a">Server</text><text x="237" y="57" text-anchor="middle" font-size="11" fill="#2557a7">verifies credentials</text>
+        <line x1="304" y1="42" x2="360" y2="42" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am9)"/>
+        <rect x="362" y="18" width="140" height="52" rx="10" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.7"/><text x="432" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#0c6a6e">JWT issued</text><text x="432" y="57" text-anchor="middle" font-size="11" fill="#0e7c86">signed with secret key</text>
+        <line x1="504" y1="42" x2="570" y2="42" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am9)"/>
+        <rect x="572" y="18" width="128" height="52" rx="10" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.7"/><text x="636" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#6b5417">Client stores</text><text x="636" y="57" text-anchor="middle" font-size="11" fill="#9a6b10">token in memory</text>
+        <!-- step 2 use token -->
+        <text x="380" y="105" text-anchor="middle" font-size="11.5" font-weight="700" fill="#6c7888">Next request: client sends token in Authorization header</text>
+        <rect x="12" y="120" width="104" height="36" rx="8" fill="#eef1f6" stroke="#6c7888" stroke-width="1.4"/><text x="64" y="142" text-anchor="middle" font-size="12" fill="#3c4858">Client request</text>
+        <line x1="118" y1="138" x2="168" y2="138" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am9)"/>
+        <rect x="170" y="116" width="134" height="52" rx="10" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.7"/><text x="237" y="138" text-anchor="middle" font-size="13" font-weight="700" fill="#1b3f7a">JWT Filter</text><text x="237" y="155" text-anchor="middle" font-size="11" fill="#2557a7">reads &amp; verifies signature</text>
+        <line x1="306" y1="138" x2="346" y2="130" stroke="#1f8a4c" stroke-width="1.8" marker-end="url(#am9g)"/><text x="376" y="122" text-anchor="middle" font-size="11.5" fill="#1f8a4c">valid &rarr; trust identity</text>
+        <line x1="306" y1="152" x2="346" y2="162" stroke="#c0392b" stroke-width="1.8" marker-end="url(#am9r)"/><text x="380" y="177" text-anchor="middle" font-size="11.5" fill="#c0392b">invalid/expired &rarr; 401</text>
+      </svg>
+      <div class="cap">Step 1 (top): Login succeeds, server creates and signs a JWT, client stores it. Step 2 (bottom): Every future request sends the JWT; the filter verifies the signature without touching the database.</div>
+    </div>
+    <h3>The three parts of a JWT</h3>
+    <table><thead><tr><th>Part</th><th>What it contains</th><th>Plain-English purpose</th></tr></thead><tbody>
+      <tr><td><strong>Header</strong></td><td>Algorithm used (e.g. HS256) and token type</td><td>"This is a JWT, signed with this method."</td></tr>
+      <tr><td><strong>Payload</strong></td><td>Claims: username, roles, expiry time (<code>sub</code>, <code>roles</code>, <code>exp</code>)</td><td>"This is who the user is and when this token expires."</td></tr>
+      <tr><td><strong>Signature</strong></td><td>A hash of Header + Payload, created with a secret key</td><td>"Only the server that knows the secret could have made this."</td></tr>
+    </tbody></table>
+    <div class="callout c-warn">
+      <div class="ct">Signing vs Encrypting &mdash; critical difference</div>
+      <p><strong>Signing</strong> proves the token has not been tampered with (integrity). Anyone can read the payload &mdash; it is not secret. <strong>Encrypting</strong> hides the content. A standard JWT is signed, not encrypted &mdash; do not put sensitive data like passwords in the payload.</p>
+    </div>
+    <div class="status"><span class="tag t-opt">OPTIONAL</span> Required for stateless REST APIs and microservices. Not needed for traditional session-based web apps.</div>
+    <div class="duo">
+      <div class="pane without"><div class="pt"><span class="ic">&#10007;</span> Without JWT (sessions)</div><p>Every server in a microservices system needs access to the session store, forcing shared state. Scaling is harder and one session store becomes a single point of failure.</p></div>
+      <div class="pane gain"><div class="pt"><span class="ic">&#10003;</span> With JWT</div><p>Stateless: any server can verify the token without shared storage. Perfect for microservices and mobile apps where session cookies do not work.</p></div>
+    </div>
+    <span class="kicker k-ann">The keyword that represents it</span>
+    <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+      <tr><td><code>OncePerRequestFilter</code></td><td>The base class you extend to write a JWT filter. It ensures your filter runs once per request and intercepts the token before the rest of the chain runs.</td><td><span class="tag t-opt">OPTIONAL</span></td></tr>
+      <tr><td><code>jjwt</code> (library)</td><td>The common library for creating and verifying JWTs in Java. Not part of Spring itself, but the standard choice in Spring Security projects.</td><td><span class="tag t-opt">OPTIONAL</span></td></tr>
+    </tbody></table>
+    <span class="kicker k-link">How it connects</span>
+    <p>JWT is an alternative to session-based Authentication (concept 2). The JWT filter sits in the Filter Chain (concept 1), verifies the token, and writes the identity to the Security Context (concept 3) &mdash; the same context, just populated differently.</p>
+  </div>
+</section>
+
+<!-- C8 CONFIG -->
+<section class="concept" id="c8">
+  <div class="concept-head"><span class="badge amber">8</span><div class="meta"><div class="cat">Core concept</div><h2>SecurityFilterChain Configuration</h2></div></div>
+  <div class="concept-body">
+    <p>Security configuration is where you write the rulebook: which URLs are open to everyone, which require a login, which require a specific role, and which authentication mechanism to use. All of these rules live in one place so the whole security posture of the application is visible at a glance.</p>
+    <div class="analogy"><div class="t">Analogy &mdash; The bank's access policy document</div><p>A bank has a written policy: "The lobby is open to all. The counter is open to customers. The vault is open to managers only." This document lives in one place. Security configuration is that document for your application.</p></div>
+    <div class="diagram">
+      <svg viewBox="0 0 760 170" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+        <defs><marker id="am10" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker><marker id="am10g" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#1f8a4c"/></marker><marker id="am10r" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c0392b"/></marker></defs>
+        <rect x="12" y="70" width="130" height="44" rx="10" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.8"/>
+        <text x="77" y="89" text-anchor="middle" font-size="13" font-weight="700" fill="#6b5417">Security Config</text>
+        <text x="77" y="107" text-anchor="middle" font-size="11" fill="#9a6b10">the rulebook</text>
+        <line x1="144" y1="84" x2="220" y2="50" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am10)"/><text x="186" y="60" text-anchor="middle" font-size="11" fill="#3c4858">/home</text>
+        <line x1="144" y1="92" x2="220" y2="92" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am10)"/><text x="186" y="84" text-anchor="middle" font-size="11" fill="#3c4858">/account</text>
+        <line x1="144" y1="104" x2="220" y2="138" stroke="#3c4858" stroke-width="1.8" marker-end="url(#am10)"/><text x="186" y="130" text-anchor="middle" font-size="11" fill="#3c4858">/admin</text>
+        <rect x="222" y="32" width="178" height="30" rx="8" fill="#e9f6ee" stroke="#1f8a4c" stroke-width="1.4"/><text x="311" y="52" text-anchor="middle" font-size="12" fill="#1f6a3a">permitAll() &mdash; everyone</text>
+        <rect x="222" y="78" width="178" height="30" rx="8" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.4"/><text x="311" y="98" text-anchor="middle" font-size="12" fill="#1b3f7a">authenticated() &mdash; logged in</text>
+        <rect x="222" y="124" width="178" height="30" rx="8" fill="#fbece9" stroke="#c0392b" stroke-width="1.4"/><text x="311" y="144" text-anchor="middle" font-size="12" fill="#c0392b">hasRole('ADMIN')</text>
+      </svg>
+      <div class="cap">The config maps each URL to an access rule: open to all, requires login, or requires a specific role.</div>
+    </div>
+    <span class="kicker k-why">Why we need it</span>
+    <p>Without configuration, Spring Security locks every URL by default (which is safe but useless). Configuration is how you open some URLs to the public, protect others, and define how users prove their identity (form login, HTTP basic, or JWT).</p>
+    <div class="status"><span class="tag t-must">MANDATORY</span> You must configure which URLs are public and which are protected, or the default (everything locked) is rarely what you want.</div>
+    <div class="duo">
+      <div class="pane without"><div class="pt"><span class="ic">&#10007;</span> Without it</div><p>Every URL is locked by default. Even the public home page requires a login. The application is unusable without at least minimal configuration.</p></div>
+      <div class="pane gain"><div class="pt"><span class="ic">&#10003;</span> What we gain</div><p>The full security posture of the app is visible in one class. Changing a rule is one line. Reviewing security needs no searching through controllers.</p></div>
+    </div>
+    <span class="kicker k-ann">The keyword that represents it</span>
+    <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+      <tr><td><code>@EnableWebSecurity</code></td><td>The label that tells Spring to use your custom configuration instead of its own defaults. It activates Spring Security for the web layer.</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      <tr><td><code>@Configuration</code></td><td>Tells Spring this class contains setup instructions. Every security config class needs this.</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      <tr><td><code>@Bean</code></td><td>Tells Spring to manage the object returned by this method. Your SecurityFilterChain method must have this so Spring picks it up.</td><td><span class="tag t-must">MANDATORY</span></td></tr>
+      <tr><td><code>permitAll()</code></td><td>An expression meaning "any request, logged in or not, may access this URL." Used for public pages.</td><td><span class="tag t-opt">OPTIONAL</span> (depends on needs)</td></tr>
+      <tr><td><code>authenticated()</code></td><td>An expression meaning "the user must be logged in." Does not check their role, only that they are known.</td><td><span class="tag t-opt">OPTIONAL</span></td></tr>
+      <tr><td><code>hasRole()</code></td><td>An expression meaning "the user must have this specific role." Used for admin or staff-only pages.</td><td><span class="tag t-opt">OPTIONAL</span></td></tr>
+    </tbody></table>
+    <span class="kicker k-link">How it connects</span>
+    <p>Configuration is where everything comes together: you define the filter chain (concept 1), plug in UserDetailsService (concept 4), set the PasswordEncoder (concept 5), choose authentication type (session or JWT), and write the access rules (concept 6).</p>
+  </div>
+</section>
+
+<!-- C9 CSRF CORS SESSION -->
+<section class="concept" id="c9">
+  <div class="concept-head"><span class="badge purple">9</span><div class="meta"><div class="cat">Important add-on</div><h2>CSRF, CORS &amp; Session Management</h2></div></div>
+  <div class="concept-body">
+    <p>Three related but separate security concerns that beginners frequently hit when building REST APIs or front-end applications. Each one protects against a different kind of problem.</p>
+
+    <h3>CSRF &mdash; Cross-Site Request Forgery</h3>
+    <div class="analogy"><div class="t">Analogy &mdash; Forged letter</div><p>You are logged into your bank in one browser tab. In another tab you open a malicious site. That site secretly sends a request to your bank (transfer 1000 to the attacker), using your live session cookie. Your bank sees a valid session and processes it. CSRF protection stops this by requiring a secret token that only your actual bank page knows.</p></div>
+    <div class="duo">
+      <div class="pane without"><div class="pt"><span class="ic">&#10007;</span> Without CSRF protection</div><p>Malicious pages can trigger actions on your users' behalf using their session cookies. Money transfers, password changes, or account deletions can happen silently.</p></div>
+      <div class="pane gain"><div class="pt"><span class="ic">&#10003;</span> What we gain</div><p>Every state-changing request must carry a secret token from the legitimate page. Forged requests from other sites do not have this token and are rejected.</p></div>
+    </div>
+    <div class="callout c-note">
+      <div class="ct">When is it safe to disable CSRF?</div>
+      <p>CSRF attacks only work when the browser automatically includes credentials (session cookies). If your API uses JWT tokens sent manually in a header, the browser never sends them automatically, so the attack is not possible. That is why stateless REST APIs that use JWT can safely disable CSRF. <strong>Never disable CSRF on a form-login, session-based application.</strong></p>
+    </div>
+
+    <h3>CORS &mdash; Cross-Origin Resource Sharing</h3>
+    <div class="analogy"><div class="t">Analogy &mdash; A bouncer with a guest list</div><p>Your backend at <code>api.mybank.com</code> will only talk to a browser page coming from <code>www.mybank.com</code>. A request arriving from <code>evil.com</code> is on the wrong guest list and is refused before it even starts. CORS lets you define exactly which origins are allowed.</p></div>
+    <p>Browsers block requests where the page's origin (domain, port, protocol) does not match the API's origin. This is called a cross-origin request. CORS configuration tells the browser "this API allows requests from these specific origins." Without it, your React or Angular front-end cannot call your API unless both run on the same address.</p>
+
+    <h3>Session Management &mdash; Stateless vs Stateful</h3>
+    <div class="diagram">
+      <svg viewBox="0 0 760 150" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+        <defs><marker id="am11" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker></defs>
+        <text x="190" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#16243d">STATEFUL (session)</text>
+        <rect x="20" y="40" width="90" height="36" rx="8" fill="#eef1f6" stroke="#6c7888" stroke-width="1.4"/><text x="65" y="63" text-anchor="middle" font-size="12" fill="#3c4858">Browser</text>
+        <rect x="160" y="30" width="100" height="56" rx="9" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.5"/><text x="210" y="55" text-anchor="middle" font-size="12" font-weight="700" fill="#1b3f7a">Server</text><text x="210" y="73" text-anchor="middle" font-size="11" fill="#2557a7">stores session</text>
+        <line x1="112" y1="58" x2="156" y2="58" stroke="#3c4858" stroke-width="1.6" marker-end="url(#am11)"/><text x="134" y="50" text-anchor="middle" font-size="10.5" fill="#6c7888">cookie</text>
+        <line x1="560" y1="22" x2="560" y2="135" stroke="#cdd5df" stroke-width="1.5" stroke-dasharray="4 5"/>
+        <text x="618" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#16243d">STATELESS (JWT)</text>
+        <rect x="420" y="40" width="90" height="36" rx="8" fill="#eef1f6" stroke="#6c7888" stroke-width="1.4"/><text x="465" y="63" text-anchor="middle" font-size="12" fill="#3c4858">Client</text>
+        <rect x="600" y="30" width="130" height="56" rx="9" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.5"/><text x="665" y="55" text-anchor="middle" font-size="12" font-weight="700" fill="#1b3f7a">Server</text><text x="665" y="73" text-anchor="middle" font-size="11" fill="#2557a7">stores NOTHING</text>
+        <line x1="512" y1="52" x2="596" y2="52" stroke="#0e7c86" stroke-width="1.6" marker-end="url(#am11)"/><text x="554" y="44" text-anchor="middle" font-size="10.5" fill="#0e7c86">JWT in header</text>
+      </svg>
+      <div class="cap">Stateful: server holds the session and the browser sends a cookie. Stateless: server holds nothing; the client sends the JWT with every request.</div>
+    </div>
+    <div class="status"><span class="tag t-opt">OPTIONAL</span> These are configuration choices. Most beginners encounter CSRF and CORS errors first before understanding them, so it is worth knowing why they exist.</div>
+    <span class="kicker k-ann">The keyword that represents it</span>
+    <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+      <tr><td><code>csrf().disable()</code></td><td>Turns off CSRF protection. Safe for stateless REST APIs using JWT. Never disable on form-login applications.</td><td><span class="tag t-opt">OPTIONAL</span></td></tr>
+      <tr><td><code>@CrossOrigin</code></td><td>A label on a controller or method that allows requests from a specific other origin. Quick but scattered. Better to configure CORS globally.</td><td><span class="tag t-opt">OPTIONAL</span></td></tr>
+      <tr><td><code>SessionCreationPolicy.STATELESS</code></td><td>A setting that tells Spring Security "do not create or use sessions." Every request must carry its own authentication (a JWT). Required for stateless APIs.</td><td><span class="tag t-opt">OPTIONAL</span> (required for JWT)</td></tr>
+    </tbody></table>
+    <span class="kicker k-link">How it connects</span>
+    <p>These settings live inside the SecurityFilterChain Configuration (concept 8). If you use JWT (concept 7) you will need to set STATELESS session policy and consider disabling CSRF. If you have a React or Angular front-end you will need CORS configuration.</p>
+  </div>
+</section>
+
+<!-- KEYWORD TABLE -->
+<section class="card" id="keywords">
+  <div class="sec-eyebrow">Quick reference</div>
+  <h2 class="sec">Keyword &amp; annotation meanings</h2>
+  <p>Every label and key term in one place. This is a <strong>meaning</strong> table, not a how-to. "Automatic" means the behaviour comes from a library or default, not something you write.</p>
+  <table>
+    <thead><tr><th>Keyword / Annotation</th><th>What it means</th><th>Concept</th><th>Status</th></tr></thead>
+    <tbody>
+    <tr><td><code>SecurityFilterChain</code></td><td>The ordered list of security filters every request passes through.</td><td>1 &middot; Filter Chain</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>OncePerRequestFilter</code></td><td>Base class for custom filters (like a JWT filter) that run once per request.</td><td>1 &middot; Filter Chain</td><td><span class="tag t-opt">OPT</span></td></tr>
+    <tr><td><code>AuthenticationManager</code></td><td>Coordinates the login process and delegates to a provider to verify credentials.</td><td>2 &middot; Authentication</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>AuthenticationProvider</code></td><td>Does the actual username + password check. The default handles most cases.</td><td>2 &middot; Authentication</td><td><span class="tag t-auto">AUTO</span></td></tr>
+    <tr><td><code>SecurityContextHolder</code></td><td>Holds the current user's identity for the duration of a request.</td><td>3 &middot; Security Context</td><td><span class="tag t-auto">AUTO</span></td></tr>
+    <tr><td><code>UserDetailsService</code></td><td>Your bridge that loads a user from your database and returns a UserDetails object.</td><td>4 &middot; UserDetails</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>UserDetails</code></td><td>Spring Security's standard shape for a user: username, password, roles, flags.</td><td>4 &middot; UserDetails</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>BCryptPasswordEncoder</code></td><td>Hashes passwords with BCrypt. Always use this (or another PasswordEncoder) &mdash; never store plain text.</td><td>5 &middot; Passwords</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>@PreAuthorize</code></td><td>Protects a method: "only allow if caller has this role/permission."</td><td>6 &middot; Authorisation</td><td><span class="tag t-opt">OPT</span></td></tr>
+    <tr><td><code>hasRole()</code> / <code>hasAuthority()</code></td><td>Expressions in config deciding which role a URL requires.</td><td>6 &middot; Authorisation</td><td><span class="tag t-must">MUST</span> in config</td></tr>
+    <tr><td><code>@Secured</code></td><td>Older, simpler method-level role check. Prefer @PreAuthorize for flexibility.</td><td>6 &middot; Authorisation</td><td><span class="tag t-opt">OPT</span></td></tr>
+    <tr><td><code>@EnableWebSecurity</code></td><td>Activates Spring Security for the web layer using your custom configuration.</td><td>8 &middot; Config</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>@Configuration</code></td><td>Marks a class as containing Spring setup instructions.</td><td>8 &middot; Config</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>@Bean</code></td><td>Tells Spring to manage the returned object. Required on your SecurityFilterChain method.</td><td>8 &middot; Config</td><td><span class="tag t-must">MUST</span></td></tr>
+    <tr><td><code>SessionCreationPolicy.STATELESS</code></td><td>Tells Spring to create no sessions. Every request carries its own JWT.</td><td>9 &middot; CSRF/CORS</td><td><span class="tag t-opt">OPT</span> (JWT)</td></tr>
+    <tr><td><code>csrf().disable()</code></td><td>Turns off CSRF protection. Safe for stateless JWT APIs only.</td><td>9 &middot; CSRF/CORS</td><td><span class="tag t-opt">OPT</span></td></tr>
+    <tr><td><code>@CrossOrigin</code></td><td>Allows requests from a specific origin. Use global config for consistency.</td><td>9 &middot; CORS</td><td><span class="tag t-opt">OPT</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMMON CONFUSIONS -->
+<section class="card" id="confusions">
+  <div class="sec-eyebrow">Clear it up</div>
+  <h2 class="sec">Five common confusions</h2>
+  <p>These are the five pairs beginners mix up most. Read them once and they will not trip you again.</p>
+  <div class="conf-grid">
+    <div class="conf">
+      <div class="ct">1 &middot; Authentication vs Authorisation</div>
+      <div class="conf-row"><span class="conf-lbl">Authentication</span><span class="conf-txt">Proves WHO you are. Happens first. Failure = 401 ("I do not know you").</span></div>
+      <div class="conf-row"><span class="conf-lbl">Authorisation</span><span class="conf-txt">Decides WHAT you can do. Happens after. Failure = 403 ("I know you, but no").</span></div>
+    </div>
+    <div class="conf">
+      <div class="ct">2 &middot; Role vs Permission</div>
+      <div class="conf-row"><span class="conf-lbl">Role</span><span class="conf-txt">Broad label: ADMIN, USER. Spring adds ROLE_ prefix automatically.</span></div>
+      <div class="conf-row"><span class="conf-lbl">Permission</span><span class="conf-txt">Fine-grained right: account:delete. No prefix. Used for specific actions.</span></div>
+    </div>
+    <div class="conf">
+      <div class="ct">3 &middot; @Secured vs @PreAuthorize</div>
+      <div class="conf-row"><span class="conf-lbl">@Secured</span><span class="conf-txt">Older, simpler. Only accepts role names. Cannot use complex expressions.</span></div>
+      <div class="conf-row"><span class="conf-lbl">@PreAuthorize</span><span class="conf-txt">Modern, flexible. Accepts expressions like <code>hasRole() and #id == principal.id</code>.</span></div>
+    </div>
+    <div class="conf">
+      <div class="ct">4 &middot; JWT signing vs encryption</div>
+      <div class="conf-row"><span class="conf-lbl">Signing</span><span class="conf-txt">Proves the token was not tampered with. The payload is still readable by anyone. Used for standard JWTs.</span></div>
+      <div class="conf-row"><span class="conf-lbl">Encryption</span><span class="conf-txt">Hides the payload content. Needed only if the payload itself is secret (rare).</span></div>
+    </div>
+    <div class="conf">
+      <div class="ct">5 &middot; Disable CSRF (REST) vs Enable (form login)</div>
+      <div class="conf-row"><span class="conf-lbl">Disable (JWT REST)</span><span class="conf-txt">Safe: JWT is sent manually in a header, not as a cookie, so cross-site attacks are not possible.</span></div>
+      <div class="conf-row"><span class="conf-lbl">Keep enabled</span><span class="conf-txt">Required for any app using session cookies and browser forms. Never disable for these.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHOLE IDEA -->
+<section class="card lead" id="whole">
+  <div class="sec-eyebrow">Putting it together</div>
+  <h2 class="sec">The whole idea, in plain words</h2>
+  <p style="font-size:1.05rem;line-height:1.8;">Spring Security is a framework that places an ordered row of checkpoints (the <strong>Filter Chain</strong>) in front of your application. Every incoming request passes through this chain. The first important checkpoint is <strong>Authentication</strong>: it collects the user's credentials, loads the user from your database through a <strong>UserDetailsService</strong>, compares the password using a <strong>PasswordEncoder</strong> (BCrypt), and either confirms identity or rejects it with a 401. If identity is confirmed, the user's details are stored in the <strong>Security Context</strong> so every other part of the request can see "who is this?" without re-checking. The next checkpoint is <strong>Authorisation</strong>: it reads the role from the context and compares it against the access rules in your <strong>Security Configuration</strong> &mdash; open to all, login required, or specific role required &mdash; blocking with a 403 if the rules are not met. For stateless REST APIs and microservices, you replace the session with a <strong>JWT</strong>: a signed ticket the server issues at login and verifies on every subsequent request without remembering anything. Finally, <strong>CSRF protection</strong> stops forged requests from malicious sites, <strong>CORS</strong> controls which front-end origins can call your API, and <strong>session management</strong> lets you declare the system is stateless. Every piece exists to answer one of two questions: Who are you? And what are you allowed to do?</p>
+  <div class="callout c-ok" style="margin-top:18px;">
+    <div class="ct">You are now ready to implement</div>
+    <p>That is the complete theory of Spring Security. The next stage is the hands-on build &mdash; creating the security configuration class, wiring your UserDetailsService, adding BCrypt, protecting URLs, and testing with Postman. With the understanding from this document, every step there will already make sense.</p>
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+  <b>Understanding Spring Security</b> &mdash; concepts before code. &nbsp;Filter Chain &middot; Authentication &middot; Security Context &middot; UserDetails &middot; Passwords &middot; Authorisation &middot; JWT &middot; Configuration &middot; CSRF, CORS &amp; Sessions.
+</footer>
+
+</body>
+</html>

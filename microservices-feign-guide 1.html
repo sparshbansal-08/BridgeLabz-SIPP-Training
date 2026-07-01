@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feign Client Deep Dive: Service-to-Service Calls in Spring Boot (Beginner Guide)</title>
+<style>
+    :root{
+        --primary:#1a3c5e;--accent:#2c6e9b;--bg:#f6f8fa;--content-bg:#ffffff;
+        --code-bg:#1e1e1e;--code-text:#d4d4d4;--border:#d8dee4;
+        --note-bg:#eef5fb;--note-border:#2c6e9b;--warn-bg:#fff8e6;--warn-border:#e0a800;
+        --ok-bg:#eaf7ee;--ok-border:#28a745;--bad-bg:#fdecea;--bad-border:#d9534f;
+        --purple:#6f42c1;--purple-bg:#f3f0fb;--teal:#0f6e72;
+        --text:#24292e;--muted:#57606a;
+    }
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.65;color:var(--text);background:var(--bg);}
+    header{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;padding:48px 24px;text-align:center;}
+    header h1{margin:0 0 10px;font-size:2.1rem;}
+    header p{margin:0;opacity:.92;font-size:1.08rem;}
+    .layout{display:flex;max-width:1240px;margin:0 auto;gap:24px;padding:24px;}
+    nav.toc{flex:0 0 280px;position:sticky;top:24px;align-self:flex-start;background:var(--content-bg);border:1px solid var(--border);border-radius:8px;padding:16px;max-height:calc(100vh - 48px);overflow-y:auto;}
+    nav.toc h2{font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 12px;}
+    nav.toc ol{margin:0;padding-left:18px;}
+    nav.toc li{margin-bottom:6px;}
+    nav.toc a{color:var(--accent);text-decoration:none;font-size:.9rem;}
+    nav.toc a:hover{text-decoration:underline;}
+    main{flex:1 1 auto;background:var(--content-bg);border:1px solid var(--border);border-radius:8px;padding:32px;min-width:0;}
+    section{margin-bottom:48px;}
+    h2{color:var(--primary);border-bottom:2px solid var(--border);padding-bottom:8px;margin-top:0;font-size:1.6rem;}
+    h3{color:var(--accent);margin-top:28px;font-size:1.2rem;}
+    h4{color:var(--primary);margin-top:22px;margin-bottom:6px;font-size:1.02rem;}
+    code{background:#eef1f4;padding:2px 6px;border-radius:4px;font-family:"Consolas","Courier New",monospace;font-size:.9em;color:#c7254e;}
+    pre{background:var(--code-bg);color:var(--code-text);padding:16px;border-radius:8px;overflow-x:auto;font-family:"Consolas","Courier New",monospace;font-size:.86rem;line-height:1.5;}
+    pre code{background:none;color:inherit;padding:0;font-size:inherit;}
+    .filename{background:#2d2d2d;color:#9cdcfe;font-family:"Consolas",monospace;font-size:.82rem;padding:8px 16px;border-radius:8px 8px 0 0;border-bottom:1px solid #444;}
+    .filename + pre{border-radius:0 0 8px 8px;margin-top:0;}
+    .callout{border-left:4px solid;border-radius:6px;padding:14px 18px;margin:18px 0;}
+    .callout p:first-child{margin-top:0;}
+    .callout p:last-child{margin-bottom:0;}
+    .note{background:var(--note-bg);border-color:var(--note-border);}
+    .warn{background:var(--warn-bg);border-color:var(--warn-border);}
+    .ok{background:var(--ok-bg);border-color:var(--ok-border);}
+    .bad{background:var(--bad-bg);border-color:var(--bad-border);}
+    .label{display:inline-block;font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;}
+    .note .label{color:var(--note-border);}
+    .warn .label{color:#b8860b;}
+    .ok .label{color:var(--ok-border);}
+    .bad .label{color:var(--bad-border);}
+    table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.9rem;}
+    th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;}
+    th{background:var(--note-bg);color:var(--primary);}
+    tr:nth-child(even) td{background:#fafbfc;}
+    .arch{background:#fafbfc;border:1px dashed var(--border);border-radius:8px;padding:20px;font-family:"Consolas",monospace;font-size:.82rem;white-space:pre;overflow-x:auto;color:var(--primary);line-height:1.4;}
+    .pill{display:inline-block;background:var(--accent);color:#fff;border-radius:20px;padding:2px 12px;font-size:.78rem;font-weight:600;margin:2px;}
+    .step-num{display:inline-block;background:var(--primary);color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;margin-right:8px;font-size:.9rem;}
+    .qa{margin:12px 0;padding:12px 16px;background:#fafbfc;border:1px solid var(--border);border-radius:6px;}
+    .qa strong{color:var(--primary);}
+    .intro-box{background:var(--note-bg);border:1px solid var(--note-border);border-radius:8px;padding:18px 22px;margin-bottom:24px;}
+    .intro-box h3{margin-top:0;}
+    footer{text-align:center;color:var(--muted);font-size:.85rem;padding:24px;}
+    .tag-mandatory{background:var(--bad-border);color:#fff;border-radius:4px;padding:1px 8px;font-size:.72rem;font-weight:700;}
+    .tag-optional{background:var(--muted);color:#fff;border-radius:4px;padding:1px 8px;font-size:.72rem;font-weight:700;}
+    .tag-auto{background:var(--ok-border);color:#fff;border-radius:4px;padding:1px 8px;font-size:.72rem;font-weight:700;}
+    .tlabel{display:inline-block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#fff;background:var(--accent);padding:4px 11px;border-radius:5px;margin:22px 0 8px;}
+    .tlabel.t-why{background:var(--teal);}
+    .tlabel.t-imp{background:var(--primary);}
+    .tlabel.t-ann{background:var(--purple);}
+    .analogy{background:var(--purple-bg);border-left:4px solid var(--purple);border-radius:6px;padding:12px 16px;margin:10px 0;}
+    .analogy .label{color:var(--purple);}
+    @media (max-width:920px){
+        .layout{flex-direction:column;}
+        nav.toc{position:static;flex-basis:auto;max-height:none;}
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Feign Client Deep Dive</h1>
+    <p>How one Spring Boot service calls another, the simple way, with Eureka and the Product / Order example</p>
+</header>
+
+<div class="layout">
+<nav class="toc">
+    <h2>Contents</h2>
+    <ol>
+        <li><a href="#intro">What this guide covers</a></li>
+        <li><a href="#picture">The two services</a></li>
+        <li><a href="#eureka">Service Discovery (Eureka)</a></li>
+        <li><a href="#feign">Feign Client (full template)</a></li>
+        <li><a href="#attrs">The @FeignClient attributes</a></li>
+        <li><a href="#three-ways">Three ways to call &mdash; compared</a></li>
+        <li><a href="#dto">The DTO question</a></li>
+        <li><a href="#run">Running and testing</a></li>
+        <li><a href="#trouble">Troubleshooting</a></li>
+        <li><a href="#summary">Summary</a></li>
+    </ol>
+</nav>
+
+<main>
+
+<div class="intro-box" id="intro">
+    <h3>What this guide covers</h3>
+    <p>This is a focused companion to the full microservices guide. It zooms in on the single most common beginner question: <strong>how does one service call another?</strong> We use the same example throughout &mdash; a <strong>Product Service</strong> that owns products, and an <strong>Order Service</strong> that needs product details to build an order. The Order Service is the <em>caller</em>; the Product Service is just a normal REST service being called.</p>
+    <p>Every main concept uses the same nine headings: what it is (with an analogy), why we need it, mandatory or optional, what happens without it, what we gain, how to implement it, the annotations involved, how to test it, and what is next. Tech: Java 17, Spring Boot 3.x, Spring Cloud, Maven, Postman.</p>
+</div>
+
+<section id="picture">
+    <h2>The two services in this guide</h2>
+    <div class="arch">[ Eureka Server ]  port 8761   (the directory: who is where)
+       ^                ^
+       | register       | register
+[ Product Service ]     [ Order Service ]
+   port 8081               port 8082
+   (the PROVIDER:          (the CONSUMER / caller:
+    a normal REST           uses a Feign client to
+    service)                call the Product Service)</div>
+    <table>
+        <tr><th>Service</th><th>Port</th><th>Role</th></tr>
+        <tr><td>Eureka Server</td><td>8761</td><td>Directory so the caller can find the provider by name.</td></tr>
+        <tr><td>Product Service</td><td>8081</td><td>Provider. Exposes <code>GET /products/{id}</code>. Knows nothing about Feign.</td></tr>
+        <tr><td>Order Service</td><td>8082</td><td>Consumer. Uses a Feign client to call the Product Service by name.</td></tr>
+    </table>
+    <div class="callout warn">
+        <span class="label">The myth to drop right now</span>
+        <p>There is no "Feign server". Feign lives only on the <strong>caller</strong>. The Product Service is the ordinary REST service you already know; it does not change at all because someone calls it with Feign.</p>
+    </div>
+</section>
+
+<!-- EUREKA (templated, because Feign-by-name needs it) -->
+<section id="eureka">
+    <h2><span class="step-num">1</span>Service Discovery with Eureka (the foundation Feign uses)</h2>
+
+    <span class="tlabel">1 · What it is</span>
+    <p>A live directory of services. Each service registers its name and address when it starts; callers look services up by name instead of memorising addresses. We cover it first because the clean version of Feign calls services <em>by name</em>, and that name resolves through Eureka.</p>
+    <div class="analogy">
+        <span class="label">Analogy</span>
+        <p>A phone directory. You search a name and get the current number; if the number changes, the directory updates and you still just search the name.</p>
+    </div>
+
+    <span class="tlabel t-why">2 · Why we need it (the port-number problem)</span>
+    <p>Without a directory, the Order Service must hardcode <code>http://localhost:8081</code> to reach the Product Service. The moment the Product Service moves port or machine, or runs as several copies, that hardcoded address breaks and must be edited everywhere. Eureka removes memorised addresses entirely.</p>
+
+    <span class="tlabel">3 · Mandatory or optional</span>
+    <p><span class="pill">Recommended</span> You <em>can</em> use Feign with a fixed <code>url</code> and no Eureka, but then you are back to hardcoding addresses. With Eureka, Feign calls by name. This guide assumes Eureka is on.</p>
+
+    <div class="callout bad">
+        <span class="label">4 · What happens without it</span>
+        <p>Hardcoded addresses scattered across callers; every move or scale-up means hunting and editing addresses and redeploying. A wrong port fails only at runtime, with no compile-time warning.</p>
+    </div>
+    <div class="callout ok">
+        <span class="label">5 · What we gain</span>
+        <p>Callers use the name <code>product-service</code>; services can move or scale and the directory stays current automatically.</p>
+    </div>
+
+    <span class="tlabel t-imp">6 · How to implement it step by step</span>
+    <p><strong>The Eureka Server</strong> (a separate project named <code>eureka-server</code>, dependency "Eureka Server"):</p>
+    <div class="filename">eureka-server/.../EurekaServerApplication.java</div>
+    <pre><code>@SpringBootApplication
+@EnableEurekaServer
+public class EurekaServerApplication {
+    public static void main(String[] args) { SpringApplication.run(EurekaServerApplication.class, args); }
+}</code></pre>
+    <div class="filename">eureka-server/src/main/resources/application.properties</div>
+    <pre><code>spring.application.name=eureka-server
+server.port=8761
+eureka.client.register-with-eureka=false
+eureka.client.fetch-registry=false</code></pre>
+    <p><strong>Each business service</strong> adds the Eureka client dependency and points at the directory:</p>
+    <div class="filename">product-service &amp; order-service: pom.xml (add this)</div>
+    <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+    <div class="filename">product-service/application.properties</div>
+    <pre><code># This name is what the Order Service's Feign client will use. Keep it exact.
+spring.application.name=product-service
+server.port=8081
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka/</code></pre>
+    <p>The Order Service uses the same lines with <code>spring.application.name=order-service</code> and <code>server.port=8082</code>.</p>
+
+    <span class="tlabel t-ann">7 · Annotations</span>
+    <table>
+        <tr><th>Annotation</th><th>What it does</th><th>Where</th><th>Status</th></tr>
+        <tr><td><code>@EnableEurekaServer</code></td><td>Turns the app into the directory.</td><td>Eureka server main class</td><td><span class="tag-mandatory">MANDATORY</span> (server)</td></tr>
+        <tr><td><code>@EnableEurekaClient</code></td><td>Registers a service. On Spring Boot 3 the dependency alone is enough, so this is usually not needed.</td><td>Service main class</td><td><span class="tag-auto">AUTOMATIC</span></td></tr>
+    </table>
+
+    <div class="callout note">
+        <span class="label">8 · How to test it</span>
+        <p>Start Eureka, then Product Service. Open <code>http://localhost:8761</code> &mdash; you should see <code>PRODUCT-SERVICE</code> listed under registered instances. That line proves the name is now resolvable, which is exactly what Feign will rely on.</p>
+    </div>
+
+    <span class="tlabel">9 · Where we are and what is next</span>
+    <p>Services register by name. Now the Order Service can call the Product Service <em>by that name</em> &mdash; the job of Feign, next.</p>
+</section>
+
+<!-- FEIGN FULL TEMPLATE -->
+<section id="feign">
+    <h2><span class="step-num">2</span>Feign Client (the heart of this guide)</h2>
+
+    <span class="tlabel">1 · What it is</span>
+    <p>Feign lets the Order Service call the Product Service by writing a simple Java interface that <em>describes</em> the call. You declare the method; Feign builds the real HTTP request, sends it, reads the reply, and converts the JSON into an object for you.</p>
+    <div class="analogy">
+        <span class="label">Analogy</span>
+        <p>Speed-dial. Instead of dialing a full number each time, you press one labelled button. You label the call once ("get product by id"); Feign does the dialing every time you press it.</p>
+    </div>
+
+    <span class="tlabel t-why">2 · Why we need it</span>
+    <p>The Order Service needs product details. Doing that by hand means building the URL, sending a request, reading the response, converting JSON, and handling errors &mdash; repeated at every call site. Feign collapses all of that into one interface method.</p>
+
+    <span class="tlabel">3 · Mandatory or optional</span>
+    <p><span class="pill">Core idea, chosen tool</span> Service-to-service communication is core to microservices. The specific tool is a choice (Feign, <code>RestTemplate</code>, or <code>WebClient</code>); Feign is the simplest to read and write, so it is the default for beginners.</p>
+
+    <div class="callout bad">
+        <span class="label">4 · What happens without Feign (the hard way)</span>
+        <pre><code>// Manual call, repeated at every call site, address hardcoded:
+RestTemplate rest = new RestTemplate();
+String url = "http://localhost:8081/products/" + id;
+ProductResponse p = rest.getForObject(url, ProductResponse.class);</code></pre>
+        <p>Verbose, repetitive, and the hardcoded address brings back the port problem from concept 1.</p>
+    </div>
+    <div class="callout ok">
+        <span class="label">5 · What we gain with Feign</span>
+        <p>One interface, reused everywhere. Calls go by service name (no address), JSON-to-object conversion is automatic, and each call site is a single readable line.</p>
+    </div>
+
+    <span class="tlabel t-imp">6 · How to implement it step by step (all in the Order Service)</span>
+    <p><strong>Step 1 &mdash; add the Feign dependency.</strong></p>
+    <div class="filename">order-service/pom.xml (add this)</div>
+    <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-openfeign&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+    <p><strong>Step 2 &mdash; switch Feign on once</strong> on the Order Service main class.</p>
+    <div class="filename">order-service/.../OrderServiceApplication.java</div>
+    <pre><code>@SpringBootApplication
+@EnableFeignClients          // makes Spring find and build your @FeignClient interfaces
+public class OrderServiceApplication {
+    public static void main(String[] args) { SpringApplication.run(OrderServiceApplication.class, args); }
+}</code></pre>
+    <p><strong>Step 3 &mdash; define a local DTO</strong> for the product fields the Order Service needs (it must not import the Product entity from the other service &mdash; see the DTO section below).</p>
+    <div class="filename">order-service/dto/ProductResponse.java</div>
+    <pre><code>package com.example.orderservice.dto;
+import java.math.BigDecimal;
+
+public class ProductResponse {
+    private Long id;
+    private String name;
+    private BigDecimal price;
+    public Long getId() { return id; }            public void setId(Long id) { this.id = id; }
+    public String getName() { return name; }       public void setName(String name) { this.name = name; }
+    public BigDecimal getPrice() { return price; } public void setPrice(BigDecimal price) { this.price = price; }
+}</code></pre>
+    <p><strong>Step 4 &mdash; declare the Feign client interface.</strong> You only describe the call.</p>
+    <div class="filename">order-service/client/ProductClient.java</div>
+    <pre><code>package com.example.orderservice.client;
+
+import com.example.orderservice.dto.ProductResponse;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+// "product-service" MUST match the provider's spring.application.name.
+// With Eureka running, Feign turns that name into a real address automatically.
+@FeignClient(name = "product-service")
+public interface ProductClient {
+
+    @GetMapping("/products/{id}")          // must match the Product controller's URL exactly
+    ProductResponse getProductById(@PathVariable("id") Long id);
+}</code></pre>
+    <p><strong>Step 5 &mdash; use it like a normal object</strong> in the Order controller.</p>
+    <div class="filename">order-service/controller/OrderController.java</div>
+    <pre><code>@RestController
+@RequestMapping("/orders")
+public class OrderController {
+
+    private final ProductClient productClient;
+    public OrderController(ProductClient productClient) { this.productClient = productClient; }
+
+    @GetMapping("/check/{productId}")
+    public String check(@PathVariable Long productId) {
+        ProductResponse p = productClient.getProductById(productId);   // one clean call
+        return "Order can include: " + p.getName() + " at price " + p.getPrice();
+    }
+}</code></pre>
+
+    <span class="tlabel t-ann">7 · Annotations used here</span>
+    <table>
+        <tr><th>Annotation</th><th>What it does &amp; why</th><th>Where it goes</th><th>Status</th></tr>
+        <tr><td><code>@EnableFeignClients</code></td><td>Tells Spring to scan for <code>@FeignClient</code> interfaces and build real call objects from them. Without it your interface is ignored and injection fails.</td><td>Order Service main class (once)</td><td><span class="tag-mandatory">MANDATORY</span></td></tr>
+        <tr><td><code>@FeignClient(name="product-service")</code></td><td>Marks the interface as a remote call and names the target service. With Eureka the name becomes a real address automatically.</td><td>The client interface</td><td><span class="tag-mandatory">MANDATORY</span></td></tr>
+        <tr><td><code>@GetMapping</code> + <code>@PathVariable</code> (in the interface)</td><td>Say which URL on the provider to call and how to fill its variables. Must match the provider's controller exactly.</td><td>Interface method &amp; parameter</td><td><span class="tag-mandatory">MANDATORY</span></td></tr>
+    </table>
+
+    <div class="callout note">
+        <span class="label">8 · How to test it</span>
+        <p>Start Eureka (8761), Product Service (8081), Order Service (8082). Create a product first (<code>POST http://localhost:8081/products</code> with a JSON body). Then call the consumer:</p>
+        <p><code>GET http://localhost:8082/orders/check/1</code></p>
+        <p>Expected: <code>Order can include: Wireless Mouse at price 799.00</code>. Your single Feign line triggered a name lookup in Eureka, a real HTTP call to Product Service, and JSON-to-object conversion.</p>
+    </div>
+
+    <span class="tlabel">9 · Where we are and what is next</span>
+    <p>The Order Service calls the Product Service cleanly, by name. The remaining sections answer the questions beginners ask next: which <code>@FeignClient</code> settings are required, how Feign compares to the alternatives, and how to handle the response type.</p>
+</section>
+
+<!-- ATTRIBUTES -->
+<section id="attrs">
+    <h2><span class="step-num">3</span>The @FeignClient Attributes (is the name mandatory?)</h2>
+    <p>Beginners get confused by the few settings inside <code>@FeignClient(...)</code>. Here is exactly what each does and whether you need it.</p>
+    <table>
+        <tr><th>Attribute</th><th>What it does</th><th>Status</th></tr>
+        <tr><td><code>name</code> (same as <code>value</code>)</td><td>The target service name. With Eureka on, this is resolved to a live address. This is the normal way.</td><td><span class="tag-mandatory">MANDATORY</span> (you must name a target somehow)</td></tr>
+        <tr><td><code>url</code></td><td>A fixed address like <code>http://localhost:8081</code>. Use only when there is no Eureka. It brings back hardcoded addresses, so avoid it in a discovery-based system.</td><td><span class="tag-optional">OPTIONAL</span></td></tr>
+        <tr><td><code>path</code></td><td>A common URL prefix added to every method, e.g. <code>path="/products"</code> so methods only write <code>/{id}</code>. Convenience only.</td><td><span class="tag-optional">OPTIONAL</span></td></tr>
+    </table>
+    <div class="callout note">
+        <span class="label">Is the name mandatory?</span>
+        <p>You must give Feign <em>a target</em>. The usual and recommended form is <code>name = "product-service"</code> (resolved by Eureka). The only alternative is a fixed <code>url</code>, which abandons discovery. So in a Eureka-based project, treat <code>name</code> as required.</p>
+    </div>
+    <h4>Valid forms at a glance</h4>
+    <pre><code>@FeignClient(name = "product-service")                       // by name, via Eureka (recommended)
+@FeignClient(name = "product-service", path = "/products")   // name + shared prefix
+@FeignClient(name = "product-service", url = "http://localhost:8081")  // fixed url (no Eureka)</code></pre>
+</section>
+
+<!-- THREE WAYS -->
+<section id="three-ways">
+    <h2><span class="step-num">4</span>Three Ways to Call Another Service &mdash; Compared</h2>
+    <p>Feign is not the only option. Seeing the alternatives makes clear why Feign is the beginner default.</p>
+    <table>
+        <tr><th>Tool</th><th>How it feels</th><th>Best for</th><th>Beginner verdict</th></tr>
+        <tr><td><code>RestTemplate</code></td><td>You build the URL and make the call by hand. Blocking (waits for each call).</td><td>Old code that already uses it.</td><td>Avoid for new code; it is in maintenance mode.</td></tr>
+        <tr><td><code>WebClient</code></td><td>Fluent calls; can fire several requests at once and wait only for the slowest.</td><td>Many calls in parallel.</td><td>Use when you need parallel calls.</td></tr>
+        <tr><td><code>@FeignClient</code></td><td>You declare an interface; no calling code at all.</td><td>Most everyday service-to-service calls.</td><td><strong>Default choice</strong> for beginners.</td></tr>
+    </table>
+    <p>The same call, all three ways:</p>
+    <pre><code>// RestTemplate: you build the URL and call
+ProductResponse p = restTemplate.getForObject(url + "/products/" + id, ProductResponse.class);
+
+// WebClient: fluent, you still do each step
+ProductResponse p = productWebClient.get().uri("/products/{id}", id)
+        .retrieve().bodyToMono(ProductResponse.class).block();
+
+// Feign: declare once in the interface, then just call the method
+ProductResponse p = productClient.getProductById(id);</code></pre>
+    <div class="callout ok">
+        <span class="label">Recommendation</span>
+        <p>Use <strong>Feign by default</strong>. Reach for <strong>WebClient</strong> only when you must call several services in parallel. <strong>Avoid RestTemplate</strong> for new code.</p>
+    </div>
+</section>
+
+<!-- DTO -->
+<section id="dto">
+    <h2><span class="step-num">5</span>The DTO Question: what type comes back?</h2>
+    <p>A very common beginner question: the <code>Product</code> entity lives in the Product Service &mdash; how does the Order Service receive it? The answer is the single most important rule of clean service calls.</p>
+    <div class="callout bad">
+        <span class="label">Do not do this</span>
+        <p>Do not import or share the Product Service's entity class. Sharing the entity glues the two services together: a change to the Product entity would force a change in the Order Service, defeating their independence.</p>
+    </div>
+    <div class="callout ok">
+        <span class="label">Do this instead</span>
+        <p>The Order Service defines its <strong>own small DTO</strong> (<code>ProductResponse</code> above) containing only the fields it actually uses (<code>id</code>, <code>name</code>, <code>price</code>). Feign matches the JSON fields to this DTO by name. Extra fields in the JSON that your DTO leaves out are simply ignored.</p>
+    </div>
+    <div class="callout note">
+        <span class="label">Can the Order Service store product data?</span>
+        <p>Yes, but only a <strong>snapshot</strong> of what an order genuinely needs &mdash; for example the product name and the price at the time of the order &mdash; saved in the order's own record. It must never try to keep a full copy of the product catalogue in sync; that would make it a second owner of product data and break database-per-service.</p>
+    </div>
+</section>
+
+<!-- RUN -->
+<section id="run">
+    <h2><span class="step-num">6</span>Running and Testing the Whole Flow</h2>
+    <p>Start in order, each in its own terminal with <code>mvn spring-boot:run</code>:</p>
+    <table>
+        <tr><th>Order</th><th>Service</th><th>Port</th><th>Why here</th></tr>
+        <tr><td>1</td><td>Eureka Server</td><td>8761</td><td>The directory must be up so services can register and be found.</td></tr>
+        <tr><td>2</td><td>Product Service</td><td>8081</td><td>The provider registers itself by name.</td></tr>
+        <tr><td>3</td><td>Order Service</td><td>8082</td><td>The consumer registers, then can find the provider by name.</td></tr>
+    </table>
+    <h4>Verify step by step</h4>
+    <ol>
+        <li>Eureka dashboard <code>http://localhost:8761</code> lists <code>PRODUCT-SERVICE</code> and <code>ORDER-SERVICE</code>.</li>
+        <li>Create a product: <code>POST http://localhost:8081/products</code> with body <code>{ "name": "Wireless Mouse", "price": 799.00, "quantity": 50 }</code>.</li>
+        <li>Direct read works: <code>GET http://localhost:8081/products/1</code>.</li>
+        <li>The Feign call works: <code>GET http://localhost:8082/orders/check/1</code> returns the product name and price &mdash; proof the consumer reached the provider by name.</li>
+    </ol>
+</section>
+
+<!-- TROUBLE -->
+<section id="trouble">
+    <h2><span class="step-num">7</span>Troubleshooting</h2>
+    <table>
+        <tr><th>Symptom</th><th>Likely cause and fix</th></tr>
+        <tr><td>"No instances available for product-service"</td><td>The provider is not registered, or you started the consumer before Eureka/the provider were ready. Check the Eureka dashboard shows <code>PRODUCT-SERVICE</code>, then retry.</td></tr>
+        <tr><td>Feign call returns 404</td><td>The interface's <code>@GetMapping</code> path does not exactly match the provider's controller URL. Compare <code>/products/{id}</code> on both sides.</td></tr>
+        <tr><td>The interface is never called / injection fails</td><td><code>@EnableFeignClients</code> is missing from the Order Service main class, or the Feign dependency is not in the pom.</td></tr>
+        <tr><td>Name does not resolve</td><td>The <code>@FeignClient(name=...)</code> does not match the provider's <code>spring.application.name</code>. They must be identical.</td></tr>
+        <tr><td>Response fields are all null</td><td>Your DTO field names do not match the JSON keys returned by the provider. Match <code>id</code>, <code>name</code>, <code>price</code> exactly.</td></tr>
+    </table>
+</section>
+
+<!-- SUMMARY -->
+<section id="summary">
+    <h2>Summary</h2>
+    <ul>
+        <li><strong>Eureka</strong> is the directory; it lets you call services by name instead of by memorised address.</li>
+        <li><strong>Feign</strong> is a client-only tool: you declare an interface and Spring builds the real call. There is no "Feign server".</li>
+        <li><strong>@EnableFeignClients</strong> (on the caller's main class) and <strong>@FeignClient(name=...)</strong> (on the interface) are the two mandatory annotations; the <code>name</code> must match the provider's <code>spring.application.name</code>.</li>
+        <li>Receive responses into your <strong>own local DTO</strong>, never the other service's entity.</li>
+        <li>Prefer Feign by default; use WebClient for parallel calls; avoid RestTemplate for new code.</li>
+    </ul>
+    <div class="callout ok">
+        <span class="label">The one line to remember</span>
+        <p>Feign turns "make an HTTP call to another service" into "call a method on an interface" &mdash; and Eureka makes that work by name, not by address.</p>
+    </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+    Feign Client Deep Dive &middot; Beginner companion guide &middot; Eureka, @FeignClient, DTOs, and the Product / Order example.
+</footer>
+
+</body>
+</html>

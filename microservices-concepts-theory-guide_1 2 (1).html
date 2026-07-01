@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Understanding Microservices: A Visual Beginner Guide (Concepts Before Code)</title>
+<style>
+    :root{
+        --ink:#16243d; --body:#3c4858; --muted:#6c7888; --faint:#9aa6b4;
+        --brand:#2557a7; --brand-dk:#1b3f7a; --brand-2:#0e7c86; --accent:#bd831a;
+        --bg:#eceff4; --paper:#ffffff; --line:#e2e7ef; --line-2:#eef1f6;
+        --ok:#1f8a4c; --ok-bg:#e9f6ee; --ok-line:#bfe5cd;
+        --bad:#c0392b; --bad-bg:#fbece9; --bad-line:#f0c9c2;
+        --warn:#9a6b10; --warn-bg:#fbf3e0; --warn-line:#ecd8a6;
+        --note:#2557a7; --note-bg:#ebf1fb; --note-line:#cadbf3;
+        --purple:#6d3fb0; --purple-bg:#f1ecfa;
+        --mono:"SF Mono","Cascadia Code",Consolas,"Courier New",monospace;
+        --sans:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    }
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{margin:0;font-family:var(--sans);font-size:16.5px;line-height:1.7;color:var(--body);background:var(--bg);}
+
+    /* HERO */
+    .hero{background:linear-gradient(150deg,#16243d 0%,#1f3a64 55%,#235487 100%);color:#fff;padding:60px 24px 54px;}
+    .hero-in{max-width:1180px;margin:0 auto;}
+    .hero .eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#e6b860;margin-bottom:16px;}
+    .hero h1{margin:0 0 14px;font-size:2.5rem;line-height:1.12;font-weight:800;letter-spacing:-.02em;max-width:18ch;}
+    .hero p{margin:0;font-size:1.12rem;color:#cdd9e8;max-width:62ch;}
+    .chips{margin-top:26px;display:flex;flex-wrap:wrap;gap:9px;}
+    .chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#eaf1f9;border-radius:30px;padding:6px 15px;font-size:.82rem;font-weight:500;}
+
+    /* LAYOUT */
+    .wrap{display:flex;max-width:1180px;margin:0 auto;gap:34px;padding:34px 24px 60px;align-items:flex-start;}
+    nav.toc{flex:0 0 248px;position:sticky;top:24px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 1px 3px rgba(22,36,61,.05);}
+    nav.toc h2{font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);margin:0 0 14px;}
+    nav.toc ol{margin:0;padding:0;list-style:none;counter-reset:nav;}
+    nav.toc li{margin:0 0 3px;}
+    nav.toc a{display:block;color:var(--body);text-decoration:none;font-size:.875rem;padding:5px 9px;border-radius:7px;transition:background .15s,color .15s;}
+    nav.toc a:hover{background:var(--note-bg);color:var(--brand);}
+    main{flex:1 1 auto;min-width:0;max-width:840px;}
+
+    /* SECTIONS / CARDS */
+    .card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:30px 34px;margin-bottom:26px;box-shadow:0 1px 3px rgba(22,36,61,.05);}
+    .lead-card{border-left:5px solid var(--accent);}
+    h2.sec{font-size:1.55rem;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin:0 0 4px;}
+    .sec-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--brand);margin-bottom:7px;}
+    h3{font-size:1.12rem;color:var(--ink);font-weight:700;margin:26px 0 8px;}
+    p{margin:0 0 13px;}
+    p:last-child{margin-bottom:0;}
+    strong{color:var(--ink);font-weight:650;}
+    code{font-family:var(--mono);font-size:.86em;background:#eef1f6;color:#2c3e57;padding:2px 7px;border-radius:5px;border:1px solid var(--line);}
+    .lead{font-size:1.05rem;color:var(--body);}
+
+    /* CONCEPT CARD */
+    .concept{background:var(--paper);border:1px solid var(--line);border-radius:16px;margin-bottom:26px;box-shadow:0 1px 3px rgba(22,36,61,.05);overflow:hidden;}
+    .concept-head{display:flex;align-items:center;gap:18px;padding:24px 34px 20px;border-bottom:1px solid var(--line-2);}
+    .badge{flex-shrink:0;width:52px;height:52px;border-radius:14px;background:linear-gradient(150deg,var(--brand),var(--brand-dk));color:#fff;font-size:1.5rem;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(37,87,167,.28);}
+    .concept-head .cat{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:3px;}
+    .concept-head h2{font-size:1.5rem;font-weight:800;color:var(--ink);margin:0;letter-spacing:-.01em;}
+    .concept-body{padding:8px 34px 30px;}
+
+    /* KICKERS + TEXT BLOCKS */
+    .kicker{display:block;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:24px 0 6px;color:var(--brand);}
+    .kicker.k-why{color:var(--brand-2);}
+    .kicker.k-ann{color:var(--purple);}
+    .kicker.k-link{color:var(--muted);}
+
+    .analogy{background:var(--purple-bg);border:1px solid #e0d4f3;border-radius:12px;padding:14px 18px;margin:12px 0;}
+    .analogy .t{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--purple);margin-bottom:4px;}
+    .analogy p{margin:0;color:#3f3357;}
+
+    /* DUO (without vs gain) */
+    .duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
+    .pane{border-radius:12px;padding:15px 18px;border:1px solid;}
+    .pane .t{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+    .pane.without{background:var(--bad-bg);border-color:var(--bad-line);}
+    .pane.without .t{color:var(--bad);}
+    .pane.gain{background:var(--ok-bg);border-color:var(--ok-line);}
+    .pane.gain .t{color:var(--ok);}
+    .pane p{margin:0;font-size:.95rem;}
+    .pane .t .ic{font-family:var(--mono);font-weight:800;}
+
+    /* MANDATORY STATUS */
+    .status{display:flex;align-items:center;gap:10px;background:var(--line-2);border-radius:10px;padding:11px 16px;margin:8px 0;font-size:.95rem;}
+    .tag{border-radius:6px;padding:3px 11px;font-size:.72rem;font-weight:700;letter-spacing:.03em;color:#fff;white-space:nowrap;}
+    .tag-must{background:var(--bad);}
+    .tag-opt{background:var(--muted);}
+    .tag-auto{background:var(--ok);}
+    .tag-core{background:var(--brand);}
+
+    /* CALLOUTS */
+    .callout{border-radius:12px;padding:14px 18px;margin:16px 0;border:1px solid;}
+    .callout .t{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;}
+    .callout p{margin:0;font-size:.97rem;}
+    .c-note{background:var(--note-bg);border-color:var(--note-line);}.c-note .t{color:var(--note);}
+    .c-warn{background:var(--warn-bg);border-color:var(--warn-line);}.c-warn .t{color:var(--warn);}
+    .c-ok{background:var(--ok-bg);border-color:var(--ok-line);}.c-ok .t{color:var(--ok);}
+
+    /* DIAGRAM */
+    .diagram{background:#fafbfd;border:1px solid var(--line);border-radius:14px;padding:20px 20px 14px;margin:18px 0;}
+    .diagram svg{display:block;width:100%;height:auto;}
+    .diagram .cap{font-size:.82rem;color:var(--muted);text-align:center;margin-top:12px;}
+
+    /* TABLES */
+    table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.9rem;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+    th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;}
+    th{background:var(--ink);color:#fff;font-size:.78rem;letter-spacing:.03em;text-transform:uppercase;}
+    tr:last-child td{border-bottom:none;}
+    tbody tr:nth-child(even) td{background:#f8fafc;}
+    td code{white-space:nowrap;}
+
+    /* GLOSSARY GRID */
+    .gloss{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;}
+    .term{background:#fafbfd;border:1px solid var(--line);border-radius:11px;padding:13px 16px;}
+    .term b{display:block;color:var(--ink);font-size:.95rem;margin-bottom:2px;}
+    .term span{font-size:.9rem;color:var(--body);}
+
+    /* MAP LISTS */
+    .maprow{display:flex;gap:13px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line-2);}
+    .maprow:last-child{border-bottom:none;}
+    .maprow .lbl{flex-shrink:0;}
+    .maprow .txt{font-size:.97rem;}
+
+    footer{background:var(--ink);color:#9fb0c4;text-align:center;font-size:.85rem;padding:30px 24px;}
+    footer b{color:#dde6f0;}
+
+    @media (max-width:900px){
+        .wrap{flex-direction:column;gap:20px;}
+        nav.toc{position:static;width:100%;flex-basis:auto;}
+        .hero h1{font-size:2rem;}
+        .duo{grid-template-columns:1fr;}
+        .gloss{grid-template-columns:1fr;}
+        .concept-head,.concept-body,.card{padding-left:20px;padding-right:20px;}
+    }
+    @media print{
+        body{background:#fff;}
+        .hero{background:#16243d !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+        nav.toc{display:none;}
+        .wrap{display:block;padding:0;}
+        .card,.concept{break-inside:avoid;box-shadow:none;}
+        .diagram,.duo,.callout,table{break-inside:avoid;}
+    }
+</style>
+</head>
+<body>
+
+<header class="hero">
+    <div class="hero-in">
+        <div class="eyebrow">Concepts before code &middot; Beginner friendly</div>
+        <h1>Understanding Microservices, One Picture at a Time</h1>
+        <p>A clear, visual walkthrough of every core idea &mdash; what it means, why it exists, and the keyword that represents it &mdash; so the whole system makes sense before you write a single line.</p>
+        <div class="chips">
+            <span class="chip">No code required</span>
+            <span class="chip">Plain language</span>
+            <span class="chip">A diagram for every concept</span>
+            <span class="chip">One running example</span>
+        </div>
+    </div>
+</header>
+
+<div class="wrap">
+<nav class="toc">
+    <h2>On this page</h2>
+    <ol>
+        <li><a href="#start">How to use this guide</a></li>
+        <li><a href="#glossary">The words you'll meet</a></li>
+        <li><a href="#what">Microservices vs monolith</a></li>
+        <li><a href="#mandatory">Are they mandatory?</a></li>
+        <li><a href="#map">What matters most</a></li>
+        <li><a href="#relate">How it all fits together</a></li>
+        <li><a href="#c1">1 &middot; A service</a></li>
+        <li><a href="#c2">2 &middot; Config Server</a></li>
+        <li><a href="#c3">3 &middot; Client configuration</a></li>
+        <li><a href="#c4">4 &middot; Service Discovery</a></li>
+        <li><a href="#c5">5 &middot; Feign Client</a></li>
+        <li><a href="#c6">6 &middot; API Gateway</a></li>
+        <li><a href="#c7">7 &middot; Logging &amp; monitoring</a></li>
+        <li><a href="#c8">8 &middot; Database per service</a></li>
+        <li><a href="#c9">9 &middot; Testing &amp; deployment</a></li>
+        <li><a href="#annotations">Keyword reference</a></li>
+        <li><a href="#whole">The whole idea</a></li>
+    </ol>
+</nav>
+
+<main>
+
+<!-- START -->
+<section class="card lead-card" id="start">
+    <div class="sec-eyebrow">Start here</div>
+    <h2 class="sec">How to use this guide</h2>
+    <p class="lead">This is a <strong>thinking guide, not a build guide</strong>. There is no code to copy and nothing to install. The single goal is to make each idea click &mdash; what it is, why it exists, and which keyword stands for it &mdash; so that when you later build a project, every step already feels obvious.</p>
+    <p>One example runs through the whole guide: a small online shop split into two parts &mdash; a <strong>Product Service</strong> that knows about products, and an <strong>Order Service</strong> that creates orders and needs product details. The moment the Order Service needs a product's price, it has to ask the Product Service. Almost every concept here exists to make that one kind of cooperation safe, simple, and reliable.</p>
+    <div class="diagram">
+        <svg viewBox="0 0 760 150" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+            <defs><marker id="ar0" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3c4858"/></marker></defs>
+            <rect x="70" y="45" width="210" height="62" rx="12" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.6"/>
+            <text x="175" y="72" text-anchor="middle" font-size="16" font-weight="700" fill="#1b3f7a">Order Service</text>
+            <text x="175" y="92" text-anchor="middle" font-size="12.5" fill="#6c7888">creates orders</text>
+            <rect x="480" y="45" width="210" height="62" rx="12" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.6"/>
+            <text x="585" y="72" text-anchor="middle" font-size="16" font-weight="700" fill="#1b3f7a">Product Service</text>
+            <text x="585" y="92" text-anchor="middle" font-size="12.5" fill="#6c7888">knows products &amp; prices</text>
+            <line x1="282" y1="68" x2="476" y2="68" stroke="#3c4858" stroke-width="2" marker-end="url(#ar0)"/>
+            <text x="379" y="58" text-anchor="middle" font-size="12.5" fill="#3c4858">"what is the price of product 1?"</text>
+            <line x1="476" y1="90" x2="282" y2="90" stroke="#0e7c86" stroke-width="2" marker-end="url(#ar0)"/>
+            <text x="379" y="106" text-anchor="middle" font-size="12.5" fill="#0e7c86">"it is 799.00"</text>
+        </svg>
+        <div class="cap">The one cooperation every concept is here to support: one service asking another for data.</div>
+    </div>
+    <p>Every concept is explained the same way, so the rhythm becomes familiar: <strong>what it is</strong> (with an everyday analogy), <strong>why we need it</strong>, <strong>whether it is mandatory</strong>, <strong>what happens without it</strong>, <strong>what we gain</strong>, the <strong>keyword</strong> that represents it, and <strong>how it connects</strong> to the rest.</p>
+</section>
+
+<!-- GLOSSARY -->
+<section class="card" id="glossary">
+    <div class="sec-eyebrow">Vocabulary</div>
+    <h2 class="sec">The words you'll meet</h2>
+    <p>Skim these once. Each is one plain sentence; come back whenever a term feels fuzzy.</p>
+    <div class="gloss">
+        <div class="term"><b>Service</b><span>A small program that runs on its own and does a job for others.</span></div>
+        <div class="term"><b>Microservice</b><span>One small service that handles just one part of a bigger system.</span></div>
+        <div class="term"><b>Monolith</b><span>One big program that does everything, all in a single piece.</span></div>
+        <div class="term"><b>REST</b><span>A common, simple way for programs to talk over the web.</span></div>
+        <div class="term"><b>Endpoint</b><span>One specific web address a service answers, like <code>/products</code>.</span></div>
+        <div class="term"><b>API</b><span>The menu of requests a service agrees to answer.</span></div>
+        <div class="term"><b>Port</b><span>A numbered "door" on a computer; each service opens its own, like 8081.</span></div>
+        <div class="term"><b>Dependency</b><span>A ready-made library a service uses so you don't build everything yourself.</span></div>
+        <div class="term"><b>Annotation</b><span>A small label starting with <code>@</code> that switches on a behaviour.</span></div>
+        <div class="term"><b>Client &amp; Server</b><span>The client asks; the server answers. One service can be both.</span></div>
+        <div class="term"><b>Registry / Discovery</b><span>A live directory of which service is where, found by name.</span></div>
+        <div class="term"><b>Gateway</b><span>A single front door all outside requests pass through.</span></div>
+        <div class="term"><b>Configuration</b><span>The settings a service needs to run: addresses, ports, database details.</span></div>
+        <div class="term"><b>Loosely coupled</b><span>Parts that can change on their own without breaking each other.</span></div>
+    </div>
+</section>
+
+<!-- WHAT -->
+<section class="card" id="what">
+    <div class="sec-eyebrow">The big idea</div>
+    <h2 class="sec">Microservices vs the monolith</h2>
+    <p>A <strong>monolith</strong> is one big application that contains everything &mdash; products, orders, payments, users &mdash; built and run as a single piece. <strong>Microservices</strong> split that into several small services, each doing one job and running on its own.</p>
+    <div class="diagram">
+        <svg viewBox="0 0 760 250" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+            <defs><marker id="ar1" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3c4858"/></marker></defs>
+            <text x="180" y="26" text-anchor="middle" font-size="14" font-weight="700" fill="#16243d">MONOLITH &mdash; one big program</text>
+            <rect x="55" y="44" width="250" height="172" rx="14" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.8"/>
+            <rect x="80" y="66" width="200" height="30" rx="7" fill="#fff" stroke="#e0c389"/><text x="180" y="86" text-anchor="middle" font-size="12.5" fill="#6b5417">Products</text>
+            <rect x="80" y="103" width="200" height="30" rx="7" fill="#fff" stroke="#e0c389"/><text x="180" y="123" text-anchor="middle" font-size="12.5" fill="#6b5417">Orders</text>
+            <rect x="80" y="140" width="200" height="30" rx="7" fill="#fff" stroke="#e0c389"/><text x="180" y="160" text-anchor="middle" font-size="12.5" fill="#6b5417">Payments</text>
+            <rect x="80" y="177" width="200" height="30" rx="7" fill="#fff" stroke="#e0c389"/><text x="180" y="197" text-anchor="middle" font-size="12.5" fill="#6b5417">Users</text>
+            <line x1="380" y1="130" x2="430" y2="130" stroke="#9aa6b4" stroke-width="2" stroke-dasharray="5 4"/>
+            <text x="540" y="26" text-anchor="middle" font-size="14" font-weight="700" fill="#16243d">MICROSERVICES &mdash; small, separate</text>
+            <rect x="455" y="50" width="120" height="48" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.6"/><text x="515" y="79" text-anchor="middle" font-size="12.5" font-weight="650" fill="#1b3f7a">Products</text>
+            <rect x="600" y="50" width="120" height="48" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.6"/><text x="660" y="79" text-anchor="middle" font-size="12.5" font-weight="650" fill="#1b3f7a">Orders</text>
+            <rect x="455" y="162" width="120" height="48" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.6"/><text x="515" y="191" text-anchor="middle" font-size="12.5" font-weight="650" fill="#1b3f7a">Payments</text>
+            <rect x="600" y="162" width="120" height="48" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.6"/><text x="660" y="191" text-anchor="middle" font-size="12.5" font-weight="650" fill="#1b3f7a">Users</text>
+            <line x1="575" y1="74" x2="600" y2="74" stroke="#3c4858" stroke-width="1.8" marker-end="url(#ar1)"/>
+            <line x1="515" y1="98" x2="515" y2="162" stroke="#3c4858" stroke-width="1.8" marker-end="url(#ar1)"/>
+            <line x1="660" y1="98" x2="660" y2="162" stroke="#3c4858" stroke-width="1.8" marker-end="url(#ar1)"/>
+        </svg>
+        <div class="cap">Left: everything fused into one. Right: small pieces that connect only when they need to.</div>
+    </div>
+    <table>
+        <thead><tr><th>Question</th><th>Monolith</th><th>Microservices</th></tr></thead>
+        <tbody>
+        <tr><td>How many programs?</td><td>One.</td><td>Many small ones.</td></tr>
+        <tr><td>Change one part</td><td>Rebuild and redeploy the whole thing.</td><td>Rebuild only that one service.</td></tr>
+        <tr><td>If one part crashes</td><td>The whole app can go down.</td><td>Often only that one service is affected.</td></tr>
+        <tr><td>Scaling a busy part</td><td>Scale everything together.</td><td>Scale only the busy service.</td></tr>
+        <tr><td>Complexity</td><td>Simple to start, harder as it grows.</td><td>More moving parts from day one.</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- MANDATORY -->
+<section class="card" id="mandatory">
+    <div class="sec-eyebrow">An honest answer</div>
+    <h2 class="sec">Are microservices mandatory for every project?</h2>
+    <p class="lead">No &mdash; and that matters. Splitting one app into many services adds real complexity: more programs to run, more calls travelling over the network, and more things that can go wrong. You should only take on that cost when you actually get something back for it.</p>
+    <div class="duo">
+        <div class="pane gain">
+            <div class="t">A monolith is usually better when</div>
+            <p>The project is small or new, the team is small, the idea is still changing fast, or you just want to ship quickly and keep things simple. Starting as a monolith and splitting later is a perfectly respected path.</p>
+        </div>
+        <div class="pane without" style="background:var(--note-bg);border-color:var(--note-line);">
+            <div class="t" style="color:var(--note);">Microservices are worth it when</div>
+            <p>The app is large, several teams work on different parts, parts must scale or deploy independently, or one part being busy or failing must not drag the rest down. Big shops, streaming, and banks fit this.</p>
+        </div>
+    </div>
+    <h3>Their real purpose, in one line</h3>
+    <p>Microservices exist to give each part of a system <strong>independence</strong> &mdash; independent building, deploying, and scaling, plus isolation so one part's failure does not become everyone's failure. Every concept in this guide exists to protect that independence while still letting the services cooperate.</p>
+</section>
+
+<!-- MAP -->
+<section class="card" id="map">
+    <div class="sec-eyebrow">Priorities</div>
+    <h2 class="sec">What matters most for a beginner</h2>
+    <p>Not every concept carries equal weight at the start. Here is the honest grouping, so you know where to focus.</p>
+    <div class="maprow"><span class="lbl"><span class="tag tag-core">CORE</span></span><span class="txt"><strong>A service, Service Discovery, and service-to-service calls (Feign)</strong> &mdash; the heart of microservices. If you understand only these three, you understand the idea.</span></div>
+    <div class="maprow"><span class="lbl"><span class="tag tag-core">CORE+</span></span><span class="txt"><strong>API Gateway and Database per service</strong> &mdash; important add-ons that almost every real system uses. Understand them soon after the core.</span></div>
+    <div class="maprow"><span class="lbl"><span class="tag tag-opt">LATER</span></span><span class="txt"><strong>Config Server, centralized logging, and advanced testing/deployment</strong> &mdash; genuinely useful, but you can grasp the whole system without them at first.</span></div>
+    <div class="callout c-note" style="margin-top:18px;">
+        <div class="t">A note on the order below</div>
+        <p>We explain the concepts in the order most courses use, which introduces the Config Server early. Keep this map in mind: for a first project the Config Server is optional &mdash; helpful to understand, but not needed to grasp the system.</p>
+    </div>
+</section>
+
+<!-- RELATE -->
+<section class="card" id="relate">
+    <div class="sec-eyebrow">The map</div>
+    <h2 class="sec">How it all fits together</h2>
+    <p>Before the details, here is the whole system in one picture. Every concept after this is just one piece of this diagram, explained slowly.</p>
+    <div class="diagram">
+        <svg viewBox="0 0 760 400" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+            <defs>
+                <marker id="ar2" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3c4858"/></marker>
+                <marker id="ar2d" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#9aa6b4"/></marker>
+            </defs>
+            <!-- client -->
+            <rect x="40" y="28" width="130" height="48" rx="11" fill="#eef1f6" stroke="#6c7888" stroke-width="1.6"/>
+            <text x="105" y="57" text-anchor="middle" font-size="13.5" font-weight="650" fill="#3c4858">Client / Postman</text>
+            <!-- gateway -->
+            <rect x="300" y="24" width="170" height="56" rx="12" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.8"/>
+            <text x="385" y="48" text-anchor="middle" font-size="14.5" font-weight="700" fill="#6b5417">API Gateway</text>
+            <text x="385" y="66" text-anchor="middle" font-size="11.5" fill="#9a6b10">the single front door</text>
+            <!-- eureka -->
+            <rect x="585" y="24" width="150" height="56" rx="12" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.8"/>
+            <text x="660" y="48" text-anchor="middle" font-size="14.5" font-weight="700" fill="#6b5417">Eureka</text>
+            <text x="660" y="66" text-anchor="middle" font-size="11.5" fill="#9a6b10">directory of services</text>
+            <!-- product / order -->
+            <rect x="250" y="180" width="160" height="60" rx="12" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.8"/>
+            <text x="330" y="206" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1b3f7a">Product Service</text>
+            <text x="330" y="225" text-anchor="middle" font-size="11.5" fill="#6c7888">port 8081</text>
+            <rect x="520" y="180" width="160" height="60" rx="12" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.8"/>
+            <text x="600" y="206" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1b3f7a">Order Service</text>
+            <text x="600" y="225" text-anchor="middle" font-size="11.5" fill="#6c7888">port 8082</text>
+            <!-- DBs -->
+            <g>
+                <ellipse cx="330" cy="320" rx="48" ry="9" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.4"/>
+                <path d="M282,320 v40 a48,9 0 0 0 96,0 v-40" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.4"/>
+                <ellipse cx="330" cy="320" rx="48" ry="9" fill="#eafaf8" stroke="#0e7c86" stroke-width="1.4"/>
+                <text x="330" y="348" text-anchor="middle" font-size="11.5" font-weight="650" fill="#0c6a6e">product_db</text>
+            </g>
+            <g>
+                <ellipse cx="600" cy="320" rx="48" ry="9" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.4"/>
+                <path d="M552,320 v40 a48,9 0 0 0 96,0 v-40" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.4"/>
+                <ellipse cx="600" cy="320" rx="48" ry="9" fill="#eafaf8" stroke="#0e7c86" stroke-width="1.4"/>
+                <text x="600" y="348" text-anchor="middle" font-size="11.5" font-weight="650" fill="#0c6a6e">order_db</text>
+            </g>
+            <!-- arrows -->
+            <line x1="170" y1="52" x2="296" y2="52" stroke="#3c4858" stroke-width="2" marker-end="url(#ar2)"/>
+            <text x="232" y="42" text-anchor="middle" font-size="11" fill="#6c7888">request</text>
+            <line x1="355" y1="80" x2="330" y2="176" stroke="#3c4858" stroke-width="2" marker-end="url(#ar2)"/>
+            <line x1="420" y1="80" x2="595" y2="176" stroke="#3c4858" stroke-width="2" marker-end="url(#ar2)"/>
+            <text x="468" y="120" text-anchor="middle" font-size="11" fill="#6c7888">routes by path</text>
+            <line x1="516" y1="210" x2="414" y2="210" stroke="#2557a7" stroke-width="2.2" marker-end="url(#ar2)"/>
+            <text x="465" y="200" text-anchor="middle" font-size="11" fill="#2557a7">Feign: asks by name</text>
+            <line x1="372" y1="180" x2="600" y2="84" stroke="#9aa6b4" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ar2d)"/>
+            <line x1="620" y1="180" x2="652" y2="84" stroke="#9aa6b4" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ar2d)"/>
+            <text x="690" y="150" text-anchor="middle" font-size="10.5" fill="#9aa6b4">register</text>
+            <line x1="330" y1="240" x2="330" y2="307" stroke="#0e7c86" stroke-width="2" marker-end="url(#ar2)"/>
+            <line x1="600" y1="240" x2="600" y2="307" stroke="#0e7c86" stroke-width="2" marker-end="url(#ar2)"/>
+        </svg>
+        <div class="cap">Solid arrows = live requests. Blue = a Feign call by name. Grey dashed = services registering in the directory. Teal = each service to its own database.</div>
+    </div>
+    <p>In one sentence: <strong>independent services register in a directory, find and call each other by name, sit behind one front door, keep their own data, and are watched and started in a sensible order.</strong> That is the entire guide. Now we slow down and take one piece at a time.</p>
+</section>
+
+<!-- C1 -->
+<section class="concept" id="c1">
+    <div class="concept-head"><span class="badge">1</span><div><div class="cat">Foundation</div><h2>A Service</h2></div></div>
+    <div class="concept-body">
+        <p class="lead">A service is one small program that runs on its own and answers requests. "Setting up a service" simply means bringing one such program to life and giving it a door number (a port). In our shop, the Product Service is one service; the Order Service is another.</p>
+        <div class="analogy"><div class="t">Think of it like</div><p>Opening one small shop in a mall. Before it can sell anything, the shop must exist: it needs a unit, a door number, and the lights on. That is all "setting up a service" means.</p></div>
+        <div class="diagram">
+            <svg viewBox="0 0 760 150" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+                <defs><marker id="ar3" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3c4858"/></marker></defs>
+                <rect x="290" y="35" width="220" height="80" rx="13" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.8"/>
+                <text x="400" y="66" text-anchor="middle" font-size="16" font-weight="700" fill="#1b3f7a">Product Service</text>
+                <rect x="318" y="78" width="120" height="24" rx="6" fill="#fff" stroke="#bcd0ee"/><text x="378" y="95" text-anchor="middle" font-size="11.5" fill="#2557a7">endpoint /products</text>
+                <rect x="446" y="78" width="46" height="24" rx="6" fill="#fff" stroke="#bcd0ee"/><text x="469" y="95" text-anchor="middle" font-size="11.5" fill="#2557a7">8081</text>
+                <line x1="120" y1="62" x2="286" y2="62" stroke="#3c4858" stroke-width="2" marker-end="url(#ar3)"/><text x="200" y="52" text-anchor="middle" font-size="12" fill="#6c7888">request</text>
+                <line x1="286" y1="90" x2="120" y2="90" stroke="#0e7c86" stroke-width="2" marker-end="url(#ar3)"/><text x="200" y="108" text-anchor="middle" font-size="12" fill="#0e7c86">response</text>
+                <line x1="640" y1="62" x2="514" y2="62" stroke="#3c4858" stroke-width="2" marker-end="url(#ar3)"/><text x="600" y="52" text-anchor="middle" font-size="12" fill="#6c7888">request</text>
+            </svg>
+            <div class="cap">A service opens one numbered door, listens for requests, and sends back responses.</div>
+        </div>
+        <span class="kicker k-why">Why we need it</span>
+        <p>Everything else &mdash; discovery, calls between services, gateways &mdash; needs at least one running service to attach to. A service is the basic building block; without one, there is nothing to connect.</p>
+        <div class="status"><span class="tag tag-must">MANDATORY</span> A microservices system is, by definition, made of services. This is step zero.</div>
+        <div class="duo">
+            <div class="pane without"><div class="t"><span class="ic">&#10007;</span> Without it</div><p>There is nothing. No endpoints to call, nothing to register in a directory, nothing for a gateway to route to. It is the seed everything grows from.</p></div>
+            <div class="pane gain"><div class="t"><span class="ic">&#10003;</span> What we gain</div><p>One independent unit that can run, be tested, and later be connected to others &mdash; without touching any other part of the system.</p></div>
+        </div>
+        <span class="kicker k-ann">The keyword that represents it</span>
+        <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+            <tr><td><code>@SpringBootApplication</code></td><td>The label on the one starting class of every service. It says "this is a complete, runnable application &mdash; start it." It turns a plain class into a launchable service.</td><td><span class="tag tag-must">MANDATORY</span></td></tr>
+        </tbody></table>
+        <span class="kicker k-link">How it connects</span>
+        <p>This is the foundation. The next ideas give a service its settings (Config Server), help it find others (Discovery), and let it call others (Feign).</p>
+    </div>
+</section>
+
+<!-- C2 -->
+<section class="concept" id="c2">
+    <div class="concept-head"><span class="badge">2</span><div><div class="cat">Settings &middot; Optional add-on</div><h2>Config Server</h2></div></div>
+    <div class="concept-body">
+        <p class="lead">A Config Server is one special service whose only job is to hold the settings for all the other services in a single, central place. Instead of each service keeping its own copy of shared settings, they all read from this one source.</p>
+        <div class="analogy"><div class="t">Think of it like</div><p>A company handbook kept in one place. Instead of every employee keeping a private copy of the rules (which slowly drift out of date), everyone reads the single official copy. Update it once and everyone is current.</p></div>
+        <div class="diagram">
+            <svg viewBox="0 0 760 200" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+                <defs><marker id="ar4" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#9aa6b4"/></marker></defs>
+                <rect x="300" y="20" width="170" height="58" rx="12" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.8"/>
+                <text x="385" y="44" text-anchor="middle" font-size="15" font-weight="700" fill="#6b5417">Config Server</text>
+                <text x="385" y="63" text-anchor="middle" font-size="11.5" fill="#9a6b10">all settings, one place</text>
+                <rect x="120" y="130" width="170" height="52" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.6"/><text x="205" y="161" text-anchor="middle" font-size="13.5" font-weight="650" fill="#1b3f7a">Product Service</text>
+                <rect x="480" y="130" width="170" height="52" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.6"/><text x="565" y="161" text-anchor="middle" font-size="13.5" font-weight="650" fill="#1b3f7a">Order Service</text>
+                <line x1="350" y1="78" x2="230" y2="126" stroke="#9aa6b4" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#ar4)"/>
+                <line x1="420" y1="78" x2="545" y2="126" stroke="#9aa6b4" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#ar4)"/>
+                <text x="252" y="104" text-anchor="middle" font-size="11.5" fill="#9a6b10">settings</text>
+                <text x="520" y="104" text-anchor="middle" font-size="11.5" fill="#9a6b10">settings</text>
+            </svg>
+            <div class="cap">One central source hands the same settings to every service.</div>
+        </div>
+        <span class="kicker k-why">Why we need it</span>
+        <p>Many services share the same settings &mdash; the directory's address, database details, shared limits. Keeping those in one place means a change is made once, not copied into every service by hand.</p>
+        <div class="status"><span class="tag tag-opt">OPTIONAL</span> A beginner can fully understand microservices without it. It earns its place once several services repeat the same settings.</div>
+        <div class="duo">
+            <div class="pane without"><div class="t"><span class="ic">&#10007;</span> Without it</div><p>The same setting is written inside every service. Change one shared value and you must edit it in every service and restart them all &mdash; and it is easy to miss one.</p></div>
+            <div class="pane gain"><div class="t"><span class="ic">&#10003;</span> What we gain</div><p>One change in one place updates everyone. Settings live in a single, trustworthy source instead of many drifting copies.</p></div>
+        </div>
+        <span class="kicker k-ann">The keyword that represents it</span>
+        <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+            <tr><td><code>@EnableConfigServer</code></td><td>The label that turns an ordinary app into <em>the</em> Config Server. It says "this app's job is to hand out settings to others." Without it, the app is just an empty service.</td><td><span class="tag tag-must">MANDATORY</span> on the server</td></tr>
+        </tbody></table>
+        <div class="callout c-warn"><div class="t">Worth noticing</div><p>The Config Server is a real, separate server. This matters later, because Feign (concept 5) is the opposite &mdash; it is only a client, with no server of its own.</p></div>
+        <span class="kicker k-link">How it connects</span>
+        <p>The Config Server only matters because other services <em>read</em> from it. That reading side is the very next concept.</p>
+    </div>
+</section>
+
+<!-- C3 -->
+<section class="concept" id="c3">
+    <div class="concept-head"><span class="badge">3</span><div><div class="cat">Settings &middot; Optional add-on</div><h2>Client Configuration</h2></div></div>
+    <div class="concept-body">
+        <p class="lead">Client configuration is the other half of the Config Server idea. A "config client" is any ordinary service that, when it starts, asks the Config Server for its settings instead of keeping them all locally.</p>
+        <div class="analogy"><div class="t">Think of it like</div><p>The new employee who, on day one, reads the official handbook instead of relying on hearsay. The handbook is the server; the employee reading it is the client.</p></div>
+        <div class="diagram">
+            <svg viewBox="0 0 760 170" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+                <defs><marker id="ar5" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3c4858"/></marker></defs>
+                <rect x="90" y="55" width="180" height="58" rx="12" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.8"/>
+                <text x="180" y="80" text-anchor="middle" font-size="14" font-weight="700" fill="#1b3f7a">Product Service</text>
+                <text x="180" y="99" text-anchor="middle" font-size="11.5" fill="#6c7888">(config client)</text>
+                <rect x="490" y="55" width="180" height="58" rx="12" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.8"/>
+                <text x="580" y="80" text-anchor="middle" font-size="14" font-weight="700" fill="#6b5417">Config Server</text>
+                <text x="580" y="99" text-anchor="middle" font-size="11.5" fill="#9a6b10">(the handbook)</text>
+                <line x1="272" y1="74" x2="486" y2="74" stroke="#3c4858" stroke-width="2" marker-end="url(#ar5)"/><text x="379" y="64" text-anchor="middle" font-size="11.5" fill="#3c4858">on startup: "what are my settings?"</text>
+                <line x1="486" y1="98" x2="272" y2="98" stroke="#0e7c86" stroke-width="2" marker-end="url(#ar5)"/><text x="379" y="116" text-anchor="middle" font-size="11.5" fill="#0e7c86">"here they are"</text>
+            </svg>
+            <div class="cap">Each service pulls its settings from the central server as it starts up.</div>
+        </div>
+        <span class="kicker k-why">Why we need it</span>
+        <p>A central handbook is useless if nobody reads it. For the Config Server to be worth anything, each service must connect to it and pull its settings on startup. This is what makes "change once, applies everywhere" actually happen.</p>
+        <div class="status"><span class="tag tag-opt">OPTIONAL</span> It is optional in exactly the same situations as the Config Server &mdash; they are two halves of one feature.</div>
+        <div class="duo">
+            <div class="pane without"><div class="t"><span class="ic">&#10007;</span> Without it</div><p>Each service keeps its own private settings, which can drift apart and disagree &mdash; one points at the old directory address, another at the new one. These silent mismatches cause failures that are hard to trace.</p></div>
+            <div class="pane gain"><div class="t"><span class="ic">&#10003;</span> What we gain</div><p>Every service starts with the same, current, central settings. No duplicated values and no silent drift between services.</p></div>
+        </div>
+        <span class="kicker k-ann">The keyword that represents it</span>
+        <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+            <tr><td><code>spring.config.import</code><br><span style="color:var(--muted);font-size:.85em;">(a setting, not an annotation)</span></td><td>A single line in a service that says "before you start, fetch your configuration from the Config Server." There is no special annotation on the client side &mdash; the connection is a setting.</td><td><span class="tag tag-auto">AUTOMATIC</span> no annotation</td></tr>
+        </tbody></table>
+        <span class="kicker k-link">How it connects</span>
+        <p>Server (concept 2) and client (this concept) form one feature. With settings sorted, the next big problem is how services <em>find</em> each other.</p>
+    </div>
+</section>
+
+<!-- C4 -->
+<section class="concept" id="c4">
+    <div class="concept-head"><span class="badge">4</span><div><div class="cat">Core concept</div><h2>Service Discovery (Eureka)</h2></div></div>
+    <div class="concept-body">
+        <p class="lead">Service Discovery is a live directory of services. When a service starts, it registers its name and current address with the directory. When another service wants it, it looks the name up instead of knowing the address. Eureka is Spring's name for this directory.</p>
+        <div class="analogy"><div class="t">Think of it like</div><p>A phone directory. You do not memorise everyone's number; you search a name and get the current number. If the number changes, the directory updates &mdash; you still just search the name.</p></div>
+        <div class="diagram">
+            <svg viewBox="0 0 760 240" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+                <defs>
+                    <marker id="ar6" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3c4858"/></marker>
+                    <marker id="ar6r" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#c0392b"/></marker>
+                    <marker id="ar6d" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#9aa6b4"/></marker>
+                </defs>
+                <text x="185" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#c0392b">WITHOUT &mdash; memorise addresses</text>
+                <rect x="40" y="80" width="130" height="50" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.6"/><text x="105" y="110" text-anchor="middle" font-size="13" font-weight="650" fill="#1b3f7a">Order Service</text>
+                <rect x="225" y="80" width="130" height="50" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.6"/><text x="290" y="110" text-anchor="middle" font-size="13" font-weight="650" fill="#1b3f7a">Product Service</text>
+                <line x1="172" y1="105" x2="221" y2="105" stroke="#c0392b" stroke-width="2" marker-end="url(#ar6r)"/>
+                <rect x="150" y="52" width="98" height="22" rx="5" fill="#fbece9" stroke="#e0a99f"/><text x="199" y="67" text-anchor="middle" font-size="10.5" fill="#c0392b">hardcoded :8081</text>
+                <text x="197" y="158" text-anchor="middle" font-size="11.5" fill="#c0392b">moves port &rarr; the call breaks</text>
+                <line x1="388" y1="20" x2="388" y2="215" stroke="#cdd5df" stroke-width="1.5" stroke-dasharray="4 5"/>
+                <text x="575" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#1f8a4c">WITH &mdash; find by name</text>
+                <rect x="498" y="48" width="155" height="48" rx="11" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.8"/><text x="575" y="70" text-anchor="middle" font-size="13.5" font-weight="700" fill="#6b5417">Eureka directory</text><text x="575" y="86" text-anchor="middle" font-size="10.5" fill="#9a6b10">name &rarr; current address</text>
+                <rect x="430" y="158" width="130" height="48" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.6"/><text x="495" y="187" text-anchor="middle" font-size="12.5" font-weight="650" fill="#1b3f7a">Product Service</text>
+                <rect x="600" y="158" width="135" height="48" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.6"/><text x="667" y="187" text-anchor="middle" font-size="12.5" font-weight="650" fill="#1b3f7a">Order Service</text>
+                <line x1="500" y1="158" x2="548" y2="98" stroke="#9aa6b4" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ar6d)"/>
+                <line x1="650" y1="158" x2="602" y2="98" stroke="#9aa6b4" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ar6d)"/>
+                <text x="455" y="130" text-anchor="middle" font-size="10" fill="#9aa6b4">register</text><text x="700" y="130" text-anchor="middle" font-size="10" fill="#9aa6b4">register</text>
+                <line x1="598" y1="182" x2="563" y2="182" stroke="#2557a7" stroke-width="2.2" marker-end="url(#ar6)"/>
+                <text x="582" y="222" text-anchor="middle" font-size="11" fill="#2557a7">calls "product-service" by name</text>
+            </svg>
+            <div class="cap">Left: hardcoded addresses break when anything moves. Right: services register, and callers ask the directory by name.</div>
+        </div>
+        <span class="kicker k-why">Why we need it &mdash; the port-number problem, plainly</span>
+        <p>Every running service sits at an address with a port number &mdash; Product at 8081, Order at 8082. The simplest way for the Order Service to reach the Product Service is to write that address down. That works until the address changes &mdash; and in real systems addresses change constantly: services move machines, restart on new ports, or run as several copies for load. Each time, you would have to find every place the address was written, change it, and restart. Discovery removes this: services register by <strong>name</strong>, callers ask by that name, and the directory always knows the current address. You stop remembering ports and start using names.</p>
+        <div class="status"><span class="tag tag-core">CORE</span> Not strictly required for two services on one laptop, but standard practice and the concept that makes services portable and scalable.</div>
+        <div class="duo">
+            <div class="pane without"><div class="t"><span class="ic">&#10007;</span> Without it</div><p>Every service hardcodes the addresses it calls. The day anything moves, restarts on a new port, or scales to several copies, those addresses break and must be hunted down by hand &mdash; failing only at the moment of the call.</p></div>
+            <div class="pane gain"><div class="t"><span class="ic">&#10003;</span> What we gain</div><p>Callers use names, not addresses. Services can move, restart, or run as many copies, and the directory keeps everyone findable automatically.</p></div>
+        </div>
+        <span class="kicker k-ann">The keyword that represents it</span>
+        <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+            <tr><td><code>@EnableEurekaServer</code></td><td>The label that turns one app into the directory itself: "this app's job is to be the phone directory of services."</td><td><span class="tag tag-must">MANDATORY</span> on the directory</td></tr>
+            <tr><td><code>@EnableEurekaClient</code><br><code>@EnableDiscoveryClient</code></td><td>Older labels meaning "this service should register itself." On modern Spring, just including the discovery library is enough, so these are usually not needed.</td><td><span class="tag tag-auto">AUTOMATIC</span> on a service</td></tr>
+        </tbody></table>
+        <span class="kicker k-link">How it connects</span>
+        <p>Discovery lets services be found by name. The very next question is how one service actually <em>makes the call</em> using that name &mdash; which is Feign.</p>
+    </div>
+</section>
+
+<!-- C5 -->
+<section class="concept" id="c5">
+    <div class="concept-head"><span class="badge">5</span><div><div class="cat">Core concept</div><h2>Feign Client</h2></div></div>
+    <div class="concept-body">
+        <p class="lead">Feign is the idea of calling another service as if it were a normal method in your own code. You describe the call once &mdash; which service, which endpoint &mdash; and the framework makes the real web request behind the scenes. In our shop, the Order Service uses Feign to ask the Product Service for a product.</p>
+        <div class="analogy"><div class="t">Think of it like</div><p>Speed-dial on a phone. Instead of dialing a full number each time, you press one labelled button. You label the call once; pressing the button does the dialing.</p></div>
+        <div class="diagram">
+            <svg viewBox="0 0 760 180" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+                <defs><marker id="ar7" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3c4858"/></marker></defs>
+                <rect x="40" y="35" width="290" height="115" rx="13" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.8"/>
+                <text x="185" y="60" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1b3f7a">Order Service (the caller)</text>
+                <rect x="68" y="78" width="234" height="52" rx="9" fill="#fff" stroke="#bcd0ee"/>
+                <text x="185" y="100" text-anchor="middle" font-size="12.5" font-weight="650" fill="#2557a7">ProductClient interface</text>
+                <text x="185" y="118" text-anchor="middle" font-size="11" fill="#6c7888">"describe the call once"</text>
+                <rect x="500" y="50" width="220" height="85" rx="13" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.8"/>
+                <text x="610" y="86" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1b3f7a">Product Service</text>
+                <text x="610" y="106" text-anchor="middle" font-size="11.5" fill="#6c7888">just a normal service</text>
+                <line x1="304" y1="92" x2="496" y2="82" stroke="#2557a7" stroke-width="2.2" marker-end="url(#ar7)"/><text x="400" y="74" text-anchor="middle" font-size="11.5" fill="#2557a7">getProductById(1)</text>
+                <line x1="496" y1="110" x2="304" y2="120" stroke="#0e7c86" stroke-width="2" marker-end="url(#ar7)"/><text x="400" y="138" text-anchor="middle" font-size="11.5" fill="#0e7c86">product data</text>
+            </svg>
+            <div class="cap">Feign lives only inside the caller. The called service does not change at all.</div>
+        </div>
+        <div class="callout c-warn"><div class="t">Drop this myth right now</div><p>There is <strong>no "Feign server"</strong>. Feign is only a client idea &mdash; it lives on the side that is asking. The Product Service is an ordinary service; it neither knows nor cares that the caller used Feign.</p></div>
+        <span class="kicker k-why">Why we need it</span>
+        <p>Services constantly need data from each other. Doing that by hand means writing the same plumbing every time: build the address, send the request, read the reply, convert it. Feign hides all of that so a remote call looks like a simple method call.</p>
+        <div class="status"><span class="tag tag-core">CORE IDEA</span> Service-to-service communication is core; Feign is the simplest tool for it, so treat it as the beginner default.</div>
+        <div class="duo">
+            <div class="pane without"><div class="t"><span class="ic">&#10007;</span> Without it</div><p>Every call repeats the same manual request-and-response plumbing, often with a hardcoded address (bringing back the port problem). More code, more repetition, more places to break.</p></div>
+            <div class="pane gain"><div class="t"><span class="ic">&#10003;</span> What we gain</div><p>One short description of the call, reused everywhere. With Discovery you call by name, the reply is converted for you, and each call becomes a single readable line.</p></div>
+        </div>
+        <span class="kicker k-ann">The keyword that represents it</span>
+        <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+            <tr><td><code>@EnableFeignClients</code></td><td>The label on the calling service: "look for my call descriptions and make them real." Without it, your descriptions are ignored.</td><td><span class="tag tag-must">MANDATORY</span> on the caller</td></tr>
+            <tr><td><code>@FeignClient(name="product-service")</code></td><td>The label on a small interface: "this describes calls to the service named product-service." The name must match the target's registered name.</td><td><span class="tag tag-must">MANDATORY</span></td></tr>
+        </tbody></table>
+        <span class="kicker k-link">How it connects</span>
+        <p>Feign relies on Discovery (concept 4) to turn a name into an address. Next we step outside the services and ask how the <em>outside world</em> reaches them.</p>
+    </div>
+</section>
+
+<!-- C6 -->
+<section class="concept" id="c6">
+    <div class="concept-head"><span class="badge">6</span><div><div class="cat">Important add-on</div><h2>API Gateway</h2></div></div>
+    <div class="concept-body">
+        <p class="lead">An API Gateway is a single entry point that sits in front of all your services. Every request from the outside world comes to the gateway, which then sends it to the correct service. Deciding which service a request belongs to is called routing.</p>
+        <div class="analogy"><div class="t">Think of it like</div><p>The reception desk of an office building. Visitors do not wander to individual rooms; they go to one reception, which directs them. You hand out one address (reception), not the room number of every team.</p></div>
+        <div class="diagram">
+            <svg viewBox="0 0 760 230" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+                <defs><marker id="ar8" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3c4858"/></marker></defs>
+                <rect x="30" y="45" width="120" height="44" rx="10" fill="#eef1f6" stroke="#6c7888" stroke-width="1.5"/><text x="90" y="72" text-anchor="middle" font-size="12.5" fill="#3c4858">Browser</text>
+                <rect x="30" y="140" width="120" height="44" rx="10" fill="#eef1f6" stroke="#6c7888" stroke-width="1.5"/><text x="90" y="167" text-anchor="middle" font-size="12.5" fill="#3c4858">Mobile app</text>
+                <rect x="300" y="78" width="160" height="74" rx="13" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.9"/><text x="380" y="108" text-anchor="middle" font-size="15" font-weight="700" fill="#6b5417">API Gateway</text><text x="380" y="128" text-anchor="middle" font-size="11" fill="#9a6b10">one front door</text>
+                <rect x="590" y="40" width="150" height="48" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.6"/><text x="665" y="70" text-anchor="middle" font-size="13" font-weight="650" fill="#1b3f7a">Product Service</text>
+                <rect x="590" y="142" width="150" height="48" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.6"/><text x="665" y="172" text-anchor="middle" font-size="13" font-weight="650" fill="#1b3f7a">Order Service</text>
+                <line x1="152" y1="67" x2="296" y2="100" stroke="#3c4858" stroke-width="2" marker-end="url(#ar8)"/>
+                <line x1="152" y1="162" x2="296" y2="130" stroke="#3c4858" stroke-width="2" marker-end="url(#ar8)"/>
+                <line x1="462" y1="105" x2="586" y2="66" stroke="#3c4858" stroke-width="2" marker-end="url(#ar8)"/><text x="524" y="78" text-anchor="middle" font-size="11" fill="#6b5417">/products</text>
+                <line x1="462" y1="125" x2="586" y2="164" stroke="#3c4858" stroke-width="2" marker-end="url(#ar8)"/><text x="524" y="160" text-anchor="middle" font-size="11" fill="#6b5417">/orders</text>
+            </svg>
+            <div class="cap">Many callers, one door. The gateway reads the path and routes each request to the right service.</div>
+        </div>
+        <span class="kicker k-why">Why we need it</span>
+        <p>Without a front door, anyone outside must know the address and port of every service &mdash; fragile, and it exposes your internal layout. The gateway is also the natural single place to handle shared jobs once (security checks, request logging) instead of repeating them in every service.</p>
+        <div class="status"><span class="tag tag-core">CORE+</span> Not required to make two services talk, but standard in any real system and worth understanding early.</div>
+        <div class="duo">
+            <div class="pane without"><div class="t"><span class="ic">&#10007;</span> Without it</div><p>Callers juggle many addresses. Add a service and every caller learns a new one. Shared concerns like security get rebuilt in each service, and internal ports leak to the outside.</p></div>
+            <div class="pane gain"><div class="t"><span class="ic">&#10003;</span> What we gain</div><p>One address for everything. Callers never see internal ports, you add or move services without changing callers, and you get one place to enforce shared rules.</p></div>
+        </div>
+        <span class="kicker k-ann">The keyword that represents it</span>
+        <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+            <tr><td>(no enable annotation)</td><td>A useful surprise: the API Gateway has <strong>no "enable" annotation</strong>. Its behaviour comes entirely from its routing settings. Beginners often hunt for an <code>@EnableGateway</code> &mdash; it does not exist.</td><td><span class="tag tag-auto">AUTOMATIC</span> settings, not a label</td></tr>
+        </tbody></table>
+        <span class="kicker k-link">How it connects</span>
+        <p>The gateway usually uses Discovery to route by name. With the outside-in path handled, the next concern is being able to <em>see</em> what is happening across all these services.</p>
+    </div>
+</section>
+
+<!-- C7 -->
+<section class="concept" id="c7">
+    <div class="concept-head"><span class="badge">7</span><div><div class="cat">Optional add-on</div><h2>Centralized Logging &amp; Monitoring</h2></div></div>
+    <div class="concept-body">
+        <p class="lead"><strong>Monitoring</strong> means seeing the health of each service &mdash; up or down, healthy or not. <strong>Centralized logging</strong> means gathering the messages from all services into one place, so you can follow a single request as it travels from service to service.</p>
+        <div class="analogy"><div class="t">Think of it like</div><p>Security cameras feeding one control room. Each shop has its own camera (its own logs), but the guard watches every feed on one wall, so they can follow one person from shop to shop.</p></div>
+        <div class="diagram">
+            <svg viewBox="0 0 760 210" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+                <defs><marker id="ar9" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3c4858"/></marker></defs>
+                <rect x="40" y="22" width="170" height="44" rx="10" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.5"/><circle cx="60" cy="44" r="5" fill="#1f8a4c"/><text x="120" y="49" text-anchor="middle" font-size="12.5" fill="#1b3f7a">API Gateway</text>
+                <rect x="40" y="83" width="170" height="44" rx="10" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.5"/><circle cx="60" cy="105" r="5" fill="#1f8a4c"/><text x="120" y="110" text-anchor="middle" font-size="12.5" fill="#1b3f7a">Product Service</text>
+                <rect x="40" y="144" width="170" height="44" rx="10" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.5"/><circle cx="60" cy="166" r="5" fill="#1f8a4c"/><text x="120" y="171" text-anchor="middle" font-size="12.5" fill="#1b3f7a">Order Service</text>
+                <rect x="500" y="70" width="230" height="72" rx="13" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.9"/><text x="615" y="100" text-anchor="middle" font-size="14.5" font-weight="700" fill="#6b5417">Control room</text><text x="615" y="120" text-anchor="middle" font-size="11.5" fill="#9a6b10">all logs + health in one view</text>
+                <line x1="212" y1="44" x2="496" y2="92" stroke="#3c4858" stroke-width="1.8" marker-end="url(#ar9)"/>
+                <line x1="212" y1="105" x2="496" y2="106" stroke="#3c4858" stroke-width="1.8" marker-end="url(#ar9)"/>
+                <line x1="212" y1="166" x2="496" y2="120" stroke="#3c4858" stroke-width="1.8" marker-end="url(#ar9)"/>
+                <text x="350" y="80" text-anchor="middle" font-size="10.5" fill="#6c7888">logs</text>
+            </svg>
+            <div class="cap">Green dots = healthy. Every service sends its logs to one place you can search.</div>
+        </div>
+        <span class="kicker k-why">Why we need it</span>
+        <p>In a monolith there is one log to read. In microservices a single user action can pass through the gateway, the Order Service, and the Product Service &mdash; three separate places. Without a way to join them, finding out what went wrong means jumping between windows and guessing which line belongs to which request.</p>
+        <div class="status"><span class="tag tag-opt">OPTIONAL</span> Strongly recommended, but you can understand the core ideas without it.</div>
+        <div class="duo">
+            <div class="pane without"><div class="t"><span class="ic">&#10007;</span> Without it</div><p>No single view of health and no easy way to follow one request across services. You compare separate logs by eye, matching timestamps and guessing, and cannot quickly answer "is that service even up?"</p></div>
+            <div class="pane gain"><div class="t"><span class="ic">&#10003;</span> What we gain</div><p>A health check per service (up or down at a glance) and the ability to follow one request end to end across every service it touched.</p></div>
+        </div>
+        <span class="kicker k-ann">The keyword that represents it</span>
+        <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+            <tr><td>Actuator<br><span style="color:var(--muted);font-size:.85em;">(a library, not an annotation)</span></td><td>The common tool here is "Actuator," added as a library rather than switched on by a label. It exposes simple health and status information about a service. No annotation to memorise &mdash; the behaviour comes from including the library.</td><td><span class="tag tag-auto">AUTOMATIC</span> library</td></tr>
+        </tbody></table>
+        <span class="kicker k-link">How it connects</span>
+        <p>Monitoring watches over everything we have connected so far. The next concept keeps each service independent at the data level.</p>
+    </div>
+</section>
+
+<!-- C8 -->
+<section class="concept" id="c8">
+    <div class="concept-head"><span class="badge">8</span><div><div class="cat">Important rule</div><h2>Database per Service</h2></div></div>
+    <div class="concept-body">
+        <p class="lead">Database per service means each service owns and manages its own database, and no other service reaches directly into it. If one needs another's data, it <em>asks</em> through the API (the Feign idea) &mdash; it never reads the other's database directly.</p>
+        <div class="analogy"><div class="t">Think of it like</div><p>Each shop in the mall has its own locked stockroom. If one shop needs an item from another, it asks at the counter &mdash; it does not walk into the other shop's stockroom and take it.</p></div>
+        <div class="diagram">
+            <svg viewBox="0 0 760 230" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+                <defs>
+                    <marker id="ar10" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0e7c86"/></marker>
+                    <marker id="ar10r" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#c0392b"/></marker>
+                </defs>
+                <rect x="55" y="30" width="170" height="50" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.7"/><text x="140" y="60" text-anchor="middle" font-size="13.5" font-weight="650" fill="#1b3f7a">Product Service</text>
+                <rect x="535" y="30" width="170" height="50" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.7"/><text x="620" y="60" text-anchor="middle" font-size="13.5" font-weight="650" fill="#1b3f7a">Order Service</text>
+                <g><ellipse cx="140" cy="150" rx="50" ry="10" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.4"/><path d="M90,150 v38 a50,10 0 0 0 100,0 v-38" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.4"/><ellipse cx="140" cy="150" rx="50" ry="10" fill="#eafaf8" stroke="#0e7c86" stroke-width="1.4"/><text x="140" y="178" text-anchor="middle" font-size="12" font-weight="650" fill="#0c6a6e">product_db</text></g>
+                <g><ellipse cx="620" cy="150" rx="50" ry="10" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.4"/><path d="M570,150 v38 a50,10 0 0 0 100,0 v-38" fill="#dff0ef" stroke="#0e7c86" stroke-width="1.4"/><ellipse cx="620" cy="150" rx="50" ry="10" fill="#eafaf8" stroke="#0e7c86" stroke-width="1.4"/><text x="620" y="178" text-anchor="middle" font-size="12" font-weight="650" fill="#0c6a6e">order_db</text></g>
+                <line x1="140" y1="80" x2="140" y2="137" stroke="#0e7c86" stroke-width="2" marker-end="url(#ar10)"/><text x="172" y="112" text-anchor="middle" font-size="10.5" fill="#0c6a6e">owns</text>
+                <line x1="620" y1="80" x2="620" y2="137" stroke="#0e7c86" stroke-width="2" marker-end="url(#ar10)"/><text x="652" y="112" text-anchor="middle" font-size="10.5" fill="#0c6a6e">owns</text>
+                <line x1="545" y1="62" x2="200" y2="150" stroke="#c0392b" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#ar10r)"/>
+                <text x="372" y="96" text-anchor="middle" font-size="12" font-weight="650" fill="#c0392b">reaching into another's database &mdash; not allowed</text>
+                <text x="372" y="128" text-anchor="middle" font-size="22" font-weight="800" fill="#c0392b">&#10007;</text>
+            </svg>
+            <div class="cap">Each service owns its own data. Crossing into another service's database directly is the rule this concept forbids.</div>
+        </div>
+        <span class="kicker k-why">Why we need it</span>
+        <p>The whole point of microservices is independence. If two services share one database, they are secretly joined: neither can change its data structure freely, and one database problem hits both. Separate databases keep services truly independent.</p>
+        <div class="status"><span class="tag tag-core">CORE RULE</span> The core data rule of microservices. Understand it from the start.</div>
+        <div class="duo">
+            <div class="pane without"><div class="t"><span class="ic">&#10007;</span> Without it</div><p>If two services share a database and read each other's tables, one team cannot change its data without breaking the other. They become glued together &mdash; a monolith with extra network calls, the downsides of both designs.</p></div>
+            <div class="pane gain"><div class="t"><span class="ic">&#10003;</span> What we gain</div><p>Each service grows its own data freely, can even use a different kind of database, and one service's data problem cannot corrupt another. Data is shared only through clear APIs.</p></div>
+        </div>
+        <span class="kicker k-ann">The keyword that represents it</span>
+        <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+            <tr><td><code>@Entity</code></td><td>The label on a class meaning "objects of this class are stored as rows in this service's own table." It marks the data a service owns.</td><td><span class="tag tag-must">MANDATORY</span> for stored data</td></tr>
+            <tr><td><code>@Id</code></td><td>The label on the one field that uniquely identifies each stored item (its key).</td><td><span class="tag tag-must">MANDATORY</span> for stored data</td></tr>
+        </tbody></table>
+        <p style="font-size:.92rem;color:var(--muted);margin-top:10px;">There is no annotation for "database per service" itself &mdash; it is a <em>rule</em> you follow, not a label you write.</p>
+        <span class="kicker k-link">How it connects</span>
+        <p>Owning data privately is the last piece that keeps services independent. The final concept is how you verify and run them all together.</p>
+    </div>
+</section>
+
+<!-- C9 -->
+<section class="concept" id="c9">
+    <div class="concept-head"><span class="badge">9</span><div><div class="cat">Running it</div><h2>Testing &amp; Deployment</h2></div></div>
+    <div class="concept-body">
+        <p class="lead"><strong>Testing</strong> means checking that each service works on its own and that they work together. <strong>Deployment</strong> means running the whole system &mdash; and crucially, starting the services in the right order so they can find each other.</p>
+        <div class="analogy"><div class="t">Think of it like</div><p>Opening the mall in the morning: switch on the building directory and reception first, then open the individual shops. Open a shop before the directory is running and customers cannot be guided to it.</p></div>
+        <div class="diagram">
+            <svg viewBox="0 0 760 120" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+                <defs><marker id="ar11" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3c4858"/></marker></defs>
+                <rect x="20" y="40" width="150" height="52" rx="11" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.7"/><circle cx="42" cy="55" r="9" fill="#bd831a"/><text x="42" y="59" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">1</text><text x="100" y="73" text-anchor="middle" font-size="12.5" font-weight="650" fill="#6b5417">Eureka</text>
+                <rect x="205" y="40" width="155" height="52" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.7"/><circle cx="227" cy="55" r="9" fill="#2557a7"/><text x="227" y="59" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">2</text><text x="288" y="73" text-anchor="middle" font-size="12.5" font-weight="650" fill="#1b3f7a">Product</text>
+                <rect x="395" y="40" width="155" height="52" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.7"/><circle cx="417" cy="55" r="9" fill="#2557a7"/><text x="417" y="59" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">3</text><text x="478" y="73" text-anchor="middle" font-size="12.5" font-weight="650" fill="#1b3f7a">Order</text>
+                <rect x="585" y="40" width="155" height="52" rx="11" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.7"/><circle cx="607" cy="55" r="9" fill="#bd831a"/><text x="607" y="59" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">4</text><text x="668" y="73" text-anchor="middle" font-size="12.5" font-weight="650" fill="#6b5417">Gateway</text>
+                <line x1="170" y1="66" x2="201" y2="66" stroke="#3c4858" stroke-width="2" marker-end="url(#ar11)"/>
+                <line x1="360" y1="66" x2="391" y2="66" stroke="#3c4858" stroke-width="2" marker-end="url(#ar11)"/>
+                <line x1="550" y1="66" x2="581" y2="66" stroke="#3c4858" stroke-width="2" marker-end="url(#ar11)"/>
+            </svg>
+            <div class="cap">Start order: the directory first, then the services that register in it, then the front door.</div>
+        </div>
+        <span class="kicker k-why">Why we need it</span>
+        <p>Microservices depend on each other at startup. If a service starts before the directory is ready, it cannot register or be found, and calls fail with confusing errors that have nothing to do with the code. Knowing the right order, and verifying each layer, makes the system predictable.</p>
+        <div class="status"><span class="tag tag-must">MANDATORY</span> Understanding startup order. <span class="tag tag-opt" style="margin-left:8px;">OPTIONAL</span> Deeper automated testing and advanced deployment.</div>
+        <div class="duo">
+            <div class="pane without"><div class="t"><span class="ic">&#10007;</span> Without it</div><p>Start a caller before the directory and you get "no instances available" &mdash; not a code bug, just bad order. Without a verification habit, you also cannot tell which service in the chain actually failed.</p></div>
+            <div class="pane gain"><div class="t"><span class="ic">&#10003;</span> What we gain</div><p>A reliable, repeatable way to bring the system up and confirm it works end to end, so problems are obvious and isolated to one service.</p></div>
+        </div>
+        <span class="kicker k-ann">The keyword that represents it</span>
+        <table><thead><tr><th>Keyword</th><th>What it means (plain English)</th><th>Status</th></tr></thead><tbody>
+            <tr><td><code>@SpringBootTest</code></td><td>The label on a test meaning "start the service the way it really runs, so I can test it realistically." It represents the idea of automated verification.</td><td><span class="tag tag-opt">OPTIONAL</span></td></tr>
+        </tbody></table>
+        <p style="font-size:.92rem;color:var(--muted);margin-top:10px;">The startup-order idea itself has no annotation &mdash; it is an operating habit (directory first, then services, then the gateway).</p>
+        <span class="kicker k-link">How it connects</span>
+        <p>This ties everything together: independent services, connected through discovery and Feign, fronted by a gateway, watched by monitoring, each owning its data &mdash; brought up in a sensible order and verified.</p>
+    </div>
+</section>
+
+<!-- ANNOTATION TABLE -->
+<section class="card" id="annotations">
+    <div class="sec-eyebrow">Quick reference</div>
+    <h2 class="sec">Keyword &amp; annotation meanings</h2>
+    <p>Every label and key term from this guide in one place &mdash; a <strong>meaning</strong> table, not a how-to. "Automatic" means there is nothing to write; the behaviour comes from a setting or a library.</p>
+    <table>
+        <thead><tr><th>Keyword</th><th>What it means</th><th>Concept</th><th>Status</th></tr></thead>
+        <tbody>
+        <tr><td><code>@SpringBootApplication</code></td><td>Marks the one starting class of a runnable service.</td><td>1 &middot; Service</td><td><span class="tag tag-must">MUST</span></td></tr>
+        <tr><td><code>@EnableConfigServer</code></td><td>Turns an app into the central settings server.</td><td>2 &middot; Config Server</td><td><span class="tag tag-must">MUST</span></td></tr>
+        <tr><td><code>spring.config.import</code></td><td>A setting that tells a service to fetch settings from the Config Server.</td><td>3 &middot; Client config</td><td><span class="tag tag-auto">AUTO</span></td></tr>
+        <tr><td><code>@EnableEurekaServer</code></td><td>Turns an app into the service directory.</td><td>4 &middot; Discovery</td><td><span class="tag tag-must">MUST</span></td></tr>
+        <tr><td><code>@EnableEurekaClient</code></td><td>Registers a service in the directory; usually automatic now.</td><td>4 &middot; Discovery</td><td><span class="tag tag-auto">AUTO</span></td></tr>
+        <tr><td><code>@EnableFeignClients</code></td><td>Tells the caller to turn its call descriptions into real calls.</td><td>5 &middot; Feign</td><td><span class="tag tag-must">MUST</span></td></tr>
+        <tr><td><code>@FeignClient(name=...)</code></td><td>Describes calls to another service, named by its registered name.</td><td>5 &middot; Feign</td><td><span class="tag tag-must">MUST</span></td></tr>
+        <tr><td>(none for the gateway)</td><td>The gateway has no enable annotation; routing is pure configuration.</td><td>6 &middot; Gateway</td><td><span class="tag tag-auto">AUTO</span></td></tr>
+        <tr><td>Actuator (library)</td><td>Exposes simple health and status info; no annotation needed.</td><td>7 &middot; Monitoring</td><td><span class="tag tag-auto">AUTO</span></td></tr>
+        <tr><td><code>@Entity</code> / <code>@Id</code></td><td>Mark a class as stored data and its unique key, in the service's own database.</td><td>8 &middot; Database</td><td><span class="tag tag-must">MUST</span></td></tr>
+        <tr><td><code>@SpringBootTest</code></td><td>Starts the service realistically for an automated test.</td><td>9 &middot; Testing</td><td><span class="tag tag-opt">OPT</span></td></tr>
+        </tbody>
+    </table>
+    <div class="callout c-warn">
+        <div class="t">The three things beginners most often get wrong</div>
+        <p>1) The API Gateway has <strong>no enable annotation</strong> &mdash; it is pure configuration. 2) On modern Spring, a service registers with the directory <strong>automatically</strong> from its library, so you usually do not write <code>@EnableEurekaClient</code>. 3) The config <strong>client</strong> needs no annotation either &mdash; just a setting. In short: not every concept has an annotation. Some are settings, some are libraries, and some are simply rules you follow.</p>
+    </div>
+</section>
+
+<!-- WHOLE -->
+<section class="card lead-card" id="whole">
+    <div class="sec-eyebrow">Putting it together</div>
+    <h2 class="sec">The whole idea, in plain words</h2>
+    <p class="lead">A microservices system is a set of small, independent programs (services), each doing one job and owning its own data. They may read shared settings from one central place (Config Server). They find each other through a live directory by name, not by memorised addresses (Service Discovery) &mdash; which is what ends the "remembering port numbers" headache. One service calls another by that name as if it were a local method (Feign, a client-only idea with no server of its own). The outside world reaches all of them through a single front door that routes each request to the right place (API Gateway). You can see their health and follow one request across them (logging and monitoring). And you run them in a sensible order &mdash; directory first, then services, then the front door &mdash; verifying as you go. Every single piece exists for one reason: to let independent services cooperate without becoming secretly glued together.</p>
+    <div class="callout c-ok" style="margin-top:18px;">
+        <div class="t">You are now ready to build</div>
+        <p>That is the complete theory. The next stage is the hands-on build &mdash; creating the services, adding dependencies, writing the settings and code, and testing each endpoint. With the understanding from this document, every step there will already make sense.</p>
+    </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+    <b>Understanding Microservices</b> &mdash; concepts before code. &nbsp;Service &middot; Config &middot; Discovery &middot; Feign &middot; Gateway &middot; Monitoring &middot; Data &middot; Running it.
+</footer>
+
+</body>
+</html>

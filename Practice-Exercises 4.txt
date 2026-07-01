@@ -1,0 +1,390 @@
+SOFTWARE ENGINEERING PRACTICE EXERCISES AND REVIEW QUESTIONS
+============================================================
+
+
+AGILE AND SOFTWARE MAINTENANCE
+==============================
+
+Agile Methodology Scrum Frameworks
+
+What is the Agile Manifesto and what are its four core values
+How does Agile differ from the traditional Waterfall model
+What is Scrum and how does it implement Agile principles
+What are the three pillars of empirical process control in Scrum
+What is the purpose of timeboxing in Scrum events
+How does Scrum support inspection and adaptation throughout a project
+What is the difference between an Agile framework and an Agile practice
+Why is working software considered the primary measure of progress
+
+Scrum Roles and Role Boundaries
+
+Who are the three roles defined in the Scrum framework
+What are the responsibilities of the Product Owner
+What are the responsibilities of the Scrum Master
+What does the Development Team own during a sprint
+Why should the Scrum Master not act as a project manager
+How does the Product Owner interact with stakeholders
+What does it mean for a Scrum Team to be self organizing
+What boundary exists between the Product Owner and the Development Team
+
+User Story Components
+
+What is a user story and what problem does it solve
+What is the standard template for writing a user story
+What are acceptance criteria and why do they matter
+What does the INVEST acronym stand for in user stories
+How are story points used to estimate user stories
+What is the Definition of Done and how does it differ from acceptance criteria
+How do epics relate to user stories
+What makes a user story ready to enter a sprint
+
+Sprint Lifecycles
+
+What is a sprint and what is its typical duration
+What happens during Sprint Planning
+What are the two questions answered when defining a sprint goal
+What is the purpose of the Daily Standup
+What three questions are commonly asked during the Daily Standup
+What happens during the Sprint Review
+What is the focus of the Sprint Retrospective
+How does the Sprint Review differ from the Sprint Retrospective
+What is the product backlog and who maintains it
+What is the sprint backlog and how is it formed
+What is velocity and how is it used for forecasting
+What is a burndown chart and what does it show
+
+Software Support and Maintenance
+
+What are the four main types of software maintenance
+What is corrective maintenance and when is it performed
+What is adaptive maintenance and what triggers it
+What is perfective maintenance and how does it add value
+What is preventive maintenance and why is it important
+How does software maintenance differ from new development
+
+Incident Management Workflows
+
+What is an incident in a production support context
+What are the typical stages of a ticket lifecycle
+What does the New status represent in a ticket workflow
+What does it mean to triage an incident
+When is a ticket moved to the Pending or On Hold status
+What is the difference between Resolved and Closed
+Under what conditions is a ticket reopened
+What is the difference between an incident and a service request
+What is root cause analysis and when is it performed
+
+SLA Definitions
+
+What does the acronym SLA stand for
+What is the difference between response time and resolution time
+How is ticket priority determined
+What distinguishes a P1 critical incident from a P3 medium incident
+What is an SLA breach and what are its consequences
+How do business hours affect SLA calculations
+What is the relationship between an SLA and an OLA
+
+Production Support Categories
+
+What is the difference between L1 L2 and L3 support
+What types of tasks are handled at the L1 support level
+What types of tasks are escalated to the L2 support level
+When should an issue be escalated to L3 engineering support
+What is a runbook and how does it help L1 support
+What is the goal of shift left in production support
+
+
+OPERATING SYSTEMS AND SCRIPTING
+===============================
+
+Unix Commands File Permissions
+
+What command prints the current working directory
+How do you list hidden files in a directory
+What do the three permission groups owner group and others represent
+What numeric values are assigned to read write and execute permissions
+What does the permission setting 755 mean
+What is the difference between chmod and chown
+How do you add execute permission for the owner using symbolic notation
+How do you recursively change permissions on a directory tree
+What does the leading character in a permission string indicate
+How do you change both the owner and group of a file at once
+
+Regex Searches and Stream Processing
+
+What is the purpose of the grep command
+How do you perform a case insensitive search with grep
+How do you search recursively through a directory with grep
+What is the primary strength of the awk command
+How do you print a specific column from a file using awk
+How do you sum a numeric column using awk
+What is the sed command used for
+How do you replace all occurrences of a word using sed
+How do you edit a file in place with sed
+How do you delete blank lines from a file using sed
+When would you choose awk instead of grep
+
+Pipe Flows and Redirection
+
+What does the pipe operator do in a Unix command
+How do you count matching lines by combining grep and wc
+What is the difference between the redirect and append operators
+How do you redirect standard error to a file
+How do you chain sort and uniq to find duplicate counts
+How do you display the top five results of a command pipeline
+
+Stream Automation Scripts
+
+What is the purpose of the shebang line in a shell script
+How do you declare and use a variable in a bash script
+What is the correct syntax for an if statement in bash
+How do you write a for loop in a shell script
+How do you define and call a function in bash
+What does the special variable holding the last exit status represent
+How do you test whether a file exists in a shell script
+How do you test whether a string is empty in a shell script
+What is the difference between a relative path and an absolute path
+
+
+VERSION CONTROL AND COLLABORATION
+=================================
+
+GIT Staging Models
+
+What are the four main areas in the Git architecture
+What is the working directory in Git
+What is the purpose of the staging area also called the index
+What is the difference between the staging area and the local repository
+What command moves changes into the staging area
+What command records staged changes into the local repository
+How do you view which files are staged and unstaged
+What is the difference between staging and committing
+
+Remote Synchronizations
+
+What is a remote repository in Git
+What is the difference between git fetch and git pull
+What does the git push command do
+What does the git clone command do
+What is the role of origin in a Git remote
+How does git pull combine fetching and merging
+Why might you prefer git fetch over git pull
+
+Branching Structures
+
+What is a branch in Git and why is it useful
+How do you create and switch to a new branch
+What is the difference between git checkout and git switch
+What is the Git Flow branching strategy
+What is the GitHub Flow branching strategy
+What is trunk based development
+What is the purpose of a feature branch
+What is a pull request and how does it support collaboration
+
+Branch Merge and Conflict Mitigations
+
+What is the difference between merging and rebasing
+What is a fast forward merge
+When does Git create a merge commit
+Why is rebasing discouraged on shared branches
+What is the golden rule of rebasing
+What causes a merge conflict
+What do the conflict markers in a file indicate
+What are the steps to manually resolve a merge conflict
+How do you abort a merge or rebase that has gone wrong
+What practices help reduce the frequency of merge conflicts
+
+
+FRONT-END DEVELOPMENT
+=====================
+
+Bootstrap 5 Flex Containers
+
+What class turns an element into a flex container
+How do you set the flex direction to a column
+What does the justify content center class do
+What does the align items center class do
+How do you allow flex items to wrap onto multiple lines
+How do you add spacing between flex items
+What is the difference between the main axis and the cross axis
+
+Core Grid Alignment Behaviors
+
+How many columns does the Bootstrap grid system use
+What is the relationship between containers rows and columns
+What is the difference between container and container fluid
+Why should the columns in a row add up to twelve
+What happens when columns exceed twelve units in a row
+How do you create three equal width columns
+What does the class combination col 12 col md 6 achieve
+How do offsets shift columns within a row
+
+Display Utility Classes
+
+What is the purpose of the d none class
+How do you hide an element only on small screens
+What are the responsive breakpoints in Bootstrap 5
+What is the pixel width threshold for the medium breakpoint
+How does mobile first design influence Bootstrap utility classes
+How do you make an element display as a block at a given breakpoint
+
+TypeScript Type Safety Advantages
+
+What is TypeScript and how does it relate to JavaScript
+What is static typing and what advantage does it provide
+What is transpilation and which tool performs it for TypeScript
+How does TypeScript catch errors before runtime
+What does it mean that TypeScript is a superset of JavaScript
+Why can browsers not run TypeScript directly
+
+Configuration Rules
+
+What is the purpose of the tsconfig json file
+What does the strict compiler option enforce
+What is the role of the target option in the configuration
+What does the outDir option control
+What is the effect of enabling noImplicitAny
+
+Interfaces and Structural Modules
+
+What is an interface in TypeScript
+What is the difference between an interface and a type alias
+What is an optional property and how is it declared
+How does an interface support extension and inheritance
+What is declaration merging and which construct supports it
+When should you use a type alias instead of an interface
+What is a union type and which construct can express it
+How are modules used to organize TypeScript code
+
+
+LOGGING FRAMEWORKS
+==================
+
+Log4j and SLF4J Appender Mechanisms
+
+What is the difference between SLF4J and Log4j
+What does it mean that SLF4J is a logging facade
+Why is coding against a logging facade considered best practice
+What is an appender in a logging framework
+What does a ConsoleAppender do
+What is the purpose of a RollingFileAppender
+How can a single logger write to multiple destinations
+What triggers a rolling file to roll over
+
+Logging Priority Levels
+
+What are the standard logging levels in order of severity
+What is the difference between DEBUG and TRACE
+When should the INFO level be used
+When should the WARN level be used
+What distinguishes ERROR from FATAL
+If the threshold is set to WARN which levels are displayed
+Why is parameterized logging preferred over string concatenation
+Why is a logging framework preferred over System dot out dot println
+
+Formatting Layouts
+
+What is the role of a pattern layout in logging
+What information can a log pattern include
+How do you include a timestamp in a log message
+What does the thread name conversion specifier represent
+Why is consistent log formatting important across an application
+
+
+SOFTWARE ENGINEERING
+====================
+
+SOLID Clean Coding Practices
+
+What does each letter in the SOLID acronym stand for
+What is the Single Responsibility Principle
+What does the Open Closed Principle mean in practice
+What is the Liskov Substitution Principle
+What is the Interface Segregation Principle
+What is the Dependency Inversion Principle
+How does Dependency Inversion improve testability
+Why do the SOLID principles lead to maintainable code
+
+Core Structural Patterns
+
+What are the three categories of design patterns
+What problem do creational patterns solve
+What problem do structural patterns solve
+What problem do behavioral patterns solve
+What is the Singleton pattern and when is it used
+What is the Factory Method pattern
+What is the Adapter pattern and what problem does it address
+What is the Decorator pattern
+What is the difference between the Factory and Strategy patterns
+What is the Observer pattern
+
+UML Semantic Notations
+
+What is the purpose of a UML class diagram
+What do the plus minus and hash symbols represent in a class diagram
+How is inheritance represented in a UML class diagram
+How is interface realization shown in UML
+What is the difference between aggregation and composition
+How is a dependency relationship drawn in UML
+What is the purpose of a UML sequence diagram
+What does a lifeline represent in a sequence diagram
+What does an activation bar indicate in a sequence diagram
+What is the difference between a synchronous and a return message
+
+
+UNIT TESTING AND QUALITY GATES
+==============================
+
+TDD Concepts
+
+What does TDD stand for
+What are the three phases of the Test Driven Development cycle
+What happens during the Red phase
+What happens during the Green phase
+What is the goal of the Refactor phase
+Why is a failing test written before the production code
+What benefits does TDD provide to code design
+How does TDD differ from writing tests after the code
+
+JUnit Lifecycle Hooks and Assertions
+
+What is the purpose of the Test annotation in JUnit 5
+When does a method annotated with BeforeEach execute
+When does a method annotated with AfterEach execute
+What is the difference between BeforeEach and BeforeAll
+Why must BeforeAll and AfterAll methods be static
+What is the purpose of the Disabled annotation
+What does the assertEquals assertion verify
+How do you assert that a method throws an exception
+What is the arrange act assert pattern
+What is the difference between assertTrue and assertEquals
+
+Mockito Mock Object Controls and Stubbing
+
+What problem does Mockito solve in unit testing
+What does the Mock annotation create
+What does the InjectMocks annotation do
+What is stubbing in Mockito
+What is the syntax for defining a stubbed return value
+What is the difference between a mock and a spy
+When should you use a spy instead of a mock
+What does the verify method confirm
+How do you verify that a method was called a specific number of times
+Why is isolating a class under test important
+
+Code Quality Automation
+
+What is the purpose of static code analysis
+What does Checkstyle analyze in a codebase
+What is a Checkstyle layout check
+What does PMD detect that Checkstyle does not
+What is a PMD ruleset
+What does SpotBugs analyze and how does it differ from PMD
+What is a SpotBugs bug pattern
+What does JaCoCo measure
+What is the difference between line coverage and branch coverage
+Does high code coverage guarantee bug free code
+What is SonarQube and what does it aggregate
+What is a SonarQube quality profile
+What is a SonarQube quality gate
+How does a quality gate integrate into a continuous integration pipeline

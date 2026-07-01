@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REST API + DTO + Logging — Simple Beginner Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f6f1;--paper:#fff;--ink:#1e1b18;--muted:#6b6560;--line:#e0dbd4;--soft:#ede8e0;--green:#2d6a4f;--green-lt:#d8f0e6;--navy:#1e3a5f;--navy-lt:#ddeaf6;--rust:#9b3922;--rust-lt:#fbe8e3;--amber:#8a6000;--amber-lt:#fef3cd;--plum:#5a2a6a;--plum-lt:#f0e8f8;--teal:#1a6060;--teal-lt:#d4efef;--code-bg:#1a1e2e;--code-fg:#e2dfd8;--kw:#c792ea;--tp:#82aaff;--fn:#ffcb6b;--st:#c3e88d;--cm:#697098;--an:#f78c6c;--nm:#fab387;--tag:#89ddff;--att:#80cbc4}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--ink);font-size:15.5px;line-height:1.82}
+#prog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--navy),var(--green),var(--rust),var(--plum));z-index:999;transition:width .1s}
+.nav{position:sticky;top:0;background:rgba(248,246,241,.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:100;padding:9px 0}
+.nav-in{max-width:1050px;margin:0 auto;padding:0 18px;display:flex;flex-wrap:wrap;gap:3px 9px;align-items:center}
+.nav .logo{font-family:'Lora',serif;font-style:italic;font-size:14px;color:var(--ink);margin-right:auto}
+.nav a{color:var(--muted);text-decoration:none;font-size:10.5px;font-weight:600;padding:3px 0;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.nav a:hover,.nav a.on{color:var(--green);border-bottom-color:var(--green)}
+.hero{background:var(--paper);border-bottom:1px solid var(--line);padding:46px 20px 34px;text-align:center}
+.hero-in{max-width:720px;margin:0 auto}
+.eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:12px}
+.hero h1{font-family:'Lora',serif;font-size:33px;font-weight:600;line-height:1.18;margin-bottom:12px}
+.hero h1 em{color:var(--green);font-style:italic;font-weight:400}
+.hero-sub{font-size:14.5px;color:var(--muted);margin-bottom:18px;line-height:1.65;max-width:600px;margin-left:auto;margin-right:auto}
+.pills{display:flex;justify-content:center;flex-wrap:wrap;gap:6px}
+.pill{padding:4px 13px;border-radius:20px;font-size:11.5px;font-weight:600;border:1.5px solid}
+.pill.n{color:var(--navy);border-color:var(--navy);background:var(--navy-lt)}.pill.g{color:var(--green);border-color:var(--green);background:var(--green-lt)}.pill.r{color:var(--rust);border-color:var(--rust);background:var(--rust-lt)}.pill.p{color:var(--plum);border-color:var(--plum);background:var(--plum-lt)}.pill.a{color:var(--amber);border-color:var(--amber);background:var(--amber-lt)}.pill.t{color:var(--teal);border-color:var(--teal);background:var(--teal-lt)}
+.page{max-width:900px;margin:0 auto;padding:0 20px 60px}
+.sec{padding:44px 0 18px;border-bottom:1px solid var(--soft)}.sec:last-of-type{border-bottom:none}
+.sec-label{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;margin-bottom:7px}
+.sec h2{font-family:'Lora',serif;font-size:24px;font-weight:600;line-height:1.22;margin-bottom:11px}
+.sec h3{font-family:'Lora',serif;font-size:18px;font-weight:500;margin:24px 0 8px;color:var(--navy)}
+.sec h3.g{color:var(--green)}.sec h3.r{color:var(--rust)}.sec h3.p{color:var(--plum)}.sec h3.t{color:var(--teal)}.sec h3.a{color:var(--amber)}
+.sec h4{font-weight:700;font-size:14px;margin:14px 0 6px}
+.sec p{margin-bottom:12px;line-height:1.78}.sec p:last-child{margin-bottom:0}
+.sec ul,.sec ol{margin:8px 0 12px 20px}.sec li{margin-bottom:6px;line-height:1.68}
+code.il{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--soft);color:var(--rust);padding:2px 5px;border-radius:3px}
+.box{border-radius:7px;padding:14px 18px;margin:12px 0;border:1px solid}
+.box.green{background:var(--green-lt);border-color:#90c8a0}.box.green h4{color:var(--green)}.box.navy{background:var(--navy-lt);border-color:#90acd0}.box.navy h4{color:var(--navy)}.box.rust{background:var(--rust-lt);border-color:#e8b0a0}.box.rust h4{color:var(--rust)}.box.amber{background:var(--amber-lt);border-color:#d4b070}.box.amber h4{color:var(--amber)}.box.plum{background:var(--plum-lt);border-color:#c090d8}.box.plum h4{color:var(--plum)}.box.teal{background:var(--teal-lt);border-color:#80c0c0}.box.teal h4{color:var(--teal)}
+.box h4{font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px}.box p,.box li{font-size:14px;line-height:1.62;margin-bottom:5px}.box ul{margin-left:16px}.box p:last-child{margin-bottom:0}.box code{font-family:'JetBrains Mono',monospace;font-size:11.5px;padding:1px 4px;border-radius:2px;background:rgba(0,0,0,.08)}
+.cw{margin:10px 0;border-radius:6px;overflow:hidden;border:1px solid #2a2f45}
+.cbar{background:#252a3d;color:#9ca3b8;padding:7px 12px;font-family:'JetBrains Mono',monospace;font-size:10.5px;display:flex;justify-content:space-between;border-bottom:1px solid #1a1e2e;gap:8px}
+.cfile{font-weight:500;color:#c4cadd;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.clang{font-size:9px;text-transform:uppercase;letter-spacing:1px;flex-shrink:0}
+.cbody{background:var(--code-bg);color:var(--code-fg);padding:14px 16px;overflow-x:auto}
+.cbody pre{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.68;white-space:pre}
+.kw{color:var(--kw)}.tp{color:var(--tp)}.fn{color:var(--fn)}.st{color:var(--st)}.cm{color:var(--cm);font-style:italic}.an{color:var(--an)}.nm{color:var(--nm)}.tag{color:var(--tag)}.att{color:var(--att)}
+.eg{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;padding:3px 10px;border-radius:3px;margin:14px 0 6px}
+.eg1{background:var(--teal)}.eg2{background:var(--navy)}.eg3{background:var(--plum)}.eg4{background:var(--rust)}.eg5{background:var(--amber)}.eg6{background:var(--green)}
+.wr{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:11px 0}@media(max-width:560px){.wr{grid-template-columns:1fr}}
+.wr-box{border-radius:5px;overflow:hidden;border:1px solid var(--line)}.wr-lbl{padding:7px 12px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.wr-lbl.wrong{background:var(--rust-lt);color:var(--rust)}.wr-lbl.right{background:var(--green-lt);color:var(--green)}.wr-lbl.neutral{background:var(--soft);color:var(--muted)}
+.wr-body{padding:11px 12px;font-size:13px;line-height:1.55;color:var(--ink)}.wr-body code{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--rust);background:var(--soft);padding:1px 4px;border-radius:2px}.wr-body ul{margin-left:14px}.wr-body li{margin-bottom:3px}
+.tw{overflow-x:auto;margin:12px 0}.tw table{width:100%;border-collapse:collapse;background:var(--paper);border:1px solid var(--line);font-size:13px}
+.tw th{background:var(--soft);text-align:left;padding:9px 11px;font-weight:600;border-bottom:1px solid var(--line)}
+.tw td{padding:9px 11px;border-bottom:1px solid var(--soft);vertical-align:top;line-height:1.55}.tw tr:last-child td{border-bottom:none}
+.tw code{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--rust);background:var(--soft);padding:1px 4px;border-radius:2px}
+.tw td.good{color:var(--green);font-weight:600}.tw td.bad{color:var(--rust);font-weight:600}
+.steps{display:flex;flex-direction:column;gap:0;margin:14px 0}
+.step{display:flex;gap:14px;position:relative;padding-bottom:20px}.step:last-child{padding-bottom:0}
+.step-num{flex-shrink:0;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;z-index:1;margin-top:2px}
+.step-line{position:absolute;left:16px;top:36px;bottom:0;width:2px;background:var(--line)}.step:last-child .step-line{display:none}
+.step-body h4{font-size:14.5px;font-weight:700;margin-bottom:4px}.step-body p{font-size:13.5px;color:var(--muted);margin:0 0 4px;line-height:1.6}.step-body code{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--rust);background:var(--soft);padding:1px 4px;border-radius:2px}
+.summary{background:linear-gradient(135deg,var(--navy-lt),#c8d8f0);border:1px solid #90acd0;border-radius:6px;padding:17px 21px;margin:20px 0 0}
+.summary h4{font-family:'Lora',serif;font-style:italic;font-size:17px;color:var(--navy);margin:0 0 10px}
+.summary li{margin-bottom:6px;font-size:14px}.summary ul{margin-left:17px}
+footer{background:var(--paper);border-top:1px solid var(--line);padding:22px;text-align:center;color:var(--muted);font-size:13px}
+footer strong{display:block;font-family:'Lora',serif;font-style:italic;font-size:15.5px;color:var(--ink);margin-bottom:4px}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav class="nav"><div class="nav-in">
+  <span class="logo">REST API + DTO + Logging — Beginner Guide</span>
+  <a href="#rest">REST API Ways</a>
+  <a href="#dto">DTO Deep Dive</a>
+  <a href="#logging">Logging Setup</a>
+  <a href="#log4j2">Log4j2</a>
+  <a href="#slf4j">SLF4J</a>
+  <a href="#logusage">How to Log</a>
+  <a href="#summary">Summary</a>
+</div></nav>
+<div class="hero"><div class="hero-in">
+  <div class="eyebrow">Beginner Only · Simple Words · Step by Step · With and Without</div>
+  <h1>REST API · DTO · Logging<br><em>Simple Beginner Guide</em></h1>
+  <p class="hero-sub">Every way to create a REST API. What DTO is and what happens without it. How to set up Log4j2 and SLF4J step by step. Every concept shown before and after with real code.</p>
+  <div class="pills">
+    <span class="pill n">REST API ways</span><span class="pill g">DTO before/after</span>
+    <span class="pill r">Log4j2 setup</span><span class="pill p">SLF4J setup</span>
+    <span class="pill a">Logging examples</span><span class="pill t">Simple words only</span>
+  </div>
+</div></div>
+<div class="page">
+
+<!-- ═════ REST API WAYS ═════ -->
+<section class="sec" id="rest">
+<div class="sec-label" style="color:var(--navy)">Section 1</div>
+<h2>REST API — All the Ways to Create One</h2>
+
+<p>REST API means your server sends back <strong>data (JSON)</strong> instead of an HTML page. A mobile app, Postman, or a React frontend calls your URL and gets data it can use however it wants. There are multiple ways to write a REST endpoint in Spring Boot — from simplest to most complete.</p>
+
+<div class="box amber"><h4>The one key difference from MVC</h4>
+<p>In Spring MVC you use <code>@Controller</code> and return a page name like <code>"students/list"</code>. In REST you use <code>@RestController</code> and return actual data. Spring automatically converts that data to JSON using a library called Jackson that is already included. That is the only change.</p></div>
+
+<h3>Way 1 — Return data directly (simplest, for learning only)</h3>
+<div class="eg eg1">Example 1 — Return a list directly, no status control</div>
+<div class="cw"><div class="cbar"><span class="cfile">controller/StudentRestController.java — Way 1: direct return</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="an">@RestController</span>
+<span class="cm">// @RestController = @Controller + every method returns JSON automatically
+// No need to return a template name like "students/list"</span>
+<span class="an">@RequestMapping</span>(<span class="st">"/api/students"</span>)
+<span class="cm">// All URLs in this class start with /api/students
+// Good practice: put /api/ before REST endpoints so they don't clash with HTML pages</span>
+<span class="kw">public class</span> <span class="tp">StudentRestController</span> {
+
+    <span class="an">@Autowired</span>
+    <span class="kw">private</span> <span class="tp">StudentService</span> studentService;
+
+    <span class="an">@GetMapping</span>
+    <span class="cm">// Handles: GET /api/students
+    // Test in Postman: GET http://localhost:8080/api/students</span>
+    <span class="kw">public</span> <span class="tp">List</span>&lt;<span class="tp">Student</span>&gt; <span class="fn">getAll</span>() {
+        <span class="kw">return</span> studentService.<span class="fn">findAll</span>();
+        <span class="cm">// Spring converts List&lt;Student&gt; to JSON:
+        // [{"id":1,"name":"Ravi","email":"ravi@x.com","age":22}, ...]
+        // HTTP status is always 200 OK — you have no control over it this way</span>
+    }
+
+    <span class="an">@GetMapping</span>(<span class="st">"/{id}"</span>)
+    <span class="cm">// Handles: GET /api/students/5
+    // {id} is a placeholder for any number</span>
+    <span class="kw">public</span> <span class="tp">Student</span> <span class="fn">getOne</span>(<span class="an">@PathVariable</span> <span class="tp">Long</span> id) {
+        <span class="cm">// @PathVariable takes the number from the URL
+        // /api/students/5 → id becomes 5</span>
+        <span class="kw">return</span> studentService.<span class="fn">findById</span>(id);
+    }
+
+    <span class="an">@PostMapping</span>
+    <span class="cm">// Handles: POST /api/students with a JSON body</span>
+    <span class="kw">public</span> <span class="tp">Student</span> <span class="fn">create</span>(<span class="an">@RequestBody</span> <span class="tp">Student</span> student) {
+        <span class="cm">// @RequestBody reads the JSON the client sent and fills a Student object
+        // Client sends: {"name":"Ravi","email":"ravi@x.com","age":22}
+        // Spring fills student.name, student.email, student.age automatically</span>
+        <span class="kw">return</span> studentService.<span class="fn">save</span>(student);
+        <span class="cm">// Returns the saved student (now with id assigned by database)</span>
+    }
+
+    <span class="an">@PutMapping</span>(<span class="st">"/{id}"</span>)
+    <span class="cm">// Handles: PUT /api/students/5 — update student with id=5</span>
+    <span class="kw">public</span> <span class="tp">Student</span> <span class="fn">update</span>(<span class="an">@PathVariable</span> <span class="tp">Long</span> id, <span class="an">@RequestBody</span> <span class="tp">Student</span> student) {
+        student.<span class="fn">setId</span>(id);     <span class="cm">// make sure we update the correct one</span>
+        <span class="kw">return</span> studentService.<span class="fn">save</span>(student);
+    }
+
+    <span class="an">@DeleteMapping</span>(<span class="st">"/{id}"</span>)
+    <span class="cm">// Handles: DELETE /api/students/5 — delete student with id=5</span>
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">delete</span>(<span class="an">@PathVariable</span> <span class="tp">Long</span> id) {
+        studentService.<span class="fn">delete</span>(id);
+        <span class="kw">return</span> <span class="st">"Student deleted"</span>;
+        <span class="cm">// Returns the string as JSON: "Student deleted"
+        // Problem: always HTTP 200 — but delete should return 204 No Content</span>
+    }
+}</pre></div></div>
+
+<div class="box rust"><h4>Problem with Way 1</h4>
+<p>You cannot control the HTTP status code. POST should return 201 (Created). DELETE should return 204 (No Content). With direct return you always get 200. This is technically wrong. Use Way 2 to fix it.</p></div>
+
+<h3>Way 2 — ResponseEntity (correct way for production)</h3>
+<div class="eg eg2">Example 2 — ResponseEntity with correct HTTP status codes</div>
+<div class="cw"><div class="cbar"><span class="cfile">ResponseEntity lets you set the HTTP status AND the body</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="an">@RestController</span>
+<span class="an">@RequestMapping</span>(<span class="st">"/api/students"</span>)
+<span class="kw">public class</span> <span class="tp">StudentRestController</span> {
+
+    <span class="an">@Autowired</span>
+    <span class="kw">private</span> <span class="tp">StudentService</span> studentService;
+
+    <span class="an">@GetMapping</span>
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">List</span>&lt;<span class="tp">Student</span>&gt;&gt; <span class="fn">getAll</span>() {
+        <span class="tp">List</span>&lt;<span class="tp">Student</span>&gt; list = studentService.<span class="fn">findAll</span>();
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">ok</span>(list);
+        <span class="cm">// .ok(data) = HTTP 200 OK + the list as JSON
+        // Postman shows: 200 OK and the JSON array</span>
+    }
+
+    <span class="an">@GetMapping</span>(<span class="st">"/{id}"</span>)
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">Student</span>&gt; <span class="fn">getOne</span>(<span class="an">@PathVariable</span> <span class="tp">Long</span> id) {
+        <span class="tp">Student</span> student = studentService.<span class="fn">findById</span>(id);
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">ok</span>(student);
+    }
+
+    <span class="an">@PostMapping</span>
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">Student</span>&gt; <span class="fn">create</span>(<span class="an">@RequestBody</span> <span class="tp">Student</span> student) {
+        <span class="tp">Student</span> saved = studentService.<span class="fn">save</span>(student);
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>
+            .<span class="fn">status</span>(<span class="tp">HttpStatus</span>.<span class="an">CREATED</span>)   <span class="cm">// HTTP 201 Created — correct for POST</span>
+            .<span class="fn">body</span>(saved);
+    }
+
+    <span class="an">@PutMapping</span>(<span class="st">"/{id}"</span>)
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">Student</span>&gt; <span class="fn">update</span>(<span class="an">@PathVariable</span> <span class="tp">Long</span> id,
+                                            <span class="an">@RequestBody</span> <span class="tp">Student</span> student) {
+        student.<span class="fn">setId</span>(id);
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">ok</span>(studentService.<span class="fn">save</span>(student));
+        <span class="cm">// HTTP 200 OK — correct for PUT</span>
+    }
+
+    <span class="an">@DeleteMapping</span>(<span class="st">"/{id}"</span>)
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">Void</span>&gt; <span class="fn">delete</span>(<span class="an">@PathVariable</span> <span class="tp">Long</span> id) {
+        studentService.<span class="fn">delete</span>(id);
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">noContent</span>().<span class="fn">build</span>();
+        <span class="cm">// HTTP 204 No Content — correct for DELETE (success but nothing to return)</span>
+    }
+}
+
+<span class="cm">// ─── HTTP Status quick guide ─────────────────────────────────────────────────
+// 200 OK           → GET and PUT success
+// 201 Created      → POST success (new record was created)
+// 204 No Content   → DELETE success
+// 400 Bad Request  → validation failed, wrong data sent
+// 404 Not Found    → id does not exist in database
+// 500 Server Error → unexpected exception</span></pre></div></div>
+
+<h3>Way 3 — POST with validation and proper error response</h3>
+<div class="eg eg3">Example 3 — Validate incoming JSON and return errors if invalid</div>
+<div class="cw"><div class="cbar"><span class="cfile">POST with @Valid — returns 400 with error details if data is wrong</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="kw">import</span> jakarta.validation.Valid;
+<span class="kw">import</span> org.springframework.validation.BindingResult;
+
+<span class="an">@PostMapping</span>
+<span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;?&gt; <span class="fn">create</span>(
+        <span class="an">@RequestBody</span> <span class="an">@Valid</span> <span class="tp">Student</span> student,
+        <span class="cm">// @RequestBody = read JSON, convert to Student
+        // @Valid = run @NotBlank @Email @Min @Max checks on it</span>
+        <span class="tp">BindingResult</span> result
+        <span class="cm">// BindingResult = holds the list of any errors @Valid found
+        // Must come IMMEDIATELY after the @Valid object</span>
+) {
+    <span class="kw">if</span> (result.<span class="fn">hasErrors</span>()) {
+        <span class="cm">// Build a map: fieldName → errorMessage</span>
+        <span class="tp">Map</span>&lt;<span class="tp">String</span>, <span class="tp">String</span>&gt; errors = <span class="kw">new</span> <span class="tp">HashMap</span>&lt;&gt;();
+        result.<span class="fn">getFieldErrors</span>()
+              .<span class="fn">forEach</span>(e -> errors.<span class="fn">put</span>(e.<span class="fn">getField</span>(), e.<span class="fn">getDefaultMessage</span>()));
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">badRequest</span>().<span class="fn">body</span>(errors);
+        <span class="cm">// HTTP 400 Bad Request + {"name":"Name cannot be empty","email":"..."}</span>
+    }
+    <span class="tp">Student</span> saved = studentService.<span class="fn">save</span>(student);
+    <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">status</span>(<span class="nm">201</span>).<span class="fn">body</span>(saved);
+}
+
+<span class="cm">// Postman — send this body to POST /api/students:
+// {"name":"","email":"notvalid","age":5}
+//
+// You get back HTTP 400 with:
+// {
+//   "name":   "Name cannot be empty",
+//   "email":  "Please enter a valid email",
+//   "age":    "Age must be at least 16",
+//   "course": "Course cannot be empty"
+// }</span></pre></div></div>
+
+<h3>Way 4 — GET with query parameters (search and filter)</h3>
+<div class="eg eg4">Example 4 — Filter by course, search by name using query params</div>
+<div class="cw"><div class="cbar"><span class="cfile">GET /api/students?course=Python or ?name=ravi</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="an">@GetMapping</span>(<span class="st">"/search"</span>)
+<span class="cm">// Handles: GET /api/students/search?course=Python
+//          GET /api/students/search?name=ravi
+// Query parameters come after the ? in the URL</span>
+<span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">List</span>&lt;<span class="tp">Student</span>&gt;&gt; <span class="fn">search</span>(
+        <span class="an">@RequestParam</span>(required = <span class="kw">false</span>) <span class="tp">String</span> course,
+        <span class="an">@RequestParam</span>(required = <span class="kw">false</span>) <span class="tp">String</span> name
+        <span class="cm">// @RequestParam reads ?course=Python from the URL
+        // required=false means the param is optional — URL works without it</span>
+) {
+    <span class="kw">if</span> (course != <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">ok</span>(studentService.<span class="fn">findByCourse</span>(course));
+    }
+    <span class="kw">if</span> (name != <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">ok</span>(studentService.<span class="fn">findByNameContaining</span>(name));
+    }
+    <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">ok</span>(studentService.<span class="fn">findAll</span>());
+}
+
+<span class="cm">// Test URLs:
+// GET /api/students/search?course=Python    → all Python students
+// GET /api/students/search?name=ravi        → students with "ravi" in name
+// GET /api/students/search                  → all students (no filter)</span></pre></div></div>
+
+<h3>Way 5 — REST with DTO (best practice for real projects)</h3>
+<div class="eg eg5">Example 5 — Complete REST controller using DTO</div>
+<div class="cw"><div class="cbar"><span class="cfile">Full CRUD using StudentDTO (see Section 2 for DTO explanation)</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="an">@RestController</span>
+<span class="an">@RequestMapping</span>(<span class="st">"/api/students"</span>)
+<span class="kw">public class</span> <span class="tp">StudentRestController</span> {
+
+    <span class="an">@Autowired</span> <span class="kw">private</span> <span class="tp">StudentService</span> service;
+
+    <span class="cm">// ─── Convert Entity → DTO (what we send to client) ────────────────</span>
+    <span class="kw">private</span> <span class="tp">StudentDTO</span> <span class="fn">toDTO</span>(<span class="tp">Student</span> s) {
+        <span class="tp">StudentDTO</span> d = <span class="kw">new</span> <span class="tp">StudentDTO</span>();
+        d.<span class="fn">setId</span>(s.<span class="fn">getId</span>()); d.<span class="fn">setName</span>(s.<span class="fn">getName</span>());
+        d.<span class="fn">setEmail</span>(s.<span class="fn">getEmail</span>()); d.<span class="fn">setCourse</span>(s.<span class="fn">getCourse</span>());
+        <span class="kw">return</span> d; <span class="cm">// password and other sensitive fields NOT copied</span>
+    }
+
+    <span class="cm">// ─── Convert DTO → Entity (what we save to database) ──────────────</span>
+    <span class="kw">private</span> <span class="tp">Student</span> <span class="fn">toEntity</span>(<span class="tp">StudentDTO</span> d) {
+        <span class="tp">Student</span> s = <span class="kw">new</span> <span class="tp">Student</span>();
+        s.<span class="fn">setName</span>(d.<span class="fn">getName</span>()); s.<span class="fn">setEmail</span>(d.<span class="fn">getEmail</span>());
+        s.<span class="fn">setCourse</span>(d.<span class="fn">getCourse</span>()); <span class="kw">return</span> s;
+    }
+
+    <span class="an">@GetMapping</span>
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">List</span>&lt;<span class="tp">StudentDTO</span>&gt;&gt; <span class="fn">getAll</span>() {
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">ok</span>(
+            service.<span class="fn">findAll</span>().<span class="fn">stream</span>().<span class="fn">map</span>(<span class="kw">this</span>::<span class="fn">toDTO</span>).<span class="fn">toList</span>());
+    }
+
+    <span class="an">@PostMapping</span>
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">StudentDTO</span>&gt; <span class="fn">create</span>(<span class="an">@RequestBody</span> <span class="an">@Valid</span> <span class="tp">StudentDTO</span> dto) {
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">status</span>(<span class="nm">201</span>).<span class="fn">body</span>(<span class="fn">toDTO</span>(service.<span class="fn">save</span>(<span class="fn">toEntity</span>(dto))));
+    }
+
+    <span class="an">@PutMapping</span>(<span class="st">"/{id}"</span>)
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">StudentDTO</span>&gt; <span class="fn">update</span>(<span class="an">@PathVariable</span> <span class="tp">Long</span> id,
+                                               <span class="an">@RequestBody</span> <span class="an">@Valid</span> <span class="tp">StudentDTO</span> dto) {
+        <span class="tp">Student</span> entity = <span class="fn">toEntity</span>(dto); entity.<span class="fn">setId</span>(id);
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">ok</span>(<span class="fn">toDTO</span>(service.<span class="fn">save</span>(entity)));
+    }
+
+    <span class="an">@DeleteMapping</span>(<span class="st">"/{id}"</span>)
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">Void</span>&gt; <span class="fn">delete</span>(<span class="an">@PathVariable</span> <span class="tp">Long</span> id) {
+        service.<span class="fn">delete</span>(id);
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">noContent</span>().<span class="fn">build</span>();
+    }
+}</pre></div></div>
+
+<h3>Summary — Which way should you use?</h3>
+<div class="tw"><table>
+<thead><tr><th>Way</th><th>Use it when</th><th>Advantage</th><th>Disadvantage</th></tr></thead>
+<tbody>
+<tr><td>Way 1 — direct return</td><td>Learning, quick demos</td><td>Simplest code to read</td><td class="bad">Always HTTP 200, exposes all entity fields</td></tr>
+<tr><td>Way 2 — ResponseEntity</td><td>Any real project</td><td class="good">Correct HTTP status codes</td><td>A bit more code to write</td></tr>
+<tr><td>Way 3 — with @Valid</td><td>Any endpoint that receives data</td><td class="good">Validation + proper 400 error response</td><td>Slightly more code</td></tr>
+<tr><td>Way 4 — query params</td><td>Search and filter endpoints</td><td class="good">Flexible filtering without multiple URLs</td><td>Service needs extra methods</td></tr>
+<tr><td>Way 5 — with DTO</td><td>Production applications</td><td class="good">Full control, secure, stable API</td><td>More files to create initially</td></tr>
+</tbody></table></div>
+</section>
+
+<!-- ═════ DTO DEEP DIVE ═════ -->
+<section class="sec" id="dto">
+<div class="sec-label" style="color:var(--green)">Section 2</div>
+<h2>DTO — What It Is, Before vs After, With and Without</h2>
+
+<p>DTO stands for <strong>Data Transfer Object</strong>. It is a plain Java class (no <code class="il">@Entity</code>, no <code class="il">@Id</code>) used to carry only the data you choose to the client. It is the difference between handing someone your entire wallet and just your business card.</p>
+
+<!-- BEFORE / AFTER VISUAL -->
+<div class="wr">
+<div class="wr-box">
+<div class="wr-lbl wrong">WITHOUT DTO — returning entity directly</div>
+<div class="wr-body">
+<p>Your Student entity goes to the client as-is.</p>
+<ul>
+<li>Client sees ALL fields: <code>id</code>, <code>name</code>, <code>email</code>, <code>password</code>, <code>createdAt</code>, <code>updatedAt</code>, and any Hibernate internal proxy fields</li>
+<li>If you add a <code>password</code> field later, the client immediately sees it — security risk</li>
+<li>Circular reference crash: Employee.department → Department.employees → Employee... (infinite loop)</li>
+<li>API breaks when you rename a field in the entity</li>
+<li>You cannot have different validation rules for "create" vs "update"</li>
+</ul>
+</div>
+</div>
+<div class="wr-box">
+<div class="wr-lbl right">WITH DTO — return only what you choose</div>
+<div class="wr-body">
+<p>Client gets exactly what you put in the DTO.</p>
+<ul>
+<li>You decide which fields the client sees</li>
+<li>Password and other sensitive fields are never included</li>
+<li>No circular reference problems</li>
+<li>You can rename entity fields without breaking the API</li>
+<li>Different validation rules per DTO (CreateStudentDTO vs UpdateStudentDTO)</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- BEFORE: no DTO -->
+<h3 class="r">BEFORE — Without DTO (what the client actually receives)</h3>
+<div class="eg eg4">Example 1 — No DTO: entity is exposed directly</div>
+<div class="cw"><div class="cbar"><span class="cfile">model/Student.java — this ENTIRE class goes to the client</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="an">@Entity</span>
+<span class="kw">public class</span> <span class="tp">Student</span> {
+    <span class="an">@Id</span> <span class="an">@GeneratedValue</span>(strategy = <span class="tp">GenerationType</span>.<span class="an">IDENTITY</span>)
+    <span class="kw">private</span> <span class="tp">Long</span>   id;
+    <span class="kw">private</span> <span class="tp">String</span> name;
+    <span class="kw">private</span> <span class="tp">String</span> email;
+    <span class="kw">private</span> <span class="tp">String</span> password;       <span class="cm">// ← DANGER: client will see this!</span>
+    <span class="kw">private</span> <span class="tp">String</span> course;
+    <span class="kw">private int</span>    age;
+    <span class="kw">private</span> <span class="tp">String</span> internalNotes;  <span class="cm">// ← client should never see this</span>
+    <span class="kw">private</span> <span class="tp">LocalDateTime</span> createdAt; <span class="cm">// ← client doesn't need this</span>
+    <span class="cm">// getters setters ...</span>
+}
+
+<span class="cm">// Controller — returning entity directly:</span>
+<span class="an">@GetMapping</span>
+<span class="kw">public</span> <span class="tp">List</span>&lt;<span class="tp">Student</span>&gt; <span class="fn">getAll</span>() {
+    <span class="kw">return</span> studentService.<span class="fn">findAll</span>();
+}
+
+<span class="cm">// What the client ACTUALLY receives (all fields exposed):
+// [
+//   {
+//     "id": 1,
+//     "name": "Ravi Kumar",
+//     "email": "ravi@x.com",
+//     "password": "secret123",      ← EXPOSED! Security breach!
+//     "course": "Java",
+//     "age": 22,
+//     "internalNotes": "flagged",   ← EXPOSED! Should be private!
+//     "createdAt": "2024-01-15T10:30:00"  ← unnecessary noise
+//   }
+// ]</span></pre></div></div>
+
+<!-- AFTER: with DTO -->
+<h3 class="g">AFTER — With DTO (client gets only what you choose)</h3>
+<div class="eg eg6">Example 2 — With DTO: clean and controlled response</div>
+<div class="cw"><div class="cbar"><span class="cfile">dto/StudentDTO.java — only the fields the client needs</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="kw">package</span> com.example.studentapp.dto;
+<span class="kw">import</span> jakarta.validation.constraints.*;
+
+<span class="cm">// NO @Entity — this is NOT a database table
+// NO @Id    — this has no primary key
+// It is a plain class used ONLY to carry data to and from the client</span>
+<span class="kw">public class</span> <span class="tp">StudentDTO</span> {
+
+    <span class="kw">private</span> <span class="tp">Long</span>   id;      <span class="cm">// shown when returning data, null when creating</span>
+
+    <span class="an">@NotBlank</span>(message = <span class="st">"Name is required"</span>)
+    <span class="an">@Size</span>(min = <span class="nm">2</span>, max = <span class="nm">50</span>)
+    <span class="kw">private</span> <span class="tp">String</span> name;
+
+    <span class="an">@NotBlank</span>(message = <span class="st">"Email is required"</span>)
+    <span class="an">@Email</span>(message = <span class="st">"Enter a valid email"</span>)
+    <span class="kw">private</span> <span class="tp">String</span> email;
+
+    <span class="an">@NotBlank</span>(message = <span class="st">"Course is required"</span>)
+    <span class="kw">private</span> <span class="tp">String</span> course;
+
+    <span class="cm">// NO password field — client NEVER sees it
+    // NO internalNotes — hidden from API
+    // NO createdAt — not needed by client</span>
+
+    <span class="kw">public</span> <span class="tp">Long</span>   <span class="fn">getId</span>()              { <span class="kw">return</span> id; }
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">getName</span>()            { <span class="kw">return</span> name; }
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">getEmail</span>()           { <span class="kw">return</span> email; }
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">getCourse</span>()          { <span class="kw">return</span> course; }
+    <span class="kw">public void</span>   <span class="fn">setId</span>(<span class="tp">Long</span> id)       { <span class="kw">this</span>.id = id; }
+    <span class="kw">public void</span>   <span class="fn">setName</span>(<span class="tp">String</span> n)    { <span class="kw">this</span>.name = n; }
+    <span class="kw">public void</span>   <span class="fn">setEmail</span>(<span class="tp">String</span> e)   { <span class="kw">this</span>.email = e; }
+    <span class="kw">public void</span>   <span class="fn">setCourse</span>(<span class="tp">String</span> c)  { <span class="kw">this</span>.course = c; }
+}
+
+<span class="cm">// What the client now receives (clean and safe):
+// [
+//   {
+//     "id": 1,
+//     "name": "Ravi Kumar",
+//     "email": "ravi@x.com",
+//     "course": "Java"
+//     ← no password, no internalNotes, no createdAt
+//   }
+// ]</span></pre></div></div>
+
+<div class="cw"><div class="cbar"><span class="cfile">Conversion helpers: Entity → DTO and DTO → Entity</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="cm">// ─── Inside the REST controller ───────────────────────────────────────────────
+
+// Convert Entity → DTO: used when RETURNING data to the client
+// We pick which fields to copy — sensitive fields are left out</span>
+<span class="kw">private</span> <span class="tp">StudentDTO</span> <span class="fn">toDTO</span>(<span class="tp">Student</span> student) {
+    <span class="tp">StudentDTO</span> dto = <span class="kw">new</span> <span class="tp">StudentDTO</span>();
+    dto.<span class="fn">setId</span>(student.<span class="fn">getId</span>());
+    dto.<span class="fn">setName</span>(student.<span class="fn">getName</span>());
+    dto.<span class="fn">setEmail</span>(student.<span class="fn">getEmail</span>());
+    dto.<span class="fn">setCourse</span>(student.<span class="fn">getCourse</span>());
+    <span class="cm">// password, internalNotes, createdAt are NOT copied — they stay hidden</span>
+    <span class="kw">return</span> dto;
+}
+
+<span class="cm">// Convert DTO → Entity: used when SAVING data from the client
+// Client sends a DTO, we create a real Entity from it to save to the database</span>
+<span class="kw">private</span> <span class="tp">Student</span> <span class="fn">toEntity</span>(<span class="tp">StudentDTO</span> dto) {
+    <span class="tp">Student</span> student = <span class="kw">new</span> <span class="tp">Student</span>();
+    student.<span class="fn">setName</span>(dto.<span class="fn">getName</span>());
+    student.<span class="fn">setEmail</span>(dto.<span class="fn">getEmail</span>());
+    student.<span class="fn">setCourse</span>(dto.<span class="fn">getCourse</span>());
+    <span class="cm">// id NOT set — database generates it automatically
+    // password NOT set — handled separately (hashing etc.)</span>
+    <span class="kw">return</span> student;
+}
+
+<span class="cm">// ─── Using them in methods ────────────────────────────────────────────────────</span>
+<span class="an">@GetMapping</span>
+<span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">List</span>&lt;<span class="tp">StudentDTO</span>&gt;&gt; <span class="fn">getAll</span>() {
+    <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">ok</span>(
+        service.<span class="fn">findAll</span>()          <span class="cm">// get List&lt;Student&gt; from database</span>
+               .<span class="fn">stream</span>()           <span class="cm">// process each one</span>
+               .<span class="fn">map</span>(<span class="kw">this</span>::<span class="fn">toDTO</span>)  <span class="cm">// convert every Student to StudentDTO</span>
+               .<span class="fn">toList</span>()           <span class="cm">// collect back to a List</span>
+    );
+}
+
+<span class="an">@PostMapping</span>
+<span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">StudentDTO</span>&gt; <span class="fn">create</span>(<span class="an">@RequestBody</span> <span class="an">@Valid</span> <span class="tp">StudentDTO</span> dto) {
+    <span class="tp">Student</span> entity = <span class="fn">toEntity</span>(dto);          <span class="cm">// DTO → Entity</span>
+    <span class="tp">Student</span> saved  = service.<span class="fn">save</span>(entity);   <span class="cm">// save Entity to DB</span>
+    <span class="tp">StudentDTO</span> result = <span class="fn">toDTO</span>(saved);       <span class="cm">// Entity → DTO (with id now set)</span>
+    <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">status</span>(<span class="nm">201</span>).<span class="fn">body</span>(result);
+}</pre></div></div>
+
+<h3>How many DTOs do you create?</h3>
+<p>The number of DTOs depends on how many <em>different shapes of data</em> you need. Here is the typical pattern for a student system:</p>
+<div class="tw"><table>
+<thead><tr><th>DTO name</th><th>When it is used</th><th>Fields included</th></tr></thead>
+<tbody>
+<tr><td><code>StudentDTO</code></td><td>GET all, GET by id — return to client</td><td>id, name, email, course (no password, no internals)</td></tr>
+<tr><td><code>CreateStudentDTO</code></td><td>POST — create a new student</td><td>name, email, course, password (no id — DB generates it)</td></tr>
+<tr><td><code>UpdateStudentDTO</code></td><td>PUT — update an existing student</td><td>name, email, course (no id — taken from URL, no password change)</td></tr>
+<tr><td><code>StudentSummaryDTO</code></td><td>GET list — show compact list view</td><td>id, name, course only (no email for list performance)</td></tr>
+</tbody></table></div>
+<div class="box green"><h4>Simple rule: one DTO per "shape of data" you need</h4>
+<p>If you only have a simple project, one <code>StudentDTO</code> is enough for everything. As your project grows, you split into more specific DTOs when different operations need different fields.</p></div>
+
+<h3>DTO with Thymeleaf MVC — same idea, different use</h3>
+<div class="eg eg5">Example 3 — Using DTO in Thymeleaf forms (not just REST)</div>
+<div class="cw"><div class="cbar"><span class="cfile">DTO works the same way in MVC — bind the form to the DTO instead of the entity</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="cm">// In MVC you can also bind forms to a DTO instead of the entity
+// Benefit: the form only receives fields you allow, not all entity fields</span>
+
+<span class="an">@GetMapping</span>(<span class="st">"/new"</span>)
+<span class="kw">public</span> <span class="tp">String</span> <span class="fn">showForm</span>(<span class="tp">Model</span> model) {
+    model.<span class="fn">addAttribute</span>(<span class="st">"studentDTO"</span>, <span class="kw">new</span> <span class="tp">StudentDTO</span>());
+    <span class="cm">// Give Thymeleaf a blank DTO, not a blank Entity</span>
+    <span class="kw">return</span> <span class="st">"students/form"</span>;
+}
+
+<span class="an">@PostMapping</span>(<span class="st">"/save"</span>)
+<span class="kw">public</span> <span class="tp">String</span> <span class="fn">save</span>(<span class="an">@Valid</span> <span class="an">@ModelAttribute</span>(<span class="st">"studentDTO"</span>) <span class="tp">StudentDTO</span> dto,
+                    <span class="tp">BindingResult</span> result) {
+    <span class="kw">if</span> (result.<span class="fn">hasErrors</span>()) <span class="kw">return</span> <span class="st">"students/form"</span>;
+    studentService.<span class="fn">save</span>(<span class="fn">toEntity</span>(dto)); <span class="cm">// convert DTO to Entity before saving</span>
+    <span class="kw">return</span> <span class="st">"redirect:/students"</span>;
+}</pre></div></div>
+
+<div class="cw"><div class="cbar"><span class="cfile">templates/students/form.html — bind form to DTO instead of entity</span><span class="clang">html</span></div>
+<div class="cbody"><pre><span class="tag">&lt;form</span> <span class="att">th:action</span>=<span class="st">"@{/students/save}"</span>
+      <span class="att">th:object</span>=<span class="st">"${studentDTO}"</span>
+      <span class="cm">&lt;!-- th:object points to the DTO name we added in the model
+           Everything else works the same as with Entity --&gt;</span>
+      <span class="att">method</span>=<span class="st">"post"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;div&gt;</span>
+    <span class="tag">&lt;label&gt;</span>Name<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;input</span> <span class="att">type</span>=<span class="st">"text"</span> <span class="att">th:field</span>=<span class="st">"*{name}"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;span</span>  <span class="att">th:errors</span>=<span class="st">"*{name}"</span> <span class="att">style</span>=<span class="st">"color:red"</span><span class="tag">&gt;&lt;/span&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="tag">&lt;div&gt;</span>
+    <span class="tag">&lt;label&gt;</span>Email<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;input</span> <span class="att">type</span>=<span class="st">"email"</span> <span class="att">th:field</span>=<span class="st">"*{email}"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;span</span>  <span class="att">th:errors</span>=<span class="st">"*{email}"</span> <span class="att">style</span>=<span class="st">"color:red"</span><span class="tag">&gt;&lt;/span&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="tag">&lt;div&gt;</span>
+    <span class="tag">&lt;label&gt;</span>Course<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;input</span> <span class="att">type</span>=<span class="st">"text"</span> <span class="att">th:field</span>=<span class="st">"*{course}"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;span</span>  <span class="att">th:errors</span>=<span class="st">"*{course}"</span> <span class="att">style</span>=<span class="st">"color:red"</span><span class="tag">&gt;&lt;/span&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="tag">&lt;button</span> <span class="att">type</span>=<span class="st">"submit"</span><span class="tag">&gt;</span>Save<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span></pre></div></div>
+</section>
+
+<!-- ═════ LOGGING OVERVIEW ═════ -->
+<section class="sec" id="logging">
+<div class="sec-label" style="color:var(--plum)">Section 3</div>
+<h2>Logging — What It Is and Why Every App Needs It</h2>
+
+<p>Logging means writing messages to a log file or console as your app runs. These messages help you see what your app is doing and find problems when something goes wrong. Without logging, you are running your app blind.</p>
+
+<div class="box amber"><h4>Think of logging like a flight recorder</h4>
+<p>An airplane's black box records everything that happens during a flight. If something goes wrong, investigators read the box to understand what happened and when. Logging is your app's black box. When a bug appears or the app crashes, you read the log to see exactly what happened, in what order, and with what data.</p></div>
+
+<div class="wr">
+<div class="wr-box">
+<div class="wr-lbl wrong">Without logging</div>
+<div class="wr-body"><ul>
+<li>App crashes at 2am → you have no idea why</li>
+<li>A student says "it gave an error when I registered" → you cannot trace what happened</li>
+<li>You cannot tell how many times a method was called</li>
+<li>Performance problems are invisible — you cannot see which method is slow</li>
+<li>Debugging means adding temporary print statements everywhere</li>
+</ul></div>
+</div>
+<div class="wr-box">
+<div class="wr-lbl right">With logging</div>
+<div class="wr-body"><ul>
+<li>Every request, save, and error is recorded with a timestamp</li>
+<li>You see exactly which line failed and what value caused it</li>
+<li>You can filter: show only ERRORS, or show DEBUG messages for one class only</li>
+<li>Log files can be kept for weeks — review them any time</li>
+<li>No temporary print statements — logging is always on</li>
+</ul></div>
+</div>
+</div>
+
+<h3>Log levels — what they mean</h3>
+<div class="tw"><table>
+<thead><tr><th>Level</th><th>Use it when</th><th>Example message</th></tr></thead>
+<tbody>
+<tr><td><code>ERROR</code></td><td>Something broke — action required immediately</td><td>"Database connection failed"</td></tr>
+<tr><td><code>WARN</code></td><td>Something unusual but app still works</td><td>"Request took 5 seconds — may be slow"</td></tr>
+<tr><td><code>INFO</code></td><td>Normal events you want to track</td><td>"Student Ravi registered successfully"</td></tr>
+<tr><td><code>DEBUG</code></td><td>Detailed info for finding bugs (dev only)</td><td>"Entering save() with student id=null"</td></tr>
+<tr><td><code>TRACE</code></td><td>Very detailed — every small step</td><td>"Checking field: name = 'Ravi'"</td></tr>
+</tbody></table></div>
+
+<h3>SLF4J vs Log4j2 — what is the difference?</h3>
+<div class="tw"><table>
+<thead><tr><th>SLF4J</th><th>Log4j2</th></tr></thead>
+<tbody>
+<tr><td>A <strong>logging interface</strong> — defines how you write log messages in your code (<code>log.info()</code>, <code>log.error()</code>)</td><td>A <strong>logging implementation</strong> — actually writes the messages to console, files, databases</td></tr>
+<tr><td>You write <code>import org.slf4j.Logger</code> in your code</td><td>You configure Log4j2 in <code>log4j2.xml</code> — it does the actual writing</td></tr>
+<tr><td>Like a power socket — the standard shape your plug goes into</td><td>Like the electricity behind the socket — the actual power that runs things</td></tr>
+<tr><td>Cannot work alone — needs an implementation behind it</td><td>Can work alone but SLF4J in front makes your code portable</td></tr>
+<tr><td>Your code uses SLF4J → you can swap Log4j2 for Logback any time without changing your code</td><td>If you use Log4j2 API directly → changing is harder</td></tr>
+</tbody></table></div>
+
+<div class="box green"><h4>How they work together in Spring Boot</h4>
+<p>You write your log messages using <strong>SLF4J</strong> (<code>log.info("Student saved")</code>). Behind the scenes, Spring Boot uses <strong>Logback</strong> by default — or you switch it to <strong>Log4j2</strong>. Either way your code stays the same because you always write to SLF4J.</p></div>
+</section>
+
+<!-- ═════ LOG4J2 SETUP ═════ -->
+<section class="sec" id="log4j2">
+<div class="sec-label" style="color:var(--rust)">Section 4</div>
+<h2>Log4j2 Setup — Step by Step</h2>
+
+<p>Spring Boot uses Logback by default. To use Log4j2 you need to do two things: remove Logback from pom.xml and add Log4j2, then create a config file.</p>
+
+<div class="steps">
+  <div class="step">
+    <div class="step-num" style="background:var(--rust)">1</div>
+    <div class="step-line"></div>
+    <div class="step-body">
+      <h4>Remove Logback and add Log4j2 in pom.xml</h4>
+      <p>Spring Boot includes Logback by default inside <code>spring-boot-starter</code>. You must exclude it first, then add Log4j2.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:var(--rust)">2</div>
+    <div class="step-line"></div>
+    <div class="step-body">
+      <h4>Create the Log4j2 configuration file</h4>
+      <p>Create <code>src/main/resources/log4j2.xml</code> — this tells Log4j2 where to write messages and which level to use.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:var(--rust)">3</div>
+    <div class="step-body">
+      <h4>Use SLF4J in your Java classes</h4>
+      <p>Import <code>org.slf4j.Logger</code> and write <code>log.info()</code>, <code>log.error()</code> — your code never changes even if you swap Log4j2 for something else later.</p>
+    </div>
+  </div>
+</div>
+
+<div class="eg eg4">Step 1 — pom.xml: exclude Logback, add Log4j2</div>
+<div class="cw"><div class="cbar"><span class="cfile">pom.xml — switch from Logback to Log4j2</span><span class="clang">xml</span></div>
+<div class="cbody"><pre><span class="tag">&lt;dependencies&gt;</span>
+
+  <span class="cm">&lt;!-- Spring Boot Web — but exclude the default Logback logger --&gt;</span>
+  <span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;exclusions&gt;</span>
+      <span class="tag">&lt;exclusion&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-logging<span class="tag">&lt;/artifactId&gt;</span>
+        <span class="cm">&lt;!-- This removes Logback — Spring Boot's default logger
+             Without this exclusion, both Logback and Log4j2 run together and clash --&gt;</span>
+      <span class="tag">&lt;/exclusion&gt;</span>
+    <span class="tag">&lt;/exclusions&gt;</span>
+  <span class="tag">&lt;/dependency&gt;</span>
+
+  <span class="cm">&lt;!-- Also exclude from data-jpa if you use it --&gt;</span>
+  <span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;exclusions&gt;</span>
+      <span class="tag">&lt;exclusion&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-logging<span class="tag">&lt;/artifactId&gt;</span>
+      <span class="tag">&lt;/exclusion&gt;</span>
+    <span class="tag">&lt;/exclusions&gt;</span>
+  <span class="tag">&lt;/dependency&gt;</span>
+
+  <span class="cm">&lt;!-- Now add Log4j2 — this replaces Logback --&gt;</span>
+  <span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-log4j2<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="cm">&lt;!-- This adds: log4j-core, log4j-api, log4j-slf4j-impl
+         log4j-slf4j-impl is the bridge that lets SLF4J calls go through Log4j2 --&gt;</span>
+  <span class="tag">&lt;/dependency&gt;</span>
+
+<span class="tag">&lt;/dependencies&gt;</span></pre></div></div>
+
+<div class="eg eg5">Step 2 — Create log4j2.xml configuration file</div>
+<div class="cw"><div class="cbar"><span class="cfile">src/main/resources/log4j2.xml</span><span class="clang">xml</span></div>
+<div class="cbody"><pre><span class="tag">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="tag">&lt;Configuration</span> <span class="att">status</span>=<span class="st">"WARN"</span><span class="tag">&gt;</span>
+<span class="cm">&lt;!-- status="WARN" — Log4j2 itself only shows warnings about its own internal state --&gt;</span>
+
+  <span class="tag">&lt;Appenders&gt;</span>
+  <span class="cm">&lt;!-- Appenders = WHERE to write the log messages --&gt;</span>
+
+    <span class="cm">&lt;!-- Console appender: write messages to the terminal --&gt;</span>
+    <span class="tag">&lt;Console</span> <span class="att">name</span>=<span class="st">"Console"</span> <span class="att">target</span>=<span class="st">"SYSTEM_OUT"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;PatternLayout</span>
+        <span class="att">pattern</span>=<span class="st">"%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36} - %msg%n"</span><span class="tag">/&gt;</span>
+      <span class="cm">&lt;!-- Pattern explained:
+           %d{...}      = date and time:  2024-01-15 10:30:45
+           [%-5level]   = log level:      [INFO ] [ERROR] [DEBUG]
+           %logger{36}  = class name:     com.example.StudentService
+           %msg         = your message:   Student Ravi saved
+           %n           = new line --&gt;</span>
+    <span class="tag">&lt;/Console&gt;</span>
+
+    <span class="cm">&lt;!-- File appender: also write to a file (logs are saved here) --&gt;</span>
+    <span class="tag">&lt;RollingFile</span> <span class="att">name</span>=<span class="st">"File"</span>
+                  <span class="att">fileName</span>=<span class="st">"logs/studentapp.log"</span>
+                  <span class="cm">&lt;!-- File where logs are written: logs/studentapp.log
+                       The folder "logs" is created automatically --&gt;</span>
+                  <span class="att">filePattern</span>=<span class="st">"logs/studentapp-%d{yyyy-MM-dd}.log"</span><span class="tag">&gt;</span>
+                  <span class="cm">&lt;!-- When the log rolls over: create studentapp-2024-01-15.log --&gt;</span>
+      <span class="tag">&lt;PatternLayout</span>
+        <span class="att">pattern</span>=<span class="st">"%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36} - %msg%n"</span><span class="tag">/&gt;</span>
+      <span class="tag">&lt;Policies&gt;</span>
+        <span class="tag">&lt;TimeBasedTriggeringPolicy</span> <span class="att">interval</span>=<span class="st">"1"</span><span class="tag">/&gt;</span>
+        <span class="cm">&lt;!-- Roll the log file every day — create a new file each day --&gt;</span>
+      <span class="tag">&lt;/Policies&gt;</span>
+    <span class="tag">&lt;/RollingFile&gt;</span>
+
+  <span class="tag">&lt;/Appenders&gt;</span>
+
+  <span class="tag">&lt;Loggers&gt;</span>
+  <span class="cm">&lt;!-- Loggers = WHAT to log and at what level --&gt;</span>
+
+    <span class="cm">&lt;!-- Your own code: show DEBUG and above (very detailed for your classes) --&gt;</span>
+    <span class="tag">&lt;Logger</span> <span class="att">name</span>=<span class="st">"com.example.studentapp"</span> <span class="att">level</span>=<span class="st">"DEBUG"</span> <span class="att">additivity</span>=<span class="st">"false"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;AppenderRef</span> <span class="att">ref</span>=<span class="st">"Console"</span><span class="tag">/&gt;</span>
+      <span class="tag">&lt;AppenderRef</span> <span class="att">ref</span>=<span class="st">"File"</span><span class="tag">/&gt;</span>
+      <span class="cm">&lt;!-- Write to BOTH console and file for your code --&gt;</span>
+    <span class="tag">&lt;/Logger&gt;</span>
+
+    <span class="cm">&lt;!-- Everything else (Spring, Hibernate): only show INFO and above
+         Without this: Hibernate prints thousands of lines per request --&gt;</span>
+    <span class="tag">&lt;Root</span> <span class="att">level</span>=<span class="st">"INFO"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;AppenderRef</span> <span class="att">ref</span>=<span class="st">"Console"</span><span class="tag">/&gt;</span>
+      <span class="tag">&lt;AppenderRef</span> <span class="att">ref</span>=<span class="st">"File"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Root&gt;</span>
+
+  <span class="tag">&lt;/Loggers&gt;</span>
+<span class="tag">&lt;/Configuration&gt;</span></pre></div></div>
+</section>
+
+<!-- ═════ SLF4J SETUP ═════ -->
+<section class="sec" id="slf4j">
+<div class="sec-label" style="color:var(--teal)">Section 5</div>
+<h2>SLF4J with Logback — The Default Spring Boot Setup (Simpler Way)</h2>
+
+<p>If you do not want to deal with Log4j2 configuration, Spring Boot's default Logback with SLF4J is perfectly fine and much simpler to set up. You do not add any dependency — Logback is already included. You just configure it.</p>
+
+<div class="box green"><h4>Logback = no setup needed for basic use</h4>
+<p>Spring Boot configures Logback automatically. You can start logging immediately without touching pom.xml or any config file. Just add a logger to your class and write messages. For more control, add a <code>logback-spring.xml</code> file.</p></div>
+
+<div class="steps">
+  <div class="step">
+    <div class="step-num" style="background:var(--teal)">1</div>
+    <div class="step-line"></div>
+    <div class="step-body">
+      <h4>No pom.xml changes needed</h4>
+      <p><code>spring-boot-starter-web</code> already includes SLF4J + Logback. Nothing to add or exclude. Just start using it.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:var(--teal)">2</div>
+    <div class="step-line"></div>
+    <div class="step-body">
+      <h4>Option A — Configure via application.properties</h4>
+      <p>For simple changes (log level, log file path) you can use <code>application.properties</code> — no XML needed.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num" style="background:var(--teal)">3</div>
+    <div class="step-body">
+      <h4>Option B — Create logback-spring.xml for full control</h4>
+      <p>For file rolling, multiple appenders, or custom patterns, create <code>src/main/resources/logback-spring.xml</code>.</p>
+    </div>
+  </div>
+</div>
+
+<div class="eg eg1">Option A — Configure logging in application.properties (simplest)</div>
+<div class="cw"><div class="cbar"><span class="cfile">src/main/resources/application.properties — logging config</span><span class="clang">properties</span></div>
+<div class="cbody"><pre><span class="cm"># Set the root log level (everything Spring and Hibernate) to INFO
+# This means: show INFO, WARN, ERROR but hide DEBUG and TRACE</span>
+logging.level.root=INFO
+
+<span class="cm"># Set your own package to DEBUG (very detailed — only for your code)</span>
+logging.level.com.example.studentapp=DEBUG
+
+<span class="cm"># Set Hibernate SQL level — see actual SQL in the console</span>
+logging.level.org.hibernate.SQL=DEBUG
+
+<span class="cm"># Write logs to a file as well as the console</span>
+logging.file.name=logs/studentapp.log
+
+<span class="cm"># Customise the log format in the console</span>
+logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} [%level] %logger{20} - %msg%n
+
+<span class="cm"># Customise the log format in the file</span>
+logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%level] %logger{36} - %msg%n</pre></div></div>
+
+<div class="eg eg2">Option B — logback-spring.xml for full file rolling control</div>
+<div class="cw"><div class="cbar"><span class="cfile">src/main/resources/logback-spring.xml</span><span class="clang">xml</span></div>
+<div class="cbody"><pre><span class="tag">&lt;configuration&gt;</span>
+
+  <span class="cm">&lt;!-- Console appender: write to terminal --&gt;</span>
+  <span class="tag">&lt;appender</span> <span class="att">name</span>=<span class="st">"Console"</span> <span class="att">class</span>=<span class="st">"ch.qos.logback.core.ConsoleAppender"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;encoder&gt;</span>
+      <span class="tag">&lt;pattern&gt;</span>%d{HH:mm:ss} [%-5level] %logger{30} - %msg%n<span class="tag">&lt;/pattern&gt;</span>
+    <span class="tag">&lt;/encoder&gt;</span>
+  <span class="tag">&lt;/appender&gt;</span>
+
+  <span class="cm">&lt;!-- File appender: write to rolling log file --&gt;</span>
+  <span class="tag">&lt;appender</span> <span class="att">name</span>=<span class="st">"File"</span> <span class="att">class</span>=<span class="st">"ch.qos.logback.core.rolling.RollingFileAppender"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;file&gt;</span>logs/studentapp.log<span class="tag">&lt;/file&gt;</span>
+    <span class="tag">&lt;rollingPolicy</span> <span class="att">class</span>=<span class="st">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;fileNamePattern&gt;</span>logs/studentapp-%d{yyyy-MM-dd}.log<span class="tag">&lt;/fileNamePattern&gt;</span>
+      <span class="cm">&lt;!-- Creates a new file every day: studentapp-2024-01-15.log --&gt;</span>
+      <span class="tag">&lt;maxHistory&gt;</span>30<span class="tag">&lt;/maxHistory&gt;</span>
+      <span class="cm">&lt;!-- Keep 30 days of log files, delete older ones automatically --&gt;</span>
+    <span class="tag">&lt;/rollingPolicy&gt;</span>
+    <span class="tag">&lt;encoder&gt;</span>
+      <span class="tag">&lt;pattern&gt;</span>%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36} - %msg%n<span class="tag">&lt;/pattern&gt;</span>
+    <span class="tag">&lt;/encoder&gt;</span>
+  <span class="tag">&lt;/appender&gt;</span>
+
+  <span class="cm">&lt;!-- Your app code: DEBUG level (very detailed) --&gt;</span>
+  <span class="tag">&lt;logger</span> <span class="att">name</span>=<span class="st">"com.example.studentapp"</span> <span class="att">level</span>=<span class="st">"DEBUG"</span> <span class="att">additivity</span>=<span class="st">"false"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;appender-ref</span> <span class="att">ref</span>=<span class="st">"Console"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;appender-ref</span> <span class="att">ref</span>=<span class="st">"File"</span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;/logger&gt;</span>
+
+  <span class="cm">&lt;!-- Everything else (Spring, Hibernate): INFO only --&gt;</span>
+  <span class="tag">&lt;root</span> <span class="att">level</span>=<span class="st">"INFO"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;appender-ref</span> <span class="att">ref</span>=<span class="st">"Console"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;appender-ref</span> <span class="att">ref</span>=<span class="st">"File"</span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;/root&gt;</span>
+
+<span class="tag">&lt;/configuration&gt;</span></pre></div></div>
+</section>
+
+<!-- ═════ HOW TO USE LOGGING ═════ -->
+<section class="sec" id="logusage">
+<div class="sec-label" style="color:var(--amber)">Section 6</div>
+<h2>How to Use Logging in Your Java Classes — Real Examples</h2>
+
+<p>Regardless of whether you use Log4j2 or Logback, you always write log messages using <strong>SLF4J</strong>. Your code looks identical either way. This is the beauty of SLF4J — it is the standard interface.</p>
+
+<div class="eg eg1">Example 1 — Add logging to StudentService (basic)</div>
+<div class="cw"><div class="cbar"><span class="cfile">service/StudentService.java — logging every important operation</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="kw">package</span> com.example.studentapp.service;
+
+<span class="kw">import</span> org.slf4j.Logger;
+<span class="kw">import</span> org.slf4j.LoggerFactory;
+<span class="cm">// These two imports are ALWAYS the same — SLF4J imports
+// Whether you use Logback or Log4j2 does not matter — same imports</span>
+
+<span class="an">@Service</span>
+<span class="kw">public class</span> <span class="tp">StudentService</span> {
+
+    <span class="kw">private static final</span> <span class="tp">Logger</span> log =
+        <span class="tp">LoggerFactory</span>.<span class="fn">getLogger</span>(<span class="tp">StudentService</span>.<span class="kw">class</span>);
+    <span class="cm">// Create ONE logger per class
+    // LoggerFactory.getLogger(StudentService.class):
+    //   - the class name appears in every log message so you know WHERE it came from
+    // private static final: one logger shared by all instances, created once</span>
+
+    <span class="an">@Autowired</span>
+    <span class="kw">private</span> <span class="tp">StudentRepository</span> repo;
+
+    <span class="kw">public</span> <span class="tp">List</span>&lt;<span class="tp">Student</span>&gt; <span class="fn">findAll</span>() {
+        log.<span class="fn">debug</span>(<span class="st">"findAll() called"</span>);
+        <span class="cm">// DEBUG = detailed developer message, shown only in development
+        // Use DEBUG for: method entry points, variable values, loop counts</span>
+
+        <span class="tp">List</span>&lt;<span class="tp">Student</span>&gt; students = repo.<span class="fn">findAll</span>();
+
+        log.<span class="fn">info</span>(<span class="st">"Returning {} students"</span>, students.<span class="fn">size</span>());
+        <span class="cm">// INFO = normal business event worth tracking
+        // {} is a placeholder — SLF4J fills it with the variable: "Returning 5 students"
+        // Use {} instead of + for concatenation — it is faster (no string building if level not active)</span>
+
+        <span class="kw">return</span> students;
+    }
+
+    <span class="kw">public</span> <span class="tp">Student</span> <span class="fn">findById</span>(<span class="tp">Long</span> id) {
+        log.<span class="fn">debug</span>(<span class="st">"findById() called with id={}"</span>, id);
+        <span class="kw">return</span> repo.<span class="fn">findById</span>(id)
+            .<span class="fn">orElseThrow</span>(() -> {
+                log.<span class="fn">warn</span>(<span class="st">"Student not found with id={}"</span>, id);
+                <span class="cm">// WARN = something unexpected happened but app continues
+                // Use WARN for: not-found scenarios, slow operations, retries</span>
+                <span class="kw">return new</span> <span class="tp">RuntimeException</span>(<span class="st">"Student not found: "</span> + id);
+            });
+    }
+
+    <span class="kw">public</span> <span class="tp">Student</span> <span class="fn">save</span>(<span class="tp">Student</span> student) {
+        log.<span class="fn">info</span>(<span class="st">"Saving student with name={} email={}"</span>, student.<span class="fn">getName</span>(), student.<span class="fn">getEmail</span>());
+        <span class="tp">Student</span> saved = repo.<span class="fn">save</span>(student);
+        log.<span class="fn">info</span>(<span class="st">"Student saved successfully with id={}"</span>, saved.<span class="fn">getId</span>());
+        <span class="kw">return</span> saved;
+    }
+
+    <span class="kw">public void</span> <span class="fn">delete</span>(<span class="tp">Long</span> id) {
+        log.<span class="fn">info</span>(<span class="st">"Deleting student with id={}"</span>, id);
+        repo.<span class="fn">deleteById</span>(id);
+        log.<span class="fn">info</span>(<span class="st">"Student {} deleted"</span>, id);
+    }
+}</pre></div></div>
+
+<div class="eg eg2">Example 2 — Logging exceptions and errors in the controller</div>
+<div class="cw"><div class="cbar"><span class="cfile">exception/GlobalExceptionHandler.java — logging errors</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="kw">import</span> org.slf4j.Logger;
+<span class="kw">import</span> org.slf4j.LoggerFactory;
+
+<span class="an">@ControllerAdvice</span>
+<span class="kw">public class</span> <span class="tp">GlobalExceptionHandler</span> {
+
+    <span class="kw">private static final</span> <span class="tp">Logger</span> log =
+        <span class="tp">LoggerFactory</span>.<span class="fn">getLogger</span>(<span class="tp">GlobalExceptionHandler</span>.<span class="kw">class</span>);
+
+    <span class="an">@ExceptionHandler</span>(<span class="tp">RuntimeException</span>.<span class="kw">class</span>)
+    <span class="an">@ResponseStatus</span>(<span class="tp">HttpStatus</span>.<span class="an">NOT_FOUND</span>)
+    <span class="an">@ResponseBody</span>
+    <span class="kw">public</span> <span class="tp">Map</span>&lt;<span class="tp">String</span>, <span class="tp">String</span>&gt; <span class="fn">handleNotFound</span>(<span class="tp">RuntimeException</span> ex) {
+        log.<span class="fn">error</span>(<span class="st">"RuntimeException caught: {}"</span>, ex.<span class="fn">getMessage</span>());
+        <span class="cm">// ERROR = something broke — action may be needed
+        // Use ERROR for: caught exceptions, database failures, unexpected states</span>
+        <span class="kw">return</span> <span class="tp">Map</span>.<span class="fn">of</span>(<span class="st">"error"</span>, ex.<span class="fn">getMessage</span>());
+    }
+
+    <span class="an">@ExceptionHandler</span>(<span class="tp">Exception</span>.<span class="kw">class</span>)
+    <span class="an">@ResponseStatus</span>(<span class="tp">HttpStatus</span>.<span class="an">INTERNAL_SERVER_ERROR</span>)
+    <span class="an">@ResponseBody</span>
+    <span class="kw">public</span> <span class="tp">Map</span>&lt;<span class="tp">String</span>, <span class="tp">String</span>&gt; <span class="fn">handleGeneral</span>(<span class="tp">Exception</span> ex) {
+        log.<span class="fn">error</span>(<span class="st">"Unexpected error: {}"</span>, ex.<span class="fn">getMessage</span>(), ex);
+        <span class="cm">// The third argument 'ex' prints the full stack trace in the log file
+        // ALWAYS log the full exception when it is an unexpected error</span>
+        <span class="kw">return</span> <span class="tp">Map</span>.<span class="fn">of</span>(<span class="st">"error"</span>, <span class="st">"Something went wrong"</span>);
+    }
+}</pre></div></div>
+
+<div class="eg eg3">Example 3 — Logging in REST controller (log every request)</div>
+<div class="cw"><div class="cbar"><span class="cfile">controller/StudentRestController.java — logging every API call</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="kw">import</span> org.slf4j.Logger;
+<span class="kw">import</span> org.slf4j.LoggerFactory;
+
+<span class="an">@RestController</span>
+<span class="an">@RequestMapping</span>(<span class="st">"/api/students"</span>)
+<span class="kw">public class</span> <span class="tp">StudentRestController</span> {
+
+    <span class="kw">private static final</span> <span class="tp">Logger</span> log =
+        <span class="tp">LoggerFactory</span>.<span class="fn">getLogger</span>(<span class="tp">StudentRestController</span>.<span class="kw">class</span>);
+
+    <span class="an">@Autowired</span> <span class="kw">private</span> <span class="tp">StudentService</span> service;
+
+    <span class="an">@GetMapping</span>
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">List</span>&lt;<span class="tp">Student</span>&gt;&gt; <span class="fn">getAll</span>() {
+        log.<span class="fn">info</span>(<span class="st">"GET /api/students called"</span>);
+        <span class="tp">List</span>&lt;<span class="tp">Student</span>&gt; students = service.<span class="fn">findAll</span>();
+        log.<span class="fn">info</span>(<span class="st">"GET /api/students returning {} results"</span>, students.<span class="fn">size</span>());
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">ok</span>(students);
+    }
+
+    <span class="an">@PostMapping</span>
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">Student</span>&gt; <span class="fn">create</span>(<span class="an">@RequestBody</span> <span class="an">@Valid</span> <span class="tp">Student</span> student,
+                                             <span class="tp">BindingResult</span> result) {
+        log.<span class="fn">info</span>(<span class="st">"POST /api/students called with name={}"</span>, student.<span class="fn">getName</span>());
+
+        <span class="kw">if</span> (result.<span class="fn">hasErrors</span>()) {
+            log.<span class="fn">warn</span>(<span class="st">"POST /api/students validation failed: {} errors"</span>, result.<span class="fn">getErrorCount</span>());
+            <span class="tp">Map</span>&lt;<span class="tp">String</span>, <span class="tp">String</span>&gt; errors = <span class="kw">new</span> <span class="tp">HashMap</span>&lt;&gt;();
+            result.<span class="fn">getFieldErrors</span>().<span class="fn">forEach</span>(e -> errors.<span class="fn">put</span>(e.<span class="fn">getField</span>(), e.<span class="fn">getDefaultMessage</span>()));
+            <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">badRequest</span>().<span class="fn">body</span>(<span class="kw">null</span>);
+        }
+
+        <span class="tp">Student</span> saved = service.<span class="fn">save</span>(student);
+        log.<span class="fn">info</span>(<span class="st">"POST /api/students created student id={}"</span>, saved.<span class="fn">getId</span>());
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">status</span>(<span class="nm">201</span>).<span class="fn">body</span>(saved);
+    }
+
+    <span class="an">@DeleteMapping</span>(<span class="st">"/{id}"</span>)
+    <span class="kw">public</span> <span class="tp">ResponseEntity</span>&lt;<span class="tp">Void</span>&gt; <span class="fn">delete</span>(<span class="an">@PathVariable</span> <span class="tp">Long</span> id) {
+        log.<span class="fn">info</span>(<span class="st">"DELETE /api/students/{} called"</span>, id);
+        service.<span class="fn">delete</span>(id);
+        log.<span class="fn">info</span>(<span class="st">"DELETE /api/students/{} completed"</span>, id);
+        <span class="kw">return</span> <span class="tp">ResponseEntity</span>.<span class="fn">noContent</span>().<span class="fn">build</span>();
+    }
+}</pre></div></div>
+
+<div class="eg eg4">Example 4 — What you see in the console when the app runs</div>
+<div class="cw"><div class="cbar"><span class="cfile">Console output — what the log messages look like</span><span class="clang">text</span></div>
+<div class="cbody"><pre><span class="cm">-- App starts up --</span>
+<span class="st">2024-01-15 10:30:01 [INFO ] com.example.StudentApp - Starting StudentApp</span>
+<span class="st">2024-01-15 10:30:03 [INFO ] o.s.b.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080</span>
+
+<span class="cm">-- GET /api/students called --</span>
+<span class="st">2024-01-15 10:31:05 [INFO ] c.e.s.controller.StudentRestController - GET /api/students called</span>
+<span class="st">2024-01-15 10:31:05 [DEBUG] c.e.s.service.StudentService - findAll() called</span>
+<span class="st">2024-01-15 10:31:05 [DEBUG] o.hibernate.SQL - select s1_0.id,s1_0.name,s1_0.email from students s1_0</span>
+<span class="st">2024-01-15 10:31:05 [INFO ] c.e.s.service.StudentService - Returning 3 students</span>
+<span class="st">2024-01-15 10:31:05 [INFO ] c.e.s.controller.StudentRestController - GET /api/students returning 3 results</span>
+
+<span class="cm">-- POST /api/students with bad data --</span>
+<span class="st">2024-01-15 10:32:11 [INFO ] c.e.s.controller.StudentRestController - POST /api/students called with name=</span>
+<span class="st">2024-01-15 10:32:11 [WARN ] c.e.s.controller.StudentRestController - POST /api/students validation failed: 3 errors</span>
+
+<span class="cm">-- POST /api/students with good data --</span>
+<span class="st">2024-01-15 10:33:00 [INFO ] c.e.s.controller.StudentRestController - POST /api/students called with name=Ravi</span>
+<span class="st">2024-01-15 10:33:00 [INFO ] c.e.s.service.StudentService - Saving student with name=Ravi email=ravi@x.com</span>
+<span class="st">2024-01-15 10:33:00 [INFO ] c.e.s.service.StudentService - Student saved successfully with id=4</span>
+<span class="st">2024-01-15 10:33:00 [INFO ] c.e.s.controller.StudentRestController - POST /api/students created student id=4</span>
+
+<span class="cm">-- GET /api/students/999 (not found) --</span>
+<span class="st">2024-01-15 10:34:15 [WARN ] c.e.s.service.StudentService - Student not found with id=999</span>
+<span class="st">2024-01-15 10:34:15 [ERROR] c.e.s.e.GlobalExceptionHandler - RuntimeException caught: Student not found: 999</span></pre></div></div>
+
+<div class="eg eg5">Example 5 — Using @Slf4j (Lombok shortcut — zero boilerplate)</div>
+<div class="cw"><div class="cbar"><span class="cfile">With Lombok: no Logger declaration needed at all</span><span class="clang">java</span></div>
+<div class="cbody"><pre><span class="cm">// Add Lombok to pom.xml:</span>
+<span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>org.projectlombok<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>lombok<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span>
+
+<span class="cm">// Without Lombok (what you write manually):</span>
+<span class="kw">private static final</span> <span class="tp">Logger</span> log = <span class="tp">LoggerFactory</span>.<span class="fn">getLogger</span>(<span class="tp">StudentService</span>.<span class="kw">class</span>);
+
+<span class="cm">// With Lombok — just add @Slf4j above the class:</span>
+<span class="an">@Slf4j</span>
+<span class="cm">// @Slf4j generates the private static final Logger log = ... line for you automatically
+// You still use: log.info(), log.error() etc. — exactly the same</span>
+<span class="an">@Service</span>
+<span class="kw">public class</span> <span class="tp">StudentService</span> {
+
+    <span class="cm">// No Logger declaration needed — @Slf4j creates it for you</span>
+
+    <span class="kw">public</span> <span class="tp">Student</span> <span class="fn">save</span>(<span class="tp">Student</span> student) {
+        log.<span class="fn">info</span>(<span class="st">"Saving student: {}"</span>, student.<span class="fn">getName</span>());
+        <span class="kw">return</span> repo.<span class="fn">save</span>(student);
+    }
+}
+
+<span class="cm">// Other Lombok logging annotations (pick one):
+// @Slf4j   → uses SLF4J (most common, works with both Logback and Log4j2)
+// @Log4j2  → uses Log4j2 API directly (only use if you specifically need Log4j2 features)
+// @CommonsLog → uses Apache Commons Logging</span></pre></div></div>
+</section>
+
+<!-- ═════ SUMMARY ═════ -->
+<section class="sec" id="summary">
+<div class="sec-label">Summary</div>
+<h2>Everything in One Place — Quick Reference</h2>
+
+<h3>REST API — which way to use</h3>
+<div class="tw"><table>
+<thead><tr><th>Situation</th><th>Use this</th></tr></thead>
+<tbody>
+<tr><td>Learning, quick demo</td><td>Way 1 — direct return</td></tr>
+<tr><td>Any real project</td><td>Way 2 — ResponseEntity with correct HTTP codes</td></tr>
+<tr><td>Any POST or PUT endpoint</td><td>Way 3 — add @Valid + BindingResult</td></tr>
+<tr><td>Search and filter</td><td>Way 4 — @RequestParam for query parameters</td></tr>
+<tr><td>Production app, security matters</td><td>Way 5 — all of the above + DTO</td></tr>
+</tbody></table></div>
+
+<h3>DTO — how many to create</h3>
+<div class="tw"><table>
+<thead><tr><th>Scenario</th><th>DTO count</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>Small project, learning</td><td>1 DTO</td><td><code>StudentDTO</code> for everything</td></tr>
+<tr><td>Medium project</td><td>2 DTOs</td><td><code>StudentDTO</code> (read) + <code>CreateStudentDTO</code> (write)</td></tr>
+<tr><td>Large project</td><td>3–4 DTOs</td><td>Separate DTO for list, detail, create, update</td></tr>
+<tr><td>Using in Thymeleaf forms</td><td>1 per form</td><td>Bind form to DTO, not entity</td></tr>
+</tbody></table></div>
+
+<h3>Logging — which setup to choose</h3>
+<div class="tw"><table>
+<thead><tr><th>Need</th><th>Use this</th><th>Effort</th></tr></thead>
+<tbody>
+<tr><td>Just want basic logging with no setup</td><td>Default Logback + application.properties</td><td>1 minute</td></tr>
+<tr><td>Want log files with daily rolling</td><td>Logback + logback-spring.xml</td><td>5 minutes</td></tr>
+<tr><td>Company requires Log4j2 specifically</td><td>Exclude Logback + add log4j2 starter + log4j2.xml</td><td>10 minutes</td></tr>
+<tr><td>Want less code in every class</td><td>Add Lombok + @Slf4j annotation</td><td>2 minutes</td></tr>
+</tbody></table></div>
+
+<div class="summary">
+<h4>The five things to remember</h4>
+<ul>
+<li><strong>REST vs MVC:</strong> change <code>@Controller</code> to <code>@RestController</code>. Return data, not a page name. Use <code>ResponseEntity</code> to set the correct HTTP status code.</li>
+<li><strong>DTO protects your data:</strong> without DTO the client sees all entity fields including sensitive ones. With DTO you control exactly what is sent. One DTO per "shape of data" you need.</li>
+<li><strong>Logging = SLF4J in your code, always:</strong> write <code>log.info()</code>, <code>log.error()</code> using SLF4J imports regardless of whether you use Logback or Log4j2 behind the scenes.</li>
+<li><strong>Logback is default and simpler:</strong> it already works in Spring Boot with no pom.xml change. Use <code>application.properties</code> for basic config. Use <code>logback-spring.xml</code> for file rolling.</li>
+<li><strong>Log4j2 needs setup:</strong> exclude <code>spring-boot-starter-logging</code> from every starter, add <code>spring-boot-starter-log4j2</code>, create <code>log4j2.xml</code>. Your actual logging code (<code>log.info()</code>) stays identical.</li>
+</ul>
+</div>
+</section>
+
+</div>
+<footer>
+  <strong>REST API · DTO · Logging — Simple Beginner Guide</strong>
+  5 Ways to Create REST API · DTO Before/After · Log4j2 Setup · SLF4J + Logback Setup · Real Logging Examples
+</footer>
+<script>
+var p=document.getElementById('prog');
+window.addEventListener('scroll',function(){var d=document.documentElement,b=document.body;var pct=(d.scrollTop||b.scrollTop)/((d.scrollHeight||b.scrollHeight)-d.clientHeight)*100;p.style.width=pct+'%';});
+var secs=document.querySelectorAll('section.sec'),links=document.querySelectorAll('.nav a');
+var obs=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting&&en.target.id){links.forEach(function(l){l.classList.remove('on')});var a=document.querySelector('.nav a[href="#'+en.target.id+'"]');if(a)a.classList.add('on');}});},{rootMargin:'-40% 0px -55% 0px'});
+secs.forEach(function(s){obs.observe(s)});
+</script>
+</body>
+</html>

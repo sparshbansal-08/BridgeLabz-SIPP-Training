@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spring Boot Microservices: Simple Step-by-Step Build Guide</title>
+<style>
+:root{
+  --ink:#16243d;--body:#3c4858;--muted:#6c7888;--faint:#9aa6b4;
+  --brand:#2557a7;--brand-dk:#1b3f7a;--brand-2:#0e7c86;--accent:#bd831a;
+  --bg:#eceff4;--paper:#fff;--line:#e2e7ef;--line-2:#eef1f6;
+  --ok:#1f8a4c;--ok-bg:#e9f6ee;--ok-line:#bfe5cd;
+  --bad:#c0392b;--bad-bg:#fbece9;--bad-line:#f0c9c2;
+  --warn:#9a6b10;--warn-bg:#fbf3e0;--warn-line:#ecd8a6;
+  --note-bg:#ebf1fb;--note-line:#cadbf3;
+  --code-bg:#1e2533;--code-fg:#e4ecf2;
+  --mono:"SF Mono","Cascadia Code",Consolas,"Courier New",monospace;
+  --sans:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);font-size:15.5px;line-height:1.68;color:var(--body);background:var(--bg);}
+.hero{background:linear-gradient(150deg,#0d1a30 0%,#16243d 55%,#1b3260 100%);color:#fff;padding:50px 24px 44px;}
+.hero-in{max-width:1180px;margin:0 auto;}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#e6b860;margin-bottom:13px;}
+.hero h1{margin:0 0 12px;font-size:2.2rem;font-weight:800;line-height:1.12;letter-spacing:-.02em;max-width:22ch;}
+.hero p{margin:0;font-size:1.04rem;color:#cdd9e8;max-width:62ch;}
+.chips{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px;}
+.chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#eaf1f9;border-radius:30px;padding:4px 12px;font-size:.8rem;}
+.wrap{display:flex;max-width:1180px;margin:0 auto;gap:26px;padding:26px 22px 60px;align-items:flex-start;}
+nav.toc{flex:0 0 232px;position:sticky;top:22px;background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:15px;box-shadow:0 1px 3px rgba(22,36,61,.05);max-height:calc(100vh - 44px);overflow-y:auto;}
+nav.toc h2{font-size:.65rem;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);margin:0 0 10px;}
+nav.toc ol{margin:0;padding:0;list-style:none;}
+nav.toc li{margin:0 0 2px;}
+nav.toc a{display:block;color:var(--body);text-decoration:none;font-size:.83rem;padding:4px 8px;border-radius:6px;}
+nav.toc a:hover{background:var(--note-bg);color:var(--brand);}
+nav.toc .grp{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);padding:7px 0 2px 8px;margin-top:3px;}
+main{flex:1 1 auto;min-width:0;max-width:840px;}
+.grp-banner{display:flex;align-items:center;gap:12px;padding:12px 0 8px;margin-bottom:4px;}
+.grp-dot{width:32px;height:32px;border-radius:8px;background:var(--ink);color:#fff;font-size:.95rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.grp-banner h2{font-size:1.25rem;font-weight:800;color:var(--ink);margin:0;}
+.step{background:var(--paper);border:1px solid var(--line);border-radius:14px;margin-bottom:18px;overflow:hidden;box-shadow:0 1px 3px rgba(22,36,61,.04);break-inside:avoid;}
+.step-head{display:flex;align-items:center;gap:13px;padding:15px 22px 13px;border-bottom:1px solid var(--line-2);}
+.step-num{flex-shrink:0;width:42px;height:42px;border-radius:11px;background:linear-gradient(150deg,var(--brand),var(--brand-dk));color:#fff;font-size:1.1rem;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(37,87,167,.22);}
+.step-num.amber{background:linear-gradient(150deg,#bd831a,#8a5e12);}
+.step-num.teal{background:linear-gradient(150deg,#0e7c86,#0a5a61);}
+.step-head .sh{display:flex;flex-direction:column;}
+.step-head .sl{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:1px;}
+.step-head h3{font-size:1.05rem;font-weight:800;color:var(--ink);margin:0;}
+.step-body{padding:4px 22px 20px;}
+.row{margin:12px 0 4px;}
+.rl{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--brand);margin-bottom:3px;}
+.rl.why{color:var(--brand-2);}
+.rl.test{color:var(--ok);}
+.rl.ann{color:#6d3fb0;}
+.why-box{background:var(--note-bg);border:1px solid var(--note-line);border-left:3px solid var(--brand);border-radius:9px;padding:9px 13px;font-size:.94rem;}
+.next-box{background:var(--ok-bg);border:1px solid var(--ok-line);border-radius:9px;padding:9px 13px;font-size:.93rem;margin-top:12px;}
+p{margin:0 0 10px;}p:last-child{margin-bottom:0;}
+strong{color:var(--ink);font-weight:650;}
+ul,ol{padding-left:20px;margin:0 0 10px;}li{margin-bottom:4px;}
+code{font-family:var(--mono);font-size:.84em;background:#eef1f6;color:#2c3e57;padding:2px 6px;border-radius:4px;border:1px solid var(--line);}
+.mand-box{border-radius:9px;padding:9px 13px;font-size:.93rem;margin:5px 0;}
+.mand-yes{background:var(--bad-bg);border:1px solid var(--bad-line);}
+.mand-no{background:var(--ok-bg);border:1px solid var(--ok-line);}
+table{width:100%;border-collapse:collapse;margin:7px 0;font-size:.84rem;border:1px solid var(--line);border-radius:9px;overflow:hidden;}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;}
+th{background:var(--ink);color:#fff;font-size:.71rem;letter-spacing:.03em;text-transform:uppercase;}
+tr:last-child td{border-bottom:none;}
+tbody tr:nth-child(even) td{background:#f8fafc;}
+td code{white-space:nowrap;}
+.tm{background:var(--bad);color:#fff;border-radius:5px;padding:2px 8px;font-size:.68rem;font-weight:700;white-space:nowrap;}
+.to{background:var(--muted);color:#fff;border-radius:5px;padding:2px 8px;font-size:.68rem;font-weight:700;white-space:nowrap;}
+.ta{background:var(--ok);color:#fff;border-radius:5px;padding:2px 8px;font-size:.68rem;font-weight:700;white-space:nowrap;}
+.tn{background:var(--brand);color:#fff;border-radius:5px;padding:2px 8px;font-size:.68rem;font-weight:700;white-space:nowrap;}
+.filepath{background:#2d3748;color:#9cdcfe;font-family:var(--mono);font-size:.77rem;padding:6px 14px;border-radius:8px 8px 0 0;display:block;border-bottom:1px solid #444;}
+pre{background:var(--code-bg);color:var(--code-fg);padding:14px;border-radius:0 0 8px 8px;overflow-x:auto;font-family:var(--mono);font-size:.81rem;line-height:1.6;margin:0 0 12px;}
+pre.solo{border-radius:8px;}
+.cm{color:#7e93a6;}.ck{color:#c678dd;}.ca{color:#e6b860;}.cs{color:#98c379;}
+.pm{background:#1a2535;border-radius:10px;padding:13px 15px;margin:8px 0;}
+.pm-title{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#7e93a6;margin-bottom:7px;}
+.pm-row{display:flex;gap:10px;margin-bottom:5px;font-family:var(--mono);font-size:.8rem;}
+.pm-l{flex:0 0 72px;font-size:.68rem;font-weight:700;text-transform:uppercase;padding-top:2px;}
+.get{color:#61affe;}.post{color:#49cc90;}
+.pm-v{color:#e4ecf2;flex:1;word-break:break-all;}
+.pm-r{background:#243040;border-radius:7px;padding:7px 11px;margin-top:6px;font-family:var(--mono);font-size:.79rem;}
+.ok-r{color:#98c379;}.bad-r{color:#e06c75;}
+.callout{border-radius:10px;padding:11px 15px;margin:10px 0;border:1px solid;}
+.callout .ct{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;}
+.callout p{margin:0;font-size:.93rem;}
+.c-warn{background:var(--warn-bg);border-color:var(--warn-line);}.c-warn .ct{color:var(--warn);}
+.c-note{background:var(--note-bg);border-color:var(--note-line);}.c-note .ct{color:var(--brand);}
+.c-ok{background:var(--ok-bg);border-color:var(--ok-line);}.c-ok .ct{color:var(--ok);}
+.diagram{background:#fafbfd;border:1px solid var(--line);border-radius:11px;padding:14px 14px 8px;margin:12px 0;}
+.diagram svg{display:block;width:100%;height:auto;}
+.diagram .cap{font-size:.79rem;color:var(--muted);text-align:center;margin-top:8px;font-style:italic;}
+.ref-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin-bottom:18px;box-shadow:0 1px 3px rgba(22,36,61,.04);}
+.ref-card h2{font-size:1.2rem;font-weight:800;color:var(--ink);margin:0 0 12px;}
+footer{background:var(--ink);color:#9fb0c4;text-align:center;font-size:.83rem;padding:22px;}
+footer b{color:#dde6f0;}
+@media(max-width:880px){
+  .wrap{flex-direction:column;}
+  nav.toc{position:static;width:100%;flex-basis:auto;max-height:none;}
+  .hero h1{font-size:1.85rem;}
+  .step-body,.step-head{padding-left:16px;padding-right:16px;}
+}
+@media print{
+  body{background:#fff;}
+  .hero{background:#0d1a30!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  nav.toc{display:none;}.wrap{display:block;padding:0;}
+  .step,.ref-card{break-inside:avoid;box-shadow:none;}
+  pre{background:#fff;color:#1e2533;border:1px solid var(--line);}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-in">
+    <div class="eyebrow">Simple build guide &middot; One step at a time &middot; Spring Boot 3.x</div>
+    <h1>Spring Boot Microservices: Simple Step-by-Step</h1>
+    <p>19 steps. Every file explained. Every annotation labelled MANDATORY, OPTIONAL, AUTOMATIC, or NOT NEEDED. Test after every step that produces a result.</p>
+    <div class="chips">
+      <span class="chip">Java 17</span><span class="chip">Spring Boot 3.x</span>
+      <span class="chip">Spring Cloud</span><span class="chip">Maven</span>
+      <span class="chip">MySQL</span><span class="chip">19 steps</span>
+    </div>
+  </div>
+</header>
+<div class="wrap">
+<nav class="toc">
+  <h2>Contents</h2>
+  <div class="grp">Group 1 &mdash; Eureka</div>
+  <ol>
+    <li><a href="#s1">Step 1: Create Eureka project</a></li>
+    <li><a href="#s2">Step 2: Eureka main class</a></li>
+    <li><a href="#s3">Step 3: Eureka properties</a></li>
+  </ol>
+  <div class="grp">Group 2 &mdash; Product Service</div>
+  <ol>
+    <li><a href="#s4">Step 4: Create project</a></li>
+    <li><a href="#s5">Step 5: Main class</a></li>
+    <li><a href="#s6">Step 6: Product entity</a></li>
+    <li><a href="#s7">Step 7: ProductRepository</a></li>
+    <li><a href="#s8">Step 8: ProductService</a></li>
+    <li><a href="#s9">Step 9: ProductController</a></li>
+    <li><a href="#s10">Step 10: Properties</a></li>
+  </ol>
+  <div class="grp">Group 3 &mdash; Order Service</div>
+  <ol>
+    <li><a href="#s11">Step 11: Create project</a></li>
+    <li><a href="#s12">Step 12: Main class</a></li>
+    <li><a href="#s13">Step 13: ProductResponse DTO</a></li>
+    <li><a href="#s14">Step 14: ProductClient (Feign)</a></li>
+    <li><a href="#s15">Step 15: Order entity</a></li>
+    <li><a href="#s16">Step 16: OrderRepository</a></li>
+    <li><a href="#s17">Step 17: OrderService</a></li>
+    <li><a href="#s18">Step 18: OrderController</a></li>
+    <li><a href="#s19">Step 19: Properties</a></li>
+  </ol>
+  <div class="grp">After all steps</div>
+  <ol>
+    <li><a href="#runorder">Run order</a></li>
+    <li><a href="#e2e">End-to-end tests</a></li>
+    <li><a href="#allann">All annotations</a></li>
+  </ol>
+</nav>
+<main>
+
+<!-- overview diagram -->
+<div class="diagram" style="margin-bottom:20px;">
+  <svg viewBox="0 0 700 148" xmlns="http://www.w3.org/2000/svg" style="font-family:'Segoe UI',system-ui,sans-serif;">
+    <defs>
+      <marker id="a0" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3c4858"/></marker>
+      <marker id="a0d" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#9aa6b4"/></marker>
+      <marker id="a0b" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#2557a7"/></marker>
+    </defs>
+    <rect x="10" y="52" width="104" height="40" rx="9" fill="#eef1f6" stroke="#6c7888" stroke-width="1.4"/>
+    <text x="62" y="77" text-anchor="middle" font-size="12.5" fill="#3c4858">Postman</text>
+    <line x1="116" y1="72" x2="164" y2="72" stroke="#3c4858" stroke-width="1.8" marker-end="url(#a0)"/>
+    <rect x="166" y="42" width="154" height="60" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.8"/>
+    <text x="243" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#1b3f7a">Order Service</text>
+    <text x="243" y="86" text-anchor="middle" font-size="11" fill="#2557a7">port 8082</text>
+    <line x1="322" y1="72" x2="368" y2="72" stroke="#2557a7" stroke-width="2" marker-end="url(#a0b)"/>
+    <text x="345" y="63" text-anchor="middle" font-size="10.5" fill="#2557a7">Feign</text>
+    <rect x="370" y="42" width="154" height="60" rx="11" fill="#ebf1fb" stroke="#2557a7" stroke-width="1.8"/>
+    <text x="447" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#1b3f7a">Product Service</text>
+    <text x="447" y="86" text-anchor="middle" font-size="11" fill="#2557a7">port 8081</text>
+    <rect x="556" y="8" width="130" height="46" rx="10" fill="#fbf3e0" stroke="#bd831a" stroke-width="1.7"/>
+    <text x="621" y="28" text-anchor="middle" font-size="12.5" font-weight="700" fill="#6b5417">Eureka Server</text>
+    <text x="621" y="46" text-anchor="middle" font-size="11" fill="#9a6b10">port 8761</text>
+    <line x1="447" y1="42" x2="580" y2="52" stroke="#9aa6b4" stroke-width="1.4" stroke-dasharray="5 3" marker-end="url(#a0d)"/>
+    <line x1="243" y1="42" x2="558" y2="30" stroke="#9aa6b4" stroke-width="1.4" stroke-dasharray="5 3" marker-end="url(#a0d)"/>
+    <text x="400" y="130" text-anchor="middle" font-size="10.5" fill="#9aa6b4">grey dashed = register with Eureka &nbsp;|&nbsp; blue arrow = Feign call</text>
+  </svg>
+  <div class="cap">You will build this in 19 steps. Eureka first, then Product Service, then Order Service.</div>
+</div>
+
+<!-- ===== GROUP 1: EUREKA ===== -->
+<div class="grp-banner" id="g1"><span class="grp-dot" style="background:var(--accent);">1</span><h2>Group 1 &mdash; Eureka Server (steps 1-3)</h2></div>
+
+<div class="step" id="s1">
+  <div class="step-head"><span class="step-num amber">1</span><div class="sh"><span class="sl">Eureka Server</span><h3>Create the project</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this because without Eureka, services cannot find each other by name — they would have to hardcode addresses that break every time a service moves.</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <p>Go to <strong>start.spring.io</strong>. Set Artifact: <code>eureka-server</code>, Java 17, Maven. Add one dependency: <strong>Eureka Server</strong>. Generate, download, open in IDE.</p></div>
+    <div class="row"><div class="rl">Is this mandatory</div>
+      <div class="mand-box mand-yes">YES — without Eureka, the Feign client in Order Service cannot resolve the name "product-service" to a real address.</div></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td colspan="3" style="color:var(--muted);font-style:italic;">None at project creation — skeleton is auto-generated.</td></tr>
+      </tbody></table></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 2 — Create the main class and add <code>@EnableEurekaServer</code>.</div>
+  </div>
+</div>
+
+<div class="step" id="s2">
+  <div class="step-head"><span class="step-num amber">2</span><div class="sh"><span class="sl">Eureka Server</span><h3>Main application class</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this because the generated class is a plain Spring Boot app. Adding <code>@EnableEurekaServer</code> turns it into the actual service directory.</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <span class="filepath">eureka-server/src/main/java/com/ecommerce/eurekaserver/EurekaServerApplication.java</span></div>
+    <div class="row"><div class="rl">Is this mandatory</div>
+      <div class="mand-box mand-yes">YES — without <code>@EnableEurekaServer</code> the app starts but ignores all registration requests.</div></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td><code>@SpringBootApplication</code></td><td>Starts Spring Boot. Auto-generated — do not remove.</td><td><span class="ta">AUTOMATIC</span></td></tr>
+        <tr><td><code>@EnableEurekaServer</code></td><td>Turns this app into the service directory.</td><td><span class="tm">MANDATORY</span></td></tr>
+      </tbody></table></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">eureka-server/src/main/java/com/ecommerce/eurekaserver/EurekaServerApplication.java</span>
+      <pre><code><span class="ck">package</span> com.ecommerce.eurekaserver;
+<span class="ck">import</span> org.springframework.boot.SpringApplication;
+<span class="ck">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
+<span class="ck">import</span> org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+
+<span class="ca">@SpringBootApplication</span>  <span class="cm">// starts Spring Boot — auto-generated, keep it</span>
+<span class="ca">@EnableEurekaServer</span>     <span class="cm">// YOU ADD THIS — makes this app the service directory</span>
+<span class="ck">public class</span> EurekaServerApplication {
+    <span class="ck">public static void</span> main(String[] args) {
+        SpringApplication.run(EurekaServerApplication.class, args);
+    }
+}</code></pre></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 3 — Configure application.properties.</div>
+  </div>
+</div>
+
+<div class="step" id="s3">
+  <div class="step-head"><span class="step-num amber">3</span><div class="sh"><span class="sl">Eureka Server</span><h3>application.properties</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this because without the two <code>false</code> settings, Eureka tries to register itself with itself and prints confusing errors every 30 seconds.</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <span class="filepath">eureka-server/src/main/resources/application.properties</span></div>
+    <div class="row"><div class="rl">Is this mandatory</div>
+      <div class="mand-box mand-yes">YES — the two <code>eureka.client.*=false</code> lines stop the startup errors.</div></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td colspan="3" style="color:var(--muted);font-style:italic;">None — properties files use key=value, not annotations.</td></tr>
+      </tbody></table></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">eureka-server/src/main/resources/application.properties</span>
+      <pre><code>spring.application.name=eureka-server         <span class="cm"># name shown in logs</span>
+server.port=8761                              <span class="cm"># standard port for Eureka</span>
+eureka.client.register-with-eureka=false      <span class="cm"># do NOT register this server with itself</span>
+eureka.client.fetch-registry=false            <span class="cm"># do NOT fetch its own registry</span></code></pre></div>
+    <div class="row"><div class="rl test">Test</div>
+      <div class="pm">
+        <div class="pm-title">Start Eureka (mvn spring-boot:run inside eureka-server folder) then open:</div>
+        <div class="pm-row"><span class="pm-l get">Browser</span><span class="pm-v">http://localhost:8761</span></div>
+        <div class="pm-r"><span class="ok-r">Eureka dashboard appears. "Instances currently registered" is empty — correct. Services register here in later steps.</span></div>
+      </div></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 4 — Create the Product Service project.</div>
+  </div>
+</div>
+
+<!-- ===== GROUP 2: PRODUCT SERVICE ===== -->
+<div class="grp-banner" id="g2"><span class="grp-dot">2</span><h2>Group 2 &mdash; Product Service (steps 4-10)</h2></div>
+
+<div class="step" id="s4">
+  <div class="step-head"><span class="step-num">4</span><div class="sh"><span class="sl">Product Service</span><h3>Create the project</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this because product-service is the first business service — it stores products and the Order Service will call it to get product prices.</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <p>Go to <strong>start.spring.io</strong>. Artifact: <code>product-service</code>. Add four dependencies:</p>
+      <table><thead><tr><th>Dependency</th><th>Why</th></tr></thead><tbody>
+        <tr><td>Spring Web</td><td>Enables REST endpoints</td></tr>
+        <tr><td>Spring Data JPA</td><td>Connects Java to MySQL</td></tr>
+        <tr><td>MySQL Driver</td><td>Talks to MySQL</td></tr>
+        <tr><td>Eureka Discovery Client</td><td>Registers this service with Eureka automatically</td></tr>
+      </tbody></table>
+      <p>Also run in MySQL: <code>CREATE DATABASE product_db;</code></p></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td colspan="3" style="color:var(--muted);font-style:italic;">None at project creation.</td></tr>
+      </tbody></table></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 5 — Create the main class.</div>
+  </div>
+</div>
+
+<div class="step" id="s5">
+  <div class="step-head"><span class="step-num">5</span><div class="sh"><span class="sl">Product Service</span><h3>Main application class</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this because every Spring Boot app needs one main class to start. No extra annotation needed — Eureka registration is automatic from the dependency added in Step 4.</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <span class="filepath">product-service/src/main/java/com/ecommerce/productservice/ProductServiceApplication.java</span></div>
+    <div class="row"><div class="rl">Is this mandatory</div>
+      <div class="mand-box mand-yes">YES — every Spring Boot app needs exactly one main class.</div></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td><code>@SpringBootApplication</code></td><td>Starts Spring Boot. Auto-generated — keep it.</td><td><span class="ta">AUTOMATIC</span></td></tr>
+        <tr><td><code>@EnableEurekaClient</code></td><td>Old annotation for Eureka registration.</td><td><span class="tn">NOT NEEDED</span></td></tr>
+      </tbody></table>
+      <div class="callout c-note"><div class="ct">Why NOT NEEDED here?</div><p>Spring Boot 3.x registers with Eureka automatically the moment you add the Eureka Discovery Client dependency. You do not write <code>@EnableEurekaClient</code> — it does nothing extra.</p></div></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">product-service/src/main/java/com/ecommerce/productservice/ProductServiceApplication.java</span>
+      <pre><code><span class="ck">package</span> com.ecommerce.productservice;
+<span class="ck">import</span> org.springframework.boot.SpringApplication;
+<span class="ck">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
+
+<span class="ca">@SpringBootApplication</span>  <span class="cm">// starts Spring Boot — nothing else needed here</span>
+<span class="ck">public class</span> ProductServiceApplication {
+    <span class="ck">public static void</span> main(String[] args) {
+        SpringApplication.run(ProductServiceApplication.class, args);
+    }
+}</code></pre></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 6 — Create the Product entity (the database table definition).</div>
+  </div>
+</div>
+
+<div class="step" id="s6">
+  <div class="step-head"><span class="step-num">6</span><div class="sh"><span class="sl">Product Service</span><h3>Product entity</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this because JPA needs a Java class to know what columns to create in the <code>products</code> table in MySQL.</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <span class="filepath">product-service/src/main/java/com/ecommerce/productservice/model/Product.java</span></div>
+    <div class="row"><div class="rl">Is this mandatory</div>
+      <div class="mand-box mand-yes">YES — without it there is no table and nothing to store.</div></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td><code>@Entity</code></td><td>Tells JPA: map this class to a database table.</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@Table(name="products")</code></td><td>Sets the table name. If omitted, JPA uses the class name.</td><td><span class="to">OPTIONAL</span></td></tr>
+        <tr><td><code>@Id</code></td><td>Marks the primary key field. JPA needs this to identify rows.</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@GeneratedValue</code></td><td>Database auto-generates the id (1, 2, 3...). Without it you set the id yourself.</td><td><span class="to">OPTIONAL</span></td></tr>
+        <tr><td><code>@Column</code></td><td>Customises a column (nullable, unique). Not needed for simple fields.</td><td><span class="to">OPTIONAL</span></td></tr>
+      </tbody></table></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">product-service/src/main/java/com/ecommerce/productservice/model/Product.java</span>
+      <pre><code><span class="ck">package</span> com.ecommerce.productservice.model;
+<span class="ck">import</span> jakarta.persistence.*;
+<span class="ck">import</span> java.math.BigDecimal;
+
+<span class="ca">@Entity</span>                     <span class="cm">// MANDATORY: map this class to a DB table</span>
+<span class="ca">@Table</span>(name = <span class="cs">"products"</span>)  <span class="cm">// OPTIONAL: name the table "products"</span>
+<span class="ck">public class</span> Product {
+
+    <span class="ca">@Id</span>                     <span class="cm">// MANDATORY: this is the primary key</span>
+    <span class="ca">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)  <span class="cm">// DB auto-generates id</span>
+    <span class="ck">private</span> Long id;
+
+    <span class="ck">private</span> String name;        <span class="cm">// plain column, no annotation needed</span>
+    <span class="ck">private</span> BigDecimal price;   <span class="cm">// plain column</span>
+    <span class="ck">private</span> Integer quantity;   <span class="cm">// plain column</span>
+
+    <span class="ck">public</span> Product() {}         <span class="cm">// JPA requires a no-argument constructor</span>
+
+    <span class="cm">// getters and setters — required for JPA and JSON</span>
+    <span class="ck">public</span> Long getId()           { <span class="ck">return</span> id; }
+    <span class="ck">public</span> String getName()       { <span class="ck">return</span> name; }
+    <span class="ck">public void</span> setName(String n)  { <span class="ck">this</span>.name = n; }
+    <span class="ck">public</span> BigDecimal getPrice()  { <span class="ck">return</span> price; }
+    <span class="ck">public void</span> setPrice(BigDecimal p) { <span class="ck">this</span>.price = p; }
+    <span class="ck">public</span> Integer getQuantity()  { <span class="ck">return</span> quantity; }
+    <span class="ck">public void</span> setQuantity(Integer q) { <span class="ck">this</span>.quantity = q; }
+}</code></pre></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 7 — Create ProductRepository (the database query interface).</div>
+  </div>
+</div>
+
+<div class="step" id="s7">
+  <div class="step-head"><span class="step-num">7</span><div class="sh"><span class="sl">Product Service</span><h3>ProductRepository interface</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this because it gives us save, findById, findAll, and deleteById for free — Spring writes all the SQL. We write zero SQL.</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <span class="filepath">product-service/src/main/java/com/ecommerce/productservice/repository/ProductRepository.java</span></div>
+    <div class="row"><div class="rl">Is this mandatory</div>
+      <div class="mand-box mand-yes">YES — without it the service class has no way to read or write the database.</div></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td colspan="3" style="color:var(--muted);font-style:italic;">None — Spring detects this interface automatically because it extends JpaRepository. No annotation needed on the interface itself.</td></tr>
+      </tbody></table></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">product-service/src/main/java/com/ecommerce/productservice/repository/ProductRepository.java</span>
+      <pre><code><span class="ck">package</span> com.ecommerce.productservice.repository;
+<span class="ck">import</span> com.ecommerce.productservice.model.Product;
+<span class="ck">import</span> org.springframework.data.jpa.repository.JpaRepository;
+
+<span class="cm">// This is an INTERFACE, not a class.
+// Extending JpaRepository&lt;Product, Long&gt; gives you for free:
+//   save(product), findById(id), findAll(), deleteById(id)
+// Spring writes the implementation — you write nothing else.</span>
+<span class="ck">public interface</span> ProductRepository <span class="ck">extends</span> JpaRepository&lt;Product, Long&gt; {
+    <span class="cm">// add custom queries here as method names if needed</span>
+}</code></pre></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 8 — Create ProductService (the business logic class).</div>
+  </div>
+</div>
+
+<div class="step" id="s8">
+  <div class="step-head"><span class="step-num">8</span><div class="sh"><span class="sl">Product Service</span><h3>ProductService class</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this because the controller should not talk directly to the repository — the service class sits in between and holds the business logic.</div></div>
+    <div class="row"><div class="rl">What to create — uses Step 6 (Product) and Step 7 (ProductRepository)</div>
+      <span class="filepath">product-service/src/main/java/com/ecommerce/productservice/service/ProductService.java</span></div>
+    <div class="row"><div class="rl">Is this mandatory</div>
+      <div class="mand-box mand-yes">YES — without <code>@Service</code>, Spring does not manage this class and the controller cannot inject it.</div></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td><code>@Service</code></td><td>Marks this as a Spring-managed component so it can be injected anywhere.</td><td><span class="tm">MANDATORY</span></td></tr>
+      </tbody></table></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">product-service/src/main/java/com/ecommerce/productservice/service/ProductService.java</span>
+      <pre><code><span class="ck">package</span> com.ecommerce.productservice.service;
+<span class="ck">import</span> com.ecommerce.productservice.model.Product;
+<span class="ck">import</span> com.ecommerce.productservice.repository.ProductRepository;
+<span class="ck">import</span> org.springframework.stereotype.Service;
+<span class="ck">import java.util</span>.List;
+
+<span class="ca">@Service</span>  <span class="cm">// MANDATORY: makes this a Spring-managed component</span>
+<span class="ck">public class</span> ProductService {
+
+    <span class="ck">private final</span> ProductRepository repo;
+
+    <span class="ck">public</span> ProductService(ProductRepository repo) {
+        <span class="ck">this</span>.repo = repo;  <span class="cm">// Spring injects the repository automatically</span>
+    }
+
+    <span class="ck">public</span> List&lt;Product&gt; getAll()           { <span class="ck">return</span> repo.findAll(); }
+    <span class="ck">public</span> Product getById(Long id)          { <span class="ck">return</span> repo.findById(id).orElseThrow(); }
+    <span class="ck">public</span> Product save(Product p)           { <span class="ck">return</span> repo.save(p); }
+    <span class="ck">public void</span>    delete(Long id)           { repo.deleteById(id); }
+    <span class="ck">public</span> Product update(Long id, Product p) {
+        Product existing = getById(id);
+        existing.setName(p.getName());
+        existing.setPrice(p.getPrice());
+        existing.setQuantity(p.getQuantity());
+        <span class="ck">return</span> repo.save(existing);
+    }
+}</code></pre></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 9 — Create ProductController (the REST endpoints).</div>
+  </div>
+</div>
+
+<div class="step" id="s9">
+  <div class="step-head"><span class="step-num">9</span><div class="sh"><span class="sl">Product Service</span><h3>ProductController</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this because the controller is the only place that receives HTTP requests from the outside world and returns responses. Uses Step 8 (ProductService).</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <span class="filepath">product-service/src/main/java/com/ecommerce/productservice/controller/ProductController.java</span></div>
+    <div class="row"><div class="rl">Is this mandatory</div>
+      <div class="mand-box mand-yes">YES — without the controller there are no HTTP endpoints to call.</div></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td><code>@RestController</code></td><td>Marks this as a REST controller. Method returns become JSON.</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@RequestMapping("/products")</code></td><td>All URLs in this class start with /products.</td><td><span class="to">OPTIONAL</span></td></tr>
+        <tr><td><code>@GetMapping</code></td><td>Maps a method to HTTP GET at a path.</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@PostMapping</code></td><td>Maps a method to HTTP POST.</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@PutMapping("/{id}")</code></td><td>Maps a method to HTTP PUT at /products/{id}.</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@DeleteMapping("/{id}")</code></td><td>Maps a method to HTTP DELETE.</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@PathVariable</code></td><td>Reads the id value from the URL (e.g. the 1 in /products/1).</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@RequestBody</code></td><td>Converts the JSON body into a Product object.</td><td><span class="tm">MANDATORY</span></td></tr>
+      </tbody></table></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">product-service/src/main/java/com/ecommerce/productservice/controller/ProductController.java</span>
+      <pre><code><span class="ck">package</span> com.ecommerce.productservice.controller;
+<span class="ck">import</span> com.ecommerce.productservice.model.Product;
+<span class="ck">import</span> com.ecommerce.productservice.service.ProductService;
+<span class="ck">import</span> org.springframework.web.bind.annotation.*;
+<span class="ck">import java.util</span>.List;
+
+<span class="ca">@RestController</span>              <span class="cm">// MANDATORY: marks as REST controller, returns JSON</span>
+<span class="ca">@RequestMapping</span>(<span class="cs">"/products"</span>) <span class="cm">// OPTIONAL: prefix for all URLs below</span>
+<span class="ck">public class</span> ProductController {
+
+    <span class="ck">private final</span> ProductService service;
+    <span class="ck">public</span> ProductController(ProductService service) { <span class="ck">this</span>.service = service; }
+
+    <span class="ca">@GetMapping</span>              <span class="cm">// GET /products — list all</span>
+    <span class="ck">public</span> List&lt;Product&gt; all() { <span class="ck">return</span> service.getAll(); }
+
+    <span class="ca">@GetMapping</span>(<span class="cs">"/{id}"</span>)     <span class="cm">// GET /products/1 — get one</span>
+    <span class="ck">public</span> Product one(<span class="ca">@PathVariable</span> Long id) { <span class="ck">return</span> service.getById(id); }
+
+    <span class="ca">@PostMapping</span>             <span class="cm">// POST /products — create new</span>
+    <span class="ck">public</span> Product create(<span class="ca">@RequestBody</span> Product p) { <span class="ck">return</span> service.save(p); }
+
+    <span class="ca">@PutMapping</span>(<span class="cs">"/{id}"</span>)    <span class="cm">// PUT /products/1 — update</span>
+    <span class="ck">public</span> Product update(<span class="ca">@PathVariable</span> Long id, <span class="ca">@RequestBody</span> Product p) {
+        <span class="ck">return</span> service.update(id, p);
+    }
+
+    <span class="ca">@DeleteMapping</span>(<span class="cs">"/{id}"</span>) <span class="cm">// DELETE /products/1 — delete</span>
+    <span class="ck">public void</span> delete(<span class="ca">@PathVariable</span> Long id) { service.delete(id); }
+}</code></pre></div>
+    <div class="row"><div class="rl test">Test — run Eureka (step 3) and product-service, then:</div>
+      <div class="pm">
+        <div class="pm-title">Create a product</div>
+        <div class="pm-row"><span class="pm-l post">POST</span><span class="pm-v">http://localhost:8081/products</span></div>
+        <div class="pm-row"><span class="pm-l" style="color:#9aa6b4;">Body</span><span class="pm-v">{"name":"Wireless Mouse","price":799.00,"quantity":50}</span></div>
+        <div class="pm-r"><span class="ok-r">{"id":1,"name":"Wireless Mouse","price":799.00,"quantity":50}</span></div>
+      </div>
+      <div class="pm">
+        <div class="pm-title">Get the product back</div>
+        <div class="pm-row"><span class="pm-l get">GET</span><span class="pm-v">http://localhost:8081/products/1</span></div>
+        <div class="pm-r"><span class="ok-r">{"id":1,"name":"Wireless Mouse","price":799.00,"quantity":50}</span></div>
+      </div></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 10 — Configure application.properties for Product Service.</div>
+  </div>
+</div>
+
+<div class="step" id="s10">
+  <div class="step-head"><span class="step-num">10</span><div class="sh"><span class="sl">Product Service</span><h3>application.properties</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this to set the service name, port, MySQL connection, and the Eureka address. The name <code>product-service</code> is critical — the Feign client in Order Service uses this exact name to find it.</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <span class="filepath">product-service/src/main/resources/application.properties</span></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td colspan="3" style="color:var(--muted);font-style:italic;">None — properties file only.</td></tr>
+      </tbody></table></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">product-service/src/main/resources/application.properties</span>
+      <pre><code>spring.application.name=product-service       <span class="cm"># CRITICAL: Feign uses this exact name</span>
+server.port=8081
+
+spring.datasource.url=jdbc:mysql://localhost:3306/product_db?createDatabaseIfNotExist=true
+spring.datasource.username=root               <span class="cm"># your MySQL username</span>
+spring.datasource.password=yourpassword       <span class="cm"># your MySQL password</span>
+spring.jpa.hibernate.ddl-auto=update          <span class="cm"># create/update tables automatically</span>
+spring.jpa.show-sql=true                      <span class="cm"># print SQL in console (good for learning)</span>
+
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
+<span class="cm"># tells this service where to register with Eureka</span></code></pre></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 11 — Create the Order Service project. Keep Product Service running.</div>
+  </div>
+</div>
+
+<!-- ===== GROUP 3: ORDER SERVICE ===== -->
+<div class="grp-banner" id="g3"><span class="grp-dot" style="background:var(--brand-2);">3</span><h2>Group 3 &mdash; Order Service (steps 11-19)</h2></div>
+
+<div class="step" id="s11">
+  <div class="step-head"><span class="step-num teal">11</span><div class="sh"><span class="sl">Order Service</span><h3>Create the project</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this because Order Service creates orders and must call Product Service to get the product price. The OpenFeign dependency makes that call look like a normal Java method call.</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <p>Go to <strong>start.spring.io</strong>. Artifact: <code>order-service</code>. Add five dependencies:</p>
+      <table><thead><tr><th>Dependency</th><th>Why</th></tr></thead><tbody>
+        <tr><td>Spring Web</td><td>Enables REST endpoints</td></tr>
+        <tr><td>Spring Data JPA</td><td>Connects Java to MySQL</td></tr>
+        <tr><td>MySQL Driver</td><td>Talks to MySQL</td></tr>
+        <tr><td>Eureka Discovery Client</td><td>Registers this service with Eureka</td></tr>
+        <tr><td>OpenFeign</td><td>Lets this service call other services by name</td></tr>
+      </tbody></table>
+      <p>Also run in MySQL: <code>CREATE DATABASE order_db;</code></p></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td colspan="3" style="color:var(--muted);font-style:italic;">None at project creation.</td></tr>
+      </tbody></table></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 12 — Create the main class and add <code>@EnableFeignClients</code>.</div>
+  </div>
+</div>
+
+<div class="step" id="s12">
+  <div class="step-head"><span class="step-num teal">12</span><div class="sh"><span class="sl">Order Service</span><h3>Main application class</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this because <code>@EnableFeignClients</code> must be on the main class — it tells Spring to find all Feign interfaces (Step 14) and build the real HTTP calling code from them. Without it, the Feign interface is silently ignored.</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <span class="filepath">order-service/src/main/java/com/ecommerce/orderservice/OrderServiceApplication.java</span></div>
+    <div class="row"><div class="rl">Is this mandatory</div>
+      <div class="mand-box mand-yes">YES — without <code>@EnableFeignClients</code>, the ProductClient interface in Step 14 is ignored and every Feign call fails with a null pointer error.</div></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td><code>@SpringBootApplication</code></td><td>Starts Spring Boot. Auto-generated — keep it.</td><td><span class="ta">AUTOMATIC</span></td></tr>
+        <tr><td><code>@EnableFeignClients</code></td><td>Scans for <code>@FeignClient</code> interfaces and builds real calling code from them.</td><td><span class="tm">MANDATORY</span></td></tr>
+      </tbody></table></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">order-service/src/main/java/com/ecommerce/orderservice/OrderServiceApplication.java</span>
+      <pre><code><span class="ck">package</span> com.ecommerce.orderservice;
+<span class="ck">import</span> org.springframework.boot.SpringApplication;
+<span class="ck">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
+<span class="ck">import</span> org.springframework.cloud.openfeign.EnableFeignClients;
+
+<span class="ca">@SpringBootApplication</span>  <span class="cm">// starts Spring Boot — auto-generated, keep it</span>
+<span class="ca">@EnableFeignClients</span>     <span class="cm">// MANDATORY: finds Feign interfaces and builds real HTTP calls from them</span>
+<span class="ck">public class</span> OrderServiceApplication {
+    <span class="ck">public static void</span> main(String[] args) {
+        SpringApplication.run(OrderServiceApplication.class, args);
+    }
+}</code></pre></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 13 — Create ProductResponse DTO (the data holder for product data received from Product Service).</div>
+  </div>
+</div>
+
+<div class="step" id="s13">
+  <div class="step-head"><span class="step-num teal">13</span><div class="sh"><span class="sl">Order Service</span><h3>ProductResponse DTO</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this because when Feign calls Product Service and gets back JSON, it needs a local class to put that data into. This is a plain class — no database connection, no annotations.</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <span class="filepath">order-service/src/main/java/com/ecommerce/orderservice/dto/ProductResponse.java</span></div>
+    <div class="row"><div class="rl">Is this mandatory</div>
+      <div class="mand-box mand-yes">YES — Feign needs a local class to map the JSON response into. Without it, you cannot use the product data.</div></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td colspan="3" style="color:var(--muted);font-style:italic;">None at all. This is a plain Java class. No @Entity, no @Table, no database of any kind.</td></tr>
+      </tbody></table>
+      <div class="callout c-warn"><div class="ct">Why NOT copy the Product entity from product-service?</div><p>If you import the Product class from product-service, Order Service depends on product-service's code. If product-service changes its fields, Order Service breaks. Keep them independent: copy only the fields you need into this plain DTO class.</p></div></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">order-service/src/main/java/com/ecommerce/orderservice/dto/ProductResponse.java</span>
+      <pre><code><span class="ck">package</span> com.ecommerce.orderservice.dto;
+<span class="ck">import</span> java.math.BigDecimal;
+
+<span class="cm">// Plain Java class. No annotations. No database connection.
+// Only include the fields Order Service actually needs from the product.</span>
+<span class="ck">public class</span> ProductResponse {
+    <span class="ck">private</span> Long id;
+    <span class="ck">private</span> String name;
+    <span class="ck">private</span> BigDecimal price;   <span class="cm">// needed to calculate totalPrice</span>
+
+    <span class="ck">public</span> ProductResponse() {}
+    <span class="ck">public</span> Long getId()           { <span class="ck">return</span> id; }
+    <span class="ck">public void</span> setId(Long i)      { id = i; }
+    <span class="ck">public</span> String getName()       { <span class="ck">return</span> name; }
+    <span class="ck">public void</span> setName(String n)  { name = n; }
+    <span class="ck">public</span> BigDecimal getPrice()  { <span class="ck">return</span> price; }
+    <span class="ck">public void</span> setPrice(BigDecimal p) { price = p; }
+}</code></pre></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 14 — Create ProductClient (the Feign interface that calls Product Service).</div>
+  </div>
+</div>
+
+<div class="step" id="s14">
+  <div class="step-head"><span class="step-num teal">14</span><div class="sh"><span class="sl">Order Service &mdash; KEY STEP</span><h3>ProductClient (Feign interface)</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this because this is how Order Service calls Product Service. You describe the call once in an interface — Feign builds the real HTTP call automatically. Uses Step 12 (<code>@EnableFeignClients</code> must already be on the main class).</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <span class="filepath">order-service/src/main/java/com/ecommerce/orderservice/client/ProductClient.java</span></div>
+    <div class="row"><div class="rl">Is this mandatory</div>
+      <div class="mand-box mand-yes">YES — this is the only way Order Service communicates with Product Service.</div></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td><code>@FeignClient(name="product-service")</code></td><td>Marks this interface as a caller. The name MUST exactly match <code>spring.application.name</code> in product-service's properties.</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@GetMapping("/products/{id}")</code></td><td>Tells Feign which URL on product-service to call. Must match the controller in Step 9.</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@PathVariable("id")</code></td><td>Fills the {id} placeholder in the URL with the method argument.</td><td><span class="tm">MANDATORY</span></td></tr>
+      </tbody></table>
+      <div class="callout c-note"><div class="ct">This is an INTERFACE, not a class</div><p>You do not write any implementation. Feign reads this interface at startup (because of <code>@EnableFeignClients</code> in Step 12) and builds the real HTTP code automatically. Calling <code>productClient.getById(1L)</code> sends a real GET request to product-service.</p></div></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">order-service/src/main/java/com/ecommerce/orderservice/client/ProductClient.java</span>
+      <pre><code><span class="ck">package</span> com.ecommerce.orderservice.client;
+<span class="ck">import</span> com.ecommerce.orderservice.dto.ProductResponse;
+<span class="ck">import</span> org.springframework.cloud.openfeign.FeignClient;
+<span class="ck">import</span> org.springframework.web.bind.annotation.GetMapping;
+<span class="ck">import</span> org.springframework.web.bind.annotation.PathVariable;
+
+<span class="ca">@FeignClient</span>(name = <span class="cs">"product-service"</span>)
+<span class="cm">// MANDATORY: name must match spring.application.name=product-service exactly
+// Feign asks Eureka to resolve "product-service" to a real address — no port hardcoded</span>
+<span class="ck">public interface</span> ProductClient {
+
+    <span class="ca">@GetMapping</span>(<span class="cs">"/products/{id}"</span>)
+    <span class="cm">    // MANDATORY: the URL on product-service to call — must match ProductController step 9</span>
+    ProductResponse getById(<span class="ca">@PathVariable</span>(<span class="cs">"id"</span>) Long id);
+    <span class="cm">    // @PathVariable("id"): fills {id} in the URL
+    // Returns ProductResponse (our local DTO) — Feign converts the JSON automatically</span>
+}</code></pre></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 15 — Create the Order entity.</div>
+  </div>
+</div>
+
+<div class="step" id="s15">
+  <div class="step-head"><span class="step-num teal">15</span><div class="sh"><span class="sl">Order Service</span><h3>Order entity</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this to define the <code>orders</code> table in MySQL. It stores only the productId (a reference), not a copy of the product — the two services keep their data independent.</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <span class="filepath">order-service/src/main/java/com/ecommerce/orderservice/model/Order.java</span></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td><code>@Entity</code></td><td>Maps this class to a database table.</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@Table(name="orders")</code></td><td>"order" is a reserved SQL word — MUST rename to "orders".</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@Id</code></td><td>Primary key field.</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@GeneratedValue</code></td><td>Database auto-generates the id.</td><td><span class="to">OPTIONAL</span></td></tr>
+      </tbody></table></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">order-service/src/main/java/com/ecommerce/orderservice/model/Order.java</span>
+      <pre><code><span class="ck">package</span> com.ecommerce.orderservice.model;
+<span class="ck">import</span> jakarta.persistence.*;
+<span class="ck">import</span> java.math.BigDecimal;
+
+<span class="ca">@Entity</span>
+<span class="ca">@Table</span>(name = <span class="cs">"orders"</span>)  <span class="cm">// MANDATORY: "order" is reserved in SQL — use "orders"</span>
+<span class="ck">public class</span> Order {
+
+    <span class="ca">@Id</span>
+    <span class="ca">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)
+    <span class="ck">private</span> Long orderId;
+
+    <span class="ck">private</span> Long productId;       <span class="cm">// stores only the id, not the full product</span>
+    <span class="ck">private</span> Integer quantity;
+    <span class="ck">private</span> BigDecimal totalPrice; <span class="cm">// price * quantity, calculated in OrderService</span>
+
+    <span class="ck">public</span> Order() {}
+    <span class="ck">public</span> Long getOrderId()        { <span class="ck">return</span> orderId; }
+    <span class="ck">public</span> Long getProductId()      { <span class="ck">return</span> productId; }
+    <span class="ck">public void</span> setProductId(Long p) { productId = p; }
+    <span class="ck">public</span> Integer getQuantity()    { <span class="ck">return</span> quantity; }
+    <span class="ck">public void</span> setQuantity(Integer q) { quantity = q; }
+    <span class="ck">public</span> BigDecimal getTotalPrice()    { <span class="ck">return</span> totalPrice; }
+    <span class="ck">public void</span> setTotalPrice(BigDecimal t) { totalPrice = t; }
+}</code></pre></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 16 — Create OrderRepository.</div>
+  </div>
+</div>
+
+<div class="step" id="s16">
+  <div class="step-head"><span class="step-num teal">16</span><div class="sh"><span class="sl">Order Service</span><h3>OrderRepository interface</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">Same pattern as Step 7 — this gives us save, findById, findAll, deleteById for orders, with no SQL to write.</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <span class="filepath">order-service/src/main/java/com/ecommerce/orderservice/repository/OrderRepository.java</span></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td colspan="3" style="color:var(--muted);font-style:italic;">None — Spring detects this automatically from the JpaRepository extension.</td></tr>
+      </tbody></table></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">order-service/src/main/java/com/ecommerce/orderservice/repository/OrderRepository.java</span>
+      <pre><code><span class="ck">package</span> com.ecommerce.orderservice.repository;
+<span class="ck">import</span> com.ecommerce.orderservice.model.Order;
+<span class="ck">import</span> org.springframework.data.jpa.repository.JpaRepository;
+
+<span class="ck">public interface</span> OrderRepository <span class="ck">extends</span> JpaRepository&lt;Order, Long&gt; {
+    <span class="cm">// save, findById, findAll, deleteById — all provided for free</span>
+}</code></pre></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 17 — Create OrderService (where the Feign call happens).</div>
+  </div>
+</div>
+
+<div class="step" id="s17">
+  <div class="step-head"><span class="step-num teal">17</span><div class="sh"><span class="sl">Order Service</span><h3>OrderService class</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this because this is where the Feign call happens — it calls product-service to get the price, calculates totalPrice, then saves the order. Uses Step 14 (ProductClient) and Step 16 (OrderRepository).</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <span class="filepath">order-service/src/main/java/com/ecommerce/orderservice/service/OrderService.java</span></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td><code>@Service</code></td><td>Marks as Spring-managed component so it can be injected into the controller.</td><td><span class="tm">MANDATORY</span></td></tr>
+      </tbody></table></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">order-service/src/main/java/com/ecommerce/orderservice/service/OrderService.java</span>
+      <pre><code><span class="ck">package</span> com.ecommerce.orderservice.service;
+<span class="ck">import</span> com.ecommerce.orderservice.client.ProductClient;
+<span class="ck">import</span> com.ecommerce.orderservice.dto.ProductResponse;
+<span class="ck">import</span> com.ecommerce.orderservice.model.Order;
+<span class="ck">import</span> com.ecommerce.orderservice.repository.OrderRepository;
+<span class="ck">import</span> org.springframework.stereotype.Service;
+<span class="ck">import java.util</span>.List;
+
+<span class="ca">@Service</span>  <span class="cm">// MANDATORY</span>
+<span class="ck">public class</span> OrderService {
+
+    <span class="ck">private final</span> OrderRepository repo;
+    <span class="ck">private final</span> ProductClient productClient;
+    <span class="cm">// productClient looks like a normal object but every call goes over HTTP to product-service</span>
+
+    <span class="ck">public</span> OrderService(OrderRepository repo, ProductClient productClient) {
+        <span class="ck">this</span>.repo = repo;
+        <span class="ck">this</span>.productClient = productClient;
+    }
+
+    <span class="ck">public</span> List&lt;Order&gt; getAll()  { <span class="ck">return</span> repo.findAll(); }
+    <span class="ck">public</span> Order getById(Long id) { <span class="ck">return</span> repo.findById(id).orElseThrow(); }
+
+    <span class="ck">public</span> Order createOrder(Long productId, Integer quantity) {
+        ProductResponse product = productClient.getById(productId);
+        <span class="cm">// This one line sends a real HTTP GET to http://product-service/products/{productId}
+        // Feign handles the network call, JSON conversion, and error handling</span>
+
+        Order order = <span class="ck">new</span> Order();
+        order.setProductId(productId);
+        order.setQuantity(quantity);
+        order.setTotalPrice(product.getPrice().multiply(
+            java.math.BigDecimal.valueOf(quantity)));
+        <span class="cm">// totalPrice = price from product-service * quantity entered by user</span>
+        <span class="ck">return</span> repo.save(order);
+    }
+
+    <span class="ck">public void</span> delete(Long id) { repo.deleteById(id); }
+}</code></pre></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 18 — Create OrderController.</div>
+  </div>
+</div>
+
+<div class="step" id="s18">
+  <div class="step-head"><span class="step-num teal">18</span><div class="sh"><span class="sl">Order Service</span><h3>OrderController</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this to expose the HTTP endpoints for orders. The POST /orders endpoint is the key one — it triggers the Feign call to product-service internally. Uses Step 17 (OrderService).</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <span class="filepath">order-service/src/main/java/com/ecommerce/orderservice/controller/OrderController.java</span></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td><code>@RestController</code></td><td>Marks as REST controller, method returns become JSON.</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@RequestMapping("/orders")</code></td><td>All URLs in this class start with /orders.</td><td><span class="to">OPTIONAL</span></td></tr>
+        <tr><td><code>@GetMapping</code> / <code>@PostMapping</code> / <code>@DeleteMapping</code></td><td>Map methods to HTTP actions.</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@PathVariable</code></td><td>Reads the id from the URL.</td><td><span class="tm">MANDATORY</span></td></tr>
+        <tr><td><code>@RequestBody</code></td><td>Converts the JSON request body into an object.</td><td><span class="tm">MANDATORY</span></td></tr>
+      </tbody></table></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">order-service/src/main/java/com/ecommerce/orderservice/controller/OrderController.java</span>
+      <pre><code><span class="ck">package</span> com.ecommerce.orderservice.controller;
+<span class="ck">import</span> com.ecommerce.orderservice.model.Order;
+<span class="ck">import</span> com.ecommerce.orderservice.service.OrderService;
+<span class="ck">import</span> org.springframework.web.bind.annotation.*;
+<span class="ck">import java.util</span>.List;
+
+<span class="ca">@RestController</span>
+<span class="ca">@RequestMapping</span>(<span class="cs">"/orders"</span>)
+<span class="ck">public class</span> OrderController {
+
+    <span class="ck">private final</span> OrderService service;
+    <span class="ck">public</span> OrderController(OrderService service) { <span class="ck">this</span>.service = service; }
+
+    <span class="ca">@GetMapping</span>
+    <span class="ck">public</span> List&lt;Order&gt; all() { <span class="ck">return</span> service.getAll(); }
+
+    <span class="ca">@GetMapping</span>(<span class="cs">"/{id}"</span>)
+    <span class="ck">public</span> Order one(<span class="ca">@PathVariable</span> Long id) { <span class="ck">return</span> service.getById(id); }
+
+    <span class="ca">@PostMapping</span>  <span class="cm">// this call triggers the Feign call to product-service</span>
+    <span class="ck">public</span> Order create(<span class="ca">@RequestBody</span> CreateOrderRequest req) {
+        <span class="ck">return</span> service.createOrder(req.productId(), req.quantity());
+    }
+
+    <span class="ca">@DeleteMapping</span>(<span class="cs">"/{id}"</span>)
+    <span class="ck">public void</span> delete(<span class="ca">@PathVariable</span> Long id) { service.delete(id); }
+
+    <span class="ck">public record</span> CreateOrderRequest(Long productId, Integer quantity) {}
+    <span class="cm">// A record is a concise class that holds two fields from the JSON body</span>
+}</code></pre></div>
+    <div class="next-box"><strong>DONE. NEXT STEP IS:</strong> Step 19 — Configure application.properties for Order Service.</div>
+  </div>
+</div>
+
+<div class="step" id="s19">
+  <div class="step-head"><span class="step-num teal">19</span><div class="sh"><span class="sl">Order Service</span><h3>application.properties</h3></div></div>
+  <div class="step-body">
+    <div class="row"><div class="rl why">Why</div>
+      <div class="why-box">We need this to set the service name, port 8082, the order_db MySQL connection, and the Eureka address. Order Service uses its OWN database — never shared with product-service.</div></div>
+    <div class="row"><div class="rl">What to create</div>
+      <span class="filepath">order-service/src/main/resources/application.properties</span></div>
+    <div class="row"><div class="rl ann">Annotations needed</div>
+      <table><thead><tr><th>Annotation</th><th>What it does</th><th>Status</th></tr></thead><tbody>
+        <tr><td colspan="3" style="color:var(--muted);font-style:italic;">None — properties file only.</td></tr>
+      </tbody></table></div>
+    <div class="row"><div class="rl">Code</div>
+      <span class="filepath">order-service/src/main/resources/application.properties</span>
+      <pre><code>spring.application.name=order-service         <span class="cm"># name for this service in Eureka</span>
+server.port=8082
+
+spring.datasource.url=jdbc:mysql://localhost:3306/order_db?createDatabaseIfNotExist=true
+spring.datasource.username=root               <span class="cm"># your MySQL username</span>
+spring.datasource.password=yourpassword       <span class="cm"># your MySQL password</span>
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
+<span class="cm"># same Eureka address as product-service — all services point here</span></code></pre></div>
+    <div class="row"><div class="rl test">Test — all three services running, then:</div>
+      <div class="pm">
+        <div class="pm-title">Create an order (triggers Feign call to product-service)</div>
+        <div class="pm-row"><span class="pm-l post">POST</span><span class="pm-v">http://localhost:8082/orders</span></div>
+        <div class="pm-row"><span class="pm-l" style="color:#9aa6b4;">Body</span><span class="pm-v">{"productId":1,"quantity":3}</span></div>
+        <div class="pm-r"><span class="ok-r">{"orderId":1,"productId":1,"quantity":3,"totalPrice":2397.00}</span><br><span style="color:#7e93a6;font-size:.79rem;">totalPrice = 799.00 (from product-service via Feign) * 3</span></div>
+      </div></div>
+    <div class="next-box"><strong>ALL 19 STEPS DONE.</strong> Go to the run order and end-to-end tests below.</div>
+  </div>
+</div>
+
+<!-- ===== AFTER ALL STEPS ===== -->
+<div class="ref-card" id="runorder">
+  <h2>Run order — open each in its own terminal</h2>
+  <table><thead><tr><th>Order</th><th>Service</th><th>Port</th><th>Command</th><th>Why this order</th></tr></thead><tbody>
+    <tr><td>1</td><td>Eureka Server</td><td>8761</td><td><code>cd eureka-server &amp;&amp; mvn spring-boot:run</code></td><td>Must be running before anything else registers.</td></tr>
+    <tr><td>2</td><td>Product Service</td><td>8081</td><td><code>cd product-service &amp;&amp; mvn spring-boot:run</code></td><td>Must be in Eureka before Order Service starts.</td></tr>
+    <tr><td>3</td><td>Order Service</td><td>8082</td><td><code>cd order-service &amp;&amp; mvn spring-boot:run</code></td><td>Needs Eureka running and product-service registered.</td></tr>
+  </tbody></table>
+  <div class="callout c-warn"><div class="ct">Common startup error</div><p>"No instances available for product-service" — Order Service started before Product Service finished registering. Wait until <code>http://localhost:8761</code> shows PRODUCT-SERVICE in the list, then start Order Service.</p></div>
+</div>
+
+<div class="ref-card" id="e2e">
+  <h2>End-to-end test — 5 Postman calls in order</h2>
+  <div class="pm">
+    <div class="pm-title">Call 1 — Create a product in product-service</div>
+    <div class="pm-row"><span class="pm-l post">POST</span><span class="pm-v">http://localhost:8081/products</span></div>
+    <div class="pm-row"><span class="pm-l" style="color:#9aa6b4;">Body</span><span class="pm-v">{"name":"Wireless Mouse","price":799.00,"quantity":50}</span></div>
+    <div class="pm-r"><span class="ok-r">{"id":1,"name":"Wireless Mouse","price":799.00,"quantity":50}</span></div>
+  </div>
+  <div class="pm">
+    <div class="pm-title">Call 2 — Verify product-service registered in Eureka</div>
+    <div class="pm-row"><span class="pm-l get">Browser</span><span class="pm-v">http://localhost:8761</span></div>
+    <div class="pm-r"><span class="ok-r">Eureka dashboard shows PRODUCT-SERVICE and ORDER-SERVICE in the registered list.</span></div>
+  </div>
+  <div class="pm">
+    <div class="pm-title">Call 3 — Get a product directly from product-service</div>
+    <div class="pm-row"><span class="pm-l get">GET</span><span class="pm-v">http://localhost:8081/products/1</span></div>
+    <div class="pm-r"><span class="ok-r">{"id":1,"name":"Wireless Mouse","price":799.00,"quantity":50}</span></div>
+  </div>
+  <div class="pm">
+    <div class="pm-title">Call 4 — Create an order (PROVES FEIGN WORKS: totalPrice is calculated using product's price)</div>
+    <div class="pm-row"><span class="pm-l post">POST</span><span class="pm-v">http://localhost:8082/orders</span></div>
+    <div class="pm-row"><span class="pm-l" style="color:#9aa6b4;">Body</span><span class="pm-v">{"productId":1,"quantity":3}</span></div>
+    <div class="pm-r"><span class="ok-r">{"orderId":1,"productId":1,"quantity":3,"totalPrice":2397.00}</span><br><span style="color:#7e93a6;font-size:.79rem;">2397 = 799 x 3. Order Service did NOT know the price — Feign fetched it from product-service.</span></div>
+  </div>
+  <div class="pm">
+    <div class="pm-title">Call 5 — Get the saved order back</div>
+    <div class="pm-row"><span class="pm-l get">GET</span><span class="pm-v">http://localhost:8082/orders/1</span></div>
+    <div class="pm-r"><span class="ok-r">{"orderId":1,"productId":1,"quantity":3,"totalPrice":2397.00}</span></div>
+  </div>
+</div>
+
+<div class="ref-card" id="allann">
+  <h2>Every annotation used in this project</h2>
+  <table><thead><tr><th>Annotation</th><th>What it does</th><th>File</th><th>Status</th></tr></thead><tbody>
+    <tr><td><code>@SpringBootApplication</code></td><td>Starts Spring Boot. Auto-generated in every main class.</td><td>All main classes</td><td><span class="ta">AUTOMATIC</span></td></tr>
+    <tr><td><code>@EnableEurekaServer</code></td><td>Turns the app into the service directory.</td><td>EurekaServerApplication</td><td><span class="tm">MANDATORY</span></td></tr>
+    <tr><td><code>@EnableEurekaClient</code></td><td>Old annotation, does nothing in Spring Boot 3.x.</td><td>Anywhere</td><td><span class="tn">NOT NEEDED</span></td></tr>
+    <tr><td><code>@EnableFeignClients</code></td><td>Finds @FeignClient interfaces and builds real HTTP calling code from them.</td><td>OrderServiceApplication</td><td><span class="tm">MANDATORY</span></td></tr>
+    <tr><td><code>@Entity</code></td><td>Maps this class to a database table.</td><td>Product, Order</td><td><span class="tm">MANDATORY</span></td></tr>
+    <tr><td><code>@Table(name="...")</code></td><td>Sets the table name. Required for Order (reserved SQL word).</td><td>Product, Order</td><td><span class="tm">MANDATORY</span> for Order, <span class="to">OPTIONAL</span> for Product</td></tr>
+    <tr><td><code>@Id</code></td><td>Marks the primary key field.</td><td>Product.id, Order.orderId</td><td><span class="tm">MANDATORY</span></td></tr>
+    <tr><td><code>@GeneratedValue</code></td><td>Database auto-generates the id.</td><td>Product.id, Order.orderId</td><td><span class="to">OPTIONAL</span></td></tr>
+    <tr><td><code>@Column</code></td><td>Customises a column. Not needed for simple fields.</td><td>Any entity field</td><td><span class="to">OPTIONAL</span></td></tr>
+    <tr><td><code>@Service</code></td><td>Marks class as Spring-managed so it can be injected.</td><td>ProductService, OrderService</td><td><span class="tm">MANDATORY</span></td></tr>
+    <tr><td><code>@RestController</code></td><td>Marks as REST controller, returns JSON.</td><td>ProductController, OrderController</td><td><span class="tm">MANDATORY</span></td></tr>
+    <tr><td><code>@RequestMapping</code></td><td>Sets URL prefix for all methods in the class.</td><td>Controllers</td><td><span class="to">OPTIONAL</span></td></tr>
+    <tr><td><code>@GetMapping</code></td><td>Maps a method to HTTP GET.</td><td>Controllers</td><td><span class="tm">MANDATORY</span></td></tr>
+    <tr><td><code>@PostMapping</code></td><td>Maps a method to HTTP POST.</td><td>Controllers</td><td><span class="tm">MANDATORY</span></td></tr>
+    <tr><td><code>@PutMapping</code></td><td>Maps a method to HTTP PUT.</td><td>ProductController</td><td><span class="tm">MANDATORY</span></td></tr>
+    <tr><td><code>@DeleteMapping</code></td><td>Maps a method to HTTP DELETE.</td><td>Controllers</td><td><span class="tm">MANDATORY</span></td></tr>
+    <tr><td><code>@PathVariable</code></td><td>Reads a value from the URL (e.g. id in /products/1).</td><td>Controller method params</td><td><span class="tm">MANDATORY</span></td></tr>
+    <tr><td><code>@RequestBody</code></td><td>Converts the JSON request body into a Java object.</td><td>Controller method params</td><td><span class="tm">MANDATORY</span></td></tr>
+    <tr><td><code>@FeignClient(name="...")</code></td><td>Marks an interface as a caller of the named service. Name must match spring.application.name.</td><td>ProductClient</td><td><span class="tm">MANDATORY</span></td></tr>
+  </tbody></table>
+</div>
+
+</main>
+</div>
+<footer><b>Spring Boot Microservices: Simple Step-by-Step</b> &mdash; 19 steps &middot; 3 services &middot; every annotation labelled &middot; test after every step.</footer>
+</body>
+</html>

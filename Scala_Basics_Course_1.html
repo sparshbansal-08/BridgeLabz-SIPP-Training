@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scala Basics Course — Complete Beginner Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
+:root{
+  --bg:#fff;--bg2:#f7f9fc;--bg3:#eef2f8;--border:#e2e8f0;--border2:#cbd5e1;
+  --text:#0f172a;--t2:#475569;--t3:#94a3b8;
+  --accent:#1e40af;--accent2:#0e7490;
+  --blue:#1e40af;--green:#15803d;--orange:#c2410c;--purple:#6d28d9;
+  --teal:#0e7490;--red:#b91c1c;--amber:#b45309;--pink:#be185d;
+  --dark:#0f172a;--dark2:#1e293b;--dark3:#334155;--dtext:#e2e8f0;
+  --sw:256px;--readw:760px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);
+  font-size:15px;line-height:1.7;display:flex;-webkit-font-smoothing:antialiased}
+/* SIDEBAR */
+.sidebar{width:var(--sw);min-height:100vh;background:var(--bg2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;padding-bottom:32px}
+.sidebar::-webkit-scrollbar{width:3px}.sidebar::-webkit-scrollbar-thumb{background:var(--border2)}
+.sb-top{padding:20px 18px 16px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.sb-top h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--accent);letter-spacing:-.2px}
+.sb-top p{font-size:11px;color:var(--t3);margin-top:4px;font-weight:500}
+.nav-sec{padding:14px 18px 6px;font-size:9px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:var(--t3)}
+.ni{display:block;padding:8px 18px;font-size:12.5px;font-weight:500;color:var(--t2);
+  text-decoration:none;border-left:2px solid transparent;transition:all .12s;line-height:1.35}
+.ni:hover{background:var(--bg3);color:var(--text)}
+.ni.active{background:#eff4ff;color:var(--accent);border-left-color:var(--accent);font-weight:600}
+.ni-sub{font-size:9.5px;color:var(--t3);display:block;margin-bottom:1px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+/* PROGRESS */
+.pbar{position:fixed;top:0;left:var(--sw);right:0;height:2px;background:var(--border);z-index:200}
+.pbar-f{height:2px;background:var(--accent);transition:width .3s}
+/* MAIN */
+.main{margin-left:var(--sw);flex:1;min-width:0}
+/* HERO — restrained, professional */
+.hero{background:var(--bg2);border-bottom:1px solid var(--border);padding:40px 48px 34px}
+.hero-inner{max-width:var(--readw);margin:0 auto}
+.phase-badge{display:inline-block;background:#eff4ff;border:1px solid #c7d7fb;color:var(--accent);
+  font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 12px;border-radius:5px;margin-bottom:16px}
+.hero h1{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;line-height:1.15;
+  margin-bottom:12px;color:var(--text);letter-spacing:-.5px}
+.hero p{font-size:15px;color:var(--t2);line-height:1.65;margin-bottom:18px;max-width:680px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:7px}
+.hero-chip{background:#fff;border:1px solid var(--border);color:var(--t2);
+  font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:5px}
+/* CONTENT — capped reading width */
+.content{padding:8px 48px 60px}
+.content > section{max-width:var(--readw);margin:0 auto}
+section{padding:32px 0 28px;border-bottom:1px solid var(--border)}
+section:last-child{border-bottom:none}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:6px}
+h2{font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:var(--text);
+  margin-bottom:14px;letter-spacing:-.3px}
+h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);
+  margin:20px 0 8px;padding-left:11px;border-left:3px solid var(--accent)}
+h4{font-family:'Syne',sans-serif;font-size:13.5px;font-weight:800;color:var(--accent);margin:16px 0 6px}
+p{color:var(--t2);margin-bottom:11px;font-size:15px;line-height:1.7}
+p strong{color:var(--text);font-weight:600}
+ul,ol{padding-left:22px;margin-bottom:11px}
+li{color:var(--t2);margin-bottom:6px;line-height:1.65;font-size:15px}
+li strong{color:var(--text);font-weight:600}
+code{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:var(--bg3);
+  color:var(--orange);padding:2px 6px;border-radius:4px;border:1px solid var(--border)}
+/* CODE BLOCK */
+.cb{background:var(--dark);border-radius:8px;margin:14px 0;overflow:hidden;border:1px solid var(--dark2)}
+.cbh{display:flex;justify-content:space-between;align-items:center;padding:8px 15px;
+  background:var(--dark2);border-bottom:1px solid var(--dark3)}
+.cf{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#94a3b8;font-weight:500}
+.bd{font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;padding:2px 7px;border-radius:4px}
+.bj{background:rgba(194,65,12,.22);color:#fb923c}
+pre{padding:15px 18px;overflow-x:auto;font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;line-height:1.7;color:var(--dtext);white-space:pre}
+pre::-webkit-scrollbar{height:4px}pre::-webkit-scrollbar-thumb{background:var(--dark3)}
+pre code{font-family:inherit;font-size:inherit;background:transparent;color:inherit;padding:0;border:none}
+pre .kw{color:#c084fc}pre .an{color:#fbbf24}pre .cl{color:#67e8f9}
+pre .fn{color:#86efac}pre .st{color:#86efac}pre .cm{color:#64748b;font-style:italic}
+pre .tg{color:#f87171}pre .nb{color:#f87171}pre .num{color:#fb923c}
+/* WHY BOX — refined */
+.why-box{border-radius:8px;margin:14px 0;overflow:hidden;border:1px solid var(--border)}
+.why-row{display:grid;grid-template-columns:130px 1fr;border-bottom:1px solid var(--border)}
+.why-row:last-child{border-bottom:none}
+.why-label{padding:12px 14px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:center;
+  justify-content:center;text-align:center;line-height:1.35}
+.why-val{padding:12px 16px;font-size:14px;color:var(--t2);border-left:1px solid var(--border);line-height:1.6}
+.why-val strong{color:var(--text)}
+.wl-what{background:#eff4ff;color:var(--blue)}
+.wl-prob{background:#fef2f2;color:var(--red)}
+.wl-why{background:#f0fdf4;color:var(--green)}
+.wl-how{background:#f5f3ff;color:var(--purple)}
+.wl-real{background:#fff7ed;color:var(--orange)}
+.wl-inter{background:#fefce8;color:var(--amber)}
+.wl-mand{background:#ecfeff;color:var(--teal)}
+/* NOTES */
+.note{border-radius:6px;padding:12px 16px;margin:12px 0;font-size:14px;border-left:3px solid;line-height:1.6}
+.note strong{margin-right:4px;font-weight:700}
+.nblue{background:#eff4ff;border-color:var(--blue);color:#1e3a8a}
+.ngreen{background:#f0fdf4;border-color:var(--green);color:#14532d}
+.norange{background:#fff7ed;border-color:var(--orange);color:#9a3412}
+.nred{background:#fef2f2;border-color:var(--red);color:#991b1b}
+.nteal{background:#ecfeff;border-color:var(--teal);color:#155e75}
+.npurple{background:#f5f3ff;border-color:var(--purple);color:#5b21b6}
+/* TABLE — clean */
+.tw{overflow-x:auto;margin:14px 0;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead{background:var(--bg3)}
+th{padding:9px 14px;text-align:left;font-size:10px;font-weight:700;letter-spacing:.5px;
+  text-transform:uppercase;color:var(--t2);border-bottom:1px solid var(--border)}
+td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--t2);vertical-align:top;line-height:1.55}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:var(--bg2)}
+td code{font-size:12px}
+/* FLOW STEPS */
+.flow-steps{margin:14px 0}
+.fs-item{display:flex;gap:14px;margin-bottom:14px;align-items:flex-start}
+.fs-num{width:26px;height:26px;border-radius:6px;background:var(--accent);color:#fff;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:800;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;margin-top:1px}
+.fs-body{flex:1}
+.fs-title{font-weight:700;color:var(--text);font-size:14.5px;margin-bottom:3px}
+.fs-desc{font-size:14px;color:var(--t2);line-height:1.6}
+.fs-desc code{font-size:12.5px}
+/* ARCH */
+.arch{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px;margin:14px 0}
+.arch-title{font-family:'Syne',sans-serif;font-size:10.5px;font-weight:800;letter-spacing:.5px;
+  text-transform:uppercase;color:var(--accent);margin-bottom:14px;text-align:center}
+.arch-row{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:5px 0}
+.arch-box,.abox{border-radius:7px;padding:9px 14px;font-size:12.5px;font-weight:700;text-align:center;
+  min-width:104px;line-height:1.35;font-family:'Syne',sans-serif;border:1px solid}
+.arch-box small,.abox small{display:block;font-size:10px;font-weight:500;margin-top:3px;opacity:.85}
+.ab-blue{background:#eff4ff;border-color:#c7d7fb;color:var(--blue)}
+.ab-green{background:#f0fdf4;border-color:#bbf7d0;color:var(--green)}
+.ab-red{background:#fef2f2;border-color:#fecaca;color:var(--red)}
+.ab-teal{background:#ecfeff;border-color:#a5f3fc;color:var(--teal)}
+.ab-purple{background:#f5f3ff;border-color:#ddd6fe;color:var(--purple)}
+.ab-amber{background:#fefce8;border-color:#fde68a;color:var(--amber)}
+.ab-pink{background:#fdf2f8;border-color:#fbcfe8;color:var(--pink)}
+.arch-arr,.arch-arr-v{color:var(--t3);font-weight:700}
+.arch-arr-v{font-size:13px;text-align:center;margin:3px 0;display:block;letter-spacing:.3px}
+/* PROS CONS */
+.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:14px 0}
+.pros-box,.cons-box{border-radius:8px;padding:14px 16px;border:1px solid}
+.pros-box{background:#f0fdf4;border-color:#bbf7d0}.cons-box{background:#fef2f2;border-color:#fecaca}
+.pc-title{font-family:'Syne',sans-serif;font-size:11.5px;font-weight:800;margin-bottom:9px;text-transform:uppercase;letter-spacing:.4px}
+.pros-box .pc-title{color:var(--green)}.cons-box .pc-title{color:var(--red)}
+.pros-box ul,.cons-box ul{padding-left:18px;margin:0}
+.pros-box li,.cons-box li{font-size:13.5px;margin-bottom:6px;line-height:1.55}
+/* IQ */
+.iq-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:14px 0}
+.iq-title{font-family:'Syne',sans-serif;font-size:10.5px;font-weight:800;text-transform:uppercase;
+  letter-spacing:.5px;color:var(--amber);margin-bottom:12px}
+.iq-item{margin-bottom:13px;padding-bottom:13px;border-bottom:1px solid var(--border)}
+.iq-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.iq-q{font-weight:700;color:var(--text);font-size:14px;margin-bottom:4px}
+.iq-a{color:var(--t2);font-size:14px;line-height:1.65}
+@media(max-width:900px){
+  :root{--sw:0px}.sidebar{display:none}
+  .hero{padding:24px 20px}.hero h1{font-size:24px}
+  .content{padding:8px 20px 40px}
+  .pros-cons{grid-template-columns:1fr}
+  .why-row{grid-template-columns:100px 1fr}
+}
+/* ALIASES for older guide structure (sidebar-header / nav-item / nav-num) */
+.sidebar-header{padding:20px 18px 16px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.sidebar-header h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--accent);letter-spacing:-.2px}
+.sidebar-header p{font-size:11px;color:var(--t3);margin-top:4px;font-weight:500}
+.nav-item{display:block;padding:8px 18px;font-size:12.5px;font-weight:500;color:var(--t2);
+  text-decoration:none;border-left:2px solid transparent;transition:all .12s;line-height:1.35}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:#eff4ff;color:var(--accent);border-left-color:var(--accent);font-weight:600}
+.nav-num{font-size:9.5px;color:var(--t3);display:block;margin-bottom:1px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+/* ALIASES for Java Interview guide structure */
+.htag{display:inline-block;background:#eff4ff;border:1px solid #c7d7fb;color:var(--accent);
+  font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 12px;border-radius:5px;margin-bottom:16px}
+.ni span{font-size:9.5px;color:var(--t3);display:block;margin-bottom:1px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+.ni.active span{color:var(--accent)}
+/* Q&A blocks (Java Interview guide) */
+.qa-block{background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:14px 16px;margin:12px 0}
+.qa-q{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.qa-q-badge{flex-shrink:0;width:22px;height:22px;border-radius:5px;background:var(--accent);
+  color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center}
+.qa-q-text{font-weight:700;color:var(--text);font-size:14.5px;line-height:1.5;padding-top:1px}
+.qa-a{padding-left:32px;border-top:1px solid var(--border);padding-top:10px;margin-top:2px}
+.qa-a p{color:var(--t2);font-size:14px;line-height:1.65;margin-bottom:8px}
+.qa-a p:last-child{margin-bottom:0}
+.qa-a strong{color:var(--text)}
+.qa-a ol,.qa-a ul{padding-left:20px;margin-bottom:8px}
+.qa-a li{font-size:14px;line-height:1.6;margin-bottom:5px}
+
+.sshot-box{background:var(--bg3);border:1px dashed var(--border2);border-radius:8px;padding:13px 17px;margin:13px 0}
+.sshot-title{font-family:'Syne',sans-serif;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--teal);margin-bottom:5px}
+.sshot-desc{font-size:13.5px;color:var(--t2);line-height:1.65}
+.lab-step{display:flex;gap:12px;margin-bottom:12px;align-items:flex-start}
+.lab-step-num{width:26px;height:26px;border-radius:6px;background:var(--accent);color:#fff;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <div class="sb-top"><h3>Scala Basics</h3><p>Complete Beginner Course</p></div>
+  <div class="nav-sec">Navigation</div><a href="#s-intro" class="ni"><span class="ni-sub">INTRO</span>Introduction to Scala</a>
+<a href="#s-why" class="ni"><span class="ni-sub">WHY SCALA</span>Why Scala Matters</a>
+<a href="#s-setup" class="ni"><span class="ni-sub">SETUP</span>Toolchain Setup — JDK, Scala, sbt</a>
+<a href="#s-vscode" class="ni"><span class="ni-sub">EDITOR</span>VS Code + Metals / IntelliJ</a>
+<a href="#s-fundamentals" class="ni"><span class="ni-sub">FUNDAMENTALS</span>Language Fundamentals</a>
+<a href="#s-functions" class="ni"><span class="ni-sub">FUNCTIONS</span>Functions</a>
+<a href="#s-oop" class="ni"><span class="ni-sub">OOP</span>Object-Oriented Programming</a>
+<a href="#s-collections" class="ni"><span class="ni-sub">COLLECTIONS</span>Collections</a>
+<a href="#s-pattern" class="ni"><span class="ni-sub">PATTERN MATCHING</span>Pattern Matching</a>
+<a href="#s-sbt" class="ni"><span class="ni-sub">SBT</span>sbt and Project Structure</a>
+<a href="#s-testing" class="ni"><span class="ni-sub">TESTING</span>Testing Basics</a>
+<a href="#s-json" class="ni"><span class="ni-sub">JSON & HTTP</span>JSON and HTTP</a>
+<a href="#s-cli" class="ni"><span class="ni-sub">CLI LAB</span>CLI Application Lab</a>
+<a href="#s-concurrency" class="ni"><span class="ni-sub">CONCURRENCY</span>Concurrency and Futures</a>
+<a href="#s-fp" class="ni"><span class="ni-sub">FUNCTIONAL</span>Functional Programming</a>
+<a href="#s-streams" class="ni"><span class="ni-sub">STREAMS</span>Streams</a>
+<a href="#s-persistence" class="ni"><span class="ni-sub">PERSISTENCE</span>Persistence and Databases</a>
+<a href="#s-webservices" class="ni"><span class="ni-sub">WEB SERVICES</span>Web Services with http4s</a>
+<a href="#s-advanced" class="ni"><span class="ni-sub">ADVANCED</span>Advanced Scala 3 Features</a>
+<a href="#s-packaging" class="ni"><span class="ni-sub">PACKAGING</span>Packaging and Distribution</a>
+<a href="#s-performance" class="ni"><span class="ni-sub">PERFORMANCE</span>Performance and Profiling</a>
+<a href="#s-troubleshoot" class="ni"><span class="ni-sub">TROUBLESHOOT</span>Troubleshooting and Pitfalls</a>
+<a href="#s-capstone" class="ni"><span class="ni-sub">CAPSTONE</span>Capstone Project</a>
+<a href="#s-glossary" class="ni"><span class="ni-sub">GLOSSARY</span>Glossary of Terms</a>
+<a href="#s-cheatsheet" class="ni"><span class="ni-sub">CHEAT SHEET</span>Scala Cheat Sheet</a>
+<a href="#s-roadmap" class="ni"><span class="ni-sub">ROADMAP</span>Further Learning Roadmap</a>
+
+</div>
+<div class="pbar"><div class="pbar-f" id="pf" style="width:0%"></div></div>
+<div class="main">
+<div class="hero"><div class="hero-inner">
+<div class="phase-badge">Beginner Friendly — No Prior Knowledge Needed</div>
+<h1>Scala Basics Course<br>for Complete Beginners</h1>
+<p>A complete, step-by-step guide to Scala — from first installation through functions, OOP, collections, testing, HTTP, and a capstone project. Every term is defined before it is used. Every code example is copy-pasteable. No emojis. Professional, clear, and easy to read.</p>
+<div class="hero-chips">
+<span class="hero-chip">26 Sections</span>
+<span class="hero-chip">Copy-pasteable code</span>
+<span class="hero-chip">Screenshot guides</span>
+<span class="hero-chip">Hands-on labs</span>
+<span class="hero-chip">Troubleshooting</span>
+<span class="hero-chip">Glossary and cheat sheet</span>
+<span class="hero-chip">India-specific notes</span>
+</div>
+</div></div>
+<div class="content"><section id="s-intro"><div class="sec-label">INTRODUCTION</div><h2>Introduction to Scala</h2>
+<div class="why-box"><div class="why-row"><div class="why-label wl-what">What is Scala?</div><div class="why-val">Scala is a programming language that runs on the <strong>Java Virtual Machine (JVM)</strong>. The word Scala stands for <em>Scalable Language</em>. It is designed to grow with your needs — from small scripts to large distributed systems.</div></div><div class="why-row"><div class="why-label wl-how">Who created it?</div><div class="why-val">Martin Odersky at EPFL (Switzerland) created Scala in 2003. Version 3, the current version, was released in 2021 with a cleaner, simpler syntax.</div></div><div class="why-row"><div class="why-label wl-why">Plain analogy</div><div class="why-val">Think of Java as a kitchen with every tool available, but many of them require a lot of setup. Scala is the same kitchen but with smarter shortcuts, safer defaults, and tools that do more with less code.</div></div><div class="why-row"><div class="why-label wl-real">Runs on JVM</div><div class="why-val">JVM stands for Java Virtual Machine — a program installed on your computer that runs compiled code. Because Scala runs on the JVM, you can use all existing Java libraries in Scala. The two languages work side by side.</div></div></div>
+<div class="note npurple"><strong>Beginner:</strong> You do not need to know Java to learn Scala. This document starts from zero and explains every term before using it.</div>
+<div class="tw"><table><thead><tr><th>Term</th><th>Plain meaning</th></tr></thead><tbody><tr><td>JVM</td><td>Java Virtual Machine — the runtime that executes your program</td></tr><tr><td>Compiled</td><td>Your code is converted to JVM bytecode before running</td></tr><tr><td>Functional</td><td>A programming style where functions are the main building blocks</td></tr><tr><td>Object-Oriented</td><td>A style where you model things as objects with data and behaviour</td></tr><tr><td>sbt</td><td>Scala Build Tool — manages your project, dependencies, and compilation</td></tr><tr><td>REPL</td><td>Read Evaluate Print Loop — an interactive console for trying code instantly</td></tr></tbody></table></div>
+<div class="note nblue"><strong>India:</strong> Scala is widely used in Indian product companies (Flipkart, Swiggy, PhonePe, TCS, Infosys labs). Knowing Scala is a strong differentiator in the job market alongside Java and Python.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Scala is a modern JVM language combining object-oriented and functional programming. It runs wherever Java runs and uses the same ecosystem.</div>
+</section>
+<section id="s-why"><div class="sec-label">WHY SCALA</div><h2>Why Scala Matters</h2>
+<p>Before investing time in a language, you should understand why it is worth learning. Here are the key reasons.</p>
+<div class="tw"><table><thead><tr><th>Reason</th><th>What It Means in Practice</th></tr></thead><tbody><tr><td>Less code, same result</td><td>What takes 50 lines in Java often takes 10 lines in Scala</td></tr><tr><td>Type safety</td><td>The compiler catches errors before you run the code — fewer bugs at runtime</td></tr><tr><td>Functional + OOP</td><td>You can use both styles in the same project — choose what fits</td></tr><tr><td>Java interoperability</td><td>Every Java library works in Scala — Spring, Hibernate, everything</td></tr><tr><td>Big data dominant</td><td>Apache Spark (the world's most used big data framework) is written in Scala</td></tr><tr><td>Concurrency built in</td><td>Futures and actors make concurrent code safer and simpler</td></tr><tr><td>Scala 3 is cleaner</td><td>The 2021 redesign removed many verbose patterns — easier to read and write</td></tr></tbody></table></div>
+<h3>Who Uses Scala in the Real World</h3><div class="tw"><table><thead><tr><th>Company / Project</th><th>What They Use Scala For</th></tr></thead><tbody><tr><td>Apache Spark</td><td>Distributed data processing — runs at every major data company</td></tr><tr><td>Twitter / X</td><td>Backend services (Finatra framework, Finagle)</td></tr><tr><td>LinkedIn</td><td>Data pipelines and backend microservices</td></tr><tr><td>Flipkart</td><td>E-commerce backend services</td></tr><tr><td>Netflix</td><td>Data engineering pipelines</td></tr><tr><td>Airbnb</td><td>Data platform</td></tr></tbody></table></div>
+<div class="note npurple"><strong>Tip:</strong> If your goal is big data, machine learning pipelines, or high-throughput backend systems in India's product companies, Scala is one of the most valuable skills you can add alongside Python.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Scala reduces boilerplate, catches errors early, and is the language of choice for Spark, streaming, and high-performance backend services worldwide.</div>
+</section>
+<section id="s-setup"><div class="sec-label">SETUP</div><h2>Toolchain Setup — JDK, Scala, sbt</h2>
+<div class="note norange"><strong>Important:</strong> Install in this exact order: JDK first, then Scala, then sbt. Do not skip a step.</div>
+<div class="tw"><table><thead><tr><th>Tool</th><th>Version</th><th>Role</th><th>Download</th></tr></thead><tbody><tr><td>JDK (Temurin)</td><td>17 LTS</td><td>Runs compiled JVM code</td><td>adoptium.net</td></tr><tr><td>Scala</td><td>3.4.x</td><td>The language itself</td><td>scala-lang.org</td></tr><tr><td>sbt</td><td>1.10.x</td><td>Build tool — compiles, tests, runs</td><td>scala-sbt.org</td></tr><tr><td>VS Code + Metals</td><td>Latest</td><td>Code editor with Scala support</td><td>code.visualstudio.com</td></tr><tr><td>IntelliJ Community</td><td>2024.x (optional)</td><td>Alternative IDE</td><td>jetbrains.com</td></tr></tbody></table></div>
+<h3>Step 1 — Install JDK 17 (Temurin)</h3><div class="why-box"><div class="why-row"><div class="why-label wl-what">What is JDK?</div><div class="why-val">JDK stands for Java Development Kit. It includes the JVM (to run code) and the compiler (to convert your code to bytecode). Scala needs the JDK to run.</div></div><div class="why-row"><div class="why-label wl-why">Why Temurin?</div><div class="why-val">Temurin is the free, open-source build of JDK provided by the Eclipse Foundation. It is stable, free to use commercially, and works on all platforms.</div></div><div class="why-row"><div class="why-label wl-how">Why version 17?</div><div class="why-val">Version 17 is a Long-Term Support (LTS) release — it receives security fixes for years. It is the standard for Scala 3 in 2024.</div></div></div>
+<div class="cb"><div class="cbh"><span class="cf">Install JDK — Windows (PowerShell)</span><span class="bd bj">SHELL</span></div><pre><code># Option A: Download installer from https://adoptium.net
+# Select: JDK 17, Temurin, Windows x64, .msi installer
+# Run the .msi and accept all defaults
+
+# Option B: Install via winget
+winget install EclipseAdoptium.Temurin.17.JDK
+
+# Verify after install:
+java -version
+# Expected output:
+# openjdk version "17.0.x" 2024-...
+# OpenJDK Runtime Environment Temurin-17...</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Install JDK — macOS</span><span class="bd bj">SHELL</span></div><pre><code># Option A: Download .pkg from https://adoptium.net
+# Select: JDK 17, Temurin, macOS, .pkg installer
+
+# Option B: Use Homebrew
+brew tap homebrew/cask-versions
+brew install --cask temurin17
+
+# Verify:
+java -version</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Install JDK — Ubuntu / Debian Linux</span><span class="bd bj">SHELL</span></div><pre><code>sudo apt update
+sudo apt install temurin-17-jdk
+# If temurin is not found, add the repository first:
+wget -qO - https://packages.adoptium.net/artifactory/api/gpg/key/public | sudo apt-key add -
+echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
+sudo apt update && sudo apt install temurin-17-jdk
+
+java -version</code></pre></div>
+<div class="sshot-box"><div class="sshot-title">JDK Verified</div><div class="sshot-desc">Terminal / Command Prompt: type 'java -version' and press Enter. Output shows three lines starting with 'openjdk version 17.0.x'. If you see version 11 or 21, you have the wrong version installed.</div></div>
+<h3>Step 2 — Install Scala via Coursier (Recommended)</h3><div class="note ngreen"><strong>Key:</strong> Coursier is the official Scala installer. It installs Scala, sbt, and other tools in one command. It is the recommended method for all platforms.</div>
+<div class="cb"><div class="cbh"><span class="cf">Install Coursier and Scala — all platforms</span><span class="bd bj">SHELL</span></div><pre><code># Windows (PowerShell, run as Administrator):
+iwr -useb https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-win32.zip -OutFile cs.zip
+Expand-Archive cs.zip -DestinationPath .
+./cs setup
+
+# macOS:
+curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-apple-darwin.gz | gzip -d > cs
+chmod +x cs && ./cs setup
+
+# Linux:
+curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz | gzip -d > cs
+chmod +x cs && ./cs setup
+
+# After setup, restart your terminal, then verify:
+scala --version
+# Expected: Scala code runner version 3.4.x</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Verify Scala in the REPL</span><span class="bd bj">SHELL</span></div><pre><code># Start the Scala REPL (interactive console):
+scala
+
+# You will see:
+# Welcome to Scala 3.4.x
+# Type in expressions for evaluation.
+# scala>
+
+# Try your first expression:
+scala> 1 + 1
+# val res0: Int = 2
+
+# Exit the REPL:
+scala> :exit</code></pre></div>
+<div class="sshot-box"><div class="sshot-title">Scala REPL Open</div><div class="sshot-desc">Terminal: after typing 'scala', the prompt changes to 'scala>'. The welcome message shows the Scala version. Type '1 + 1' and press Enter. The REPL prints 'val res0: Int = 2'. This confirms Scala is installed correctly.</div></div>
+<h3>Step 3 — Install sbt</h3><div class="why-box"><div class="why-row"><div class="why-label wl-what">What is sbt?</div><div class="why-val">sbt stands for Scala Build Tool. It compiles your code, downloads libraries (dependencies), runs tests, and packages your application. You will use sbt for every project.</div></div><div class="why-row"><div class="why-label wl-why">Installed with Coursier?</div><div class="why-val">If you used Coursier above, sbt was already installed. If not, download the installer from scala-sbt.org.</div></div></div>
+<div class="cb"><div class="cbh"><span class="cf">Verify sbt</span><span class="bd bj">SHELL</span></div><pre><code>sbt --version
+# Expected: sbt version in this project: 1.10.x
+
+# Or: sbt sbtVersion
+# Expected: [info] 1.10.x</code></pre></div>
+<div class="sshot-box"><div class="sshot-title">sbt Version Check</div><div class="sshot-desc">Terminal: 'sbt --version' shows 'sbt version in this project: 1.10.x'. If you see an error, make sure sbt is on your PATH — restart the terminal after installation.</div></div>
+<div class="note nblue"><strong>India:</strong> Coursier downloads packages from the internet. If you have a slow connection, the first sbt project launch can take 10-15 minutes as it downloads the Scala compiler and standard library. After the first download, everything is cached locally in ~/.ivy2 and ~/.sbt and will be instant.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Install JDK 17 (Temurin), then use Coursier to install Scala and sbt. Verify with: java -version, scala --version, sbt --version.</div>
+</section>
+<section id="s-vscode"><div class="sec-label">EDITOR</div><h2>VS Code + Metals / IntelliJ</h2>
+<p>You can write Scala in any text editor, but a proper IDE gives you autocomplete, error highlighting, and inline documentation. Two good options exist: VS Code with Metals (lightweight) and IntelliJ IDEA Community (full-featured).</p>
+<h3>Option A — VS Code + Metals (Recommended for Beginners)</h3><div class="why-box"><div class="why-row"><div class="why-label wl-what">What is VS Code?</div><div class="why-val">Visual Studio Code is a free, lightweight code editor made by Microsoft. It runs on Windows, Mac, and Linux.</div></div><div class="why-row"><div class="why-label wl-why">What is Metals?</div><div class="why-val">Metals is the Scala language server. It adds Scala support to VS Code: autocomplete, error checking, go-to-definition, and more.</div></div></div>
+<div class="tw"><table><thead><tr><th>Step</th><th>Action</th><th>What Happens</th></tr></thead><tbody><tr><td>1</td><td>Download VS Code from code.visualstudio.com</td><td>Install the editor</td></tr><tr><td>2</td><td>Open VS Code → Extensions (Ctrl+Shift+X)</td><td>Open the extensions panel</td></tr><tr><td>3</td><td>Search for 'Metals' → Install 'Scala (Metals)'</td><td>Metals extension installed</td></tr><tr><td>4</td><td>Open a folder that contains a build.sbt file</td><td>Metals detects it as a Scala project</td></tr><tr><td>5</td><td>Click 'Import build' when Metals prompts</td><td>Metals downloads the project and enables all features</td></tr></tbody></table></div>
+<div class="sshot-box"><div class="sshot-title">VS Code with Metals</div><div class="sshot-desc">VS Code: Left panel shows file tree with build.sbt at root. Bottom status bar shows 'Metals: Indexing...' or 'Metals: Done'. A .scala file is open in the editor with syntax highlighting. Autocomplete popup is visible when typing a method name.</div></div>
+<div class="sshot-box"><div class="sshot-title">Metals Import Build Prompt</div><div class="sshot-desc">VS Code: After opening a Scala project folder, a blue notification appears at the bottom right: 'New sbt workspace detected. Would you like to import the build?' with a button 'Import build'. Click this button.</div></div>
+<h3>Option B — IntelliJ IDEA Community + Scala Plugin</h3><div class="tw"><table><thead><tr><th>Step</th><th>Action</th></tr></thead><tbody><tr><td>1</td><td>Download IntelliJ IDEA Community from jetbrains.com (free)</td></tr><tr><td>2</td><td>Install and open IntelliJ</td></tr><tr><td>3</td><td>Plugins → Marketplace → search 'Scala' → Install</td></tr><tr><td>4</td><td>File → New → Project → Scala → sbt</td></tr><tr><td>5</td><td>IntelliJ downloads sbt and sets up the project automatically</td></tr></tbody></table></div>
+<div class="sshot-box"><div class="sshot-title">IntelliJ New Scala Project</div><div class="sshot-desc">IntelliJ: New Project dialog. Left sidebar shows 'Scala' selected. Right panel shows sbt project template. Name field shows the project name. JDK dropdown shows '17 (Temurin)'. Scala version shows '3.4.x'. Click Create.</div></div>
+<div class="note npurple"><strong>Tip:</strong> For beginners, VS Code + Metals is lighter on memory and faster to start. For large projects or if you are already an IntelliJ user, use IntelliJ. Both options are free.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Install VS Code, then the Metals extension. Open any folder with a build.sbt file and click 'Import build'. The editor will highlight errors and provide autocomplete.</div>
+</section>
+<section id="s-fundamentals"><div class="sec-label">FUNDAMENTALS</div><h2>Language Fundamentals</h2>
+<p>In this section you will learn the basic building blocks of Scala: values, variables, types, and control flow. All examples can be run in the Scala REPL — type <code>scala</code> in your terminal to open it.</p>
+<h3>Values vs Variables</h3><div class="why-box"><div class="why-row"><div class="why-label wl-what">val — value (immutable)</div><div class="why-val">A <code>val</code> is a name for a value that cannot change. Once you set it, it is fixed. This is the preferred choice in Scala.</div></div><div class="why-row"><div class="why-label wl-prob">var — variable (mutable)</div><div class="why-val">A <code>var</code> can change after it is set. Use it rarely — only when you truly need to change the value.</div></div><div class="why-row"><div class="why-label wl-why">Why prefer val?</div><div class="why-val">Immutable values are easier to reason about. You never need to check 'did something change this?' — it never did. This reduces bugs.</div></div></div>
+<div class="cb"><div class="cbh"><span class="cf">val and var — REPL</span><span class="bd bj">SCALA</span></div><pre><code>val name = "Alice"       // val: fixed, cannot change
+val age  = 30            // Scala infers the type Int
+val pi   = 3.14159       // Scala infers Double
+
+var count = 0            // var: can change
+count = count + 1        // OK — count is now 1
+
+// name = "Bob"          // ERROR: cannot reassign val
+
+// Explicit type annotation (optional):
+val city: String = "Mumbai"
+val year: Int    = 2024</code></pre></div>
+<h3>Basic Types</h3><div class="tw"><table><thead><tr><th>Type</th><th>What It Stores</th><th>Example</th></tr></thead><tbody><tr><td>Int</td><td>Whole numbers (−2 billion to +2 billion)</td><td>42, −7, 0</td></tr><tr><td>Long</td><td>Very large whole numbers</td><td>123456789L</td></tr><tr><td>Double</td><td>Decimal numbers (64-bit)</td><td>3.14, −0.5</td></tr><tr><td>Float</td><td>Decimal numbers (32-bit, less precise)</td><td>2.71f</td></tr><tr><td>Boolean</td><td>True or false only</td><td>true, false</td></tr><tr><td>Char</td><td>A single character</td><td>'A', '3'</td></tr><tr><td>String</td><td>Text of any length</td><td>"Hello, World!"</td></tr><tr><td>Unit</td><td>No meaningful value (like void in Java)</td><td>returned by println</td></tr></tbody></table></div>
+<div class="cb"><div class="cbh"><span class="cf">String interpolation</span><span class="bd bj">SCALA</span></div><pre><code>val firstName = "Ravi"
+val score     = 95
+
+// s"" interpolation: embed variables directly
+val message = s"Hello, $firstName! Your score is $score."
+// message: String = Hello, Ravi! Your score is 95.
+
+// Expressions in interpolation:
+val grade = s"Grade: ${if score >= 90 then "A" else "B"}"
+// grade: String = Grade: A
+
+// f"" interpolation: formatted output
+val pi = 3.14159
+val formatted = f"Pi = $pi%.2f"
+// formatted: String = Pi = 3.14</code></pre></div>
+<h3>Control Flow</h3><div class="cb"><div class="cbh"><span class="cf">if / else — REPL</span><span class="bd bj">SCALA</span></div><pre><code>val temperature = 35
+
+// if/else is an expression — it returns a value
+val weather = if temperature > 30 then "hot" else "comfortable"
+// weather: String = hot
+
+// Multi-line:
+val advice =
+  if temperature > 40 then "Stay indoors"
+  else if temperature > 30 then "Carry water"
+  else "Enjoy the weather"</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">for loop — REPL</span><span class="bd bj">SCALA</span></div><pre><code>// Simple loop:
+for i <- 1 to 5 do
+  println(s"Step $i")
+
+// Loop over a list:
+val cities = List("Mumbai", "Delhi", "Bangalore")
+for city <- cities do
+  println(s"City: $city")
+
+// for expression (returns a List):
+val doubled = for x <- 1 to 5 yield x * 2
+// doubled: IndexedSeq[Int] = Vector(2, 4, 6, 8, 10)
+
+// while loop (use rarely):
+var n = 1
+while n <= 3 do
+  println(n)
+  n += 1</code></pre></div>
+<div class="sshot-box"><div class="sshot-title">Running Code in REPL</div><div class="sshot-desc">Terminal: REPL is open (scala> prompt visible). User typed: val name = "Alice" and pressed Enter. REPL shows: val name: String = Alice. The type was inferred automatically. Next line shows scala> again, ready for the next input.</div></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Use val for values that do not change (preferred). Use var rarely. Types are usually inferred. if/else is an expression that returns a value. for loops iterate over ranges or collections.</div>
+</section>
+<section id="s-functions"><div class="sec-label">FUNCTIONS</div><h2>Functions</h2>
+<p>A function is a named block of code that takes inputs, does something, and returns a result. Functions are central to Scala — you will write them constantly.</p>
+<div class="cb"><div class="cbh"><span class="cf">Defining functions</span><span class="bd bj">SCALA</span></div><pre><code>// Basic function:
+def greet(name: String): String =
+  s"Hello, $name!"
+
+greet("Priya")    // val res0: String = Hello, Priya!
+
+// Function with multiple parameters:
+def add(a: Int, b: Int): Int = a + b
+add(3, 4)         // val res1: Int = 7
+
+// Function with no return value (returns Unit):
+def printLine(text: String): Unit =
+  println(text)
+
+// Return type is often inferred — same result:
+def multiply(a: Int, b: Int) = a * b</code></pre></div>
+<h3>Default Parameters and Named Arguments</h3><div class="cb"><div class="cbh"><span class="cf">Default and named arguments</span><span class="bd bj">SCALA</span></div><pre><code>def createUser(name: String, role: String = "user", active: Boolean = true): String =
+  s"$name | role=$role | active=$active"
+
+createUser("Ananya")                          // uses defaults
+createUser("Raj", role = "admin")             // named argument
+createUser("Dev", active = false, role = "moderator") // any order</code></pre></div>
+<h3>Anonymous Functions (Lambdas)</h3><div class="why-box"><div class="why-row"><div class="why-label wl-what">What is a lambda?</div><div class="why-val">An anonymous function is a function without a name. You define it inline and pass it to other functions. In Scala, the syntax is <code>x => x + 1</code>.</div></div></div>
+<div class="cb"><div class="cbh"><span class="cf">Anonymous functions</span><span class="bd bj">SCALA</span></div><pre><code>// Named version:
+def double(x: Int): Int = x * 2
+
+// Anonymous version (same thing, no name):
+val double2 = (x: Int) => x * 2
+
+// Passing a function to another function:
+val numbers = List(1, 2, 3, 4, 5)
+val doubled = numbers.map(x => x * 2)
+// doubled: List[Int] = List(2, 4, 6, 8, 10)
+
+// Even shorter with underscore shorthand:
+val tripled = numbers.map(_ * 3)
+// tripled: List[Int] = List(3, 6, 9, 12, 15)</code></pre></div>
+<h3>Higher-Order Functions</h3><div class="note ngreen"><strong>Key:</strong> A higher-order function is a function that takes another function as a parameter, or returns a function. map, filter, and reduce are the three most important ones.</div>
+<div class="cb"><div class="cbh"><span class="cf">map, filter, reduce</span><span class="bd bj">SCALA</span></div><pre><code>val scores = List(45, 72, 88, 91, 60)
+
+// map: apply a function to each element
+val graded = scores.map(s => if s >= 60 then "Pass" else "Fail")
+// List(Fail, Pass, Pass, Pass, Pass)
+
+// filter: keep elements that match a condition
+val passed = scores.filter(_ >= 60)
+// List(72, 88, 91, 60)
+
+// reduce / fold: combine all elements into one
+val total = scores.reduce(_ + _)    // 356
+val avg   = total / scores.length   // 71</code></pre></div>
+<div class="sshot-box"><div class="sshot-title">map and filter Output</div><div class="sshot-desc">REPL: After running scores.filter(_ >= 60), REPL shows: val res: List[Int] = List(72, 88, 91, 60). Four elements remain — those with score 60 or above.</div></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Functions are defined with def. Default parameters simplify calls. Anonymous functions (lambdas) use => syntax. Higher-order functions map, filter, reduce process collections.</div>
+</section>
+<section id="s-oop"><div class="sec-label">OOP</div><h2>Object-Oriented Programming</h2>
+<p>Scala is fully object-oriented. Everything is an object. You define classes to model real-world things and use them to create instances.</p>
+<div class="cb"><div class="cbh"><span class="cf">Class definition</span><span class="bd bj">SCALA</span></div><pre><code>// A class models a thing with data (fields) and behaviour (methods)
+class Person(val name: String, val age: Int):
+  def greet(): String = s"Hi, I am $name, age $age."
+  def isAdult: Boolean = age >= 18
+
+val p = Person("Rahul", 25)
+p.name      // Rahul
+p.greet()   // Hi, I am Rahul, age 25.
+p.isAdult   // true</code></pre></div>
+<h3>Case Classes — The Scala Way to Model Data</h3><div class="why-box"><div class="why-row"><div class="why-label wl-what">What is a case class?</div><div class="why-val">A case class is a special class designed for holding data. Scala automatically gives it: equals, hashCode, toString, a copy method, and pattern matching support. You almost always use case classes for data.</div></div></div>
+<div class="cb"><div class="cbh"><span class="cf">Case class</span><span class="bd bj">SCALA</span></div><pre><code>case class Product(id: Int, name: String, price: Double)
+
+val p1 = Product(1, "Laptop", 55000.0)
+val p2 = Product(1, "Laptop", 55000.0)
+
+println(p1)        // Product(1,Laptop,55000.0)
+p1 == p2           // true  (structural equality — checks values)
+
+// copy: create a modified copy without changing the original
+val discounted = p1.copy(price = 49500.0)
+// Product(1,Laptop,49500.0)
+// p1 is still Product(1,Laptop,55000.0) — unchanged</code></pre></div>
+<h3>Traits — Defining Shared Behaviour</h3><div class="note ngreen"><strong>Key:</strong> A trait is like an interface in Java, but can have implemented methods too. Use traits to define what something can do, and classes to implement how.</div>
+<div class="cb"><div class="cbh"><span class="cf">Traits</span><span class="bd bj">SCALA</span></div><pre><code>trait Printable:
+  def print(): Unit = println(this.toString)
+
+trait Serializable:
+  def serialize(): String
+
+case class Order(id: Int, amount: Double) extends Printable, Serializable:
+  def serialize(): String = s"ORDER:$id:$amount"
+
+val o = Order(101, 2500.0)
+o.print()       // Order(101,2500.0)
+o.serialize()   // ORDER:101:2500.0</code></pre></div>
+<h3>Objects — Singletons and Companion Objects</h3><div class="cb"><div class="cbh"><span class="cf">Object (singleton)</span><span class="bd bj">SCALA</span></div><pre><code>// object = a singleton — only one instance ever exists
+// Use for utility functions, constants, and factory methods
+
+object MathUtils:
+  val PI = 3.14159
+  def circleArea(r: Double): Double = PI * r * r
+
+MathUtils.circleArea(5)  // 78.53975
+
+// Companion object: same name as a class — used for factory methods
+object Person:
+  def apply(fullName: String): Person =
+    val parts = fullName.split(" ")
+    Person(parts(0), parts(1))
+
+// Person(...) calls the apply method:
+// val p = Person("Anita Sharma")</code></pre></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Use class for objects with behaviour, case class for data, trait for shared behaviour, object for singletons and utilities. Case classes are the standard way to model domain data in Scala.</div>
+</section>
+<section id="s-collections"><div class="sec-label">COLLECTIONS</div><h2>Collections</h2>
+<p>Collections are data structures that hold multiple values. Scala has a rich, immutable-by-default collection library. The three most used are List, Map, and Set.</p>
+<div class="tw"><table><thead><tr><th>Collection</th><th>What It Holds</th><th>Key Property</th></tr></thead><tbody><tr><td>List</td><td>Ordered sequence of elements</td><td>Immutable, allows duplicates</td></tr><tr><td>Vector</td><td>Indexed sequence</td><td>Immutable, fast random access</td></tr><tr><td>Set</td><td>Unique elements</td><td>No duplicates, unordered</td></tr><tr><td>Map</td><td>Key-value pairs</td><td>Keys are unique</td></tr><tr><td>Option</td><td>Zero or one value</td><td>Replaces null safely</td></tr><tr><td>Seq</td><td>Generic sequence interface</td><td>Supertype of List and Vector</td></tr></tbody></table></div>
+<div class="cb"><div class="cbh"><span class="cf">List — common operations</span><span class="bd bj">SCALA</span></div><pre><code>val nums = List(3, 1, 4, 1, 5, 9, 2, 6)
+
+nums.head           // 3  (first element)
+nums.tail           // List(1, 4, 1, 5, 9, 2, 6)  (everything except head)
+nums.last           // 6
+nums.length         // 8
+nums.sorted         // List(1, 1, 2, 3, 4, 5, 6, 9)
+nums.distinct       // List(3, 1, 4, 5, 9, 2, 6)  (removes duplicates)
+nums.sum            // 31
+nums.max            // 9
+nums.contains(4)    // true
+nums.take(3)        // List(3, 1, 4)
+nums.drop(3)        // List(1, 5, 9, 2, 6)
+
+// Adding elements (creates a new List — original unchanged)
+val longer = 0 :: nums       // prepend
+val longer2 = nums :+ 10     // append</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Map — key/value pairs</span><span class="bd bj">SCALA</span></div><pre><code>val capitals = Map(
+  "India"   -> "New Delhi",
+  "Japan"   -> "Tokyo",
+  "Germany" -> "Berlin"
+)
+
+capitals("India")              // New Delhi
+capitals.get("India")          // Some(New Delhi)
+capitals.get("France")         // None  (safe — no exception)
+capitals.getOrElse("France", "Unknown")  // Unknown
+
+// Add or update (creates a new Map):
+val updated = capitals + ("France" -> "Paris")
+
+// Remove:
+val removed = capitals - "Japan"
+
+// Iterate:
+for (country, city) <- capitals do
+  println(s"$country => $city")</code></pre></div>
+<h3>Option — Safe Null Handling</h3><div class="why-box"><div class="why-row"><div class="why-label wl-prob">The problem with null</div><div class="why-val">In Java, a method that might return nothing returns null. If you forget to check for null and call a method on it, you get a NullPointerException at runtime — a very common bug.</div></div><div class="why-row"><div class="why-label wl-why">Option is the solution</div><div class="why-val">Scala uses Option instead of null. Option[String] is either Some(value) or None. The type tells you: this might be missing. The compiler makes you handle both cases.</div></div></div>
+<div class="cb"><div class="cbh"><span class="cf">Option</span><span class="bd bj">SCALA</span></div><pre><code>val users = Map("alice" -> "alice@test.com", "bob" -> "bob@test.com")
+
+val email: Option[String] = users.get("alice") // Some(alice@test.com)
+val missing: Option[String] = users.get("carol") // None
+
+// Handle safely with getOrElse:
+val aliceEmail = email.getOrElse("no email")    // alice@test.com
+val carolEmail = missing.getOrElse("no email")  // no email
+
+// Transform with map (only runs if Some):
+val upper = email.map(_.toUpperCase)  // Some(ALICE@TEST.COM)
+val none2 = missing.map(_.toUpperCase)  // None — nothing to transform
+
+// Pattern match:
+email match
+  case Some(e) => println(s"Found: $e")
+  case None    => println("Not found")</code></pre></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> List is the default sequence (immutable). Map stores key-value pairs. Option replaces null — use Some(value) or None instead of returning null.</div>
+</section>
+<section id="s-pattern"><div class="sec-label">PATTERN MATCHING</div><h2>Pattern Matching</h2>
+<p>Pattern matching is one of Scala's most powerful features. It is like a switch statement, but far more capable. It can match values, types, structures, and extract data in one step.</p>
+<div class="cb"><div class="cbh"><span class="cf">Basic pattern matching</span><span class="bd bj">SCALA</span></div><pre><code>val score = 85
+
+val grade = score match
+  case s if s >= 90 => "A"
+  case s if s >= 80 => "B"
+  case s if s >= 70 => "C"
+  case _            => "F"   // _ matches anything
+// grade: String = B</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Matching types and case classes</span><span class="bd bj">SCALA</span></div><pre><code>sealed trait Shape
+case class Circle(radius: Double)    extends Shape
+case class Rectangle(w: Double, h: Double) extends Shape
+case class Triangle(base: Double, height: Double) extends Shape
+
+def area(shape: Shape): Double = shape match
+  case Circle(r)       => 3.14159 * r * r
+  case Rectangle(w, h) => w * h
+  case Triangle(b, h)  => 0.5 * b * h
+
+area(Circle(5))         // 78.53975
+area(Rectangle(4, 6))  // 24.0</code></pre></div>
+<div class="note ngreen"><strong>Key:</strong> <code>sealed trait</code> means all subtypes must be in the same file. This lets the compiler check that your pattern match handles every case — you get a warning if you miss one.</div>
+<div class="cb"><div class="cbh"><span class="cf">Matching on Option and List</span><span class="bd bj">SCALA</span></div><pre><code>def describe(opt: Option[Int]): String = opt match
+  case Some(n) if n > 0 => s"Positive: $n"
+  case Some(0)          => "Zero"
+  case Some(n)          => s"Negative: $n"
+  case None             => "Nothing here"
+
+describe(Some(42))   // Positive: 42
+describe(Some(0))    // Zero
+describe(None)       // Nothing here
+
+// Matching on List structure:
+def firstTwo(list: List[Int]): String = list match
+  case Nil           => "Empty list"
+  case x :: Nil      => s"One element: $x"
+  case x :: y :: _   => s"First two: $x and $y"</code></pre></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Pattern matching replaces complex if/else chains. Use case _ as a catch-all. sealed trait + case classes give exhaustiveness checking — the compiler warns if a case is missing.</div>
+</section>
+<section id="s-sbt"><div class="sec-label">SBT</div><h2>sbt and Project Structure</h2>
+<p>sbt (Scala Build Tool) is how you create and manage Scala projects. Every real Scala project uses sbt. This section shows you the exact file layout and the commands you need.</p>
+<h3>Creating Your First Project</h3><div class="cb"><div class="cbh"><span class="cf">Create project from template</span><span class="bd bj">SHELL</span></div><pre><code># In your terminal, run:
+sbt new scala/scala3.g8
+
+# sbt will ask:
+# name [Scala 3 Project Template]: my-first-project
+# Enter your project name and press Enter.
+
+# This creates a folder: my-first-project/
+cd my-first-project</code></pre></div>
+<h3>Standard Project File Structure</h3><div class="note ngreen"><strong>Key:</strong> Every sbt project follows this exact layout. Learn it once and it applies to all Scala projects.</div>
+<div class="cb"><div class="cbh"><span class="cf">Project Structure</span><span class="bd bj">STRUCTURE</span></div><pre><code>my-first-project/
+  build.sbt                    Project config: name, version, Scala version, libraries
+  project/
+    build.properties           Specifies the sbt version
+    plugins.sbt                Optional sbt plugins
+  src/
+    main/
+      scala/
+        Main.scala             Your main application code
+    test/
+      scala/
+        MainTest.scala         Your test code
+  target/                      Compiled output (auto-generated, do not edit)
+  .bsp/                        Build Server Protocol files (auto-generated)
+  .metals/                     Metals workspace files (auto-generated)</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">build.sbt — complete file</span><span class="bd bj">SBT</span></div><pre><code>// build.sbt — project configuration
+
+val scala3Version = "3.4.2"
+
+lazy val root = project
+  .in(file("."))
+  .settings(
+    name         := "my-first-project",
+    version      := "0.1.0",
+    scalaVersion := scala3Version,
+
+    // Add libraries here:
+    libraryDependencies ++= Seq(
+      // example: "org.scalatest" %% "scalatest" % "3.2.18" % Test
+    )
+  )</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">project/build.properties</span><span class="bd bj">CONFIG</span></div><pre><code>sbt.version=1.10.1</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">src/main/scala/Main.scala</span><span class="bd bj">SCALA</span></div><pre><code>@main def run(): Unit =
+  println("Hello, Scala!")
+  println(s"2 + 2 = ${2 + 2}")</code></pre></div>
+<h3>Essential sbt Commands</h3><div class="tw"><table><thead><tr><th>Command</th><th>What It Does</th><th>When to Use It</th></tr></thead><tbody><tr><td>sbt compile</td><td>Compiles all source files</td><td>Check for errors before running</td></tr><tr><td>sbt run</td><td>Compiles and runs the main class</td><td>Run the application</td></tr><tr><td>sbt test</td><td>Compiles and runs all tests</td><td>Verify everything works</td></tr><tr><td>sbt console</td><td>Opens a REPL with your project loaded</td><td>Try code interactively</td></tr><tr><td>sbt clean</td><td>Deletes all compiled files</td><td>Fix strange build errors</td></tr><tr><td>sbt ~compile</td><td>Watches for file changes and recompiles</td><td>Development mode</td></tr><tr><td>sbt package</td><td>Creates a .jar file</td><td>Package for distribution</td></tr></tbody></table></div>
+<div class="cb"><div class="cbh"><span class="cf">Running your project</span><span class="bd bj">SHELL</span></div><pre><code>cd my-first-project
+
+# Run the project:
+sbt run
+
+# Expected output:
+# [info] running run
+# Hello, Scala!
+# 2 + 2 = 4
+# [success] Total time: 3 s</code></pre></div>
+<div class="sshot-box"><div class="sshot-title">sbt run Output</div><div class="sshot-desc">Terminal: After running 'sbt run', the terminal shows '[info] compiling 1 Scala source' then the program output 'Hello, Scala!' followed by '[success] Total time: X s'.</div></div>
+<div class="sshot-box"><div class="sshot-title">VS Code Project Structure</div><div class="sshot-desc">VS Code file explorer (left panel): shows the project tree — build.sbt at the root level, src/main/scala/Main.scala nested under src. The build.sbt file is open in the editor showing the project configuration.</div></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Every Scala project has build.sbt (config), src/main/scala (code), src/test/scala (tests). Key commands: sbt run, sbt test, sbt compile, sbt clean.</div>
+</section>
+<section id="s-testing"><div class="sec-label">TESTING</div><h2>Testing Basics</h2>
+<p>Testing means writing code that automatically checks that your code works correctly. In Scala, the most popular testing library is ScalaTest.</p>
+<div class="cb"><div class="cbh"><span class="cf">Add ScalaTest to build.sbt</span><span class="bd bj">SBT</span></div><pre><code>libraryDependencies ++= Seq(
+  "org.scalatest" %% "scalatest" % "3.2.18" % Test
+)
+
+// % Test means: only include in test code, not production code</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Writing your first test</span><span class="bd bj">SCALA</span></div><pre><code>// src/test/scala/CalculatorTest.scala
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+
+class CalculatorTest extends AnyFlatSpec with Matchers:
+
+  "add" should "return the sum of two numbers" in {
+    Calculator.add(2, 3) shouldBe 5
+    Calculator.add(-1, 1) shouldBe 0
+  }
+
+  "divide" should "return None when dividing by zero" in {
+    Calculator.divide(10, 0) shouldBe None
+    Calculator.divide(10, 2) shouldBe Some(5.0)
+  }</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">The Calculator being tested</span><span class="bd bj">SCALA</span></div><pre><code>// src/main/scala/Calculator.scala
+object Calculator:
+  def add(a: Int, b: Int): Int = a + b
+
+  def divide(a: Int, b: Int): Option[Double] =
+    if b == 0 then None
+    else Some(a.toDouble / b)</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Run tests</span><span class="bd bj">SHELL</span></div><pre><code>sbt test
+
+# Expected output:
+# [info] CalculatorTest:
+# [info] add
+# [info] - should return the sum of two numbers
+# [info] divide
+# [info] - should return None when dividing by zero
+# [info] Run completed in 1.234 seconds.
+# [info] Total number of tests run: 2
+# [info] Suites: completed 1, aborted 0
+# [info] Tests: succeeded 2, failed 0, canceled 0, ignored 0, pending 0
+# [info] All tests passed.
+# [success] Total time: 5 s</code></pre></div>
+<div class="sshot-box"><div class="sshot-title">All Tests Passed</div><div class="sshot-desc">Terminal: After 'sbt test', the last few lines show 'All tests passed.' in green, followed by '[success] Total time: 5 s'. If any test fails, the output shows the test name, expected value, and actual value in red.</div></div>
+<div style="border:2px solid var(--accent);border-radius:10px;margin:16px 0;overflow:hidden"><div style="background:var(--accent);color:#fff;padding:10px 18px;font-family:Syne,sans-serif;font-size:13px;font-weight:800;letter-spacing:.3px">LAB — Testing Lab</div><div style="padding:16px 18px"><p><strong>Objective:</strong> Write a function and a passing test for it.</p><p><strong>Steps:</strong></p><ol style='color:var(--t2);font-size:14px;line-height:2'><li>Create a new function: <code>def isEven(n: Int): Boolean = n % 2 == 0</code></li><li>Write a test with at least 3 cases: 0, 2, 3</li><li>Run <code>sbt test</code></li><li>Confirm: <em>All tests passed</em></li></ol><p><strong>Acceptance criteria:</strong> sbt test shows 0 failures and 1 suite completed.</p></div></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> ScalaTest is added as a % Test dependency. Tests live in src/test/scala. Run sbt test to execute all tests. All tests passed is the expected final output.</div>
+</section>
+<section id="s-json"><div class="sec-label">JSON & HTTP</div><h2>JSON and HTTP</h2>
+<p>JSON (JavaScript Object Notation) is the standard format for data exchange over HTTP. This section shows how to parse and create JSON in Scala, and how to make HTTP requests.</p>
+<div class="cb"><div class="cbh"><span class="cf">Add JSON library (circe) to build.sbt</span><span class="bd bj">SBT</span></div><pre><code>val circeVersion = "0.14.9"
+
+libraryDependencies ++= Seq(
+  "io.circe" %% "circe-core"    % circeVersion,
+  "io.circe" %% "circe-generic" % circeVersion,
+  "io.circe" %% "circe-parser"  % circeVersion
+)</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Parse and create JSON with circe</span><span class="bd bj">SCALA</span></div><pre><code>import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
+
+// Model:
+case class User(id: Int, name: String, email: String)
+
+// Encode to JSON:
+val user = User(1, "Priya", "priya@test.com")
+val json = user.asJson.noSpaces
+// json: String = {"id":1,"name":"Priya","email":"priya@test.com"}
+
+// Decode from JSON:
+val jsonStr = """{"id":2,"name":"Raj","email":"raj@test.com"}"""
+val result = decode[User](jsonStr)
+// result: Either[Error, User] = Right(User(2,Raj,raj@test.com))
+
+result match
+  case Right(u) => println(s"Loaded user: ${u.name}")
+  case Left(e)  => println(s"Parse error: $e")</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">HTTP client (sttp)</span><span class="bd bj">SBT</span></div><pre><code>// Add to build.sbt:
+"com.softwaremill.sttp.client4" %% "core" % "4.0.0-M17"</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Making HTTP requests with sttp</span><span class="bd bj">SCALA</span></div><pre><code>import sttp.client4.quick.*
+import sttp.client4.Response
+
+// GET request:
+val response = quickRequest
+  .get(uri"https://jsonplaceholder.typicode.com/users/1")
+  .send()
+
+println(response.code)  // sttp.model.StatusCode = 200
+println(response.body.take(100))  // first 100 chars of JSON
+
+// POST request with JSON body:
+val postResponse = quickRequest
+  .post(uri"https://httpbin.org/post")
+  .body("""{"name":"test"}""")
+  .contentType("application/json")
+  .send()
+
+println(postResponse.code)  // 200</code></pre></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> circe handles JSON encoding and decoding. sttp is the standard HTTP client. decode returns Either[Error, T] — always handle both Right (success) and Left (error) cases.</div>
+</section>
+<section id="s-cli"><div class="sec-label">CLI LAB</div><h2>CLI Application Lab</h2>
+<div style="border:2px solid var(--accent);border-radius:10px;margin:16px 0;overflow:hidden"><div style="background:var(--accent);color:#fff;padding:10px 18px;font-family:Syne,sans-serif;font-size:13px;font-weight:800;letter-spacing:.3px">LAB — CLI Application — Contact Book</div><div style="padding:16px 18px"><p><strong>Overview:</strong> Build a command-line contact book that stores names and phone numbers in memory.</p><p><strong>Objectives:</strong> Apply case classes, Map, pattern matching, and a main loop.</p><p><strong>Prerequisites:</strong> Sections 5-10 completed, sbt project created.</p></div></div>
+<div class="cb"><div class="cbh"><span class="cf">src/main/scala/ContactBook.scala</span><span class="bd bj">SCALA</span></div><pre><code>import scala.io.StdIn.readLine
+
+case class Contact(name: String, phone: String)
+
+object ContactBook:
+
+  def main(args: Array[String]): Unit =
+    println("Contact Book — type help for commands")
+    loop(Map.empty)
+
+  def loop(contacts: Map[String, Contact]): Unit =
+    print("> ")
+    val input = readLine().trim.split(" ").toList
+
+    input match
+      case "add" :: name :: phone :: Nil =>
+        val updated = contacts + (name -> Contact(name, phone))
+        println(s"Added $name")
+        loop(updated)
+
+      case "find" :: name :: Nil =>
+        contacts.get(name) match
+          case Some(c) => println(s"${c.name}: ${c.phone}")
+          case None    => println(s"Contact $name not found")
+        loop(contacts)
+
+      case List("list") =>
+        if contacts.isEmpty then println("No contacts")
+        else contacts.values.foreach(c => println(s"${c.name}: ${c.phone}"))
+        loop(contacts)
+
+      case List("quit") =>
+        println("Goodbye.")
+
+      case List("help") =>
+        println("Commands: add &lt;name&gt; &lt;phone&gt; | find &lt;name&gt; | list | quit")
+        loop(contacts)
+
+      case _ =>
+        println("Unknown command. Type help.")
+        loop(contacts)</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Run the CLI app</span><span class="bd bj">SHELL</span></div><pre><code>sbt run
+
+# Session example:
+# > add Priya 9876543210
+# Added Priya
+# > add Raj 9123456789
+# Added Raj
+# > list
+# Priya: 9876543210
+# Raj: 9123456789
+# > find Priya
+# Priya: 9876543210
+# > find Unknown
+# Contact Unknown not found
+# > quit
+# Goodbye.</code></pre></div>
+<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:12px 0"><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">sbt run starts without errors</span></div>
+<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">add command stores a contact</span></div>
+<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">find returns the correct phone number</span></div>
+<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">list shows all contacts</span></div>
+<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">quit exits cleanly</span></div>
+<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">Unknown command shows a helpful message</span></div>
+</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> This lab applies fundamentals, case classes, Map, and pattern matching in a real interactive program. The recursion in loop() replaces a while(true) loop using pure values.</div>
+</section>
+<section id="s-concurrency"><div class="sec-label">CONCURRENCY</div><h2>Concurrency and Futures</h2>
+<p>Concurrency means doing multiple things at the same time. In Scala, the standard way is with <strong>Futures</strong> — a Future represents a computation that will complete at some point in the future.</p>
+<div class="why-box"><div class="why-row"><div class="why-label wl-prob">The problem without concurrency</div><div class="why-val">Without concurrency, your program does one thing, waits for it to finish, then does the next thing. Calling three APIs in sequence might take 3 seconds. Calling them concurrently takes only 1 second.</div></div><div class="why-row"><div class="why-label wl-what">What is a Future?</div><div class="why-val">A Future[T] is a placeholder for a value of type T that will be available later. It starts the computation immediately (on a background thread) and returns instantly. You get the result when it is ready.</div></div></div>
+<div class="cb"><div class="cbh"><span class="cf">Basic Future usage</span><span class="bd bj">SCALA</span></div><pre><code>import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Await
+import scala.concurrent.duration.*
+
+// Start a background computation:
+val future1: Future[Int] = Future {
+  Thread.sleep(1000)  // simulate 1 second of work
+  42
+}
+
+// The program continues immediately (does not wait):
+println("This prints immediately")
+
+// Wait for the result (blocks until done, maximum 5 seconds):
+val result = Await.result(future1, 5.seconds)
+println(s"Future result: $result")  // Future result: 42</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Combining Futures with for-comprehension</span><span class="bd bj">SCALA</span></div><pre><code>import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+
+def fetchUser(id: Int): Future[String] = Future(s"User_$id")
+def fetchOrders(user: String): Future[List[String]] = Future(List(s"Order for $user"))
+
+// Chain Futures with for-comprehension:
+val combined: Future[String] = for
+  user   <- fetchUser(1)
+  orders <- fetchOrders(user)
+yield s"$user has ${orders.length} order(s)"
+
+// Handle success and failure:
+combined.onComplete:
+  case scala.util.Success(msg) => println(msg)
+  case scala.util.Failure(err) => println(s"Error: ${err.getMessage}")</code></pre></div>
+<div class="note npurple"><strong>Tip:</strong> For production Scala code, many teams use the Cats Effect or ZIO libraries instead of raw Futures. These libraries provide safer, more composable concurrency. Start with Futures to learn the concept, then explore Cats Effect.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Future[T] runs code in the background and gives you the result when ready. Combine futures with for-comprehension. Always handle both Success and Failure.</div>
+</section>
+<section id="s-fp"><div class="sec-label">FUNCTIONAL</div><h2>Functional Programming Foundations</h2>
+<p>Functional programming (FP) is a style of writing code where you avoid changing state and use functions to transform data. Scala supports both OOP and FP — you choose the right tool for each situation.</p>
+<div class="tw"><table><thead><tr><th>FP Concept</th><th>Plain meaning</th><th>Scala keyword/feature</th></tr></thead><tbody><tr><td>Immutability</td><td>Data does not change after creation</td><td>val, case class</td></tr><tr><td>Pure function</td><td>Same input always gives same output, no side effects</td><td>def with no var or println</td></tr><tr><td>Higher-order function</td><td>A function that takes or returns a function</td><td>map, filter, flatMap</td></tr><tr><td>Function composition</td><td>Combining functions to build larger ones</td><td>andThen, compose</td></tr><tr><td>Functor</td><td>Something you can map over</td><td>Option, List, Future</td></tr><tr><td>Monad</td><td>Something you can flatMap over</td><td>Option, List, Future, Either</td></tr></tbody></table></div>
+<div class="cb"><div class="cbh"><span class="cf">Pure functions vs impure functions</span><span class="bd bj">SCALA</span></div><pre><code>// PURE function: same input = same output, no side effects
+def addTax(price: Double, rate: Double): Double = price * (1 + rate)
+addTax(100.0, 0.18)  // always 118.0
+
+// IMPURE function: reads/writes external state
+var counter = 0
+def countCalls(): Int =
+  counter += 1  // side effect: modifying external state
+  counter
+
+countCalls()  // 1
+countCalls()  // 2  — different result same input!</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Function composition</span><span class="bd bj">SCALA</span></div><pre><code>val double   = (x: Int) => x * 2
+val addTen   = (x: Int) => x + 10
+val isEven   = (x: Int) => x % 2 == 0
+
+// Compose: apply double first, then addTen
+val doubleThenAdd = double andThen addTen
+doubleThenAdd(5)  // 20  (5*2=10, 10+10=20)
+
+// Pipeline a list through multiple transformations:
+val result = List(1, 2, 3, 4, 5)
+  .map(_ * 2)        // List(2, 4, 6, 8, 10)
+  .filter(_ > 4)     // List(6, 8, 10)
+  .map(_ + 1)        // List(7, 9, 11)
+// result: List[Int] = List(7, 9, 11)</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Either — error handling without exceptions</span><span class="bd bj">SCALA</span></div><pre><code>// Either[Left, Right] — Left = error, Right = success
+def parseInt(s: String): Either[String, Int] =
+  try Right(s.toInt)
+  catch case _ => Left(s"Cannot parse: $s")
+
+parseInt("42")    // Right(42)
+parseInt("abc")   // Left(Cannot parse: abc)
+
+// Chain operations that might fail:
+val result =
+  for
+    a <- parseInt("10")
+    b <- parseInt("20")
+  yield a + b
+// result: Either[String, Int] = Right(30)</code></pre></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> FP is about transforming data with pure functions. Use map, filter, flatMap on Option, List, Either to build pipelines. Either replaces try/catch for expected error cases.</div>
+</section>
+<section id="s-streams"><div class="sec-label">STREAMS</div><h2>Streams</h2>
+<p>A stream is a sequence of data elements made available over time. Unlike a List (all elements loaded into memory), a stream processes one element at a time — essential for large datasets.</p>
+<div class="cb"><div class="cbh"><span class="cf">LazyList — Scala's built-in lazy stream</span><span class="bd bj">SCALA</span></div><pre><code>// LazyList evaluates elements only when needed
+val naturals: LazyList[Int] = LazyList.from(1)
+// This is an infinite sequence — but nothing is computed yet
+
+val firstTen = naturals.take(10).toList
+// List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+// Process a large file line by line (without loading all into memory):
+import scala.io.Source
+val lines: Iterator[String] = Source.fromFile("data.csv").getLines()
+val result = lines
+  .filter(_.contains("Mumbai"))
+  .map(_.split(","))
+  .take(100)
+  .toList</code></pre></div>
+<div class="note ngreen"><strong>Key:</strong> For production streaming (Kafka, Spark, real-time pipelines), use Akka Streams or fs2. These provide backpressure handling and robust error recovery for high-volume data.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> LazyList evaluates elements on demand. Use it for potentially infinite sequences and large data processing. For production streaming: Akka Streams or fs2.</div>
+</section>
+<section id="s-persistence"><div class="sec-label">PERSISTENCE</div><h2>Persistence and Databases</h2>
+<p>Persistence means saving data so it survives after the program stops. The simplest approach in Scala is using a file or an embedded database like H2 — no separate server needed.</p>
+<div class="cb"><div class="cbh"><span class="cf">Add Doobie (SQL library) to build.sbt</span><span class="bd bj">SBT</span></div><pre><code>val doobieVersion = "1.0.0-RC5"
+
+libraryDependencies ++= Seq(
+  "org.tpolecat" %% "doobie-core"  % doobieVersion,
+  "org.tpolecat" %% "doobie-h2"    % doobieVersion,
+  "com.h2database" % "h2"          % "2.2.224"
+)</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Database operations with Doobie</span><span class="bd bj">SCALA</span></div><pre><code>import doobie.*
+import doobie.implicits.*
+import cats.effect.IO
+import cats.effect.unsafe.implicits.global
+
+// Connect to an in-memory H2 database (no server needed)
+val xa = Transactor.fromDriverManager[IO](
+  driver     = "org.h2.Driver",
+  url        = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
+  user       = "sa",
+  password   = ""
+)
+
+case class User(id: Int, name: String)
+
+// Create table and insert:
+val setup = sql"""CREATE TABLE IF NOT EXISTS users (id INT, name VARCHAR(100))"""
+  .update.run
+val insert = sql"""INSERT INTO users VALUES (1, 'Alice')""".update.run
+
+// Query:
+val query = sql"""SELECT id, name FROM users"""
+  .query[User].to[List]
+
+// Run everything:
+val result = (setup *> insert *> query).transact(xa).unsafeRunSync()
+// result: List[User] = List(User(1,Alice))</code></pre></div>
+<div class="note nblue"><strong>India:</strong> H2 is an embedded database — zero installation, no separate process, works fully offline. Perfect for learning, testing, and offline development. For production, switch the Transactor URL to PostgreSQL.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Use H2 (embedded) for learning and testing — no server needed. Doobie provides type-safe SQL in Scala. For production: switch to PostgreSQL or MySQL by changing the Transactor URL.</div>
+</section>
+<section id="s-webservices"><div class="sec-label">WEB SERVICES</div><h2>Web Services with http4s</h2>
+<p>A web service exposes your application as HTTP endpoints that other programs (or browsers) can call. http4s is the most popular purely functional HTTP library for Scala.</p>
+<div class="cb"><div class="cbh"><span class="cf">Add http4s to build.sbt</span><span class="bd bj">SBT</span></div><pre><code>val http4sVersion = "0.23.27"
+
+libraryDependencies ++= Seq(
+  "org.http4s" %% "http4s-ember-server" % http4sVersion,
+  "org.http4s" %% "http4s-circe"        % http4sVersion,
+  "org.http4s" %% "http4s-dsl"          % http4sVersion,
+  "org.typelevel" %% "cats-effect"      % "3.5.4"
+)</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Minimal REST API with http4s</span><span class="bd bj">SCALA</span></div><pre><code>import org.http4s.*
+import org.http4s.dsl.io.*
+import org.http4s.ember.server.*
+import org.http4s.implicits.*
+import cats.effect.*
+import com.comcast.ip4s.*
+
+object Server extends IOApp.Simple:
+
+  val routes = HttpRoutes.of[IO] {
+
+    case GET -> Root / "health" =>
+      Ok("Service is running")
+
+    case GET -> Root / "greet" / name =>
+      Ok(s"Hello, $name!")
+
+  }.orNotFound
+
+  def run: IO[Unit] =
+    EmberServerBuilder.default[IO]
+      .withHost(ipv4"0.0.0.0")
+      .withPort(port"8080")
+      .withHttpApp(routes)
+      .build
+      .useForever</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Test the endpoints</span><span class="bd bj">SHELL</span></div><pre><code># Run the server:
+sbt run
+
+# In another terminal:
+curl http://localhost:8080/health
+# Service is running
+
+curl http://localhost:8080/greet/Priya
+# Hello, Priya!
+
+curl http://localhost:8080/greet/Raj
+# Hello, Raj!</code></pre></div>
+<div class="sshot-box"><div class="sshot-title">http4s Server Running</div><div class="sshot-desc">Terminal 1: 'sbt run' shows 'EmberServerBuilder: started on 0.0.0.0:8080'. Terminal 2: 'curl http://localhost:8080/health' returns 'Service is running' with HTTP 200.</div></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> http4s builds type-safe HTTP services. Routes match on HTTP method and path. Run sbt run, test with curl. For production add JSON responses using circe integration.</div>
+</section>
+<section id="s-advanced"><div class="sec-label">ADVANCED</div><h2>Advanced Scala 3 Features</h2>
+<p>Scala 3 introduced several cleaner, more powerful features. This section introduces the most useful ones at a beginner level.</p>
+<div class="cb"><div class="cbh"><span class="cf">Enums — clean alternatives to sealed traits</span><span class="bd bj">SCALA</span></div><pre><code>// Simple enum:
+enum Direction:
+  case North, South, East, West
+
+val d = Direction.North
+
+// Enum with data:
+enum Status(val code: Int):
+  case Active   extends Status(1)
+  case Inactive extends Status(0)
+  case Pending  extends Status(2)
+
+Status.Active.code  // 1</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Extension methods — add methods to existing types</span><span class="bd bj">SCALA</span></div><pre><code>// Add methods to String without modifying the class:
+extension (s: String)
+  def shout: String = s.toUpperCase + "!"
+  def isPalindrome: Boolean = s == s.reverse
+
+"hello".shout      // HELLO!
+"racecar".isPalindrome  // true
+"scala".isPalindrome    // false</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Given / Using — type class instances (simplified)</span><span class="bd bj">SCALA</span></div><pre><code>// A type class defines a capability
+trait Describable[A]:
+  def describe(a: A): String
+
+// given = provide an implicit instance
+given Describable[Int] with
+  def describe(n: Int): String = s"The number $n"
+
+given Describable[String] with
+  def describe(s: String): String = s"The text: $s"
+
+// using = require an implicit instance
+def printDesc[A](a: A)(using d: Describable[A]): Unit =
+  println(d.describe(a))
+
+printDesc(42)       // The number 42
+printDesc("hello")  // The text: hello</code></pre></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Scala 3 enums replace sealed trait hierarchies. Extension methods add behaviour to existing types. given/using is the cleaner version of Scala 2 implicits.</div>
+</section>
+<section id="s-packaging"><div class="sec-label">PACKAGING</div><h2>Packaging and Distribution</h2>
+<p>Packaging means creating a distributable file that others can run without having your source code. In Scala/JVM, this is a JAR file.</p>
+<div class="cb"><div class="cbh"><span class="cf">Package as a fat JAR (sbt-assembly)</span><span class="bd bj">SBT</span></div><pre><code>// project/plugins.sbt — add the plugin:
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.2.0")
+
+// build.sbt — configure the main class:
+assembly / mainClass := Some("Main")
+assembly / assemblyJarName := "my-app.jar"</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Build and run the JAR</span><span class="bd bj">SHELL</span></div><pre><code># Build the fat JAR:
+sbt assembly
+
+# JAR is created at:
+# target/scala-3.x/my-app.jar
+
+# Run anywhere with JDK 17+:
+java -jar target/scala-3.x/my-app.jar
+
+# Clean up:
+sbt clean</code></pre></div>
+<div class="note nblue"><strong>India:</strong> A fat JAR contains your code AND all its dependencies. Share it with a colleague who has JDK 17 installed — they can run it without sbt or Scala installed.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Use sbt-assembly to create a fat JAR. Run it with: java -jar my-app.jar. The recipient only needs JDK 17 — no sbt, no Scala installer needed.</div>
+</section>
+<section id="s-performance"><div class="sec-label">PERFORMANCE</div><h2>Performance and Profiling</h2>
+<p>Scala on the JVM generally performs comparably to Java. This section covers how to measure and improve performance.</p>
+<div class="cb"><div class="cbh"><span class="cf">Simple timing in code</span><span class="bd bj">SCALA</span></div><pre><code>def timed[A](label: String)(block: => A): A =
+  val start = System.currentTimeMillis()
+  val result = block
+  val elapsed = System.currentTimeMillis() - start
+  println(s"$label took ${elapsed}ms")
+  result
+
+val result = timed("Sorting 1 million numbers") {
+  (1 to 1_000_000).sorted
+}
+// Sorting 1 million numbers took 312ms</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">JVM heap size — tuning for large workloads</span><span class="bd bj">SHELL</span></div><pre><code># Increase heap to 4 GB:
+java -Xmx4g -jar my-app.jar
+
+# Set initial and max heap:
+java -Xms512m -Xmx4g -jar my-app.jar
+
+# In sbt for development:
+# Add to build.sbt:
+# javaOptions += "-Xmx4g"</code></pre></div>
+<div class="tw"><table><thead><tr><th>Common performance tip</th><th>When to apply</th></tr></thead><tbody><tr><td>Use Vector instead of List for random access</td><td>When you frequently use (n) indexing</td></tr><tr><td>Use Iterator instead of List for large files</td><td>When processing files line by line</td></tr><tr><td>Avoid .toString inside hot loops</td><td>String creation is expensive</td></tr><tr><td>Use tail recursion (@tailrec)</td><td>For deep recursive functions</td></tr><tr><td>Profile before optimising</td><td>Never guess — measure first</td></tr></tbody></table></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Measure first, optimise later. Use the timed helper to find slow code. Increase JVM heap for large data. Vector is faster than List for indexed access.</div>
+</section>
+<section id="s-troubleshoot"><div class="sec-label">TROUBLESHOOT</div><h2>Troubleshooting and Pitfalls</h2>
+<p>This section covers the most common problems beginners encounter and the exact steps to fix them.</p>
+<div style="border-radius:10px;margin:14px 0;border:1px solid var(--border);overflow:hidden"><div style="background:#1e293b;color:#fbbf24;padding:10px 16px;font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700">sbt hangs or downloads endlessly on first run</div><div style="padding:13px 16px;background:var(--bg)"><p style="font-size:14px;margin-bottom:7px"><strong style="color:var(--text)">Cause:</strong> <span style="color:var(--t2)">Downloading the Scala compiler and all libraries from the internet on first use</span></p><div class="note ngreen"><strong>Fix:</strong> Wait 10-15 minutes. If on a slow connection in India, leave it running overnight. After the first download, it is cached and runs in seconds.</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:1px solid var(--border);overflow:hidden"><div style="background:#1e293b;color:#fbbf24;padding:10px 16px;font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700">java: command not found / java is not recognised</div><div style="padding:13px 16px;background:var(--bg)"><p style="font-size:14px;margin-bottom:7px"><strong style="color:var(--text)">Cause:</strong> <span style="color:var(--t2)">JDK 17 is not installed, or it is not on the PATH</span></p><div class="note ngreen"><strong>Fix:</strong> 1. Re-run the JDK installer. 2. Restart your terminal. 3. Run: java -version. If still not found, manually add the JDK /bin folder to your system PATH environment variable.</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:1px solid var(--border);overflow:hidden"><div style="background:#1e293b;color:#fbbf24;padding:10px 16px;font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700">Metals does not import build / IntelliJ shows red errors</div><div style="padding:13px 16px;background:var(--bg)"><p style="font-size:14px;margin-bottom:7px"><strong style="color:var(--text)">Cause:</strong> <span style="color:var(--t2)">The sbt project was not imported into the IDE</span></p><div class="note ngreen"><strong>Fix:</strong> VS Code: Click the 'Import build' notification that appears when you open the project folder. If you missed it, open the Command Palette (Ctrl+Shift+P) and run 'Metals: Import build'. IntelliJ: File → Sync Project with sbt files.</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:1px solid var(--border);overflow:hidden"><div style="background:#1e293b;color:#fbbf24;padding:10px 16px;font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700">error: not found: type Xxx or value yyy</div><div style="padding:13px 16px;background:var(--bg)"><p style="font-size:14px;margin-bottom:7px"><strong style="color:var(--text)">Cause:</strong> <span style="color:var(--t2)">A library dependency is missing from build.sbt, or the import is wrong</span></p><div class="note ngreen"><strong>Fix:</strong> 1. Check build.sbt has the correct dependency. 2. Run sbt reload after changing build.sbt. 3. Check the import statement at the top of the file.</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:1px solid var(--border);overflow:hidden"><div style="background:#1e293b;color:#fbbf24;padding:10px 16px;font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700">OutOfMemoryError: Java heap space</div><div style="padding:13px 16px;background:var(--bg)"><p style="font-size:14px;margin-bottom:7px"><strong style="color:var(--text)">Cause:</strong> <span style="color:var(--t2)">sbt or your application ran out of JVM memory</span></p><div class="note ngreen"><strong>Fix:</strong> Add to build.sbt: javaOptions += "-Xmx4g". Or set environment variable: SBT_OPTS=-Xmx4g</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:1px solid var(--border);overflow:hidden"><div style="background:#1e293b;color:#fbbf24;padding:10px 16px;font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700">sbt test shows compilation errors but code looks right</div><div style="padding:13px 16px;background:var(--bg)"><p style="font-size:14px;margin-bottom:7px"><strong style="color:var(--text)">Cause:</strong> <span style="color:var(--t2)">Stale compiled files from a previous version conflict</span></p><div class="note ngreen"><strong>Fix:</strong> Run sbt clean, then sbt test again. This deletes all compiled output and recompiles from scratch.</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:1px solid var(--border);overflow:hidden"><div style="background:#1e293b;color:#fbbf24;padding:10px 16px;font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700">NoClassDefFoundError at runtime</div><div style="padding:13px 16px;background:var(--bg)"><p style="font-size:14px;margin-bottom:7px"><strong style="color:var(--text)">Cause:</strong> <span style="color:var(--t2)">A dependency is missing from the packaged JAR, or the wrong version is used</span></p><div class="note ngreen"><strong>Fix:</strong> If using sbt-assembly, run sbt assembly again. Check for version conflicts in build.sbt.</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:1px solid var(--border);overflow:hidden"><div style="background:#1e293b;color:#fbbf24;padding:10px 16px;font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700">Port already in use when starting HTTP server</div><div style="padding:13px 16px;background:var(--bg)"><p style="font-size:14px;margin-bottom:7px"><strong style="color:var(--text)">Cause:</strong> <span style="color:var(--t2)">Another process is using port 8080</span></p><div class="note ngreen"><strong>Fix:</strong> Change the port in your server config. Or find and stop the other process: lsof -i :8080 (Mac/Linux), netstat -ano | findstr :8080 (Windows).</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:1px solid var(--border);overflow:hidden"><div style="background:#1e293b;color:#fbbf24;padding:10px 16px;font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700">Character encoding issues in terminal (symbols appear as ?)</div><div style="padding:13px 16px;background:var(--bg)"><p style="font-size:14px;margin-bottom:7px"><strong style="color:var(--text)">Cause:</strong> <span style="color:var(--t2)">Terminal is not configured for UTF-8</span></p><div class="note ngreen"><strong>Fix:</strong> Windows: run chcp 65001 in cmd. Mac/Linux: add export LANG=en_US.UTF-8 to ~/.bashrc or ~/.zshrc.</div></div></div>
+<div style="border-radius:10px;margin:14px 0;border:1px solid var(--border);overflow:hidden"><div style="background:#1e293b;color:#fbbf24;padding:10px 16px;font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700">Scala 2 syntax vs Scala 3 — errors when following tutorials</div><div style="padding:13px 16px;background:var(--bg)"><p style="font-size:14px;margin-bottom:7px"><strong style="color:var(--text)">Cause:</strong> <span style="color:var(--t2)">Many online tutorials still use Scala 2 syntax which is different from Scala 3</span></p><div class="note ngreen"><strong>Fix:</strong> Check the tutorial's Scala version. In Scala 3, colons replace braces for blocks, new keyword for enums, etc. Look for Scala 3 specific tutorials or the official docs at docs.scala-lang.org.</div></div></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Always try sbt clean first when you get strange errors. For Metals issues, reimport the build. Check you are following Scala 3 (not Scala 2) tutorials.</div>
+</section>
+<section id="s-capstone"><div class="sec-label">CAPSTONE</div><h2>Capstone Project — Student Score API</h2>
+<div style="border:2px solid var(--accent);border-radius:10px;margin:16px 0;overflow:hidden"><div style="background:var(--accent);color:#fff;padding:10px 18px;font-family:Syne,sans-serif;font-size:13px;font-weight:800;letter-spacing:.3px">LAB — Capstone — Student Score API</div><div style="padding:16px 18px"><p><strong>Overview:</strong> Build a REST API that stores student scores in memory and exposes them over HTTP.</p><p><strong>You will use:</strong> case classes, Map, http4s, circe JSON, pattern matching, and Option.</p></div></div>
+<div class="cb"><div class="cbh"><span class="cf">Project structure</span><span class="bd bj">OUTPUT</span></div><pre><code>student-api/
+  build.sbt
+  src/main/scala/
+    Main.scala          Entry point
+    StudentRoutes.scala HTTP routes
+    StudentService.scala Business logic
+    Models.scala        Case classes
+  src/test/scala/
+    StudentServiceTest.scala Unit tests</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Models.scala</span><span class="bd bj">SCALA</span></div><pre><code>case class Student(id: Int, name: String, score: Double)
+
+case class CreateStudent(name: String, score: Double)
+
+enum Grade:
+  case A, B, C, F
+
+object Grade:
+  def fromScore(s: Double): Grade =
+    if s >= 90 then A
+    else if s >= 75 then B
+    else if s >= 60 then C
+    else F</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">StudentService.scala</span><span class="bd bj">SCALA</span></div><pre><code>import scala.collection.concurrent.TrieMap
+
+class StudentService:
+  private val store = TrieMap.empty[Int, Student]
+  private var nextId = 1
+
+  def add(req: CreateStudent): Student =
+    val student = Student(nextId, req.name, req.score)
+    store.put(nextId, student)
+    nextId += 1
+    student
+
+  def find(id: Int): Option[Student] = store.get(id)
+
+  def all: List[Student] = store.values.toList.sortBy(_.id)
+
+  def delete(id: Int): Boolean = store.remove(id).isDefined</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">API endpoints</span><span class="bd bj">OUTPUT</span></div><pre><code>GET  /students          — list all students
+POST /students          — add a student (JSON body: {name, score})
+GET  /students/{id}     — get one student
+GET  /students/{id}/grade — get grade A/B/C/F
+DELETE /students/{id}   — delete a student</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">Test with curl</span><span class="bd bj">SHELL</span></div><pre><code># Add students:
+curl -X POST http://localhost:8080/students \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Priya","score":92}'
+# {"id":1,"name":"Priya","score":92.0}
+
+curl -X POST http://localhost:8080/students \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Raj","score":74}'
+
+# List all:
+curl http://localhost:8080/students
+# [{"id":1,"name":"Priya","score":92.0},{"id":2,"name":"Raj","score":74.0}]
+
+# Get grade:
+curl http://localhost:8080/students/1/grade
+# "A"
+curl http://localhost:8080/students/2/grade
+# "C"</code></pre></div>
+<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:12px 0"><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">POST /students creates a student and returns JSON with id</span></div>
+<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">GET /students returns all students as a JSON array</span></div>
+<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">GET /students/{id} returns 200 with student or 404 if not found</span></div>
+<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">GET /students/{id}/grade returns the correct grade letter</span></div>
+<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">DELETE /students/{id} removes the student</span></div>
+<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">Unit tests for StudentService pass with sbt test</span></div>
+<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px"><span style="color:var(--accent);font-size:15px;flex-shrink:0">&#9633;</span><span style="color:var(--t2)">sbt package creates a JAR file</span></div>
+</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> The capstone project combines every section: case classes, sealed enums, HTTP routes, JSON, testing, and packaging. Completing it demonstrates production-ready Scala skill.</div>
+</section>
+<section id="s-glossary"><div class="sec-label">GLOSSARY</div><h2>Glossary of Terms</h2>
+<div class="tw"><table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>case class</td><td>A class that auto-generates equals, hashCode, toString, copy, and pattern-matching support</td></tr><tr><td>companion object</td><td>An object with the same name as a class — shares its namespace, used for factory methods</td></tr><tr><td>Either[L, R]</td><td>A type representing success (Right) or failure (Left) — safer than exceptions</td></tr><tr><td>extension method</td><td>A method added to an existing type without modifying its source</td></tr><tr><td>for-comprehension</td><td>A clean syntax for chaining flatMap/map on monadic types</td></tr><tr><td>Future[T]</td><td>A computation running in the background that will produce a value of type T</td></tr><tr><td>given / using</td><td>Scala 3 mechanism for providing and consuming type class instances</td></tr><tr><td>higher-order function</td><td>A function that takes a function as parameter or returns a function</td></tr><tr><td>immutable</td><td>Cannot be changed after creation — val, List, Map are immutable by default</td></tr><tr><td>JDK</td><td>Java Development Kit — includes the JVM and compiler</td></tr><tr><td>JVM</td><td>Java Virtual Machine — the runtime that executes compiled Scala/Java code</td></tr><tr><td>LazyList</td><td>A stream that computes elements on demand — can represent infinite sequences</td></tr><tr><td>Monad</td><td>A type with flatMap and unit — allows chaining operations that may fail</td></tr><tr><td>Option[T]</td><td>A type that is Some(value) or None — replaces null</td></tr><tr><td>pattern matching</td><td>Matching a value against a series of patterns and extracting data</td></tr><tr><td>REPL</td><td>Read-Evaluate-Print Loop — interactive Scala console for trying code</td></tr><tr><td>sbt</td><td>Scala Build Tool — compiles, tests, runs, and packages Scala projects</td></tr><tr><td>sealed trait</td><td>A trait whose subtypes must all be in the same file — enables exhaustive matching</td></tr><tr><td>tail recursion</td><td>Recursion where the recursive call is the last operation — optimised by compiler</td></tr><tr><td>trait</td><td>A reusable interface that can contain both abstract and concrete methods</td></tr><tr><td>type inference</td><td>Scala's ability to determine the type of an expression without an explicit annotation</td></tr><tr><td>Unit</td><td>Scala's void — the return type of functions that return no meaningful value</td></tr><tr><td>val</td><td>An immutable binding — like a constant</td></tr><tr><td>var</td><td>A mutable variable — use sparingly</td></tr></tbody></table></div>
+</section>
+<section id="s-cheatsheet"><div class="sec-label">CHEAT SHEET</div><h2>Scala 3 Cheat Sheet</h2>
+<div class="cb"><div class="cbh"><span class="cf">Scala 3 Cheat Sheet — Quick Reference</span><span class="bd bj">SCALA</span></div><pre><code>// ── VALUES AND TYPES ──────────────────────────────────
+val x: Int    = 42         // immutable, inferred type is fine too
+var y         = 0          // mutable (use rarely)
+val s: String = s"$x is x" // string interpolation
+
+// ── FUNCTIONS ─────────────────────────────────────────
+def add(a: Int, b: Int): Int = a + b
+val double = (x: Int) => x * 2   // anonymous function
+val addOne: Int => Int = _ + 1   // underscore shorthand
+
+// ── CLASSES ───────────────────────────────────────────
+class Dog(val name: String)
+case class Cat(name: String, age: Int)  // preferred for data
+object Utils { def helper() = ... }     // singleton
+trait Runnable { def run(): Unit }      // interface
+
+// ── COLLECTIONS ───────────────────────────────────────
+val list   = List(1, 2, 3)
+val set    = Set("a", "b")
+val map    = Map("k" -> "v")
+val opt    = Some(42) / None
+
+list.map(_ * 2)          // List(2, 4, 6)
+list.filter(_ > 1)       // List(2, 3)
+list.reduce(_ + _)       // 6
+list.flatMap(x => List(x, x * 10))  // List(1, 10, 2, 20, 3, 30)
+
+// ── PATTERN MATCHING ──────────────────────────────────
+val result = value match
+  case 0          => "zero"
+  case n if n > 0 => s"positive: $n"
+  case _          => "other"
+
+// ── CONTROL FLOW ──────────────────────────────────────
+val r = if x > 0 then "pos" else "non-pos"  // expression
+for i <- 1 to 5 do println(i)
+for i <- list if i > 1 yield i * 2  // for-expression
+
+// ── OPTION / EITHER ───────────────────────────────────
+opt.getOrElse(0)
+opt.map(_ * 2)
+opt.flatMap(n => if n > 0 then Some(n) else None)
+
+// ── SBT COMMANDS ──────────────────────────────────────
+// sbt run       sbt test      sbt compile
+// sbt clean     sbt console   sbt ~compile
+// sbt assembly  sbt reload    sbt new scala/scala3.g8</code></pre></div>
+</section>
+<section id="s-roadmap"><div class="sec-label">ROADMAP</div><h2>Further Learning Roadmap</h2>
+<p>After completing this course, here is the recommended path to go deeper.</p>
+<div class="tw"><table><thead><tr><th>Phase</th><th>Topics to Learn</th><th>Resources</th></tr></thead><tbody><tr><td>Phase 1 — Foundations</td><td>Complete this course, capstone project</td><td>This document + docs.scala-lang.org</td></tr><tr><td>Phase 2 — Cats Effect</td><td>IO monad, concurrent data structures</td><td>typelevel.org/cats-effect</td></tr><tr><td>Phase 3 — Apache Spark</td><td>Spark basics, DataFrames, SparkSQL</td><td>spark.apache.org — free docs</td></tr><tr><td>Phase 4 — Akka / Pekko</td><td>Actor model, Akka Streams</td><td>pekko.apache.org (open source)</td></tr><tr><td>Phase 5 — Kafka + Scala</td><td>Streaming pipelines with kafka4s / FS2</td><td>fs2.io</td></tr><tr><td>Phase 6 — Contribute</td><td>Open source Scala projects on GitHub</td><td>github.com/search?q=language:Scala</td></tr></tbody></table></div>
+<div class="note nblue"><strong>India:</strong> All tools in the roadmap are 100% open source and free. Coursera / edX / YouTube have free Scala courses. The official Scala documentation at docs.scala-lang.org works offline once cached. For offline learning: download docs as PDF, save IntelliJ docs locally.</div>
+<div class="tw"><table><thead><tr><th>Online Resource</th><th>What It Covers</th><th>Cost</th></tr></thead><tbody><tr><td>docs.scala-lang.org</td><td>Official Scala 3 documentation and book</td><td>Free</td></tr><tr><td>Coursera: Functional Programming in Scala (Odersky)</td><td>Deep FP foundations from Scala's creator</td><td>Free to audit</td></tr><tr><td>rockthejvm.com</td><td>Video courses on Scala, Akka, Spark</td><td>Paid (some free)</td></tr><tr><td>github.com/scala/scala3</td><td>Read the Scala 3 source code</td><td>Free</td></tr><tr><td>scastie.scala-lang.org</td><td>Online Scala REPL — no installation needed</td><td>Free</td></tr></tbody></table></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> The path: Foundations → Cats Effect → Apache Spark → Akka/Pekko → Kafka. All resources are free. The official documentation works offline.</div>
+</section>
+</div>
+</div>
+<script>const links=document.querySelectorAll('.ni');const secs=document.querySelectorAll('section');const pf=document.getElementById('pf');
+function mark(id){links.forEach(n=>n.classList.toggle('active',n.getAttribute('href')==='#s-'+id));const idx=[...secs].findIndex(s=>s.id==='s-'+id);if(pf)pf.style.width=Math.round((idx+1)/secs.length*100)+'%';}
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)mark(e.target.id.replace('s-',''));});},{rootMargin:'-20% 0px -65% 0px'});
+secs.forEach(s=>obs.observe(s));links.forEach(n=>n.addEventListener('click',e=>{e.preventDefault();const id=n.getAttribute('href').replace('#s-','');const el=document.getElementById('s-'+id);if(el){el.scrollIntoView({behavior:'smooth'});mark(id);}}));</script>
+</body>
+</html>

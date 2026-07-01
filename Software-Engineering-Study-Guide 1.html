@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Software Engineering Study Guide - Comprehensive Q&amp;A Reference</title>
+<style>
+    :root {
+        --primary: #1f2a52;
+        --secondary: #3a4ba0;
+        --accent: #0b6e7c;
+        --light: #f3f5fa;
+        --border: #cfd6e4;
+        --text: #1f2933;
+        --muted: #54607a;
+        --good: #1d7a46;
+        --bad: #b0392c;
+        --code-bg: #11182b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: "Segoe UI", Calibri, Arial, sans-serif;
+        color: var(--text);
+        line-height: 1.55;
+        padding: 0 48px 64px 48px;
+        max-width: 1000px;
+        margin: 0 auto;
+        background: #ffffff;
+    }
+
+    h1, h2, h3, h4 { color: var(--primary); font-weight: 600; }
+    h1 { font-size: 28px; margin: 0 0 4px 0; }
+    h2 {
+        font-size: 22px;
+        border-bottom: 2px solid var(--secondary);
+        padding-bottom: 6px;
+        margin-top: 42px;
+    }
+    h3 { font-size: 17px; margin-top: 28px; color: var(--secondary); }
+    h4 { font-size: 15px; margin-top: 20px; color: var(--accent); }
+    p { margin: 10px 0; }
+
+    code {
+        font-family: "Consolas", "Courier New", monospace;
+        background: var(--light);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        padding: 1px 5px;
+        font-size: 13px;
+        color: #b03060;
+    }
+
+    pre {
+        font-family: "Consolas", "Courier New", monospace;
+        background: var(--code-bg);
+        color: #e8eef5;
+        border-radius: 6px;
+        padding: 16px 18px;
+        font-size: 12.5px;
+        line-height: 1.5;
+        overflow-x: auto;
+        white-space: pre;
+    }
+    pre code { background: none; border: none; color: inherit; padding: 0; font-size: 12.5px; }
+    .c-key { color: #79c0ff; }
+    .c-str { color: #a5d6a4; }
+    .c-com { color: #8b98a9; font-style: italic; }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 16px 0;
+        font-size: 13px;
+    }
+    th, td {
+        border: 1px solid var(--border);
+        padding: 8px 11px;
+        text-align: left;
+        vertical-align: top;
+    }
+    th { background: var(--primary); color: #ffffff; font-weight: 600; }
+    tr:nth-child(even) td { background: var(--light); }
+
+    .cover {
+        text-align: center;
+        padding: 80px 0 60px 0;
+        border-bottom: 3px solid var(--primary);
+        margin-bottom: 10px;
+    }
+    .cover .subtitle { font-size: 16px; color: var(--muted); margin-top: 8px; }
+    .cover .meta { font-size: 13px; color: var(--muted); margin-top: 36px; }
+    .badge {
+        display: inline-block;
+        background: var(--accent);
+        color: #fff;
+        font-size: 12px;
+        padding: 4px 12px;
+        border-radius: 14px;
+        margin: 4px;
+    }
+
+    .qa { margin: 14px 0; }
+    .q {
+        background: #eef1fb;
+        border-left: 4px solid var(--secondary);
+        padding: 8px 14px;
+        font-weight: 600;
+        color: var(--primary);
+        border-radius: 0 4px 4px 0;
+    }
+    .a { padding: 8px 14px 4px 14px; }
+
+    .note {
+        background: #eaf6f7;
+        border-left: 4px solid var(--accent);
+        padding: 10px 16px;
+        margin: 16px 0;
+        font-size: 13.5px;
+    }
+
+    .pill-good { color: var(--good); font-weight: 600; }
+    .pill-bad { color: var(--bad); font-weight: 600; }
+
+    .toc ol { line-height: 2.0; }
+    .toc a { color: var(--secondary); text-decoration: none; }
+    .toc ol ol { line-height: 1.6; font-size: 13px; }
+
+    footer {
+        margin-top: 50px;
+        border-top: 1px solid var(--border);
+        padding-top: 12px;
+        font-size: 12px;
+        color: var(--muted);
+        text-align: center;
+    }
+
+    @media print {
+        body { padding: 0 12px; }
+        h2 { page-break-after: avoid; }
+        pre, table, .note, .qa { page-break-inside: avoid; }
+        .page-break { page-break-before: always; }
+        .cover { padding: 60px 0 40px 0; }
+    }
+</style>
+</head>
+<body>
+
+<div class="cover">
+    <h1>Software Engineering Study Guide</h1>
+    <div class="subtitle">Comprehensive Q&amp;A, Comparison Tables, and Code Snippets</div>
+    <div style="margin-top:24px;">
+        <span class="badge">Agile &amp; Maintenance</span>
+        <span class="badge">Unix &amp; Scripting</span>
+        <span class="badge">Git</span>
+        <span class="badge">Bootstrap &amp; TypeScript</span>
+        <span class="badge">Logging</span>
+        <span class="badge">SOLID &amp; Patterns</span>
+        <span class="badge">Testing &amp; Quality</span>
+    </div>
+    <div class="meta">
+        Technical Reference Document<br>
+        Seven-Module Foundation Curriculum
+    </div>
+</div>
+
+<div class="toc">
+    <h2>Table of Contents</h2>
+    <ol>
+        <li><a href="#m1">Agile &amp; Software Maintenance</a></li>
+        <li><a href="#m2">Unix &amp; Scripting Fundamentals</a></li>
+        <li><a href="#m3">Version Control (Git)</a></li>
+        <li><a href="#m4">Front-End Essentials (Bootstrap 5 &amp; TypeScript)</a></li>
+        <li><a href="#m5">Logging Frameworks (Log4j &amp; SLF4J)</a></li>
+        <li><a href="#m6">Software Engineering Concepts (SOLID, Patterns, UML)</a></li>
+        <li><a href="#m7">Unit Testing &amp; Automated Quality Gates</a></li>
+    </ol>
+</div>
+
+<!-- ===================== MODULE 1 ===================== -->
+<h2 id="m1" class="page-break">1. Agile &amp; Software Maintenance</h2>
+
+<p>
+    Agile is an iterative approach to delivering software in small, working increments.
+    Scrum is the most widely used Agile framework. It organizes work into fixed-length
+    iterations called sprints, supported by defined roles, events (ceremonies), and artifacts.
+</p>
+
+<h3>1.1 Core Agile Values and Scrum Pillars</h3>
+<p>The Agile Manifesto defines four values. Scrum adds three empirical pillars.</p>
+<table>
+    <tr><th>Agile Value (preferred)</th><th>Over (still has value)</th></tr>
+    <tr><td>Individuals and interactions</td><td>Processes and tools</td></tr>
+    <tr><td>Working software</td><td>Comprehensive documentation</td></tr>
+    <tr><td>Customer collaboration</td><td>Contract negotiation</td></tr>
+    <tr><td>Responding to change</td><td>Following a plan</td></tr>
+</table>
+<table>
+    <tr><th>Scrum Pillar</th><th>Meaning</th></tr>
+    <tr><td>Transparency</td><td>The work and progress are visible to everyone involved</td></tr>
+    <tr><td>Inspection</td><td>Artifacts and progress are checked frequently to detect problems</td></tr>
+    <tr><td>Adaptation</td><td>The process or product is adjusted as soon as issues are found</td></tr>
+</table>
+
+<h3>1.2 Scrum Roles</h3>
+<table>
+    <tr><th>Role</th><th>Responsibility</th></tr>
+    <tr><td>Product Owner</td><td>Owns and prioritizes the product backlog, maximizes product value</td></tr>
+    <tr><td>Scrum Master</td><td>Facilitates the process, removes impediments, coaches the team</td></tr>
+    <tr><td>Development Team</td><td>Cross-functional group that builds the increment each sprint</td></tr>
+</table>
+
+<h3>1.3 Mandatory Ceremonies</h3>
+<table>
+    <tr><th>Ceremony</th><th>When</th><th>Timebox (2-wk sprint)</th><th>Purpose / Output</th></tr>
+    <tr><td>Sprint Planning</td><td>Start of sprint</td><td>Up to 4 hours</td><td>Select backlog items, define the sprint goal and plan</td></tr>
+    <tr><td>Daily Standup</td><td>Every day</td><td>15 minutes</td><td>Sync progress, surface blockers; not a status report to a manager</td></tr>
+    <tr><td>Sprint Review</td><td>End of sprint</td><td>Up to 2 hours</td><td>Demo the increment to stakeholders, gather feedback</td></tr>
+    <tr><td>Sprint Retrospective</td><td>After review</td><td>Up to 1.5 hours</td><td>Inspect the process, agree on improvements for next sprint</td></tr>
+</table>
+
+<div class="note">
+    <strong>Daily Standup three questions:</strong> What did I do yesterday? What will I do today?
+    Are there any impediments in my way?
+</div>
+
+<h3>1.4 Key Artifacts and Terms</h3>
+<table>
+    <tr><th>Term</th><th>Definition</th></tr>
+    <tr><td>Product Backlog</td><td>Ordered list of everything that might be needed in the product</td></tr>
+    <tr><td>Sprint Backlog</td><td>Items selected for the current sprint plus the plan to deliver them</td></tr>
+    <tr><td>Increment</td><td>The sum of completed backlog items, in a usable, shippable state</td></tr>
+    <tr><td>Definition of Done</td><td>Shared checklist that an item must meet to be called complete</td></tr>
+    <tr><td>Velocity</td><td>Average story points a team completes per sprint, used for forecasting</td></tr>
+    <tr><td>Story Points</td><td>Relative estimate of effort/complexity, often using Fibonacci numbers</td></tr>
+</table>
+
+<h3>1.5 Q&amp;A</h3>
+<div class="qa">
+    <div class="q">Q1. What is the difference between Agile and Scrum?</div>
+    <div class="a">Agile is a philosophy defined by the Agile Manifesto (values and principles). Scrum is one concrete framework that implements Agile using sprints, roles, and ceremonies. All Scrum is Agile, but not all Agile is Scrum (Kanban and XP are other Agile approaches).</div>
+</div>
+<div class="qa">
+    <div class="q">Q2. Can the Sprint Backlog change during a sprint?</div>
+    <div class="a">The sprint goal stays fixed, but the detailed work can be renegotiated between the team and Product Owner as more is learned. New scope that threatens the goal should wait for the next sprint.</div>
+</div>
+<div class="qa">
+    <div class="q">Q3. Who runs the Daily Standup?</div>
+    <div class="a">The Development Team owns it. The Scrum Master ensures it happens and stays within the timebox but does not run it as a status meeting.</div>
+</div>
+<div class="qa">
+    <div class="q">Q4. What is the difference between a Sprint Review and a Retrospective?</div>
+    <div class="a">The Review inspects the product (demo to stakeholders, feedback on what was built). The Retrospective inspects the process (how the team worked and how to improve).</div>
+</div>
+
+<h3>1.6 Software Maintenance, SLAs, and Support Levels</h3>
+<p>After release, software enters maintenance. Work is tracked as tickets governed by Service Level Agreements (SLAs).</p>
+
+<h4>Types of Maintenance</h4>
+<table>
+    <tr><th>Type</th><th>Purpose</th></tr>
+    <tr><td>Corrective</td><td>Fix defects found in production</td></tr>
+    <tr><td>Adaptive</td><td>Adjust to a changed environment (OS, browser, API, regulation)</td></tr>
+    <tr><td>Perfective</td><td>Improve performance or usability of working features</td></tr>
+    <tr><td>Preventive</td><td>Reduce future risk (refactoring, updating dependencies)</td></tr>
+</table>
+
+<h4>Service Level Agreement (SLA)</h4>
+<p>An SLA is a formal commitment between a service provider and customer that defines response and resolution targets, usually tied to ticket priority.</p>
+<table>
+    <tr><th>Priority</th><th>Example Impact</th><th>Sample Response SLA</th><th>Sample Resolution SLA</th></tr>
+    <tr><td>P1 (Critical)</td><td>Production down, all users blocked</td><td>15 minutes</td><td>4 hours</td></tr>
+    <tr><td>P2 (High)</td><td>Major feature broken, no workaround</td><td>1 hour</td><td>8 hours</td></tr>
+    <tr><td>P3 (Medium)</td><td>Minor feature issue, workaround exists</td><td>4 hours</td><td>3 business days</td></tr>
+    <tr><td>P4 (Low)</td><td>Cosmetic issue or request</td><td>1 business day</td><td>As scheduled</td></tr>
+</table>
+
+<h4>Ticket Lifecycle</h4>
+<pre>
+ New  -->  Assigned  -->  In Progress  -->  Pending / On Hold
+   |                                            |
+   |                                            v
+   |                                        Resolved
+   |                                            |
+   |                                            v
+   +----------------> Reopened <-----------  Closed
+       (if the fix did not work or issue recurs)
+</pre>
+<table>
+    <tr><th>Status</th><th>Meaning</th></tr>
+    <tr><td>New</td><td>Ticket logged, not yet triaged</td></tr>
+    <tr><td>Assigned</td><td>Owner identified and allocated</td></tr>
+    <tr><td>In Progress</td><td>Work actively underway</td></tr>
+    <tr><td>Pending / On Hold</td><td>Blocked, waiting on user, vendor, or dependency</td></tr>
+    <tr><td>Resolved</td><td>Fix applied, awaiting confirmation</td></tr>
+    <tr><td>Closed</td><td>Confirmed and signed off</td></tr>
+    <tr><td>Reopened</td><td>Issue recurred or fix rejected</td></tr>
+</table>
+
+<h4>Production Support Levels</h4>
+<table>
+    <tr><th>Level</th><th>Who</th><th>Scope</th><th>Typical Actions</th></tr>
+    <tr><td>L1</td><td>Help desk / first response</td><td>Basic, known issues</td><td>Triage, follow runbooks, reset, gather details, escalate</td></tr>
+    <tr><td>L2</td><td>Technical support / app team</td><td>Deeper config and app issues</td><td>Analyze logs, apply known fixes, reproduce defects, escalate complex bugs</td></tr>
+    <tr><td>L3</td><td>Engineering / developers</td><td>Root-cause and code fixes</td><td>Debug source, patch code, fix data, deliver permanent fix</td></tr>
+</table>
+<div class="qa">
+    <div class="q">Q5. What is the difference between response time and resolution time in an SLA?</div>
+    <div class="a">Response time is how quickly the team acknowledges and begins work on a ticket. Resolution time is how quickly the issue is actually fixed. A P1 may require a 15-minute response but allow a few hours for full resolution.</div>
+</div>
+<div class="qa">
+    <div class="q">Q6. When should L2 escalate to L3?</div>
+    <div class="a">When the issue requires source-code changes, a database fix, or root-cause analysis that goes beyond configuration and known workarounds. L3 owns permanent code-level fixes.</div>
+</div>
+
+<!-- ===================== MODULE 2 ===================== -->
+<h2 id="m2" class="page-break">2. Unix &amp; Scripting Fundamentals</h2>
+<p>
+    Unix and Linux expose a powerful command line where small, single-purpose tools are combined
+    to perform complex tasks. Mastering navigation, permissions, and text-stream tools is essential
+    for support and automation work.
+</p>
+
+<h3>2.1 Filesystem Navigation</h3>
+<table>
+    <tr><th>Command</th><th>Purpose</th><th>Example</th></tr>
+    <tr><td>pwd</td><td>Print working directory</td><td><code>pwd</code></td></tr>
+    <tr><td>ls</td><td>List directory contents</td><td><code>ls -la</code> (long, including hidden)</td></tr>
+    <tr><td>cd</td><td>Change directory</td><td><code>cd /var/log</code></td></tr>
+    <tr><td>mkdir</td><td>Create directory</td><td><code>mkdir -p a/b/c</code></td></tr>
+    <tr><td>cp</td><td>Copy files/directories</td><td><code>cp -r src dest</code></td></tr>
+    <tr><td>mv</td><td>Move or rename</td><td><code>mv old.txt new.txt</code></td></tr>
+    <tr><td>rm</td><td>Remove</td><td><code>rm -rf temp/</code></td></tr>
+    <tr><td>find</td><td>Search the tree</td><td><code>find . -name "*.log"</code></td></tr>
+    <tr><td>cat / less</td><td>View file contents</td><td><code>less app.log</code></td></tr>
+</table>
+<table>
+    <tr><th>Path Symbol</th><th>Meaning</th></tr>
+    <tr><td><code>.</code></td><td>Current directory</td></tr>
+    <tr><td><code>..</code></td><td>Parent directory</td></tr>
+    <tr><td><code>~</code></td><td>Home directory of the current user</td></tr>
+    <tr><td><code>/</code></td><td>Root of the filesystem</td></tr>
+</table>
+
+<h3>2.2 File Permissions: chmod and chown</h3>
+<p>
+    Each file has three permission groups: owner (user), group, and others. Each group can have
+    read (r=4), write (w=2), and execute (x=1) permissions.
+</p>
+<pre>
+ -rwxr-xr--   1  alice  devs   ...   script.sh
+ |  |  |  |
+ |  |  |  +--- others: r--  (4)  read only
+ |  |  +------ group:  r-x  (5)  read + execute
+ |  +--------- owner:  rwx  (7)  read + write + execute
+ +------------ file type ( - file, d directory, l link )
+</pre>
+<table>
+    <tr><th>Octal</th><th>Symbolic</th><th>Meaning</th></tr>
+    <tr><td>7</td><td>rwx</td><td>read + write + execute</td></tr>
+    <tr><td>6</td><td>rw-</td><td>read + write</td></tr>
+    <tr><td>5</td><td>r-x</td><td>read + execute</td></tr>
+    <tr><td>4</td><td>r--</td><td>read only</td></tr>
+    <tr><td>0</td><td>---</td><td>no access</td></tr>
+</table>
+<pre>
+<span class="c-com"># Give owner all, group read+execute, others read (754)</span>
+chmod 754 script.sh
+
+<span class="c-com"># Symbolic form: add execute for the owner</span>
+chmod u+x script.sh
+
+<span class="c-com"># Recursively set permissions on a directory tree</span>
+chmod -R 755 /opt/app
+
+<span class="c-com"># Change the owner to 'alice' and group to 'devs'</span>
+chown alice:devs script.sh
+
+<span class="c-com"># Change owner recursively</span>
+chown -R alice:devs /opt/app
+</pre>
+
+<h3>2.3 Stream Processing: grep, awk, sed</h3>
+<table>
+    <tr><th>Tool</th><th>Best at</th><th>One-line description</th></tr>
+    <tr><td>grep</td><td>Searching</td><td>Find lines that match a pattern</td></tr>
+    <tr><td>awk</td><td>Columns / fields</td><td>Process structured text by field, compute, format</td></tr>
+    <tr><td>sed</td><td>Editing</td><td>Stream editor for find-and-replace and transforms</td></tr>
+</table>
+<pre>
+<span class="c-com"># grep: show ERROR lines, case-insensitive, with line numbers</span>
+grep -in "error" app.log
+
+<span class="c-com"># grep: recursive search in a project for a TODO</span>
+grep -rn "TODO" ./src
+
+<span class="c-com"># awk: print the 1st and 3rd whitespace-separated columns</span>
+awk '{ print $1, $3 }' access.log
+
+<span class="c-com"># awk: sum the 5th column (e.g., bytes transferred)</span>
+awk '{ total += $5 } END { print total }' access.log
+
+<span class="c-com"># awk: use a custom field separator (CSV) and filter</span>
+awk -F',' '$3 > 100 { print $1 }' data.csv
+
+<span class="c-com"># sed: replace the first 'foo' with 'bar' on each line</span>
+sed 's/foo/bar/' file.txt
+
+<span class="c-com"># sed: replace ALL occurrences (global) and edit the file in place</span>
+sed -i 's/foo/bar/g' file.txt
+
+<span class="c-com"># sed: delete blank lines</span>
+sed '/^$/d' file.txt
+</pre>
+
+<h3>2.4 Pipes and Redirection</h3>
+<p>A pipe <code>|</code> sends the output of one command as the input of the next, allowing small tools to be chained.</p>
+<pre>
+<span class="c-com"># Count how many ERROR lines are in the log</span>
+grep "ERROR" app.log | wc -l
+
+<span class="c-com"># Top 5 most frequent IP addresses in an access log</span>
+awk '{ print $1 }' access.log | sort | uniq -c | sort -nr | head -5
+
+<span class="c-com"># Redirection operators</span>
+command &gt;  out.txt   <span class="c-com"># overwrite stdout to a file</span>
+command &gt;&gt; out.txt   <span class="c-com"># append stdout to a file</span>
+command 2&gt; err.txt   <span class="c-com"># redirect stderr</span>
+command &lt;  in.txt    <span class="c-com"># take stdin from a file</span>
+</pre>
+
+<h3>2.5 Basic Shell Script Structure</h3>
+<pre>
+<span class="c-key">#!/bin/bash</span>
+<span class="c-com"># The shebang line tells the OS to run this with bash.</span>
+
+<span class="c-com"># Variables (no spaces around =)</span>
+NAME=<span class="c-str">"World"</span>
+COUNT=3
+
+<span class="c-com"># Use a variable with $</span>
+<span class="c-key">echo</span> <span class="c-str">"Hello, $NAME"</span>
+
+<span class="c-com"># Conditional</span>
+<span class="c-key">if</span> [ -f app.log ]; <span class="c-key">then</span>
+    <span class="c-key">echo</span> <span class="c-str">"Log file exists"</span>
+<span class="c-key">else</span>
+    <span class="c-key">echo</span> <span class="c-str">"No log file"</span>
+<span class="c-key">fi</span>
+
+<span class="c-com"># Loop</span>
+<span class="c-key">for</span> i <span class="c-key">in</span> 1 2 3; <span class="c-key">do</span>
+    <span class="c-key">echo</span> <span class="c-str">"Iteration $i"</span>
+<span class="c-key">done</span>
+
+<span class="c-com"># Function and exit status</span>
+backup() {
+    cp <span class="c-str">"$1"</span> <span class="c-str">"$1.bak"</span>
+    <span class="c-key">return</span> $?
+}
+backup app.log
+</pre>
+<table>
+    <tr><th>Test Flag</th><th>True when</th></tr>
+    <tr><td><code>-f file</code></td><td>file exists and is a regular file</td></tr>
+    <tr><td><code>-d dir</code></td><td>directory exists</td></tr>
+    <tr><td><code>-z str</code></td><td>string is empty</td></tr>
+    <tr><td><code>-n str</code></td><td>string is not empty</td></tr>
+    <tr><td><code>$?</code></td><td>exit status of the last command (0 = success)</td></tr>
+</table>
+
+<h3>2.6 Q&amp;A</h3>
+<div class="qa">
+    <div class="q">Q1. When would you use awk instead of grep?</div>
+    <div class="a">Use grep to find lines matching a pattern. Use awk when you need to work with specific columns or fields, do arithmetic, or format output. grep filters; awk processes.</div>
+</div>
+<div class="qa">
+    <div class="q">Q2. What is the difference between <code>&gt;</code> and <code>&gt;&gt;</code>?</div>
+    <div class="a"><code>&gt;</code> overwrites the target file with new output. <code>&gt;&gt;</code> appends to the end of the file, preserving existing content.</div>
+</div>
+<div class="qa">
+    <div class="q">Q3. What does <code>chmod 755</code> mean?</div>
+    <div class="a">Owner gets read+write+execute (7), group gets read+execute (5), others get read+execute (5). It is common for executable scripts and directories.</div>
+</div>
+<div class="qa">
+    <div class="q">Q4. Why is the shebang line important?</div>
+    <div class="a">The shebang (<code>#!/bin/bash</code>) tells the operating system which interpreter to use to run the script, so it executes consistently regardless of the user's current shell.</div>
+</div>
+
+<!-- ===================== MODULE 3 ===================== -->
+<h2 id="m3" class="page-break">3. Version Control (Git)</h2>
+<p>
+    Git is a distributed version control system. Every developer has a full copy of the repository
+    and its history. Work moves through well-defined areas before it is shared with others.
+</p>
+
+<h3>3.1 Git Architecture: The Four Areas</h3>
+<pre>
+  Working Directory      Staging Area (Index)     Local Repository       Remote Repository
+  (your edited files)    (snapshot to commit)     (.git, full history)   (GitHub/GitLab)
+        |                       |                        |                      |
+        |---- git add --------->|                        |                      |
+        |                       |---- git commit ------->|                      |
+        |                       |                        |---- git push ------->|
+        |                       |                        |<--- git fetch -------|
+        |<----------------- git checkout / merge --------|                      |
+        |<--------------------------- git pull (fetch + merge) ----------------|
+</pre>
+<table>
+    <tr><th>Area</th><th>What it holds</th><th>Command to move into it</th></tr>
+    <tr><td>Working Directory</td><td>Actual files you edit</td><td>(edit files)</td></tr>
+    <tr><td>Staging Area / Index</td><td>The next snapshot you intend to commit</td><td><code>git add</code></td></tr>
+    <tr><td>Local Repository</td><td>Committed history on your machine</td><td><code>git commit</code></td></tr>
+    <tr><td>Remote Repository</td><td>Shared history on a server</td><td><code>git push</code></td></tr>
+</table>
+
+<h3>3.2 Everyday Commands</h3>
+<pre>
+<span class="c-com"># Set up</span>
+git init                      <span class="c-com"># start a new repo</span>
+git clone &lt;url&gt;               <span class="c-com"># copy an existing remote repo</span>
+
+<span class="c-com"># Inspect</span>
+git status                    <span class="c-com"># what changed, what is staged</span>
+git log --oneline --graph     <span class="c-com"># compact history with branch lines</span>
+git diff                      <span class="c-com"># unstaged changes</span>
+
+<span class="c-com"># Record changes</span>
+git add file.txt              <span class="c-com"># stage one file</span>
+git add .                     <span class="c-com"># stage everything</span>
+git commit -m "message"       <span class="c-com"># commit staged changes</span>
+
+<span class="c-com"># Sync with remote</span>
+git push origin main
+git pull origin main          <span class="c-com"># fetch + merge</span>
+git fetch origin              <span class="c-com"># download only, no merge</span>
+</pre>
+
+<h3>3.3 Branching Strategies</h3>
+<pre>
+<span class="c-com"># Create and switch to a feature branch</span>
+git branch feature/login
+git checkout feature/login
+<span class="c-com"># or, in one step:</span>
+git checkout -b feature/login
+<span class="c-com"># modern equivalent:</span>
+git switch -c feature/login
+</pre>
+<table>
+    <tr><th>Strategy</th><th>Idea</th><th>Best for</th></tr>
+    <tr><td>Git Flow</td><td>Long-lived main and develop branches, plus feature, release, hotfix branches</td><td>Scheduled releases, larger teams</td></tr>
+    <tr><td>GitHub Flow</td><td>Single main branch; short-lived feature branches merged via pull request</td><td>Continuous delivery, web apps</td></tr>
+    <tr><td>Trunk-Based</td><td>Everyone commits to main frequently behind feature flags</td><td>High-maturity CI/CD teams</td></tr>
+</table>
+
+<h3>3.4 Merge vs. Rebase</h3>
+<table>
+    <tr><th>Aspect</th><th>Merge</th><th>Rebase</th></tr>
+    <tr><td>History</td><td>Preserves it; creates a merge commit</td><td>Rewrites it; replays commits onto a new base</td></tr>
+    <tr><td>Shape</td><td>Branched, non-linear graph</td><td>Clean, linear history</td></tr>
+    <tr><td>Traceability</td><td>Shows exactly when branches joined</td><td>Hides the original branch points</td></tr>
+    <tr><td>Safety on shared branches</td><td><span class="pill-good">Safe</span></td><td><span class="pill-bad">Risky</span> (do not rebase pushed/shared commits)</td></tr>
+    <tr><td>Golden rule</td><td colspan="2">Never rebase commits that others have already pulled.</td></tr>
+</table>
+<pre>
+<span class="c-com"># Merge: bring feature into main, keeping both histories</span>
+git checkout main
+git merge feature/login
+
+<span class="c-com"># Rebase: replay feature commits on top of the latest main</span>
+git checkout feature/login
+git rebase main
+</pre>
+<pre>
+ Merge result:                         Rebase result:
+   A---B---C  main                       A---B---C  main
+        \       \                                  \
+         D---E---M (merge commit)                   D'--E'  feature (linear)
+              feature
+</pre>
+
+<h3>3.5 Resolving a Merge Conflict (Manually)</h3>
+<p>A conflict happens when two branches change the same lines. Git marks the conflict and pauses.</p>
+<pre>
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+int timeout = 30;        <span class="c-com">// your current branch's version</span>
+=======
+int timeout = 60;        <span class="c-com">// the incoming branch's version</span>
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/login
+</pre>
+<p>Steps to resolve:</p>
+<pre>
+<span class="c-com"># 1. See which files conflict</span>
+git status
+
+<span class="c-com"># 2. Open each file, pick the correct code, and remove the</span>
+<span class="c-com">#    &lt;&lt;&lt;&lt;, ====, and &gt;&gt;&gt;&gt; markers entirely.</span>
+
+<span class="c-com"># 3. Stage the resolved files</span>
+git add Config.java
+
+<span class="c-com"># 4a. If merging:</span>
+git commit
+
+<span class="c-com"># 4b. If rebasing:</span>
+git rebase --continue
+
+<span class="c-com"># To abandon and start over:</span>
+git merge --abort      <span class="c-com"># or: git rebase --abort</span>
+</pre>
+
+<h3>3.6 Q&amp;A</h3>
+<div class="qa">
+    <div class="q">Q1. What is the difference between <code>git fetch</code> and <code>git pull</code>?</div>
+    <div class="a"><code>git fetch</code> downloads new commits from the remote but does not change your working branch. <code>git pull</code> is <code>fetch</code> followed by <code>merge</code>, so it also updates your current branch.</div>
+</div>
+<div class="qa">
+    <div class="q">Q2. What is the difference between staging and committing?</div>
+    <div class="a">Staging (<code>git add</code>) selects which changes go into the next snapshot. Committing (<code>git commit</code>) permanently records that snapshot in the local repository with a message.</div>
+</div>
+<div class="qa">
+    <div class="q">Q3. When should you use rebase over merge?</div>
+    <div class="a">Use rebase to keep a clean, linear history on your own local feature branch before sharing it. Use merge to integrate shared branches. Never rebase commits that have already been pushed and pulled by others.</div>
+</div>
+<div class="qa">
+    <div class="q">Q4. What causes a merge conflict?</div>
+    <div class="a">Two branches modify the same lines of the same file, or one edits a file the other deletes. Git cannot decide automatically, so it marks the region and asks a human to choose.</div>
+</div>
+
+<!-- ===================== MODULE 4 ===================== -->
+<h2 id="m4" class="page-break">4. Front-End Essentials (Bootstrap 5 &amp; TypeScript)</h2>
+
+<h3>4.1 Bootstrap 5 Grid System</h3>
+<p>
+    Bootstrap's grid is a 12-column, flexbox-based layout. Content sits in columns, columns sit in
+    rows, and rows sit in a container. Columns in a row should add up to 12.
+</p>
+<pre>
+&lt;div class="container"&gt;
+  &lt;div class="row"&gt;
+    &lt;div class="col-4"&gt;One third&lt;/div&gt;
+    &lt;div class="col-4"&gt;One third&lt;/div&gt;
+    &lt;div class="col-4"&gt;One third&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+<table>
+    <tr><th>Element</th><th>Role</th></tr>
+    <tr><td><code>.container</code></td><td>Fixed-width, centered wrapper that changes width per breakpoint</td></tr>
+    <tr><td><code>.container-fluid</code></td><td>Full-width wrapper spanning the whole viewport</td></tr>
+    <tr><td><code>.row</code></td><td>Horizontal group of columns; uses negative margins</td></tr>
+    <tr><td><code>.col</code> / <code>.col-*</code></td><td>A column; the number is how many of 12 units it spans</td></tr>
+</table>
+
+<h3>4.2 Responsive Breakpoints</h3>
+<p>Breakpoint infixes make a column behave differently at different screen widths.</p>
+<table>
+    <tr><th>Breakpoint</th><th>Infix</th><th>Applies from width</th><th>Typical device</th></tr>
+    <tr><td>Extra small</td><td>(none)</td><td>&lt; 576px</td><td>Phones (portrait)</td></tr>
+    <tr><td>Small</td><td>sm</td><td>&ge; 576px</td><td>Phones (landscape)</td></tr>
+    <tr><td>Medium</td><td>md</td><td>&ge; 768px</td><td>Tablets</td></tr>
+    <tr><td>Large</td><td>lg</td><td>&ge; 992px</td><td>Laptops</td></tr>
+    <tr><td>Extra large</td><td>xl</td><td>&ge; 1200px</td><td>Desktops</td></tr>
+    <tr><td>XXL</td><td>xxl</td><td>&ge; 1400px</td><td>Large desktops</td></tr>
+</table>
+<pre>
+<span class="c-com">&lt;!-- Full width on phones, half on tablets, one-third on laptops --&gt;</span>
+&lt;div class="col-12 col-md-6 col-lg-4"&gt;Responsive column&lt;/div&gt;
+</pre>
+
+<h3>4.3 Flex Utilities</h3>
+<table>
+    <tr><th>Class</th><th>Effect</th></tr>
+    <tr><td><code>d-flex</code></td><td>Make the element a flex container</td></tr>
+    <tr><td><code>flex-row</code> / <code>flex-column</code></td><td>Set main axis horizontal or vertical</td></tr>
+    <tr><td><code>justify-content-center</code></td><td>Align items along the main axis (start, center, between, around)</td></tr>
+    <tr><td><code>align-items-center</code></td><td>Align items along the cross axis</td></tr>
+    <tr><td><code>flex-wrap</code></td><td>Allow items to wrap onto multiple lines</td></tr>
+    <tr><td><code>gap-3</code></td><td>Add spacing between flex items</td></tr>
+</table>
+<pre>
+<span class="c-com">&lt;!-- Center content both horizontally and vertically --&gt;</span>
+&lt;div class="d-flex justify-content-center align-items-center" style="height:200px"&gt;
+  &lt;button class="btn btn-primary"&gt;Centered&lt;/button&gt;
+&lt;/div&gt;
+</pre>
+
+<h3>4.4 TypeScript Foundations</h3>
+<p>
+    TypeScript is a superset of JavaScript that adds optional static typing. Browsers cannot run it
+    directly; it is transpiled (compiled) into plain JavaScript.
+</p>
+<pre>
+TypeScript (.ts)  --[ tsc compiler ]-->  JavaScript (.js)  -->  runs in browser/Node
+</pre>
+
+<h4>Static Typing</h4>
+<pre>
+<span class="c-key">let</span> count: number = 5;
+<span class="c-key">let</span> title: string = <span class="c-str">"Report"</span>;
+<span class="c-key">let</span> active: boolean = <span class="c-key">true</span>;
+
+<span class="c-com">// Function with typed parameters and return type</span>
+<span class="c-key">function</span> add(a: number, b: number): number {
+    <span class="c-key">return</span> a + b;
+}
+
+<span class="c-com">// Error caught at compile time, not at runtime:</span>
+<span class="c-com">// add("2", 3);  // string is not assignable to number</span>
+</pre>
+
+<h4>Interface vs. Type</h4>
+<pre>
+<span class="c-com">// interface: best for object shapes, can be extended and merged</span>
+<span class="c-key">interface</span> User {
+    id: number;
+    name: string;
+    email?: string;      <span class="c-com">// optional property</span>
+}
+
+<span class="c-com">// type alias: can also model unions and primitives</span>
+<span class="c-key">type</span> Status = <span class="c-str">"active"</span> | <span class="c-str">"inactive"</span>;   <span class="c-com">// union type</span>
+<span class="c-key">type</span> ID = number | string;
+</pre>
+<table>
+    <tr><th>Aspect</th><th>interface</th><th>type</th></tr>
+    <tr><td>Object shapes</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Extends / inherits</td><td><code>extends</code></td><td>Intersection <code>&amp;</code></td></tr>
+    <tr><td>Declaration merging</td><td>Yes (re-open and add)</td><td>No</td></tr>
+    <tr><td>Unions / primitives</td><td>No</td><td>Yes</td></tr>
+    <tr><td>Recommended for</td><td>Public object contracts</td><td>Unions, tuples, complex composed types</td></tr>
+</table>
+
+<h3>4.5 Q&amp;A</h3>
+<div class="qa">
+    <div class="q">Q1. Why must columns add up to 12 in Bootstrap?</div>
+    <div class="a">The grid divides each row into 12 equal units. Using 12 total ensures columns fit on one line; exceeding 12 makes the extra columns wrap to a new line.</div>
+</div>
+<div class="qa">
+    <div class="q">Q2. What does <code>col-12 col-md-6</code> mean?</div>
+    <div class="a">The element spans all 12 units (full width) on extra-small and small screens, and 6 units (half width) from the medium breakpoint upward. This is mobile-first responsive design.</div>
+</div>
+<div class="qa">
+    <div class="q">Q3. What is transpilation?</div>
+    <div class="a">Transpilation converts source code from one language to another at a similar level of abstraction. TypeScript is transpiled by the <code>tsc</code> compiler into JavaScript that browsers can run.</div>
+</div>
+<div class="qa">
+    <div class="q">Q4. When should you choose a type over an interface?</div>
+    <div class="a">Use <code>type</code> when you need union types, tuples, or to compose complex types. Use <code>interface</code> for object contracts you expect to extend or that form a public API.</div>
+</div>
+
+<!-- ===================== MODULE 5 ===================== -->
+<h2 id="m5" class="page-break">5. Logging Frameworks (Log4j &amp; SLF4J)</h2>
+<p>
+    Logging records what an application does at runtime. A logging framework provides control over
+    what is recorded, at what severity, in what format, and where it is sent.
+</p>
+
+<h3>5.1 SLF4J vs. Log4j: Facade vs. Implementation</h3>
+<table>
+    <tr><th>Aspect</th><th>SLF4J</th><th>Log4j 2 / Logback</th></tr>
+    <tr><td>What it is</td><td>An abstraction (facade) API</td><td>A concrete logging implementation</td></tr>
+    <tr><td>Role</td><td>You code against it</td><td>It does the actual logging work</td></tr>
+    <tr><td>Benefit</td><td>Swap the backend without changing code</td><td>Performance, appenders, configuration</td></tr>
+    <tr><td>Analogy</td><td>The power socket standard</td><td>The power station behind it</td></tr>
+</table>
+<div class="note">
+    Best practice: write code against the SLF4J API and plug in Log4j 2 or Logback as the backend.
+    This decouples your application from any single logging library.
+</div>
+<pre>
+<span class="c-com">// Code is written against SLF4J, not the implementation</span>
+<span class="c-key">import</span> org.slf4j.Logger;
+<span class="c-key">import</span> org.slf4j.LoggerFactory;
+
+<span class="c-key">public class</span> OrderService {
+    <span class="c-key">private static final</span> Logger log = LoggerFactory.getLogger(OrderService.<span class="c-key">class</span>);
+
+    <span class="c-key">public void</span> place(String id) {
+        <span class="c-com">// Parameterized logging avoids building the string unless needed</span>
+        log.info(<span class="c-str">"Placing order {}"</span>, id);
+        <span class="c-key">try</span> {
+            <span class="c-com">// ... business logic ...</span>
+        } <span class="c-key">catch</span> (Exception e) {
+            log.error(<span class="c-str">"Failed to place order {}"</span>, id, e);
+        }
+    }
+}
+</pre>
+
+<h3>5.2 Logging Levels</h3>
+<p>Levels are ordered by severity. A configured threshold shows that level and everything more severe.</p>
+<table>
+    <tr><th>Level</th><th>Severity</th><th>Use for</th><th>Typical environment</th></tr>
+    <tr><td>TRACE</td><td>Lowest</td><td>Very fine-grained flow, loop internals</td><td>Deep debugging only</td></tr>
+    <tr><td>DEBUG</td><td>Low</td><td>Diagnostic detail, variable values</td><td>Development</td></tr>
+    <tr><td>INFO</td><td>Normal</td><td>High-level milestones (started, processed)</td><td>Production (default)</td></tr>
+    <tr><td>WARN</td><td>Elevated</td><td>Unexpected but recoverable situations</td><td>Production</td></tr>
+    <tr><td>ERROR</td><td>High</td><td>A failure in the current operation</td><td>Production (alerting)</td></tr>
+    <tr><td>FATAL</td><td>Highest</td><td>Severe failure; app may abort (Log4j term)</td><td>Production (paging)</td></tr>
+</table>
+<pre>
+ If threshold = INFO, then:
+   TRACE  DEBUG  | INFO  WARN  ERROR  FATAL
+   (hidden)      | (shown ------------------>)
+</pre>
+
+<h3>5.3 Appenders</h3>
+<p>An appender decides where log output goes. A logger can have several appenders at once.</p>
+<table>
+    <tr><th>Appender</th><th>Destination</th></tr>
+    <tr><td>ConsoleAppender</td><td>Standard output / console</td></tr>
+    <tr><td>FileAppender</td><td>A single file</td></tr>
+    <tr><td>RollingFileAppender</td><td>Files that roll over by size or date</td></tr>
+    <tr><td>JDBCAppender</td><td>A database table</td></tr>
+    <tr><td>SMTPAppender</td><td>Email (often for ERROR and above)</td></tr>
+</table>
+<pre>
+<span class="c-com">&lt;!-- Log4j2 log4j2.xml: console + rolling file --&gt;</span>
+&lt;Configuration status="WARN"&gt;
+  &lt;Appenders&gt;
+    &lt;Console name="Console" target="SYSTEM_OUT"&gt;
+      &lt;PatternLayout pattern="%d{HH:mm:ss} %-5level %logger{36} - %msg%n"/&gt;
+    &lt;/Console&gt;
+    &lt;RollingFile name="File" fileName="logs/app.log"
+                 filePattern="logs/app-%d{yyyy-MM-dd}.log.gz"&gt;
+      &lt;PatternLayout pattern="%d %-5level [%t] %c - %msg%n"/&gt;
+      &lt;Policies&gt;
+        &lt;TimeBasedTriggeringPolicy/&gt;
+        &lt;SizeBasedTriggeringPolicy size="10 MB"/&gt;
+      &lt;/Policies&gt;
+    &lt;/RollingFile&gt;
+  &lt;/Appenders&gt;
+  &lt;Loggers&gt;
+    &lt;Root level="info"&gt;
+      &lt;AppenderRef ref="Console"/&gt;
+      &lt;AppenderRef ref="File"/&gt;
+    &lt;/Root&gt;
+  &lt;/Loggers&gt;
+&lt;/Configuration&gt;
+</pre>
+
+<h3>5.4 Why Logging Beats System.out.println</h3>
+<table>
+    <tr><th>Capability</th><th>Logging Framework</th><th>System.out.println</th></tr>
+    <tr><td>Severity levels</td><td><span class="pill-good">Yes</span></td><td><span class="pill-bad">No</span></td></tr>
+    <tr><td>Turn off without editing code</td><td><span class="pill-good">Yes (config)</span></td><td><span class="pill-bad">No (recompile)</span></td></tr>
+    <tr><td>Multiple destinations</td><td><span class="pill-good">Yes (appenders)</span></td><td><span class="pill-bad">Console only</span></td></tr>
+    <tr><td>Timestamp, thread, class context</td><td><span class="pill-good">Automatic</span></td><td><span class="pill-bad">Manual</span></td></tr>
+    <tr><td>File rotation / archiving</td><td><span class="pill-good">Yes</span></td><td><span class="pill-bad">No</span></td></tr>
+    <tr><td>Performance under load</td><td><span class="pill-good">Async, buffered</span></td><td><span class="pill-bad">Synchronous, slow</span></td></tr>
+</table>
+
+<h3>5.5 Q&amp;A</h3>
+<div class="qa">
+    <div class="q">Q1. What is the difference between SLF4J and Log4j?</div>
+    <div class="a">SLF4J is a facade (an API you program against). Log4j is an implementation that performs the logging. SLF4J lets you change the underlying logging library without changing application code.</div>
+</div>
+<div class="qa">
+    <div class="q">Q2. If the level is set to WARN, will INFO messages appear?</div>
+    <div class="a">No. Only WARN, ERROR, and FATAL appear. The threshold shows the chosen level and everything more severe; less severe levels are suppressed.</div>
+</div>
+<div class="qa">
+    <div class="q">Q3. Why prefer parameterized logging like <code>log.info("id {}", id)</code>?</div>
+    <div class="a">The message string is only assembled if that level is enabled, avoiding unnecessary string concatenation and improving performance, especially for DEBUG and TRACE.</div>
+</div>
+<div class="qa">
+    <div class="q">Q4. Why is System.out.println discouraged in real applications?</div>
+    <div class="a">It has no levels, cannot be reconfigured without recompiling, writes only to the console, lacks context like timestamps and thread names, and performs poorly under load. A logging framework solves all of these.</div>
+</div>
+
+<!-- ===================== MODULE 6 ===================== -->
+<h2 id="m6" class="page-break">6. Software Engineering Concepts (SOLID, Patterns, UML)</h2>
+
+<h3>6.1 SOLID Principles</h3>
+<table>
+    <tr><th>Letter</th><th>Principle</th><th>Meaning</th></tr>
+    <tr><td>S</td><td>Single Responsibility</td><td>A class should have only one reason to change</td></tr>
+    <tr><td>O</td><td>Open/Closed</td><td>Open for extension, closed for modification</td></tr>
+    <tr><td>L</td><td>Liskov Substitution</td><td>Subtypes must be usable wherever the base type is expected</td></tr>
+    <tr><td>I</td><td>Interface Segregation</td><td>Prefer many small, specific interfaces over one large one</td></tr>
+    <tr><td>D</td><td>Dependency Inversion</td><td>Depend on abstractions, not concrete classes</td></tr>
+</table>
+<pre>
+<span class="c-com">// Single Responsibility: each class does one job</span>
+<span class="c-key">class</span> InvoiceCalculator { <span class="c-key">double</span> total(Invoice i) { <span class="c-com">/* ... */</span> } }
+<span class="c-key">class</span> InvoicePrinter    { <span class="c-key">void</span> print(Invoice i)    { <span class="c-com">/* ... */</span> } }
+<span class="c-key">class</span> InvoiceRepository { <span class="c-key">void</span> save(Invoice i)     { <span class="c-com">/* ... */</span> } }
+
+<span class="c-com">// Dependency Inversion: depend on an interface, not a concrete class</span>
+<span class="c-key">interface</span> PaymentGateway { <span class="c-key">void</span> charge(<span class="c-key">double</span> amount); }
+
+<span class="c-key">class</span> CheckoutService {
+    <span class="c-key">private final</span> PaymentGateway gateway;       <span class="c-com">// abstraction</span>
+    CheckoutService(PaymentGateway gateway) {     <span class="c-com">// injected</span>
+        <span class="c-key">this</span>.gateway = gateway;
+    }
+}
+</pre>
+
+<h3>6.2 Design Pattern Categories</h3>
+<table>
+    <tr><th>Category</th><th>Solves</th><th>Examples</th></tr>
+    <tr><td>Creational</td><td>How objects are created</td><td>Singleton, Factory Method, Abstract Factory, Builder, Prototype</td></tr>
+    <tr><td>Structural</td><td>How objects are composed</td><td>Adapter, Decorator, Facade, Composite, Proxy, Bridge, Flyweight</td></tr>
+    <tr><td>Behavioral</td><td>How objects interact and share responsibility</td><td>Strategy, Observer, Command, Template Method, Iterator, State</td></tr>
+</table>
+
+<h4>Creational: Singleton</h4>
+<pre>
+<span class="c-key">public class</span> Config {
+    <span class="c-key">private static final</span> Config INSTANCE = <span class="c-key">new</span> Config();
+    <span class="c-key">private</span> Config() { }                     <span class="c-com">// private constructor</span>
+    <span class="c-key">public static</span> Config getInstance() {     <span class="c-com">// single global access point</span>
+        <span class="c-key">return</span> INSTANCE;
+    }
+}
+</pre>
+
+<h4>Creational: Factory Method</h4>
+<pre>
+<span class="c-key">interface</span> Shape { <span class="c-key">void</span> draw(); }
+<span class="c-key">class</span> Circle <span class="c-key">implements</span> Shape { <span class="c-key">public void</span> draw() { } }
+<span class="c-key">class</span> Square <span class="c-key">implements</span> Shape { <span class="c-key">public void</span> draw() { } }
+
+<span class="c-key">class</span> ShapeFactory {
+    Shape create(String type) {
+        <span class="c-key">return</span> <span class="c-key">switch</span> (type) {
+            <span class="c-key">case</span> <span class="c-str">"circle"</span> -&gt; <span class="c-key">new</span> Circle();
+            <span class="c-key">case</span> <span class="c-str">"square"</span> -&gt; <span class="c-key">new</span> Square();
+            <span class="c-key">default</span> -&gt; <span class="c-key">throw new</span> IllegalArgumentException(type);
+        };
+    }
+}
+</pre>
+
+<h4>Behavioral: Strategy</h4>
+<pre>
+<span class="c-key">interface</span> SortStrategy { <span class="c-key">void</span> sort(<span class="c-key">int</span>[] data); }
+<span class="c-key">class</span> QuickSort  <span class="c-key">implements</span> SortStrategy { <span class="c-key">public void</span> sort(<span class="c-key">int</span>[] d) { } }
+<span class="c-key">class</span> MergeSort  <span class="c-key">implements</span> SortStrategy { <span class="c-key">public void</span> sort(<span class="c-key">int</span>[] d) { } }
+
+<span class="c-key">class</span> Sorter {
+    <span class="c-key">private</span> SortStrategy strategy;                 <span class="c-com">// swappable at runtime</span>
+    Sorter(SortStrategy s) { <span class="c-key">this</span>.strategy = s; }
+    <span class="c-key">void</span> run(<span class="c-key">int</span>[] data) { strategy.sort(data); }
+}
+</pre>
+
+<h4>Structural: Adapter</h4>
+<pre>
+<span class="c-com">// Makes an incompatible class usable through an expected interface</span>
+<span class="c-key">interface</span> MediaPlayer { <span class="c-key">void</span> play(String file); }
+
+<span class="c-key">class</span> LegacyAudio { <span class="c-key">void</span> playMp3(String f) { } }   <span class="c-com">// incompatible API</span>
+
+<span class="c-key">class</span> AudioAdapter <span class="c-key">implements</span> MediaPlayer {
+    <span class="c-key">private final</span> LegacyAudio legacy = <span class="c-key">new</span> LegacyAudio();
+    <span class="c-key">public void</span> play(String file) { legacy.playMp3(file); }  <span class="c-com">// translate the call</span>
+}
+</pre>
+
+<h3>6.3 UML: Class Diagram Symbols</h3>
+<table>
+    <tr><th>Symbol</th><th>Visibility / Relationship</th><th>Meaning</th></tr>
+    <tr><td><code>+</code></td><td>public</td><td>Visible to all</td></tr>
+    <tr><td><code>-</code></td><td>private</td><td>Visible only inside the class</td></tr>
+    <tr><td><code>#</code></td><td>protected</td><td>Visible to subclasses</td></tr>
+    <tr><td><code>~</code></td><td>package</td><td>Visible within the package</td></tr>
+    <tr><td>solid line, hollow triangle</td><td>Inheritance (generalization)</td><td>"is a"</td></tr>
+    <tr><td>dashed line, hollow triangle</td><td>Realization</td><td>implements an interface</td></tr>
+    <tr><td>solid line, arrow</td><td>Association</td><td>"has a" reference</td></tr>
+    <tr><td>hollow diamond</td><td>Aggregation</td><td>whole-part, parts can live independently</td></tr>
+    <tr><td>filled diamond</td><td>Composition</td><td>strong whole-part, parts die with the whole</td></tr>
+    <tr><td>dashed line, arrow</td><td>Dependency</td><td>"uses temporarily"</td></tr>
+</table>
+<pre>
+   +------------------------+
+   |       Account          |   &lt;-- class name
+   +------------------------+
+   | - balance: double      |   &lt;-- private field
+   | + owner: String        |   &lt;-- public field
+   +------------------------+
+   | + deposit(amt): void   |   &lt;-- public method
+   | + withdraw(amt): void  |
+   +------------------------+
+
+   Account &lt;|---- SavingsAccount     (inheritance: SavingsAccount is an Account)
+   Order   &lt;&gt;---- LineItem           (aggregation)
+   House   *----- Room               (composition)
+</pre>
+
+<h3>6.4 UML: Sequence Diagram Symbols</h3>
+<table>
+    <tr><th>Element</th><th>Meaning</th></tr>
+    <tr><td>Lifeline (vertical dashed line)</td><td>An object's existence over time</td></tr>
+    <tr><td>Activation bar (thin rectangle)</td><td>Period when an object is doing work</td></tr>
+    <tr><td>Solid arrow</td><td>Synchronous call (caller waits)</td></tr>
+    <tr><td>Dashed arrow</td><td>Return message</td></tr>
+    <tr><td>Open arrowhead</td><td>Asynchronous message</td></tr>
+</table>
+<pre>
+ Client            Service            Repository
+   |                  |                   |
+   |  request()       |                   |
+   |----------------->|                   |
+   |                  |  findById(id)     |
+   |                  |------------------>|
+   |                  |   data (return)   |
+   |                  |&lt;- - - - - - - - - |
+   |  response        |                   |
+   |&lt;- - - - - - - - -|                   |
+</pre>
+
+<h3>6.5 Q&amp;A</h3>
+<div class="qa">
+    <div class="q">Q1. What does the Open/Closed Principle mean in practice?</div>
+    <div class="a">You should be able to add new behavior by adding new code (new classes or strategies), not by modifying existing, tested classes. Interfaces and polymorphism make this possible.</div>
+</div>
+<div class="qa">
+    <div class="q">Q2. What is the difference between aggregation and composition?</div>
+    <div class="a">Both are whole-part relationships. In aggregation the parts can exist independently of the whole (a team and its players). In composition the parts cannot exist without the whole (a house and its rooms).</div>
+</div>
+<div class="qa">
+    <div class="q">Q3. How do Factory and Strategy patterns differ?</div>
+    <div class="a">Factory is creational: it decides which object to create. Strategy is behavioral: it swaps an algorithm at runtime. Factory answers "which object," Strategy answers "which behavior."</div>
+</div>
+<div class="qa">
+    <div class="q">Q4. Why is Dependency Inversion important for testing?</div>
+    <div class="a">When a class depends on an interface, you can inject a mock implementation during tests, isolating the class from databases or external services.</div>
+</div>
+
+<!-- ===================== MODULE 7 ===================== -->
+<h2 id="m7" class="page-break">7. Unit Testing &amp; Automated Quality Gates</h2>
+
+<h3>7.1 Test-Driven Development (TDD)</h3>
+<p>TDD is writing the test before the code, in a short repeating loop.</p>
+<pre>
+        +-----------+        +-----------+        +-------------+
+        |   RED     |  --->  |   GREEN   |  --->  |  REFACTOR   |
+        | write a   |        | write the |        | clean up    |
+        | failing   |        | minimum   |        | code, tests |
+        | test      |        | code to   |        | still pass  |
+        |           |        | pass      |        |             |
+        +-----------+        +-----------+        +-------------+
+              ^                                          |
+              +------------------------------------------+
+                         repeat for next behavior
+</pre>
+<table>
+    <tr><th>Phase</th><th>Goal</th></tr>
+    <tr><td>Red</td><td>Write a test for new behavior; it fails because the code does not exist yet</td></tr>
+    <tr><td>Green</td><td>Write the simplest code that makes the test pass</td></tr>
+    <tr><td>Refactor</td><td>Improve the design without changing behavior; tests stay green</td></tr>
+</table>
+
+<h3>7.2 JUnit 5 Lifecycle</h3>
+<table>
+    <tr><th>Annotation</th><th>Runs</th><th>Typical use</th></tr>
+    <tr><td><code>@Test</code></td><td>For each test method</td><td>Defines a single test case</td></tr>
+    <tr><td><code>@BeforeEach</code></td><td>Before every test</td><td>Fresh setup of objects under test</td></tr>
+    <tr><td><code>@AfterEach</code></td><td>After every test</td><td>Per-test cleanup</td></tr>
+    <tr><td><code>@BeforeAll</code></td><td>Once before all tests</td><td>Expensive shared setup (static)</td></tr>
+    <tr><td><code>@AfterAll</code></td><td>Once after all tests</td><td>Final teardown (static)</td></tr>
+    <tr><td><code>@Disabled</code></td><td>Skips a test</td><td>Temporarily ignore</td></tr>
+</table>
+<pre>
+<span class="c-key">import</span> org.junit.jupiter.api.*;
+<span class="c-key">import static</span> org.junit.jupiter.api.Assertions.*;
+
+<span class="c-key">class</span> CalculatorTest {
+
+    <span class="c-key">private</span> Calculator calc;
+
+    <span class="c-key">@BeforeAll</span>
+    <span class="c-key">static void</span> initAll() { <span class="c-com">/* runs once, e.g. load config */</span> }
+
+    <span class="c-key">@BeforeEach</span>
+    <span class="c-key">void</span> setUp() { calc = <span class="c-key">new</span> Calculator(); }   <span class="c-com">// fresh per test</span>
+
+    <span class="c-key">@Test</span>
+    <span class="c-key">void</span> addsTwoNumbers() {
+        assertEquals(5, calc.add(2, 3));            <span class="c-com">// arrange-act-assert</span>
+    }
+
+    <span class="c-key">@Test</span>
+    <span class="c-key">void</span> throwsOnDivideByZero() {
+        assertThrows(ArithmeticException.<span class="c-key">class</span>, () -&gt; calc.divide(1, 0));
+    }
+
+    <span class="c-key">@AfterEach</span>
+    <span class="c-key">void</span> tearDown() { calc = <span class="c-key">null</span>; }
+
+    <span class="c-key">@AfterAll</span>
+    <span class="c-key">static void</span> tearDownAll() { <span class="c-com">/* runs once at the end */</span> }
+}
+</pre>
+
+<h3>7.3 Mockito</h3>
+<p>Mockito creates fake collaborators so a class can be tested in isolation.</p>
+<table>
+    <tr><th>Annotation / Term</th><th>Meaning</th></tr>
+    <tr><td><code>@Mock</code></td><td>Create a fake (mock) of a dependency</td></tr>
+    <tr><td><code>@InjectMocks</code></td><td>Create the object under test and inject the mocks into it</td></tr>
+    <tr><td>Stubbing</td><td>Define what a mock returns: <code>when(...).thenReturn(...)</code></td></tr>
+    <tr><td>Verifying</td><td>Check a method was called: <code>verify(...)</code></td></tr>
+    <tr><td>Spy</td><td>Wrap a real object; real methods run unless stubbed</td></tr>
+</table>
+<table>
+    <tr><th>Aspect</th><th>Mock</th><th>Spy</th></tr>
+    <tr><td>Underlying object</td><td>Completely fake</td><td>Real object, partially overridden</td></tr>
+    <tr><td>Default behavior</td><td>Returns null/0/empty</td><td>Runs the real method</td></tr>
+    <tr><td>Use when</td><td>You do not need real logic</td><td>You need most real logic, stub a little</td></tr>
+</table>
+<pre>
+<span class="c-key">@ExtendWith</span>(MockitoExtension.<span class="c-key">class</span>)
+<span class="c-key">class</span> OrderServiceTest {
+
+    <span class="c-key">@Mock</span>
+    <span class="c-key">private</span> PaymentGateway gateway;        <span class="c-com">// fake dependency</span>
+
+    <span class="c-key">@InjectMocks</span>
+    <span class="c-key">private</span> OrderService service;          <span class="c-com">// real object, mock injected</span>
+
+    <span class="c-key">@Test</span>
+    <span class="c-key">void</span> chargesCustomer() {
+        <span class="c-com">// stubbing: define the mock's behavior</span>
+        when(gateway.charge(100.0)).thenReturn(<span class="c-key">true</span>);
+
+        <span class="c-key">boolean</span> ok = service.checkout(100.0);
+
+        assertTrue(ok);
+        <span class="c-com">// verifying: confirm the interaction happened once</span>
+        verify(gateway, times(1)).charge(100.0);
+    }
+}
+</pre>
+
+<h3>7.4 Automated Static Analysis &amp; Quality Gates</h3>
+<table>
+    <tr><th>Tool</th><th>Type</th><th>What it checks</th></tr>
+    <tr><td>Checkstyle</td><td>Style</td><td>Code layout and conventions (naming, spacing, imports)</td></tr>
+    <tr><td>PMD</td><td>Static analysis</td><td>Bad practices: unused variables, empty blocks, complexity</td></tr>
+    <tr><td>SpotBugs</td><td>Bytecode analysis</td><td>Likely bugs: null dereferences, resource leaks</td></tr>
+    <tr><td>JaCoCo</td><td>Coverage</td><td>Percentage of code exercised by tests</td></tr>
+    <tr><td>SonarQube</td><td>Platform</td><td>Aggregates bugs, vulnerabilities, smells, coverage; enforces gates</td></tr>
+</table>
+<table>
+    <tr><th>Tool</th><th>Key concept</th><th>Detail</th></tr>
+    <tr><td>PMD</td><td>Rulesets</td><td>XML groups of rules (e.g., best practices, design) applied to source</td></tr>
+    <tr><td>Checkstyle</td><td>Layout checks</td><td>Configured by a checks XML (e.g., Google or Sun style)</td></tr>
+    <tr><td>SonarQube</td><td>Quality profiles &amp; gates</td><td>A profile is the active rule set; a gate is the pass/fail threshold</td></tr>
+    <tr><td>JaCoCo</td><td>Coverage matrix</td><td>Reports line, branch, and method coverage</td></tr>
+    <tr><td>SpotBugs</td><td>Bug patterns</td><td>Categorized by confidence and severity rank</td></tr>
+</table>
+<table>
+    <tr><th>Coverage Metric</th><th>Measures</th></tr>
+    <tr><td>Line coverage</td><td>Which lines were executed by tests</td></tr>
+    <tr><td>Branch coverage</td><td>Whether both true/false paths of each decision ran</td></tr>
+    <tr><td>Method coverage</td><td>Which methods were invoked at least once</td></tr>
+</table>
+<div class="note">
+    A quality gate is an automated pass/fail checkpoint in the CI pipeline. For example: build fails
+    if coverage is below 80 percent, or if any new blocker bug or critical vulnerability is found.
+</div>
+
+<h3>7.5 Q&amp;A</h3>
+<div class="qa">
+    <div class="q">Q1. What is the difference between <code>@BeforeEach</code> and <code>@BeforeAll</code>?</div>
+    <div class="a"><code>@BeforeEach</code> runs before every individual test for fresh setup. <code>@BeforeAll</code> runs once before all tests and must be static, used for expensive shared setup.</div>
+</div>
+<div class="qa">
+    <div class="q">Q2. What is the difference between a mock and a spy?</div>
+    <div class="a">A mock is a fully fake object that returns default values unless stubbed. A spy wraps a real object and runs real methods unless specific ones are stubbed. Use a spy when you need most of the real behavior.</div>
+</div>
+<div class="qa">
+    <div class="q">Q3. What is the difference between stubbing and verifying?</div>
+    <div class="a">Stubbing sets up what a mock should return (<code>when().thenReturn()</code>). Verifying asserts that a method was actually called with expected arguments (<code>verify()</code>).</div>
+</div>
+<div class="qa">
+    <div class="q">Q4. What does the Red-Green-Refactor cycle achieve?</div>
+    <div class="a">It ensures every piece of code is driven by a test (Red), implemented minimally (Green), and then improved safely (Refactor), producing well-tested, well-designed code incrementally.</div>
+</div>
+<div class="qa">
+    <div class="q">Q5. Does 100 percent code coverage mean the code is bug-free?</div>
+    <div class="a">No. Coverage shows which code ran during tests, not whether the assertions are meaningful. High coverage with weak assertions can still miss bugs. It is a useful signal, not a guarantee.</div>
+</div>
+<div class="qa">
+    <div class="q">Q6. How does SonarQube use quality profiles and quality gates?</div>
+    <div class="a">A quality profile is the set of rules applied during analysis. A quality gate is the threshold that decides pass or fail (for example, no new critical issues and coverage above a target). The CI pipeline can block a merge if the gate fails.</div>
+</div>
+
+<footer>
+    Software Engineering Study Guide &mdash; Seven-Module Comprehensive Q&amp;A Reference.<br>
+    Modules: Agile &amp; Maintenance &bull; Unix &amp; Scripting &bull; Git &bull; Bootstrap &amp; TypeScript &bull; Logging &bull; SOLID, Patterns &amp; UML &bull; Testing &amp; Quality Gates.<br>
+    To export as PDF, open this file in a web browser and choose Print, then Save as PDF.
+</footer>
+
+</body>
+</html>

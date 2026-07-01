@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spring Boot Beginner Deep-Dive Guide - Maven, Annotations, JPA, Logging, DTO</title>
+<style>
+    :root {
+        --primary: #11335b;
+        --secondary: #1f6fb2;
+        --accent: #b45309;
+        --light: #eef4fa;
+        --border: #c7d6e6;
+        --text: #1f2933;
+        --muted: #4a5b73;
+        --code-bg: #0d1f33;
+        --qbar: #1f6fb2;
+        --term-bg: #11171c;
+    }
+    * { box-sizing: border-box; }
+    body {
+        font-family: "Segoe UI", Calibri, Arial, sans-serif;
+        color: var(--text);
+        line-height: 1.55;
+        padding: 0 48px 64px 48px;
+        max-width: 1000px;
+        margin: 0 auto;
+        background: #ffffff;
+    }
+    h1, h2, h3 { color: var(--primary); font-weight: 600; }
+    h1 { font-size: 28px; margin: 0 0 4px 0; }
+    h2 {
+        font-size: 22px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 3px solid var(--secondary);
+        padding-bottom: 6px;
+        margin-top: 44px;
+    }
+    h3 { font-size: 16px; margin-top: 26px; color: var(--accent); }
+    h4 { font-size: 14px; margin: 18px 0 6px 0; color: var(--secondary); }
+    p { margin: 8px 0; }
+
+    code {
+        font-family: "Consolas", "Courier New", monospace;
+        background: var(--light);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        padding: 1px 5px;
+        font-size: 12.5px;
+        color: #b03060;
+    }
+    pre {
+        font-family: "Consolas", "Courier New", monospace;
+        background: var(--code-bg);
+        color: #e8eef5;
+        border-radius: 6px;
+        padding: 14px 16px;
+        font-size: 12px;
+        line-height: 1.5;
+        overflow-x: auto;
+        white-space: pre;
+    }
+    pre .k { color: #6cb6ff; }
+    pre .s { color: #9ae6a4; }
+    pre .c { color: #7d8aa0; font-style: italic; }
+    pre .n { color: #f0a36b; }
+    pre .a { color: #e6b800; }
+
+    .term {
+        font-family: "Consolas", "Courier New", monospace;
+        background: var(--term-bg);
+        color: #d6e2ea;
+        border-radius: 6px;
+        padding: 14px 16px;
+        font-size: 12px;
+        line-height: 1.55;
+        overflow-x: auto;
+        white-space: pre;
+    }
+    .term .p { color: #f0a36b; }
+    .term .o { color: #9ae6a4; }
+
+    .cover {
+        text-align: center;
+        padding: 80px 0 56px 0;
+        border-bottom: 3px solid var(--primary);
+        margin-bottom: 10px;
+    }
+    .cover .subtitle { font-size: 16px; color: var(--muted); margin-top: 8px; }
+    .cover .meta { font-size: 13px; color: var(--muted); margin-top: 32px; }
+    .badge {
+        display: inline-block;
+        background: var(--accent);
+        color: #fff;
+        font-size: 12px;
+        padding: 4px 12px;
+        border-radius: 14px;
+        margin: 4px;
+    }
+
+    .qa { margin: 12px 0; padding-left: 14px; border-left: 3px solid var(--qbar); }
+    .q { font-weight: 600; color: var(--primary); margin-bottom: 3px; }
+    .a { margin: 0 0 4px 0; }
+    .a ul { margin: 4px 0 4px 18px; padding: 0; }
+    .a li { margin: 2px 0; }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 12px 0;
+        font-size: 12.5px;
+    }
+    th, td { border: 1px solid var(--border); padding: 7px 10px; text-align: left; vertical-align: top; }
+    th { background: var(--primary); color: #fff; }
+    tr:nth-child(even) td { background: var(--light); }
+
+    .note {
+        background: #eaf2fb;
+        border-left: 4px solid var(--accent);
+        padding: 10px 16px;
+        margin: 14px 0;
+        font-size: 13px;
+    }
+    .tip {
+        background: #eafaf1;
+        border-left: 4px solid #1f8a52;
+        padding: 10px 16px;
+        margin: 14px 0;
+        font-size: 13px;
+    }
+    .warn {
+        background: #fdeceb;
+        border-left: 4px solid #c0392b;
+        padding: 10px 16px;
+        margin: 14px 0;
+        font-size: 13px;
+    }
+    .filebox {
+        background: #fffaf0;
+        border: 1px solid #e6cf9c;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 12px 0;
+        font-family: "Consolas", "Courier New", monospace;
+        font-size: 12px;
+        white-space: pre;
+        overflow-x: auto;
+    }
+    .filebox .cap, .term .cap {
+        display: block;
+        font-family: "Segoe UI", Arial, sans-serif;
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .toc { columns: 2; column-gap: 36px; font-size: 13.5px; }
+    .toc a { color: var(--secondary); text-decoration: none; line-height: 1.9; }
+
+    footer {
+        margin-top: 50px;
+        border-top: 1px solid var(--border);
+        padding-top: 12px;
+        font-size: 12px;
+        color: var(--muted);
+        text-align: center;
+    }
+    @media print {
+        body { padding: 0 12px; }
+        h2 { page-break-after: avoid; page-break-before: always; }
+        .qa, pre, table, .note, .tip, .warn, .filebox, .term { page-break-inside: avoid; }
+        .cover { padding: 60px 0 40px 0; }
+        #toc-section { page-break-after: always; }
+    }
+</style>
+</head>
+<body>
+
+<div class="cover">
+    <h1>Spring Boot Beginner Deep-Dive Guide</h1>
+    <div class="subtitle">Maven &amp; POM, Annotations, IoC/DI, JPA, Exceptions, Logging, DTO, and Deployment</div>
+    <div style="margin-top:22px;">
+        <span class="badge">Maven &amp; pom.xml</span>
+        <span class="badge">@SpringBootApplication</span>
+        <span class="badge">IoC &amp; DI</span>
+        <span class="badge">Spring Data JPA</span>
+        <span class="badge">Exception Handling</span>
+        <span class="badge">Logging / SLF4J</span>
+        <span class="badge">DTO</span>
+        <span class="badge">Deployment</span>
+    </div>
+    <div class="meta">
+        Explained in Simple Language &bull; With Examples, Tables, and Scenario-Based Questions
+    </div>
+</div>
+
+<div id="toc-section">
+<h2>Table of Contents</h2>
+<div class="toc">
+    <a href="#m1">1. Maven and pom.xml Explained</a><br>
+    <a href="#m2">2. Maven Lifecycle and Scopes</a><br>
+    <a href="#m3">3. @SpringBootApplication and Key Annotations</a><br>
+    <a href="#m4">4. Spring vs Spring Boot</a><br>
+    <a href="#m5">5. IoC and Dependency Injection</a><br>
+    <a href="#m6">6. Stereotype Annotations (Can We Interchange?)</a><br>
+    <a href="#m7">7. JDBC vs Hibernate vs Spring Data JPA</a><br>
+    <a href="#m8">8. Reading application.properties</a><br>
+    <a href="#m9">9. Exception Handling in Spring Boot</a><br>
+    <a href="#m10">10. Logging and SLF4J</a><br>
+    <a href="#m11">11. DTO - Why We Need It</a><br>
+    <a href="#m12">12. Calling UI: Controller vs RestController</a><br>
+    <a href="#m13">13. Deploying a Spring Boot App</a><br>
+    <a href="#m14">14. Scenario-Based Questions</a><br>
+</div>
+</div>
+
+<!-- ==================== MODULE 1: MAVEN AND POM ==================== -->
+<h2 id="m1">1. Maven and pom.xml Explained</h2>
+
+<div class="note">
+Maven is the tool that builds your project and downloads the libraries (JAR files) your
+code needs. Without it, you would download every library by hand and manage versions yourself.
+</div>
+
+<h3>1.1 What is Maven and why we need it</h3>
+<div class="qa"><div class="q">What is Maven?</div><div class="a">Maven is a build and dependency management tool for Java projects. It compiles your code, runs tests, packages the app into a JAR or WAR, and downloads the libraries your project depends on.</div></div>
+<div class="qa"><div class="q">Why do we need Maven?</div>
+<div class="a"><ul>
+<li><b>Dependency management:</b> you list a library once, and Maven downloads it and all the libraries it needs automatically.</li>
+<li><b>Standard build:</b> every Maven project builds the same way (<code>mvn clean package</code>), so any developer can build it.</li>
+<li><b>Standard folder layout:</b> code in <code>src/main/java</code>, tests in <code>src/test/java</code>.</li>
+<li><b>Repeatable:</b> the same build works on your machine, a teammate's machine, and the build server.</li>
+</ul></div></div>
+<div class="qa"><div class="q">What problem did Maven solve?</div><div class="a">Before Maven, developers manually downloaded JAR files, copied them into the project, and fixed version conflicts by hand. Maven automates all of this.</div></div>
+
+<h3>1.2 What POM stands for and why we need it</h3>
+<div class="qa"><div class="q">What does POM stand for?</div><div class="a">POM stands for <b>Project Object Model</b>. It is the model (description) of your project written in a file named <code>pom.xml</code>.</div></div>
+<div class="qa"><div class="q">What is pom.xml?</div><div class="a">It is the central configuration file of a Maven project. It tells Maven the project's name, version, Java version, dependencies (libraries), and build plugins.</div></div>
+<div class="qa"><div class="q">Why do we need pom.xml?</div><div class="a">Because it is the single place where Maven reads everything it needs to build the project: what libraries to download, which Java version to use, and how to package the app.</div></div>
+
+<h3>1.3 A simple Spring Boot pom.xml</h3>
+<div class="filebox"><span class="cap">pom.xml</span>&lt;project xmlns="http://maven.apache.org/POM/4.0.0" ...&gt;
+
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+
+    &lt;!-- Parent: gives us tested versions for all Spring libraries --&gt;
+    &lt;parent&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+        &lt;version&gt;3.3.4&lt;/version&gt;
+    &lt;/parent&gt;
+
+    &lt;!-- Identity of THIS project --&gt;
+    &lt;groupId&gt;com.example&lt;/groupId&gt;
+    &lt;artifactId&gt;demo&lt;/artifactId&gt;
+    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+
+    &lt;properties&gt;
+        &lt;java.version&gt;17&lt;/java.version&gt;
+    &lt;/properties&gt;
+
+    &lt;dependencies&gt;
+        &lt;!-- Web: controllers, REST, embedded Tomcat --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+
+&lt;/project&gt;</div>
+
+<h3>1.4 Why do we need the Spring Boot parent?</h3>
+<div class="qa"><div class="q">What is <code>spring-boot-starter-parent</code>?</div><div class="a">It is a special "parent" POM that your project inherits from. It provides tested, compatible versions of hundreds of libraries, plus sensible default settings.</div></div>
+<div class="qa"><div class="q">Why is the parent important?</div>
+<div class="a"><ul>
+<li><b>Version management:</b> you do not write versions for Spring dependencies. The parent already knows the correct, compatible version. This avoids version conflicts.</li>
+<li><b>Default configuration:</b> it sets the Java compiler, UTF-8 encoding, and plugin defaults for you.</li>
+<li><b>Less work:</b> your pom.xml stays short and clean.</li>
+</ul></div></div>
+<div class="note">
+This is why in the dependencies above, <code>spring-boot-starter-web</code> has no <code>&lt;version&gt;</code> tag.
+The parent decides the version, so all Spring libraries stay compatible with each other.
+</div>
+
+<h3>1.5 groupId, artifactId, and version</h3>
+<table>
+<tr><th>Tag</th><th>Meaning</th><th>Example</th></tr>
+<tr><td><code>groupId</code></td><td>The organization or group that owns the project. Usually a reversed domain name.</td><td><code>com.example</code></td></tr>
+<tr><td><code>artifactId</code></td><td>The name of this specific project or module.</td><td><code>demo</code></td></tr>
+<tr><td><code>version</code></td><td>The version of this project. <code>SNAPSHOT</code> means "still in development".</td><td><code>0.0.1-SNAPSHOT</code></td></tr>
+</table>
+<div class="note">
+Together these three are called the project's <b>coordinates</b> (GAV: GroupId, ArtifactId, Version).
+They uniquely identify any library in the Maven world, like a postal address.
+</div>
+
+<div class="qa"><div class="q">What happens if I do NOT give a version to my own project?</div>
+<div class="a">For your own project, if you remove the <code>&lt;version&gt;</code> tag, Maven gives a build error: <i>"'version' is missing"</i>. A project must have a version so it can be identified and packaged.
+<br>However, for a <b>dependency</b> that is managed by the parent (like the starters), you intentionally leave the version out, and the parent supplies it. That is correct and not an error.</div></div>
+<div class="qa"><div class="q">So when is a missing version an error and when is it fine?</div>
+<div class="a"><ul>
+<li><b>Your project's own version missing:</b> error, build fails.</li>
+<li><b>Dependency version missing AND a parent/BOM manages it:</b> fine, version is inherited.</li>
+<li><b>Dependency version missing AND nothing manages it:</b> error, <i>"'dependencies.dependency.version' is missing"</i>.</li>
+</ul></div></div>
+
+<h3>1.6 Other important parts of pom.xml</h3>
+<table>
+<tr><th>Element</th><th>What it does</th></tr>
+<tr><td><code>&lt;modelVersion&gt;</code></td><td>The POM format version. Always <code>4.0.0</code> for modern Maven.</td></tr>
+<tr><td><code>&lt;parent&gt;</code></td><td>The POM we inherit settings and versions from.</td></tr>
+<tr><td><code>&lt;properties&gt;</code></td><td>Reusable values, such as <code>java.version</code>.</td></tr>
+<tr><td><code>&lt;dependencies&gt;</code></td><td>The list of libraries the project needs.</td></tr>
+<tr><td><code>&lt;dependency&gt;</code></td><td>One single library, written with its groupId, artifactId, and (sometimes) version.</td></tr>
+<tr><td><code>&lt;build&gt;</code> / <code>&lt;plugins&gt;</code></td><td>Tools that run during the build, such as the Spring Boot plugin that makes a runnable JAR.</td></tr>
+</table>
+
+<div class="qa"><div class="q">What is a "starter" dependency?</div><div class="a">A starter is a bundle of related libraries. For example, <code>spring-boot-starter-web</code> brings in Spring MVC, Jackson (JSON), and an embedded Tomcat server, all in one line.</div></div>
+<div class="qa"><div class="q">What is the Spring Boot Maven plugin for?</div><div class="a">It packages the app into a single executable "fat JAR" that contains your code, all libraries, and an embedded server, so you can run it with <code>java -jar app.jar</code>.</div></div>
+
+<!-- ==================== MODULE 2: MAVEN LIFECYCLE AND SCOPES ==================== -->
+<h2 id="m2">2. Maven Lifecycle and Scopes</h2>
+
+<h3>2.1 Maven build lifecycle (phases)</h3>
+<p>When you run a Maven command, it runs that phase <b>and all phases before it</b>, in order.</p>
+<table>
+<tr><th>Phase</th><th>What it does</th></tr>
+<tr><td><code>validate</code></td><td>Checks the project is correct and all needed information is available.</td></tr>
+<tr><td><code>compile</code></td><td>Compiles the source code into <code>.class</code> files.</td></tr>
+<tr><td><code>test</code></td><td>Runs unit tests using a framework like JUnit.</td></tr>
+<tr><td><code>package</code></td><td>Bundles the compiled code into a JAR or WAR file.</td></tr>
+<tr><td><code>verify</code></td><td>Runs checks on the results of integration tests.</td></tr>
+<tr><td><code>install</code></td><td>Copies the packaged JAR into your local Maven repository (<code>.m2</code>) so other local projects can use it.</td></tr>
+<tr><td><code>deploy</code></td><td>Uploads the final package to a remote repository for other teams to use.</td></tr>
+</table>
+<div class="note">
+There is also <code>clean</code>, which is a separate lifecycle. <code>mvn clean</code> deletes the <code>target</code> folder
+(old build output). We often combine them: <code>mvn clean package</code>.
+</div>
+
+<div class="term"><span class="cap">Common Maven commands</span><span class="p">$</span> mvn validate      <span class="o"># check the project is set up correctly</span>
+<span class="p">$</span> mvn compile       <span class="o"># compile the source code</span>
+<span class="p">$</span> mvn test          <span class="o"># compile + run unit tests</span>
+<span class="p">$</span> mvn package       <span class="o"># compile + test + build the JAR</span>
+<span class="p">$</span> mvn install       <span class="o"># package + copy JAR to local .m2 repo</span>
+<span class="p">$</span> mvn clean package <span class="o"># delete old build, then build fresh</span></div>
+
+<div class="qa"><div class="q">What is the difference between package and install?</div>
+<div class="a"><ul>
+<li><code>package</code> creates the JAR inside the project's <code>target</code> folder.</li>
+<li><code>install</code> does everything package does, then also copies the JAR into your local repository (<code>~/.m2</code>) so other projects on your machine can depend on it.</li>
+</ul></div></div>
+<div class="qa"><div class="q">What does <code>mvn clean</code> do?</div><div class="a">It deletes the <code>target</code> folder, removing all previously compiled and packaged files so the next build starts fresh.</div></div>
+
+<h3>2.2 Dependency scopes</h3>
+<p>A <b>scope</b> tells Maven <i>when</i> a dependency is needed (compiling, testing, or running).</p>
+<table>
+<tr><th>Scope</th><th>Available during</th><th>Example use</th></tr>
+<tr><td><code>compile</code> (default)</td><td>Everywhere: compile, test, run.</td><td>Spring Web, most libraries.</td></tr>
+<tr><td><code>provided</code></td><td>Compile and test, but NOT packaged (the server provides it).</td><td>Servlet API on an external server.</td></tr>
+<tr><td><code>runtime</code></td><td>Test and run, but not needed to compile.</td><td>Database driver like MySQL.</td></tr>
+<tr><td><code>test</code></td><td>Only when compiling and running tests.</td><td>JUnit, Mockito.</td></tr>
+</table>
+<div class="filebox"><span class="cap">Examples of scope in pom.xml</span>&lt;!-- runtime: needed to run, not to compile our code --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+
+&lt;!-- test: only used by unit tests --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;</div>
+<div class="qa"><div class="q">Why use scopes at all?</div><div class="a">To keep the final package small and correct. For example, test libraries should not be shipped inside your production JAR, so they use <code>test</code> scope.</div></div>
+
+<!-- ==================== MODULE 3: @SpringBootApplication AND ANNOTATIONS ==================== -->
+<h2 id="m3">3. @SpringBootApplication and Key Annotations</h2>
+
+<h3>3.1 What @SpringBootApplication does</h3>
+<div class="filebox"><span class="cap">DemoApplication.java</span><span style="color:#b03060">@SpringBootApplication</span>
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}</div>
+<div class="qa"><div class="q">What is @SpringBootApplication?</div><div class="a">It is the main annotation placed on the class that starts a Spring Boot application. It is a shortcut that combines three other annotations into one.</div></div>
+<div class="qa"><div class="q">Which three annotations does it combine?</div>
+<div class="a"><ul>
+<li><code>@Configuration</code>: lets the class define beans (objects managed by Spring).</li>
+<li><code>@EnableAutoConfiguration</code>: tells Spring Boot to auto-configure beans based on the libraries on the classpath (for example, set up Tomcat if web is present).</li>
+<li><code>@ComponentScan</code>: scans the current package and sub-packages to find your controllers, services, and repositories.</li>
+</ul></div></div>
+<div class="qa"><div class="q">Why do we need it / what if we do not use it?</div>
+<div class="a">If you remove it, Spring Boot will not auto-configure anything and will not scan your components. Your controllers and services would not be detected, the embedded server may not start, and the app would not work as expected. You would have to add the three annotations yourself.</div></div>
+<div class="qa"><div class="q">Why must it be in a top-level package?</div><div class="a">Because <code>@ComponentScan</code> scans the package of this class and everything below it. If your other classes are in a parent or unrelated package, they will not be found.</div></div>
+
+<h3>3.2 Common annotations and their use cases</h3>
+<table>
+<tr><th>Annotation</th><th>What it does</th><th>Use case</th></tr>
+<tr><td><code>@SpringBootApplication</code></td><td>Starts and configures the app.</td><td>The single main class.</td></tr>
+<tr><td><code>@Controller</code></td><td>Marks a web controller that returns view names (HTML pages).</td><td>Thymeleaf web pages.</td></tr>
+<tr><td><code>@RestController</code></td><td>Marks a controller that returns data (JSON/text).</td><td>REST APIs.</td></tr>
+<tr><td><code>@Service</code></td><td>Marks a business-logic class.</td><td>Calculations, rules, coordination.</td></tr>
+<tr><td><code>@Repository</code></td><td>Marks a data-access class.</td><td>Database operations.</td></tr>
+<tr><td><code>@Component</code></td><td>Marks a generic Spring-managed bean.</td><td>Helper or utility beans.</td></tr>
+<tr><td><code>@Entity</code></td><td>Maps a class to a database table (JPA).</td><td>User, Product, Order classes.</td></tr>
+<tr><td><code>@Autowired</code></td><td>Injects a dependency automatically.</td><td>Giving a controller its service.</td></tr>
+<tr><td><code>@GetMapping</code></td><td>Maps an HTTP GET request to a method.</td><td>Show or read data.</td></tr>
+<tr><td><code>@PostMapping</code></td><td>Maps an HTTP POST request to a method.</td><td>Submit or save data.</td></tr>
+<tr><td><code>@RequestMapping</code></td><td>Maps a base URL or any HTTP method.</td><td>Setting a base path like <code>/api</code>.</td></tr>
+<tr><td><code>@PathVariable</code></td><td>Reads a value from the URL path.</td><td><code>/students/5</code> &rarr; id = 5.</td></tr>
+<tr><td><code>@RequestParam</code></td><td>Reads a query parameter.</td><td><code>?name=raj</code> &rarr; name = raj.</td></tr>
+<tr><td><code>@RequestBody</code></td><td>Converts JSON in the request into a Java object.</td><td>POST APIs that accept JSON.</td></tr>
+<tr><td><code>@Bean</code></td><td>Declares a single bean inside a configuration class.</td><td>Custom objects like a PasswordEncoder.</td></tr>
+<tr><td><code>@Configuration</code></td><td>Marks a class that defines beans.</td><td>Security or app configuration.</td></tr>
+<tr><td><code>@Value</code></td><td>Reads a value from properties.</td><td>Reading <code>app.name</code>.</td></tr>
+</table>
+
+<div class="qa"><div class="q">What is the difference between @Controller and @RestController?</div><div class="a"><code>@Controller</code> returns a view name and is used with HTML templates. <code>@RestController</code> equals <code>@Controller</code> + <code>@ResponseBody</code>, so every method returns data (JSON or text) directly.</div></div>
+<div class="qa"><div class="q">What is the difference between @RequestParam and @PathVariable?</div><div class="a"><code>@PathVariable</code> reads part of the URL path (<code>/users/5</code>). <code>@RequestParam</code> reads a query string value (<code>/users?id=5</code>).</div></div>
+
+<!-- ==================== MODULE 4: SPRING VS SPRING BOOT ==================== -->
+<h2 id="m4">4. Spring vs Spring Boot</h2>
+
+<div class="qa"><div class="q">What is Spring?</div><div class="a">Spring is a large Java framework that provides features like dependency injection and web support. With plain Spring, you must configure many things yourself (XML or Java config, server setup, library versions).</div></div>
+<div class="qa"><div class="q">What is Spring Boot?</div><div class="a">Spring Boot is built on top of Spring. It removes most of the manual configuration by using auto-configuration, starters, and an embedded server. It helps you build a running app very quickly.</div></div>
+
+<table>
+<tr><th>Point</th><th>Spring</th><th>Spring Boot</th></tr>
+<tr><td>Configuration</td><td>Mostly manual (XML or Java).</td><td>Auto-configuration; very little setup.</td></tr>
+<tr><td>Server</td><td>Deploy a WAR to an external Tomcat.</td><td>Embedded Tomcat inside a runnable JAR.</td></tr>
+<tr><td>Dependencies</td><td>Add and match versions by hand.</td><td>Starters bundle compatible versions.</td></tr>
+<tr><td>Boilerplate</td><td>More code to wire things up.</td><td>Much less; sensible defaults.</td></tr>
+<tr><td>Run</td><td>Build a WAR, deploy to server.</td><td><code>mvn spring-boot:run</code> or <code>java -jar</code>.</td></tr>
+<tr><td>Best for</td><td>Full control, custom setups.</td><td>Fast development, microservices.</td></tr>
+</table>
+<div class="note">
+Simple way to remember: <b>Spring Boot is Spring plus auto-configuration plus an embedded server.</b>
+Spring Boot does not replace Spring; it makes Spring easier to use.
+</div>
+
+<!-- ==================== MODULE 5: IoC AND DI ==================== -->
+<h2 id="m5">5. IoC and Dependency Injection</h2>
+
+<h3>5.1 Inversion of Control (IoC)</h3>
+<div class="qa"><div class="q">What is IoC (Inversion of Control)?</div><div class="a">IoC means the framework, not your code, is in control of creating and connecting objects. Instead of your class creating the objects it needs, Spring creates them and hands them over.</div></div>
+<div class="qa"><div class="q">What is the IoC container?</div><div class="a">It is the part of Spring that creates, configures, and manages all the objects (called beans). The two main types are <code>BeanFactory</code> (basic) and <code>ApplicationContext</code> (full-featured, used in real apps).</div></div>
+<div class="qa"><div class="q">What are the types of IoC container?</div>
+<div class="a"><ul>
+<li><b>BeanFactory:</b> the basic container, creates beans only when asked (lazy).</li>
+<li><b>ApplicationContext:</b> the advanced container, creates beans at startup (eager) and adds extra features like events and message handling. This is what Spring Boot uses.</li>
+</ul></div></div>
+
+<h3>5.2 Dependency Injection (DI)</h3>
+<div class="qa"><div class="q">What is Dependency Injection?</div><div class="a">DI is the way IoC is achieved. Spring "injects" (supplies) the objects a class needs instead of the class building them itself. A "dependency" is simply another object your class needs to do its work.</div></div>
+<div class="qa"><div class="q">What are the types of Dependency Injection?</div>
+<div class="a"><ul>
+<li><b>Constructor injection:</b> dependencies are passed through the constructor. Recommended, because the object is always fully built.</li>
+<li><b>Setter injection:</b> dependencies are set through setter methods.</li>
+<li><b>Field injection:</b> dependencies are placed directly on a field with <code>@Autowired</code>. Easy but harder to test.</li>
+</ul></div></div>
+
+<div class="filebox"><span class="cap">Constructor injection (recommended)</span><span style="color:#b03060">@Service</span>
+public class OrderService {
+
+    <span style="color:#b03060">private final</span> PaymentService paymentService;
+
+    <span class="c">// Spring sees this constructor and injects PaymentService automatically</span>
+    public OrderService(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
+}</div>
+
+<div class="qa"><div class="q">Why is constructor injection preferred?</div>
+<div class="a"><ul>
+<li>The object is fully created with all its dependencies set.</li>
+<li>You can mark fields <code>final</code>, making them safe and read-only.</li>
+<li>It is easy to test because you just pass mock objects to the constructor.</li>
+</ul></div></div>
+<div class="qa"><div class="q">What is @Autowired?</div><div class="a">It tells Spring to inject a matching bean automatically. On a constructor it is optional if there is only one constructor; on a field or setter it marks where the dependency goes.</div></div>
+<div class="qa"><div class="q">Why is DI useful (its importance)?</div>
+<div class="a"><ul>
+<li><b>Loose coupling:</b> classes do not create their own dependencies, so they are easy to change.</li>
+<li><b>Easy testing:</b> you can inject fake (mock) objects in tests.</li>
+<li><b>Reusable and clean:</b> Spring manages object creation in one place.</li>
+</ul></div></div>
+
+<!-- ==================== MODULE 6: STEREOTYPE ANNOTATIONS ==================== -->
+<h2 id="m6">6. Stereotype Annotations (Can We Interchange?)</h2>
+
+<p>These annotations all create Spring beans, but each one shows the <i>role</i> of the class.</p>
+<table>
+<tr><th>Annotation</th><th>Layer / Role</th><th>Extra behavior</th></tr>
+<tr><td><code>@Component</code></td><td>Generic bean (any role).</td><td>None special.</td></tr>
+<tr><td><code>@Service</code></td><td>Business logic layer.</td><td>None special; shows intent.</td></tr>
+<tr><td><code>@Repository</code></td><td>Data access layer.</td><td>Translates database exceptions into Spring exceptions.</td></tr>
+<tr><td><code>@Controller</code></td><td>Web layer (returns views).</td><td>Works with view resolvers.</td></tr>
+<tr><td><code>@RestController</code></td><td>Web layer (returns data).</td><td><code>@Controller</code> + <code>@ResponseBody</code>.</td></tr>
+</table>
+
+<div class="qa"><div class="q">Can we interchange @Component, @Service, and @Repository?</div>
+<div class="a">Technically yes, the app will often still run, because all three create beans. But you should not, because:
+<ul>
+<li><code>@Repository</code> adds useful database exception translation that you lose if you use <code>@Component</code>.</li>
+<li>The annotations document the class's purpose. Using the right one makes the code readable and correct.</li>
+</ul></div></div>
+<div class="qa"><div class="q">Can we interchange @Controller and @RestController?</div>
+<div class="a">No, not safely. <code>@Controller</code> returns a <b>view name</b> (an HTML page). <code>@RestController</code> returns <b>data</b> (JSON/text). If you swap them, a web page controller would return the text "home" instead of rendering <code>home.html</code>, and a REST API would try to find a non-existent view.</div></div>
+<div class="qa"><div class="q">What about @Entity?</div><div class="a"><code>@Entity</code> is different. It is a JPA annotation that maps a class to a database table. It does not create a Spring bean and cannot be swapped with the others.</div></div>
+<div class="tip">
+Rule of thumb: use <code>@RestController</code> for APIs, <code>@Controller</code> for HTML pages,
+<code>@Service</code> for logic, <code>@Repository</code> for database access, and <code>@Component</code> only for general helpers.
+</div>
+
+<!-- ==================== MODULE 7: JDBC vs HIBERNATE vs JPA ==================== -->
+<h2 id="m7">7. JDBC vs Hibernate vs Spring Data JPA</h2>
+
+<div class="qa"><div class="q">What is JDBC?</div><div class="a">JDBC (Java Database Connectivity) is the lowest-level way to talk to a database in Java. You write SQL yourself and handle connections, statements, and results manually.</div></div>
+<div class="qa"><div class="q">What is Hibernate?</div><div class="a">Hibernate is an ORM (Object-Relational Mapping) tool. It maps Java objects to database tables, so you work with objects and Hibernate generates the SQL for you.</div></div>
+<div class="qa"><div class="q">What is Spring Data JPA?</div><div class="a">Spring Data JPA is a layer on top of JPA/Hibernate. You define a repository interface, and Spring generates the implementation, including ready-made methods like <code>save</code> and <code>findAll</code>.</div></div>
+
+<table>
+<tr><th>Point</th><th>JDBC</th><th>Hibernate</th><th>Spring Data JPA</th></tr>
+<tr><td>Level</td><td>Lowest (manual).</td><td>ORM framework.</td><td>Highest (least code).</td></tr>
+<tr><td>SQL</td><td>You write all SQL.</td><td>Mostly generated; HQL available.</td><td>Generated from method names.</td></tr>
+<tr><td>Boilerplate</td><td>A lot.</td><td>Less.</td><td>Very little.</td></tr>
+<tr><td>Mapping</td><td>Manual (rows to objects).</td><td>Automatic via annotations.</td><td>Automatic via annotations.</td></tr>
+<tr><td>Best for</td><td>Full control, simple needs.</td><td>Complex object mapping.</td><td>Fast development, CRUD apps.</td></tr>
+</table>
+
+<div class="filebox"><span class="cap">Spring Data JPA: a full repository in a few lines</span><span style="color:#b03060">@Repository</span>
+public interface StudentRepository extends JpaRepository&lt;Student, Integer&gt; {
+    <span class="c">// save(), findAll(), findById(), deleteById() are already provided</span>
+    <span class="c">// This one is auto-implemented just from its name:</span>
+    Student findByName(String name);
+}</div>
+<div class="note">
+Relationship: <b>Spring Data JPA</b> uses <b>JPA</b> (a standard/specification), and the most common
+implementation of JPA is <b>Hibernate</b>, which finally uses <b>JDBC</b> to talk to the database.
+So they build on each other rather than competing.
+</div>
+
+<!-- ==================== MODULE 8: READING application.properties ==================== -->
+<h2 id="m8">8. Reading application.properties</h2>
+
+<h3>8.1 What it is and why we need it</h3>
+<div class="qa"><div class="q">What is application.properties?</div><div class="a">It is the main configuration file of a Spring Boot app. It holds settings like the server port, database URL, and your own custom values, written as <code>key=value</code> pairs.</div></div>
+<div class="qa"><div class="q">Why do we need it?</div><div class="a">So that settings are kept outside the Java code. You can change the database password or port without recompiling the app. It keeps configuration in one easy place.</div></div>
+<div class="qa"><div class="q">Why is it read automatically, and only this file?</div><div class="a">Spring Boot follows "convention over configuration". By default it looks for a file named exactly <code>application.properties</code> (or <code>application.yml</code>) on the classpath, usually in <code>src/main/resources</code>. This default name is built into Spring Boot, which is why other names are not read unless you tell Spring about them.</div></div>
+
+<h3>8.2 How to read a value, for example name=admin</h3>
+<div class="filebox"><span class="cap">src/main/resources/application.properties</span>app.name=admin
+server.port=8080</div>
+
+<h4>Way 1: @Value (simple, single values)</h4>
+<div class="filebox"><span class="cap">Reading app.name with @Value</span><span style="color:#b03060">@RestController</span>
+public class DemoController {
+
+    <span class="c">// Spring reads app.name from properties and puts "admin" here</span>
+    <span style="color:#b03060">@Value</span>(<span style="color:#9ae6a4">"${app.name}"</span>)
+    private String appName;
+
+    <span style="color:#b03060">@GetMapping</span>(<span style="color:#9ae6a4">"/name"</span>)
+    public String getName() {
+        return <span style="color:#9ae6a4">"The name is: "</span> + appName;  <span class="c">// -> The name is: admin</span>
+    }
+}</div>
+
+<h4>Way 2: @ConfigurationProperties (groups of values)</h4>
+<div class="filebox"><span class="cap">Grouping related properties</span><span style="color:#b03060">@Component</span>
+<span style="color:#b03060">@ConfigurationProperties</span>(prefix = <span style="color:#9ae6a4">"app"</span>)
+public class AppConfig {
+    private String name;  <span class="c">// binds app.name automatically</span>
+    <span class="c">// getters and setters</span>
+}</div>
+
+<div class="qa"><div class="q">What if the property is missing?</div><div class="a">With <code>@Value("${app.name}")</code> and no value, the app fails to start. You can give a default: <code>@Value("${app.name:guest}")</code> uses <code>guest</code> if <code>app.name</code> is not set.</div></div>
+
+<h3>8.3 What if I use a different file name instead of application.properties?</h3>
+<div class="qa"><div class="q">If I create myconfig.properties instead, will Spring read it?</div><div class="a">No, not automatically. Spring Boot only reads <code>application.properties</code> (or <code>application.yml</code>) by default. A file with any other name is ignored unless you point Spring to it.</div></div>
+<div class="qa"><div class="q">How do I read a custom-named properties file?</div>
+<div class="a">Use <code>@PropertySource</code> on a configuration class:
+</div></div>
+<div class="filebox"><span class="cap">Loading a custom file</span><span style="color:#b03060">@Configuration</span>
+<span style="color:#b03060">@PropertySource</span>(<span style="color:#9ae6a4">"classpath:myconfig.properties"</span>)
+public class CustomConfig {
+    <span style="color:#b03060">@Value</span>(<span style="color:#9ae6a4">"${app.name}"</span>)
+    private String name;  <span class="c">// now read from myconfig.properties</span>
+}</div>
+<div class="qa"><div class="q">Can I choose a different file when running the app?</div><div class="a">Yes. You can pass <code>--spring.config.name=myconfig</code> or <code>--spring.config.location=...</code> on the command line, and Spring Boot will load that file instead of the default.</div></div>
+<div class="note">
+Summary: the name <code>application.properties</code> is special only because it is Spring Boot's default.
+For any other name, use <code>@PropertySource</code> or the <code>spring.config</code> options.
+</div>
+
+<!-- ==================== MODULE 9: EXCEPTION HANDLING ==================== -->
+<h2 id="m9">9. Exception Handling in Spring Boot</h2>
+
+<div class="qa"><div class="q">Why handle exceptions?</div><div class="a">So the app does not crash or show ugly stack traces to users. Instead it returns a clear message and a correct HTTP status code.</div></div>
+
+<h3>9.1 Local handling with @ExceptionHandler</h3>
+<div class="filebox"><span class="cap">Handle an exception inside one controller</span><span style="color:#b03060">@RestController</span>
+public class StudentController {
+
+    <span style="color:#b03060">@GetMapping</span>(<span style="color:#9ae6a4">"/students/{id}"</span>)
+    public Student get(<span style="color:#b03060">@PathVariable</span> int id) {
+        <span class="c">// if not found, throw an exception</span>
+        throw new StudentNotFoundException(<span style="color:#9ae6a4">"No student with id "</span> + id);
+    }
+
+    <span class="c">// This method runs when that exception is thrown</span>
+    <span style="color:#b03060">@ExceptionHandler</span>(StudentNotFoundException.class)
+    <span style="color:#b03060">@ResponseStatus</span>(HttpStatus.NOT_FOUND)  <span class="c">// returns HTTP 404</span>
+    public String handleNotFound(StudentNotFoundException ex) {
+        return ex.getMessage();
+    }
+}</div>
+
+<h3>9.2 Global handling with @RestControllerAdvice</h3>
+<p>This handles exceptions for the <b>whole application</b> in one place.</p>
+<div class="filebox"><span class="cap">One global handler for all controllers</span><span style="color:#b03060">@RestControllerAdvice</span>
+public class GlobalExceptionHandler {
+
+    <span style="color:#b03060">@ExceptionHandler</span>(StudentNotFoundException.class)
+    public ResponseEntity&lt;String&gt; handleNotFound(StudentNotFoundException ex) {
+        <span class="c">// body + status code together</span>
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    <span style="color:#b03060">@ExceptionHandler</span>(Exception.class)  <span class="c">// catch-all for anything else</span>
+    public ResponseEntity&lt;String&gt; handleOther(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body(<span style="color:#9ae6a4">"Something went wrong"</span>);
+    }
+}</div>
+
+<div class="qa"><div class="q">What is the difference between @ExceptionHandler and @RestControllerAdvice?</div>
+<div class="a"><ul>
+<li><code>@ExceptionHandler</code> alone handles exceptions only inside the controller where it is written.</li>
+<li><code>@RestControllerAdvice</code> handles exceptions across all controllers, keeping error handling in one shared place.</li>
+</ul></div></div>
+<div class="qa"><div class="q">How do I set the error status code in a RestController?</div>
+<div class="a">Two common ways:
+<ul>
+<li>Add <code>@ResponseStatus(HttpStatus.NOT_FOUND)</code> on the handler method.</li>
+<li>Return a <code>ResponseEntity</code> and set the status with <code>ResponseEntity.status(...)</code>, which also lets you set the body.</li>
+</ul></div></div>
+
+<h3>9.3 Common HTTP status codes</h3>
+<table>
+<tr><th>Code</th><th>Meaning</th><th>When to use</th></tr>
+<tr><td>200 OK</td><td>Success.</td><td>Request worked, data returned.</td></tr>
+<tr><td>201 Created</td><td>A new resource was created.</td><td>After a successful POST.</td></tr>
+<tr><td>400 Bad Request</td><td>The client sent invalid data.</td><td>Validation failed.</td></tr>
+<tr><td>401 Unauthorized</td><td>Not logged in / no valid token.</td><td>Missing authentication.</td></tr>
+<tr><td>403 Forbidden</td><td>Logged in but not allowed.</td><td>Wrong role.</td></tr>
+<tr><td>404 Not Found</td><td>Resource does not exist.</td><td>Unknown id or URL.</td></tr>
+<tr><td>500 Server Error</td><td>Something failed on the server.</td><td>Unexpected exception.</td></tr>
+</table>
+
+<!-- ==================== MODULE 10: LOGGING AND SLF4J ==================== -->
+<h2 id="m10">10. Logging and SLF4J</h2>
+
+<h3>10.1 Why logging, not System.out.println</h3>
+<div class="qa"><div class="q">Why use a logger instead of System.out.println?</div>
+<div class="a"><ul>
+<li><b>Levels:</b> you can label messages as INFO, DEBUG, ERROR, and switch them on or off without changing code.</li>
+<li><b>Destinations:</b> logs can go to the console, a file, or a server. <code>println</code> only goes to the console.</li>
+<li><b>Format:</b> loggers add time, class name, and thread automatically.</li>
+<li><b>Performance and control:</b> you can reduce logging in production and increase it while debugging.</li>
+</ul></div></div>
+
+<h3>10.2 How to enable logging in Spring Boot</h3>
+<div class="qa"><div class="q">Do I need to add anything to use logging?</div><div class="a">No. Spring Boot already includes SLF4J and Logback (a logging implementation) through <code>spring-boot-starter</code>. You can start logging immediately.</div></div>
+<div class="filebox"><span class="cap">Using a logger in any class</span><span style="color:#b03060">import</span> org.slf4j.Logger;
+<span style="color:#b03060">import</span> org.slf4j.LoggerFactory;
+
+<span style="color:#b03060">@Service</span>
+public class StudentService {
+
+    <span class="c">// Create one logger per class</span>
+    private static final Logger log = LoggerFactory.getLogger(StudentService.class);
+
+    public void save() {
+        log.info(<span style="color:#9ae6a4">"Saving student..."</span>);    <span class="c">// normal information</span>
+        log.debug(<span style="color:#9ae6a4">"Debug details here"</span>);   <span class="c">// only when debugging</span>
+        log.error(<span style="color:#9ae6a4">"Something failed"</span>);     <span class="c">// errors</span>
+    }
+}</div>
+
+<div class="filebox"><span class="cap">Control logging levels in application.properties</span><span class="c"># show DEBUG logs for your own package</span>
+logging.level.com.example=DEBUG
+
+<span class="c"># write logs to a file as well</span>
+logging.file.name=app.log</div>
+
+<h3>10.3 SLF4J, Log4j2, and how they fit together</h3>
+<div class="qa"><div class="q">What is SLF4J?</div><div class="a">SLF4J (Simple Logging Facade for Java) is not a logging tool itself. It is a common front (a facade) that your code writes against. Behind it, a real logging library does the actual work.</div></div>
+<div class="qa"><div class="q">What is Log4j2 / Logback?</div><div class="a">These are real logging implementations that actually write the log messages. Logback is the default in Spring Boot; Log4j2 is a popular alternative.</div></div>
+<div class="qa"><div class="q">If I want to enable SLF4J alone, can I? If not, why?</div>
+<div class="a">No, SLF4J by itself cannot produce logs, because it is only a facade (an interface). It always needs a real implementation behind it to actually write the logs. So you use SLF4J in your code, but a backend like Logback or Log4j2 must be present to do the work.</div></div>
+<div class="qa"><div class="q">So what is needed behind SLF4J?</div>
+<div class="a"><ul>
+<li><b>By default:</b> SLF4J + Logback (already included in Spring Boot).</li>
+<li><b>To use Log4j2 instead:</b> exclude the default Logback starter and add <code>spring-boot-starter-log4j2</code>. SLF4J then routes your log calls to Log4j2.</li>
+</ul></div></div>
+<div class="note">
+Picture it as: <b>Your code &rarr; SLF4J (the common interface) &rarr; Logback or Log4j2 (the real worker)</b>.
+You always code to SLF4J; you swap the worker behind it without changing your code.
+</div>
+
+<!-- ==================== MODULE 11: DTO ==================== -->
+<h2 id="m11">11. DTO - Why We Need It</h2>
+
+<div class="qa"><div class="q">What is a DTO?</div><div class="a">A DTO (Data Transfer Object) is a simple object used to carry data between layers, especially between the backend and the client. It contains only the fields the client should see.</div></div>
+<div class="qa"><div class="q">Why do we need a DTO? What if we do not use one?</div>
+<div class="a">If you return your <code>@Entity</code> directly:
+<ul>
+<li>You may expose sensitive fields (like a password hash) to the client.</li>
+<li>The API breaks if you change the database structure, because the entity is tied to the table.</li>
+<li>You cannot easily reshape or combine data for the client.</li>
+</ul>
+A DTO solves all of these by giving the client a clean, safe, stable shape.</div></div>
+<div class="qa"><div class="q">What are the advantages of using DTOs?</div>
+<div class="a"><ul>
+<li><b>Security:</b> hide internal fields you do not want to expose.</li>
+<li><b>Stability:</b> the API stays the same even if the database changes.</li>
+<li><b>Flexibility:</b> combine fields from several entities into one response.</li>
+<li><b>Clarity:</b> the client receives exactly what it needs, nothing more.</li>
+</ul></div></div>
+
+<div class="filebox"><span class="cap">Entity (database) vs DTO (sent to client)</span><span class="c">// ENTITY - mapped to the table, has sensitive fields</span>
+<span style="color:#b03060">@Entity</span>
+public class User {
+    <span style="color:#b03060">@Id</span> private int id;
+    private String username;
+    private String passwordHash;  <span class="c">// must NOT be exposed</span>
+}
+
+<span class="c">// DTO - only safe fields go to the client</span>
+public class UserDTO {
+    private int id;
+    private String username;      <span class="c">// no password here</span>
+}</div>
+
+<h4>Simple DTO use-case examples</h4>
+<table>
+<tr><th>Use case</th><th>Why a DTO helps</th></tr>
+<tr><td>Login response</td><td>Return username and token, never the password.</td></tr>
+<tr><td>User profile</td><td>Show name and email, hide internal id flags and audit fields.</td></tr>
+<tr><td>Order summary</td><td>Combine customer name + product names into one object.</td></tr>
+<tr><td>Public product list</td><td>Show price and title, hide supplier cost.</td></tr>
+</table>
+
+<!-- ==================== MODULE 12: CALLING UI ==================== -->
+<h2 id="m12">12. Calling UI: Controller vs RestController</h2>
+
+<h3>12.1 Returning a UI page with @Controller</h3>
+<p>Steps to show an HTML page from the backend:</p>
+<table>
+<tr><th>Step</th><th>What happens</th></tr>
+<tr><td>1</td><td>Browser requests a URL like <code>/home</code>.</td></tr>
+<tr><td>2</td><td>A <code>@Controller</code> method handles it and adds data to the <code>Model</code>.</td></tr>
+<tr><td>3</td><td>The method returns a <b>view name</b>, for example <code>"home"</code>.</td></tr>
+<tr><td>4</td><td>The view resolver finds <code>templates/home.html</code>.</td></tr>
+<tr><td>5</td><td>Thymeleaf fills the page with model data and returns finished HTML.</td></tr>
+</table>
+<div class="filebox"><span class="cap">@Controller returns an HTML page</span><span style="color:#b03060">@Controller</span>
+public class PageController {
+
+    <span style="color:#b03060">@GetMapping</span>(<span style="color:#9ae6a4">"/home"</span>)
+    public String home(Model model) {
+        model.addAttribute(<span style="color:#9ae6a4">"message"</span>, <span style="color:#9ae6a4">"Welcome!"</span>);  <span class="c">// data for the page</span>
+        return <span style="color:#9ae6a4">"home"</span>;  <span class="c">// -> renders templates/home.html</span>
+    }
+}</div>
+<div class="filebox"><span class="cap">templates/home.html (Thymeleaf)</span>&lt;h1 th:text="${message}"&gt;placeholder&lt;/h1&gt;</div>
+
+<h3>12.2 Returning data with @RestController</h3>
+<p>Now the next step: returning raw data (JSON) instead of a page.</p>
+<table>
+<tr><th>Step</th><th>What happens</th></tr>
+<tr><td>1</td><td>Client (browser JS, mobile app, Postman) requests <code>/api/message</code>.</td></tr>
+<tr><td>2</td><td>A <code>@RestController</code> method handles it.</td></tr>
+<tr><td>3</td><td>The method returns an object or String directly.</td></tr>
+<tr><td>4</td><td>Spring converts it to JSON automatically and sends it back.</td></tr>
+<tr><td>5</td><td>The client reads the JSON; no HTML page is involved.</td></tr>
+</table>
+<div class="filebox"><span class="cap">@RestController returns JSON data</span><span style="color:#b03060">@RestController</span>
+public class ApiController {
+
+    <span style="color:#b03060">@GetMapping</span>(<span style="color:#9ae6a4">"/api/message"</span>)
+    public Map&lt;String, String&gt; message() {
+        <span class="c">// returned object becomes JSON: {"message":"Welcome!"}</span>
+        return Map.of(<span style="color:#9ae6a4">"message"</span>, <span style="color:#9ae6a4">"Welcome!"</span>);
+    }
+}</div>
+
+<div class="qa"><div class="q">In short, how do the two differ when calling the UI?</div>
+<div class="a"><ul>
+<li><code>@Controller</code> + Thymeleaf: the <b>server builds the HTML page</b> and sends it. Good for traditional websites.</li>
+<li><code>@RestController</code>: the server sends <b>JSON data</b>, and the UI (JavaScript or a mobile app) builds the page. Good for APIs and modern front-ends.</li>
+</ul></div></div>
+
+<!-- ==================== MODULE 13: DEPLOYMENT ==================== -->
+<h2 id="m13">13. Deploying a Spring Boot App</h2>
+
+<div class="qa"><div class="q">How do I deploy a Spring Boot app to a server?</div><div class="a">The most common way is to build a single runnable JAR and run it on the server with <code>java -jar</code>. Because Spring Boot includes an embedded Tomcat, you do not need to install a separate server.</div></div>
+
+<h4>Step-by-step</h4>
+<div class="term"><span class="cap">Build and run the JAR</span><span class="p">$</span> mvn clean package          <span class="o"># builds target/demo-0.0.1-SNAPSHOT.jar</span>
+<span class="p">$</span> java -jar target/demo-0.0.1-SNAPSHOT.jar   <span class="o"># runs the app</span>
+<span class="o"># the app starts on http://localhost:8080</span></div>
+
+<table>
+<tr><th>Step</th><th>Action</th></tr>
+<tr><td>1</td><td>Run <code>mvn clean package</code> to create the JAR in the <code>target</code> folder.</td></tr>
+<tr><td>2</td><td>Copy the JAR to the server (using SCP, FTP, or a pipeline).</td></tr>
+<tr><td>3</td><td>On the server, run <code>java -jar yourapp.jar</code>.</td></tr>
+<tr><td>4</td><td>Set production settings using a profile or environment variables.</td></tr>
+<tr><td>5</td><td>Keep it running with a service manager (systemd) or inside a Docker container.</td></tr>
+</table>
+
+<div class="qa"><div class="q">How do I use production settings?</div><div class="a">Create <code>application-prod.properties</code> and run with <code>--spring.profiles.active=prod</code>, or pass values as command-line arguments or environment variables.</div></div>
+<div class="filebox"><span class="cap">Dockerfile (optional, for container deployment)</span>FROM eclipse-temurin:17-jre
+COPY target/demo-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-jar", "/app.jar"]</div>
+<div class="qa"><div class="q">Can I deploy as a WAR instead?</div><div class="a">Yes, if you must use an external server. You change packaging to <code>war</code> and extend <code>SpringBootServletInitializer</code>. But the modern, simpler way is the executable JAR.</div></div>
+<div class="warn">
+Never run a production app with <code>debug=true</code> or with test data. Use a real database,
+a production profile, and proper logging levels.
+</div>
+
+<!-- ==================== MODULE 14: SCENARIO-BASED QUESTIONS ==================== -->
+<h2 id="m14">14. Scenario-Based Questions</h2>
+
+<h3>14.1 pom.xml scenarios</h3>
+<div class="qa"><div class="q">Your build fails saying a dependency version is missing. What is wrong?</div><div class="a">The dependency is not managed by the parent or a BOM, so you must add a <code>&lt;version&gt;</code> tag to it, or add a parent that manages its version.</div></div>
+<div class="qa"><div class="q">You added MySQL but the JAR is large and includes test libraries. How do you fix scopes?</div><div class="a">Give the MySQL driver <code>runtime</code> scope and test libraries <code>test</code> scope, so only what is needed ships in the package.</div></div>
+<div class="qa"><div class="q">Two libraries pull in different versions of the same dependency. What helps?</div><div class="a">The Spring Boot parent or a BOM manages versions centrally so they stay compatible. You can also set the version once in <code>&lt;properties&gt;</code>.</div></div>
+
+<h3>14.2 Spring basics scenarios</h3>
+<div class="qa"><div class="q">Your service is not being injected and is null. What is the likely cause?</div><div class="a">The class is probably not a Spring bean (missing <code>@Service</code>/<code>@Component</code>), or it is in a package outside the component scan, or you created it with <code>new</code> instead of letting Spring inject it.</div></div>
+<div class="qa"><div class="q">Your controller is not found at its URL. What do you check?</div><div class="a">Check that the class has <code>@Controller</code> or <code>@RestController</code>, the mapping annotation is correct, and the class is in a package scanned by <code>@SpringBootApplication</code>.</div></div>
+
+<h3>14.3 Entity, Repository, Service, Controller scenarios</h3>
+<div class="qa"><div class="q">You need to save a Student to the database. Which classes do you create?</div>
+<div class="a"><ul>
+<li><b>Entity</b> <code>Student</code> with <code>@Entity</code> and <code>@Id</code>.</li>
+<li><b>Repository</b> <code>StudentRepository extends JpaRepository&lt;Student, Integer&gt;</code>.</li>
+<li><b>Service</b> <code>StudentService</code> with the business logic, calling the repository.</li>
+<li><b>Controller</b> to receive the web request and call the service.</li>
+</ul></div></div>
+<div class="qa"><div class="q">You want to find a student by email. How do you add it without writing SQL?</div><div class="a">Add a method <code>Student findByEmail(String email);</code> in the repository. Spring Data JPA implements it automatically from the method name.</div></div>
+<div class="qa"><div class="q">You want a REST API to return Students as JSON. What do you use?</div><div class="a">A <code>@RestController</code> with a <code>@GetMapping</code> that returns the list. Spring converts it to JSON automatically. Prefer returning DTOs instead of entities.</div></div>
+
+<h3>14.4 @SpringBootApplication and application.properties scenarios</h3>
+<div class="qa"><div class="q">After moving the main class into a sub-package, components stopped loading. Why?</div><div class="a">Component scanning starts from the main class's package. If your components are now in a parent or sibling package, they are no longer scanned. Move the main class back to the top package.</div></div>
+<div class="qa"><div class="q">You set a custom value but it is not read. What do you verify?</div><div class="a">Confirm the file is named <code>application.properties</code> and is in <code>src/main/resources</code>, the key spelling matches the <code>@Value("${...}")</code>, and the property is not overridden elsewhere.</div></div>
+<div class="qa"><div class="q">You want different settings for local and production. How?</div><div class="a">Use profile files like <code>application-dev.properties</code> and <code>application-prod.properties</code>, and activate one with <code>spring.profiles.active</code>.</div></div>
+
+<footer>
+Spring Boot Beginner Deep-Dive Guide &bull; Maven, Annotations, IoC/DI, JPA, Exceptions, Logging, DTO, Deployment &bull; For learning and interview preparation.
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Microservices Complete Project Guide — One-Stop Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
+:root{
+  --bg:#fff;--bg2:#f7f9fc;--bg3:#eef2f8;--border:#e2e8f0;--border2:#cbd5e1;
+  --text:#0f172a;--t2:#475569;--t3:#94a3b8;
+  --accent:#1e40af;--accent2:#0e7490;
+  --blue:#1e40af;--green:#15803d;--orange:#c2410c;--purple:#6d28d9;
+  --teal:#0e7490;--red:#b91c1c;--amber:#b45309;--pink:#be185d;
+  --dark:#0f172a;--dark2:#1e293b;--dark3:#334155;--dtext:#e2e8f0;
+  --sw:256px;--readw:760px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);
+  font-size:15px;line-height:1.7;display:flex;-webkit-font-smoothing:antialiased}
+/* SIDEBAR */
+.sidebar{width:var(--sw);min-height:100vh;background:var(--bg2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;padding-bottom:32px}
+.sidebar::-webkit-scrollbar{width:3px}.sidebar::-webkit-scrollbar-thumb{background:var(--border2)}
+.sb-top{padding:20px 18px 16px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.sb-top h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--accent);letter-spacing:-.2px}
+.sb-top p{font-size:11px;color:var(--t3);margin-top:4px;font-weight:500}
+.nav-sec{padding:14px 18px 6px;font-size:9px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:var(--t3)}
+.ni{display:block;padding:8px 18px;font-size:12.5px;font-weight:500;color:var(--t2);
+  text-decoration:none;border-left:2px solid transparent;transition:all .12s;line-height:1.35}
+.ni:hover{background:var(--bg3);color:var(--text)}
+.ni.active{background:#eff4ff;color:var(--accent);border-left-color:var(--accent);font-weight:600}
+.ni-sub{font-size:9.5px;color:var(--t3);display:block;margin-bottom:1px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+/* PROGRESS */
+.pbar{position:fixed;top:0;left:var(--sw);right:0;height:2px;background:var(--border);z-index:200}
+.pbar-f{height:2px;background:var(--accent);transition:width .3s}
+/* MAIN */
+.main{margin-left:var(--sw);flex:1;min-width:0}
+/* HERO — restrained, professional */
+.hero{background:var(--bg2);border-bottom:1px solid var(--border);padding:40px 48px 34px}
+.hero-inner{max-width:var(--readw);margin:0 auto}
+.phase-badge{display:inline-block;background:#eff4ff;border:1px solid #c7d7fb;color:var(--accent);
+  font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 12px;border-radius:5px;margin-bottom:16px}
+.hero h1{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;line-height:1.15;
+  margin-bottom:12px;color:var(--text);letter-spacing:-.5px}
+.hero p{font-size:15px;color:var(--t2);line-height:1.65;margin-bottom:18px;max-width:680px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:7px}
+.hero-chip{background:#fff;border:1px solid var(--border);color:var(--t2);
+  font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:5px}
+/* CONTENT — capped reading width */
+.content{padding:8px 48px 60px}
+.content > section{max-width:var(--readw);margin:0 auto}
+section{padding:32px 0 28px;border-bottom:1px solid var(--border)}
+section:last-child{border-bottom:none}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:6px}
+h2{font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:var(--text);
+  margin-bottom:14px;letter-spacing:-.3px}
+h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);
+  margin:20px 0 8px;padding-left:11px;border-left:3px solid var(--accent)}
+h4{font-family:'Syne',sans-serif;font-size:13.5px;font-weight:800;color:var(--accent);margin:16px 0 6px}
+p{color:var(--t2);margin-bottom:11px;font-size:15px;line-height:1.7}
+p strong{color:var(--text);font-weight:600}
+ul,ol{padding-left:22px;margin-bottom:11px}
+li{color:var(--t2);margin-bottom:6px;line-height:1.65;font-size:15px}
+li strong{color:var(--text);font-weight:600}
+code{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:var(--bg3);
+  color:var(--orange);padding:2px 6px;border-radius:4px;border:1px solid var(--border)}
+/* CODE BLOCK */
+.cb{background:var(--dark);border-radius:8px;margin:14px 0;overflow:hidden;border:1px solid var(--dark2)}
+.cbh{display:flex;justify-content:space-between;align-items:center;padding:8px 15px;
+  background:var(--dark2);border-bottom:1px solid var(--dark3)}
+.cf{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#94a3b8;font-weight:500}
+.bd{font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;padding:2px 7px;border-radius:4px}
+.bj{background:rgba(194,65,12,.22);color:#fb923c}
+pre{padding:15px 18px;overflow-x:auto;font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;line-height:1.7;color:var(--dtext);white-space:pre}
+pre::-webkit-scrollbar{height:4px}pre::-webkit-scrollbar-thumb{background:var(--dark3)}
+pre code{font-family:inherit;font-size:inherit;background:transparent;color:inherit;padding:0;border:none}
+pre .kw{color:#c084fc}pre .an{color:#fbbf24}pre .cl{color:#67e8f9}
+pre .fn{color:#86efac}pre .st{color:#86efac}pre .cm{color:#64748b;font-style:italic}
+pre .tg{color:#f87171}pre .nb{color:#f87171}pre .num{color:#fb923c}
+/* WHY BOX — refined */
+.why-box{border-radius:8px;margin:14px 0;overflow:hidden;border:1px solid var(--border)}
+.why-row{display:grid;grid-template-columns:130px 1fr;border-bottom:1px solid var(--border)}
+.why-row:last-child{border-bottom:none}
+.why-label{padding:12px 14px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:center;
+  justify-content:center;text-align:center;line-height:1.35}
+.why-val{padding:12px 16px;font-size:14px;color:var(--t2);border-left:1px solid var(--border);line-height:1.6}
+.why-val strong{color:var(--text)}
+.wl-what{background:#eff4ff;color:var(--blue)}
+.wl-prob{background:#fef2f2;color:var(--red)}
+.wl-why{background:#f0fdf4;color:var(--green)}
+.wl-how{background:#f5f3ff;color:var(--purple)}
+.wl-real{background:#fff7ed;color:var(--orange)}
+.wl-inter{background:#fefce8;color:var(--amber)}
+.wl-mand{background:#ecfeff;color:var(--teal)}
+/* NOTES */
+.note{border-radius:6px;padding:12px 16px;margin:12px 0;font-size:14px;border-left:3px solid;line-height:1.6}
+.note strong{margin-right:4px;font-weight:700}
+.nblue{background:#eff4ff;border-color:var(--blue);color:#1e3a8a}
+.ngreen{background:#f0fdf4;border-color:var(--green);color:#14532d}
+.norange{background:#fff7ed;border-color:var(--orange);color:#9a3412}
+.nred{background:#fef2f2;border-color:var(--red);color:#991b1b}
+.nteal{background:#ecfeff;border-color:var(--teal);color:#155e75}
+.npurple{background:#f5f3ff;border-color:var(--purple);color:#5b21b6}
+/* TABLE — clean */
+.tw{overflow-x:auto;margin:14px 0;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead{background:var(--bg3)}
+th{padding:9px 14px;text-align:left;font-size:10px;font-weight:700;letter-spacing:.5px;
+  text-transform:uppercase;color:var(--t2);border-bottom:1px solid var(--border)}
+td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--t2);vertical-align:top;line-height:1.55}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:var(--bg2)}
+td code{font-size:12px}
+/* FLOW STEPS */
+.flow-steps{margin:14px 0}
+.fs-item{display:flex;gap:14px;margin-bottom:14px;align-items:flex-start}
+.fs-num{width:26px;height:26px;border-radius:6px;background:var(--accent);color:#fff;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:800;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;margin-top:1px}
+.fs-body{flex:1}
+.fs-title{font-weight:700;color:var(--text);font-size:14.5px;margin-bottom:3px}
+.fs-desc{font-size:14px;color:var(--t2);line-height:1.6}
+.fs-desc code{font-size:12.5px}
+/* ARCH */
+.arch{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px;margin:14px 0}
+.arch-title{font-family:'Syne',sans-serif;font-size:10.5px;font-weight:800;letter-spacing:.5px;
+  text-transform:uppercase;color:var(--accent);margin-bottom:14px;text-align:center}
+.arch-row{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:5px 0}
+.arch-box,.abox{border-radius:7px;padding:9px 14px;font-size:12.5px;font-weight:700;text-align:center;
+  min-width:104px;line-height:1.35;font-family:'Syne',sans-serif;border:1px solid}
+.arch-box small,.abox small{display:block;font-size:10px;font-weight:500;margin-top:3px;opacity:.85}
+.ab-blue{background:#eff4ff;border-color:#c7d7fb;color:var(--blue)}
+.ab-green{background:#f0fdf4;border-color:#bbf7d0;color:var(--green)}
+.ab-red{background:#fef2f2;border-color:#fecaca;color:var(--red)}
+.ab-teal{background:#ecfeff;border-color:#a5f3fc;color:var(--teal)}
+.ab-purple{background:#f5f3ff;border-color:#ddd6fe;color:var(--purple)}
+.ab-amber{background:#fefce8;border-color:#fde68a;color:var(--amber)}
+.ab-pink{background:#fdf2f8;border-color:#fbcfe8;color:var(--pink)}
+.arch-arr,.arch-arr-v{color:var(--t3);font-weight:700}
+.arch-arr-v{font-size:13px;text-align:center;margin:3px 0;display:block;letter-spacing:.3px}
+/* PROS CONS */
+.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:14px 0}
+.pros-box,.cons-box{border-radius:8px;padding:14px 16px;border:1px solid}
+.pros-box{background:#f0fdf4;border-color:#bbf7d0}.cons-box{background:#fef2f2;border-color:#fecaca}
+.pc-title{font-family:'Syne',sans-serif;font-size:11.5px;font-weight:800;margin-bottom:9px;text-transform:uppercase;letter-spacing:.4px}
+.pros-box .pc-title{color:var(--green)}.cons-box .pc-title{color:var(--red)}
+.pros-box ul,.cons-box ul{padding-left:18px;margin:0}
+.pros-box li,.cons-box li{font-size:13.5px;margin-bottom:6px;line-height:1.55}
+/* IQ */
+.iq-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:14px 0}
+.iq-title{font-family:'Syne',sans-serif;font-size:10.5px;font-weight:800;text-transform:uppercase;
+  letter-spacing:.5px;color:var(--amber);margin-bottom:12px}
+.iq-item{margin-bottom:13px;padding-bottom:13px;border-bottom:1px solid var(--border)}
+.iq-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.iq-q{font-weight:700;color:var(--text);font-size:14px;margin-bottom:4px}
+.iq-a{color:var(--t2);font-size:14px;line-height:1.65}
+@media(max-width:900px){
+  :root{--sw:0px}.sidebar{display:none}
+  .hero{padding:24px 20px}.hero h1{font-size:24px}
+  .content{padding:8px 20px 40px}
+  .pros-cons{grid-template-columns:1fr}
+  .why-row{grid-template-columns:100px 1fr}
+}
+/* ALIASES for older guide structure (sidebar-header / nav-item / nav-num) */
+.sidebar-header{padding:20px 18px 16px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.sidebar-header h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--accent);letter-spacing:-.2px}
+.sidebar-header p{font-size:11px;color:var(--t3);margin-top:4px;font-weight:500}
+.nav-item{display:block;padding:8px 18px;font-size:12.5px;font-weight:500;color:var(--t2);
+  text-decoration:none;border-left:2px solid transparent;transition:all .12s;line-height:1.35}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:#eff4ff;color:var(--accent);border-left-color:var(--accent);font-weight:600}
+.nav-num{font-size:9.5px;color:var(--t3);display:block;margin-bottom:1px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+/* ALIASES for Java Interview guide structure */
+.htag{display:inline-block;background:#eff4ff;border:1px solid #c7d7fb;color:var(--accent);
+  font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 12px;border-radius:5px;margin-bottom:16px}
+.ni span{font-size:9.5px;color:var(--t3);display:block;margin-bottom:1px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+.ni.active span{color:var(--accent)}
+/* Q&A blocks (Java Interview guide) */
+.qa-block{background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:14px 16px;margin:12px 0}
+.qa-q{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.qa-q-badge{flex-shrink:0;width:22px;height:22px;border-radius:5px;background:var(--accent);
+  color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center}
+.qa-q-text{font-weight:700;color:var(--text);font-size:14.5px;line-height:1.5;padding-top:1px}
+.qa-a{padding-left:32px;border-top:1px solid var(--border);padding-top:10px;margin-top:2px}
+.qa-a p{color:var(--t2);font-size:14px;line-height:1.65;margin-bottom:8px}
+.qa-a p:last-child{margin-bottom:0}
+.qa-a strong{color:var(--text)}
+.qa-a ol,.qa-a ul{padding-left:20px;margin-bottom:8px}
+.qa-a li{font-size:14px;line-height:1.6;margin-bottom:5px}
+
+.step{border-radius:9px;margin:14px 0;overflow:hidden;border:1px solid var(--border)}
+.step-hdr{background:var(--accent);color:#fff;padding:11px 18px;display:flex;align-items:center;gap:13px}
+.step-num{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
+.step-title{font-family:'Syne',sans-serif;font-size:14.5px;font-weight:800;color:#fff}
+.step-body{padding:15px 18px;background:var(--bg)}
+.step-body p{font-size:14.5px;margin-bottom:8px}
+.step-body p:last-child{margin:0}
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <div class="sb-top"><h3>Microservices</h3><p>Complete Project Guide</p></div>
+  <div class="nav-sec">Navigation</div><a href="#s-intro" class="ni"><span class="ni-sub">INTRODUCTION</span>What You Know vs What Is New</a>
+<a href="#s-p1" class="ni"><span class="ni-sub">POINT 1</span>Eureka Server</a>
+<a href="#s-p2" class="ni"><span class="ni-sub">POINT 2</span>API Gateway</a>
+<a href="#s-p3" class="ni"><span class="ni-sub">POINT 3</span>Feign Client</a>
+<a href="#s-p4" class="ni"><span class="ni-sub">POINT 4</span>Spring Security + JWT</a>
+<a href="#s-p5" class="ni"><span class="ni-sub">POINT 5</span>Config Server + Client</a>
+<a href="#s-buildorder" class="ni"><span class="ni-sub">BUILD ORDER</span>Step-by-Step Build & Run Order</a>
+<a href="#s-postman" class="ni"><span class="ni-sub">POSTMAN</span>Complete Postman Test Table</a>
+<a href="#s-errors" class="ni"><span class="ni-sub">COMMON ERRORS</span>Common Errors and Exact Fixes</a>
+<a href="#s-p6" class="ni"><span class="ni-sub">POINT 6 (OPTIONAL)</span>Docker — Do This Later</a>
+
+</div>
+<div class="pbar"><div class="pbar-f" id="pf" style="width:0%"></div></div>
+<div class="main">
+<div class="hero">
+<div class="hero-inner">
+<div class="phase-badge">One-Stop Reference — Beginner Friendly</div>
+<h1>Microservices Project Guide<br>for Spring Boot Developers</h1>
+<p>You already know Entity, Service, Controller, JPA, and MySQL. This guide shows you exactly what changes, what stays the same, and every configuration line you need — to build a complete microservices system without looking at any other document.</p>
+<div class="hero-chips">
+<span class="hero-chip">Points 1 to 5 — Core</span>
+<span class="hero-chip">Folder structure per service</span>
+<span class="hero-chip">Every properties line explained</span>
+<span class="hero-chip">Screenshot placeholders</span>
+<span class="hero-chip">Build order</span>
+<span class="hero-chip">Postman tests</span>
+<span class="hero-chip">Common errors</span>
+</div>
+</div>
+</div>
+<div class="content"><section id="s-intro"><div class="sec-label">INTRODUCTION</div><h2>What You Already Know vs What Is New</h2>
+<p>You already know how to build a Spring Boot project. This guide shows you exactly what changes and what stays the same when you move to microservices. You will not need any other document — everything is here.</p>
+<h3>What Stays Exactly the Same</h3><div class="tw"><table><thead><tr><th>What</th><th>Example</th><th>Changes in Microservices?</th></tr></thead><tbody><tr><td>Entity class</td><td>@Entity, @Id, @GeneratedValue</td><td>No change — identical code</td></tr><tr><td>Repository</td><td>JpaRepository&lt;Product, Long&gt;</td><td>No change — identical code</td></tr><tr><td>Service class</td><td>@Service, @Autowired</td><td>No change — identical code</td></tr><tr><td>Controller</td><td>@RestController, @GetMapping</td><td>No change — identical code</td></tr><tr><td>application.properties format</td><td>server.port, datasource.url</td><td>Same format — a few new lines added</td></tr><tr><td>MySQL setup</td><td>spring.datasource.url</td><td>No change — same connection config</td></tr><tr><td>DTO classes</td><td>ProductResponseDTO</td><td>No change — plain Java classes</td></tr><tr><td>ResponseEntity</td><td>ResponseEntity.ok(data)</td><td>No change — identical</td></tr></tbody></table></div>
+<h3>What Is New in Microservices</h3><div class="tw"><table><thead><tr><th>Technology</th><th>What It Does</th><th>New?</th></tr></thead><tbody><tr><td>Eureka Server</td><td>Phone book — every service registers here so others can find it</td><td>YES <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td></tr><tr><td>API Gateway</td><td>One entry point — clients call port 8080 only, never internal ports</td><td>YES <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td></tr><tr><td>Feign Client</td><td>Clean way for one service to call another over HTTP</td><td>YES <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td></tr><tr><td>Spring Security + JWT</td><td>Token-based security — only logged-in users can call APIs</td><td>YES <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td></tr><tr><td>Config Server + Client</td><td>One central place for all application.properties values</td><td>YES <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td></tr></tbody></table></div>
+<h3>The Complete System Diagram</h3><div class="cb"><div class="cbh"><span class="cf">How all services connect</span><span class="bd bj">STRUCTURE</span></div><pre><code>Client (Browser / Mobile / Postman)
+        |
+        | calls port 8080 only
+        v
++------------------+
+|   API Gateway    |  port 8080  — routes requests, checks JWT token
++------------------+
+    |          |          |
+    |          |          |
+    v          v          v
++----------+ +----------+ +----------+
+| product  | | order    | | auth     |
+| service  | | service  | | service  |
+| :8081    | | :8082    | | :8085    |
+| product_ | | order_db | | auth_db  |
+|    db    | |          | |          |
++----------+ +----------+ +----------+
+        |          |          |
+        +----------+----------+
+                   |
+                   | all services register here
+                   v
+        +------------------+
+        |  Eureka Server   |  port 8761  — service registry
+        +------------------+
+                   ^
+                   | all services fetch config from here
+        +------------------+
+        |  Config Server   |  port 8888  — central configuration
+        +------------------+</code></pre></div>
+<div class="tw"><table><thead><tr><th>Service</th><th>Port</th><th>Database</th><th>Responsibility</th></tr></thead><tbody><tr><td>product-service</td><td>8081</td><td>product_db</td><td>CRUD for products</td></tr><tr><td>order-service</td><td>8082</td><td>order_db</td><td>CRUD for orders, calls product-service</td></tr><tr><td>auth-service</td><td>8085</td><td>auth_db</td><td>Login, register, issue JWT tokens</td></tr><tr><td>eureka-server</td><td>8761</td><td>None</td><td>Service registry — phone book for services</td></tr><tr><td>api-gateway</td><td>8080</td><td>None</td><td>Single entry point, JWT check, routing</td></tr><tr><td>config-server</td><td>8888</td><td>None</td><td>Central configuration for all services</td></tr></tbody></table></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> You now understand what stays the same, what is new, and how all 6 services connect. The guide covers Points 1–5 in full detail. Point 6 (Docker) is an optional note at the end.</div>
+</section>
+<section id="s-p1"><div class="sec-label">POINT 1</div><h2>Eureka Server — Services Find Each Other by Name</h2>
+<div class="why-box"><div class="why-row"><div class="why-label wl-prob">Problem</div><div class="why-val">Without Eureka, every service uses a hardcoded URL like <code>http://localhost:8081</code>. If the service moves, changes port, or scales to 3 copies, the calling service breaks.</div></div><div class="why-row"><div class="why-label wl-why">Solution</div><div class="why-val">Every service registers with Eureka using its name. Other services look up the name instead of the address. Eureka always returns a current, live address.</div></div><div class="why-row"><div class="why-label wl-how">Simple analogy</div><div class="why-val">Eureka is a hotel reception desk. Every department (service) registers its room number (address). Guests (other services) ask reception for a department — they never memorise internal room numbers.</div></div></div>
+<h3>Folder and File Structure</h3><div class="cb"><div class="cbh"><span class="cf">Project Structure</span><span class="bd bj">STRUCTURE</span></div><pre><code>eureka-server/
+  src/main/java/com/eureka/
+    EurekaServerApplication.java   WHAT: main class — @EnableEurekaServer
+                                   WHY:  one annotation turns this into a registry
+                                   NEW:  yes — @EnableEurekaServer is new
+  src/main/resources/
+    application.properties         WHAT: port and server settings
+  pom.xml                          WHAT: dependencies
+
+No Entity. No Repository. No Service. No Controller.
+This service has almost no code — it is configured, not programmed.</code></pre></div>
+<h3>application.properties — Every Line Explained</h3><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">server.port=8761</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">Sets the port Eureka runs on.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">Port 8761 is the industry standard for Eureka. All other services point here.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">Gateway and all services cannot find Eureka — the whole system fails to discover services.</span></div><div style="color:var(--t3);font-size:13px;margin-top:4px">Example: If 8761 is taken, change to 8762 and update all other services.</div></div></div>
+<div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">spring.application.name=eureka-server</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">The name this service registers under.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">Shows up in dashboards and logs so you can identify this service.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">Shows as UNKNOWN in monitoring tools.</span></div></div></div>
+<div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">eureka.client.register-with-eureka=false</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">Tells the server NOT to register itself as a client.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">Eureka Server is the registry — it should not register with itself.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">Causes a confusing startup warning or error loop.</span></div></div></div>
+<div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">eureka.client.fetch-registry=false</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">Tells the server NOT to fetch its own list.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">The server IS the list — it does not need to fetch from itself.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">Unnecessary startup delays and warning messages.</span></div></div></div>
+<div style="background:var(--bg2);border:1px dashed var(--border2);border-radius:8px;padding:16px 20px;margin:14px 0;font-size:13.5px;color:var(--t3)"><strong style="color:var(--t2);font-size:12px;letter-spacing:.4px;text-transform:uppercase">Screenshot</strong><br><span style="color:var(--t2)">Eureka dashboard at http://localhost:8761 — shows no services registered yet</span></div>
+<h3>pom.xml Dependencies</h3><div class="tw"><table><thead><tr><th>Dependency</th><th>What It Does</th><th>Familiar or NEW?</th><th>If Missing</th></tr></thead><tbody><tr><td>spring-cloud-starter-netflix-eureka-server</td><td>Makes this app the Eureka registry server</td><td>NEW <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td><td>App starts but has no registry functionality — just an empty Spring Boot app</td></tr><tr><td>spring-cloud-dependencies (BOM)</td><td>Controls compatible versions for all Spring Cloud libraries</td><td>NEW <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td><td>Maven picks random incompatible versions — cryptic startup errors</td></tr></tbody></table></div>
+<div class="note ngreen"><strong>Key:</strong> The <strong>BOM block</strong> goes in <code>&lt;dependencyManagement&gt;</code>, not in <code>&lt;dependencies&gt;</code>. It controls versions only — it does not add libraries itself.</div>
+<h3>What Other Services Add to Register with Eureka</h3><p>Every other service adds this one line to their <code>application.properties</code>:</p><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">eureka.client.service-url.defaultZone=http://localhost:8761/eureka/</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">The address of the Eureka server.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">Without this, the service does not know where to register — it starts but stays invisible to other services.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">The service starts fine but is never registered. Other services cannot find it by name.</span></div></div></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Eureka is the registry. It has almost no code — just one annotation and four properties lines. Every other service adds one line to point to it.</div>
+</section>
+<section id="s-p2"><div class="sec-label">POINT 2</div><h2>API Gateway — One Entry Point for All Services</h2>
+<div class="why-box"><div class="why-row"><div class="why-label wl-prob">Problem</div><div class="why-val">Without a Gateway, every client must know every service port: 8081 for products, 8082 for orders, 8085 for auth. Add a new service and every client app needs updating.</div></div><div class="why-row"><div class="why-label wl-why">Solution</div><div class="why-val">The Gateway is the only address clients use: port 8080. It reads the URL and routes to the correct service automatically, using Eureka to find the current address.</div></div><div class="why-row"><div class="why-label wl-what">Also does</div><div class="why-val">The Gateway checks the JWT token on every request before forwarding it. One security checkpoint for all services.</div></div></div>
+<h3>Folder and File Structure</h3><div class="cb"><div class="cbh"><span class="cf">Project Structure</span><span class="bd bj">STRUCTURE</span></div><pre><code>api-gateway/
+  src/main/java/com/gateway/
+    ApiGatewayApplication.java         WHAT: main class — @SpringBootApplication only
+                                       WHY:  no extra annotation needed
+                                       NOTE: all routing is in application.properties
+    filter/
+      JwtAuthenticationFilter.java     WHAT: checks JWT token on every request
+                                       WHY:  rejects invalid/missing tokens with 401
+                                       NEW:  yes — added in Point 4 (skip for now)
+  src/main/resources/
+    application.properties             WHAT: routing rules — the most important file
+  pom.xml
+
+No Entity. No Repository. No Service. No Controller.
+All routing is done in application.properties — no Java code needed for routing.</code></pre></div>
+<h3>application.properties — Every Line Explained</h3><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">server.port=8080</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">The single port all clients use.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">8080 is the industry convention for HTTP in development.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">Gateway starts on a random or default port — clients cannot reliably reach it.</span></div></div></div>
+<div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">spring.application.name=api-gateway</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">Name this service registers under in Eureka.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">Used in logs and Eureka dashboard to identify the Gateway.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">Shows as UNKNOWN in monitoring tools.</span></div></div></div>
+<div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">eureka.client.service-url.defaultZone=http://localhost:8761/eureka/</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">Where Eureka is — so Gateway can look up service addresses.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">Without this, <code>lb://product-service</code> cannot be resolved.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">All routes with lb:// fail with: Unable to find instance for product-service.</span></div></div></div>
+<h4>Route Configuration — Every Line</h4><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">spring.cloud.gateway.routes[0].id=product-service-route</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">A unique name for this route.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">Appears in logs when this route is matched — makes debugging easy.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">Startup fails: Route id is required.</span></div></div></div>
+<div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">spring.cloud.gateway.routes[0].uri=lb://product-service</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">Where to forward the request. lb:// means load-balanced via Eureka.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">lb:// tells Spring Cloud LoadBalancer to ask Eureka for the current address. Automatically load-balances if multiple instances run.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">Startup fails: URI is required. OR: requests go to a hardcoded address that breaks when the service moves.</span></div></div></div>
+<div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">spring.cloud.gateway.routes[0].predicates[0]=Path=/api/products/**</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">The URL pattern that triggers this route.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">Without a predicate, a route would match every request. The ** wildcard matches anything after /api/products/.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">Route matches nothing — requests return 404.</span></div></div></div>
+<div class="cb"><div class="cbh"><span class="cf">api-gateway/src/main/resources/application.properties</span><span class="bd bj">PROPERTIES</span></div><pre><code>server.port=8080
+spring.application.name=api-gateway
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
+
+# Route 1: product requests
+spring.cloud.gateway.routes[0].id=product-service-route
+spring.cloud.gateway.routes[0].uri=lb://product-service
+spring.cloud.gateway.routes[0].predicates[0]=Path=/api/products/**
+
+# Route 2: order requests
+spring.cloud.gateway.routes[1].id=order-service-route
+spring.cloud.gateway.routes[1].uri=lb://order-service
+spring.cloud.gateway.routes[1].predicates[0]=Path=/api/orders/**
+
+# Route 3: auth requests (public — no token needed)
+spring.cloud.gateway.routes[2].id=auth-service-route
+spring.cloud.gateway.routes[2].uri=lb://auth-service
+spring.cloud.gateway.routes[2].predicates[0]=Path=/auth/**</code></pre></div>
+<div style="background:var(--bg2);border:1px dashed var(--border2);border-radius:8px;padding:16px 20px;margin:14px 0;font-size:13.5px;color:var(--t3)"><strong style="color:var(--t2);font-size:12px;letter-spacing:.4px;text-transform:uppercase">Screenshot</strong><br><span style="color:var(--t2)">Postman: GET http://localhost:8080/api/products — same response as calling port 8081 directly</span></div>
+<h3>pom.xml Dependencies</h3><div class="tw"><table><thead><tr><th>Dependency</th><th>What It Does</th><th>Familiar or NEW?</th><th>If Missing</th></tr></thead><tbody><tr><td>spring-cloud-starter-gateway</td><td>The Gateway routing engine — uses WebFlux (Netty), not Tomcat</td><td>NEW <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td><td>No routing. App starts but all requests return 404</td></tr><tr><td>spring-cloud-starter-netflix-eureka-client</td><td>Lets Gateway look up services in Eureka using lb://</td><td>NEW <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td><td>All lb:// routes fail — services cannot be found by name</td></tr><tr><td>spring-cloud-dependencies (BOM)</td><td>Version control for Spring Cloud libraries</td><td>NEW <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td><td>Version conflicts — cryptic startup errors</td></tr></tbody></table></div>
+<div class="note nred"><strong>Never:</strong> <strong>Do NOT add <code>spring-boot-starter-web</code> to the Gateway.</strong> Gateway uses WebFlux (reactive). spring-boot-starter-web uses Spring MVC (servlet). Adding both causes: <em>Spring MVC found on classpath, which is incompatible with Spring Cloud Gateway.</em> The app will not start.</div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> The Gateway routes requests using application.properties only — no Java routing code needed. All clients use port 8080. lb:// finds services via Eureka automatically.</div>
+</section>
+<section id="s-p3"><div class="sec-label">POINT 3</div><h2>Feign Client — One Service Calls Another</h2>
+<div class="why-box"><div class="why-row"><div class="why-label wl-prob">Problem</div><div class="why-val">order-service needs the product price from product-service. Without Feign, you write RestTemplate code: build a URL string, call getForObject, pass the response type. This is verbose and breaks if the URL changes.</div></div><div class="why-row"><div class="why-label wl-why">Solution</div><div class="why-val">Feign: write one Java interface. Spring generates the entire HTTP call automatically. Uses Eureka to find the service — no hardcoded URL.</div></div><div class="why-row"><div class="why-label wl-how">How simple it is</div><div class="why-val">You write one interface with one method. That is the entire Feign client. No URL building. No HTTP code. Spring handles everything.</div></div></div>
+<h3>Where Feign Lives — order-service Only</h3><div class="cb"><div class="cbh"><span class="cf">Project Structure</span><span class="bd bj">STRUCTURE</span></div><pre><code>order-service/
+  src/main/java/com/order/
+    entity/
+      Order.java                      SAME as always
+    repository/
+      OrderRepository.java            SAME as always
+    service/
+      OrderService.java               SAME as always (uses ProductClient)
+    controller/
+      OrderController.java            SAME as always
+    client/                           NEW folder
+      ProductClient.java              NEW file — the Feign interface
+        WHAT: defines the call to product-service
+        WHY:  Spring generates the HTTP call from this interface
+    dto/
+      ProductResponseDTO.java         data received from product-service
+    OrderServiceApplication.java      add @EnableFeignClients here
+  src/main/resources/
+    application.properties
+  pom.xml</code></pre></div>
+<h3>Package Name and Exact Class Name</h3><div class="tw"><table><thead><tr><th>Service</th><th>Class Type</th><th>Exact Class Name</th><th>Full Package</th></tr></thead><tbody><tr><td>order-service</td><td>Feign Interface</td><td>ProductClient</td><td>com.order.client.ProductClient</td></tr><tr><td>order-service</td><td>DTO</td><td>ProductResponseDTO</td><td>com.order.dto.ProductResponseDTO</td></tr></tbody></table></div>
+<h3>The Complete Feign Client — Every Line Explained</h3><div class="cb"><div class="cbh"><span class="cf">com/order/client/ProductClient.java</span><span class="bd bj">JAVA</span></div><pre><code><span class="an">@FeignClient</span>(name = <span class="st">"product-service"</span>)
+<span class="kw">public interface</span> <span class="cl">ProductClient</span> {
+
+    <span class="an">@GetMapping</span>(<span class="st">"/api/products/{id}"</span>)
+    ProductResponseDTO <span class="fn">getProductById</span>(<span class="an">@PathVariable</span> Long id);
+
+}</code></pre></div>
+<div class="tw"><table><thead><tr><th>Line</th><th>What It Does</th><th>Why It Matters</th></tr></thead><tbody><tr><td>@FeignClient(name = "product-service")</td><td>Connects this interface to product-service in Eureka</td><td>The name must exactly match spring.application.name in product-service</td></tr><tr><td>@GetMapping("/api/products/{id}")</td><td>The endpoint to call on product-service</td><td>Must match the exact path in ProductController</td></tr><tr><td>ProductResponseDTO</td><td>The data returned by the call</td><td>Must have the same fields as product-service returns</td></tr><tr><td>@PathVariable Long id</td><td>The product ID passed in the URL</td><td>Same as a normal Spring controller parameter</td></tr></tbody></table></div>
+<h3>What to Add to the Main Class</h3><div class="cb"><div class="cbh"><span class="cf">OrderServiceApplication.java</span><span class="bd bj">JAVA</span></div><pre><code><span class="an">@SpringBootApplication</span>
+<span class="an">@EnableFeignClients</span>  <span class="cm">// NEW — tells Spring to scan for @FeignClient interfaces</span>
+<span class="kw">public class</span> <span class="cl">OrderServiceApplication</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(String[] args) {
+        SpringApplication.run(OrderServiceApplication.<span class="kw">class</span>, args);
+    }
+}</code></pre></div>
+<h3>pom.xml — New Dependency for order-service</h3><div class="tw"><table><thead><tr><th>Dependency</th><th>What It Does</th><th>Familiar or NEW?</th><th>If Missing</th></tr></thead><tbody><tr><td>spring-cloud-starter-openfeign</td><td>Enables Feign Client — the HTTP interface generator</td><td>NEW <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td><td>@FeignClient interfaces are not processed. ProductClient cannot be autowired. order-service fails to start.</td></tr></tbody></table></div>
+<div style="background:var(--bg2);border:1px dashed var(--border2);border-radius:8px;padding:16px 20px;margin:14px 0;font-size:13.5px;color:var(--t3)"><strong style="color:var(--t2);font-size:12px;letter-spacing:.4px;text-transform:uppercase">Screenshot</strong><br><span style="color:var(--t2)">Postman: POST /api/orders — response shows order total calculated using real product price from product-service via Feign</span></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Feign is one interface with one method in a client/ folder. Add @EnableFeignClients to the main class and one dependency to pom.xml. Spring generates the HTTP call.</div>
+</section>
+<section id="s-p4"><div class="sec-label">POINT 4</div><h2>Spring Security + JWT — Protect Every API</h2>
+<div class="why-box"><div class="why-row"><div class="why-label wl-prob">Problem</div><div class="why-val">Without security, anyone can call DELETE /api/products/1 with no login and delete real data. All APIs are completely open.</div></div><div class="why-row"><div class="why-label wl-why">Solution</div><div class="why-val">auth-service handles login and issues a JWT token. The API Gateway checks the token on every request. Services behind the Gateway trust all forwarded requests.</div></div><div class="why-row"><div class="why-label wl-what">What JWT is</div><div class="why-val">A JWT (JSON Web Token) is a signed string: header.payload.signature. The payload holds who the user is and when the token expires. The signature proves it has not been tampered with. Any service can verify it without calling auth-service again.</div></div></div>
+<h3>Folder and File Structure — auth-service</h3><div class="cb"><div class="cbh"><span class="cf">Project Structure</span><span class="bd bj">STRUCTURE</span></div><pre><code>auth-service/
+  src/main/java/com/auth/
+    entity/
+      User.java                  WHAT: email, password (BCrypt hashed), role
+    repository/
+      UserRepository.java        WHAT: findByEmail(String email)
+    service/
+      AuthService.java           WHAT: login() and register() logic
+    controller/
+      AuthController.java        WHAT: POST /auth/login, POST /auth/register
+    util/
+      JwtUtil.java               WHAT: generateToken() and validateToken()
+                                  NEW:  yes — this utility class is new
+    dto/
+      LoginRequest.java          WHAT: { email, password }
+      AuthResponse.java          WHAT: { token: "eyJ..." }
+    AuthServiceApplication.java
+  src/main/resources/
+    application.properties
+  pom.xml</code></pre></div>
+<h3>Folder Addition — api-gateway</h3><div class="cb"><div class="cbh"><span class="cf">Project Structure</span><span class="bd bj">STRUCTURE</span></div><pre><code>api-gateway/
+  src/main/java/com/gateway/
+    filter/                       NEW folder
+      JwtAuthenticationFilter.java
+        WHAT: GlobalFilter — runs on every incoming request
+        WHY:  checks Authorization header, rejects missing/bad tokens with 401
+        NEW:  yes — this whole folder is new
+</code></pre></div>
+<h3>application.properties — auth-service (Every Line)</h3><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">server.port=8085</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">Port for auth-service.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">Each service needs a unique port.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">Conflict with another service on startup.</span></div></div></div>
+<div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">spring.application.name=auth-service</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">Name registered in Eureka.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">Gateway uses this name to route /auth/** to this service.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">Gateway cannot find auth-service — login returns 503.</span></div></div></div>
+<div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">jwt.secret=mySecretKey404E635266556A586E3272357538782F413F4428</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">The secret key used to sign and verify JWT tokens.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">Must be the SAME value in both auth-service and api-gateway. They share it to verify tokens.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">If different, every token fails validation with 401 — even valid tokens.</span></div></div></div>
+<div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">jwt.expiration=86400000</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">How long a token is valid in milliseconds.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">86400000 ms = 24 hours. After this, the token expires and the user must log in again.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">Token never expires — a security risk.</span></div></div></div>
+<h3>Public Routes — Routes That Do NOT Need a Token</h3><div class="note norange"><strong>Important:</strong> <code>/auth/login</code> and <code>/auth/register</code> MUST be public. If they require a token, nobody can ever log in — you need to call login to GET a token. This is the most common beginner deadlock.</div>
+<div class="tw"><table><thead><tr><th>Path</th><th>Needs Token?</th><th>Why</th></tr></thead><tbody><tr><td>POST /auth/register</td><td>No</td><td>Must create an account first</td></tr><tr><td>POST /auth/login</td><td>No</td><td>Must log in to receive a token</td></tr><tr><td>GET /api/products</td><td>Yes</td><td>Protected endpoint</td></tr><tr><td>POST /api/orders</td><td>Yes</td><td>Protected endpoint</td></tr></tbody></table></div>
+<h3>pom.xml Dependencies — auth-service</h3><div class="tw"><table><thead><tr><th>Dependency</th><th>What It Does</th><th>Familiar or NEW?</th><th>If Missing</th></tr></thead><tbody><tr><td>spring-boot-starter-security</td><td>Spring Security framework — enables authentication</td><td>NEW <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td><td>No security layer — all endpoints are open</td></tr><tr><td>jjwt-api</td><td>JWT library API — defines how to create and parse tokens</td><td>NEW <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td><td>Cannot create or verify tokens</td></tr><tr><td>jjwt-impl</td><td>JWT implementation — the actual token logic</td><td>NEW <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td><td>jjwt-api has no implementation — tokens do not work</td></tr><tr><td>jjwt-jackson</td><td>JSON parsing for JWT payload</td><td>NEW <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td><td>Token payload cannot be read — token validation fails</td></tr><tr><td>spring-cloud-starter-netflix-eureka-client</td><td>Register auth-service with Eureka</td><td>NEW <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td><td>Gateway cannot route /auth/** to this service</td></tr></tbody></table></div>
+<div style="background:var(--bg2);border:1px dashed var(--border2);border-radius:8px;padding:16px 20px;margin:14px 0;font-size:13.5px;color:var(--t3)"><strong style="color:var(--t2);font-size:12px;letter-spacing:.4px;text-transform:uppercase">Screenshot</strong><br><span style="color:var(--t2)">Postman: POST /auth/login — response body shows { 'token': 'eyJhbGci...' }</span></div>
+<div style="background:var(--bg2);border:1px dashed var(--border2);border-radius:8px;padding:16px 20px;margin:14px 0;font-size:13.5px;color:var(--t3)"><strong style="color:var(--t2);font-size:12px;letter-spacing:.4px;text-transform:uppercase">Screenshot</strong><br><span style="color:var(--t2)">Postman: GET /api/products with Authorization: Bearer &lt;token&gt; — response 200 OK</span></div>
+<div style="background:var(--bg2);border:1px dashed var(--border2);border-radius:8px;padding:16px 20px;margin:14px 0;font-size:13.5px;color:var(--t3)"><strong style="color:var(--t2);font-size:12px;letter-spacing:.4px;text-transform:uppercase">Screenshot</strong><br><span style="color:var(--t2)">Postman: GET /api/products with NO token — response 401 Unauthorized</span></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> auth-service handles login and issues JWT tokens. The Gateway filter checks the token on every request. Public routes (/auth/login, /auth/register) skip the check so users can get a token.</div>
+</section>
+<section id="s-p5"><div class="sec-label">POINT 5</div><h2>Config Server + Client — One Place for All Configuration</h2>
+<div class="why-box"><div class="why-row"><div class="why-label wl-prob">Problem</div><div class="why-val">The JWT secret is copied in auth-service AND api-gateway. The Eureka URL is in every service. When anything changes, you update and redeploy multiple services.</div></div><div class="why-row"><div class="why-label wl-why">Solution</div><div class="why-val">Config Server holds all properties in one folder. Each service fetches its own config from there at startup. Change once — all services see it.</div></div><div class="why-row"><div class="why-label wl-how">Simple analogy</div><div class="why-val">Config Server is a central library. Each service checks out its own book (properties file). There is only one copy of each book — no scattered photocopies to keep in sync.</div></div></div>
+<h3>Folder and File Structure — config-server</h3><div class="cb"><div class="cbh"><span class="cf">Project Structure</span><span class="bd bj">STRUCTURE</span></div><pre><code>config-server/
+  src/main/java/com/config/
+    ConfigServerApplication.java   WHAT: @EnableConfigServer — one annotation
+                                    NEW:  yes — @EnableConfigServer is new
+  config-repo/                      NEW folder — all properties files live here
+    application.properties          shared by ALL services
+    product-service.properties      only for product-service
+    order-service.properties        only for order-service
+    auth-service.properties         only for auth-service
+    api-gateway.properties          only for api-gateway
+  src/main/resources/
+    application.properties          config-server own settings
+  pom.xml</code></pre></div>
+<h3>application.properties — config-server (Every Line)</h3><div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">server.port=8888</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">Port Config Server runs on.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">8888 is the industry standard for Config Server.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">All clients trying to fetch config cannot connect.</span></div></div></div>
+<div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">spring.application.name=config-server</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">Name in Eureka.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">Other services find it by name.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">Shows as UNKNOWN in monitoring tools.</span></div></div></div>
+<div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">spring.profiles.active=native</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">Use local filesystem (not Git) to store config files.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">Simplest setup for beginners — no Git account needed.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">Config Server tries to connect to a Git repository and fails.</span></div></div></div>
+<div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;margin:10px 0;overflow:hidden"><div style="background:var(--dark);padding:9px 15px;font-family:JetBrains Mono,monospace;font-size:13px;color:#fbbf24">spring.cloud.config.server.native.search-locations=file:./config-repo</div><div style="padding:11px 16px"><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHAT:</strong> <span style="color:var(--t2);font-size:14px">The folder where all properties files live.</span></div><div style="margin-bottom:5px"><strong style="color:var(--text);font-size:12px">WHY:</strong> <span style="color:var(--t2);font-size:14px">Without this, Config Server does not know where to look for config files.</span></div><div style="margin-bottom:5px"><strong style="color:var(--red);font-size:12px">IF REMOVED:</strong> <span style="color:var(--t2);font-size:14px">Config Server starts but returns 404 for every service config request.</span></div></div></div>
+<h3>What Goes in config-repo/application.properties (Shared by All)</h3><div class="cb"><div class="cbh"><span class="cf">config-repo/application.properties</span><span class="bd bj">PROPERTIES</span></div><pre><code># Shared by ALL services — put common config here
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
+jwt.secret=mySecretKey404E635266556A586E3272357538782F413F4428
+jwt.expiration=86400000</code></pre></div>
+<h3>What Changes in Each Service After Adding Config Client</h3><p>Each service's own application.properties shrinks to just 2 lines:</p><div class="cb"><div class="cbh"><span class="cf">product-service/src/main/resources/application.properties (after Config Client)</span><span class="bd bj">PROPERTIES</span></div><pre><code>spring.application.name=product-service
+spring.config.import=optional:configserver:http://localhost:8888
+# Everything else (port, datasource, eureka URL, jwt.secret) comes from Config Server</code></pre></div>
+<div class="tw"><table><thead><tr><th>File in config-repo</th><th>Who Gets It</th><th>What to Put There</th></tr></thead><tbody><tr><td>application.properties</td><td>ALL services</td><td>Eureka URL, JWT secret, common settings</td></tr><tr><td>product-service.properties</td><td>product-service only</td><td>server.port=8081, datasource.url for product_db</td></tr><tr><td>order-service.properties</td><td>order-service only</td><td>server.port=8082, datasource.url for order_db</td></tr><tr><td>auth-service.properties</td><td>auth-service only</td><td>server.port=8085, datasource.url for auth_db</td></tr><tr><td>api-gateway.properties</td><td>api-gateway only</td><td>server.port=8080, gateway routes</td></tr></tbody></table></div>
+<h3>pom.xml Addition for ALL Client Services</h3><div class="tw"><table><thead><tr><th>Dependency</th><th>What It Does</th><th>Familiar or NEW?</th><th>If Missing</th></tr></thead><tbody><tr><td>spring-cloud-starter-config</td><td>Enables Config Client — fetches config from Config Server at startup</td><td>NEW <span style="background:#fef9c3;color:#92400e;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">NEW</span></td><td>Service ignores Config Server — falls back to its own application.properties only</td></tr></tbody></table></div>
+<div style="background:var(--bg2);border:1px dashed var(--border2);border-radius:8px;padding:16px 20px;margin:14px 0;font-size:13.5px;color:var(--t3)"><strong style="color:var(--t2);font-size:12px;letter-spacing:.4px;text-transform:uppercase">Screenshot</strong><br><span style="color:var(--t2)">Browser: GET http://localhost:8888/product-service/default — returns product-service config as JSON</span></div>
+<div class="note nteal" style="margin-top:20px"><strong>Section Summary:</strong> Config Server holds all properties in one folder. Services fetch their config at startup using 2 lines. Change config once and all services pick it up without rebuilding.</div>
+</section>
+<section id="s-buildorder"><div class="sec-label">BUILD ORDER</div><h2>Step-by-Step Build and Run Order</h2>
+<p>Always start services in this order. Each service depends on the one before it being ready.</p>
+<div class="step"><div class="step-hdr"><div class="step-num">1</div><div class="step-title">Start config-server (port 8888)</div></div><div class="step-body"><p><strong>Why this order:</strong> Start Config Server first — all other services fetch their config here at startup.</p><p><strong>Console message to look for:</strong> <code>Started ConfigServerApplication</code></p><p><strong>Test URL:</strong> <code>GET http://localhost:8888/product-service/default</code></p><p><strong>Expected result:</strong> Returns JSON with product-service configuration</p><div class="note nred" style="margin:8px 0"><strong>Common error:</strong> config-repo folder not found → check the search-locations path in application.properties</div></div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">2</div><div class="step-title">Start eureka-server (port 8761)</div></div><div class="step-body"><p><strong>Why this order:</strong> Start Eureka second — all other services register here.</p><p><strong>Console message to look for:</strong> <code>Started EurekaServerApplication</code></p><p><strong>Test URL:</strong> <code>Open http://localhost:8761 in browser</code></p><p><strong>Expected result:</strong> Eureka dashboard loads. No services listed yet.</p><div class="note nred" style="margin:8px 0"><strong>Common error:</strong> Port 8761 in use → check no other Eureka instance running</div></div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">3</div><div class="step-title">Start product-service (port 8081)</div></div><div class="step-body"><p><strong>Why this order:</strong> Start product-service — nothing depends on it first.</p><p><strong>Console message to look for:</strong> <code>Started ProductServiceApplication</code></p><p><strong>Test URL:</strong> <code>GET http://localhost:8081/api/products</code></p><p><strong>Expected result:</strong> Returns empty list []. Eureka shows PRODUCT-SERVICE: UP</p><div class="note nred" style="margin:8px 0"><strong>Common error:</strong> Cannot connect to Eureka → wait 30 seconds and retry</div></div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">4</div><div class="step-title">Start order-service (port 8082)</div></div><div class="step-body"><p><strong>Why this order:</strong> Start order-service — needs product-service registered in Eureka for Feign.</p><p><strong>Console message to look for:</strong> <code>Started OrderServiceApplication</code></p><p><strong>Test URL:</strong> <code>GET http://localhost:8082/api/orders</code></p><p><strong>Expected result:</strong> Returns empty list []. Eureka shows ORDER-SERVICE: UP</p><div class="note nred" style="margin:8px 0"><strong>Common error:</strong> ProductClient cannot be created → check @EnableFeignClients on main class</div></div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">5</div><div class="step-title">Start auth-service (port 8085)</div></div><div class="step-body"><p><strong>Why this order:</strong> Start auth-service — needs Eureka to register and Config Server for JWT secret.</p><p><strong>Console message to look for:</strong> <code>Started AuthServiceApplication</code></p><p><strong>Test URL:</strong> <code>POST http://localhost:8085/auth/register with {email, password}</code></p><p><strong>Expected result:</strong> User created. Returns 200 OK.</p><div class="note nred" style="margin:8px 0"><strong>Common error:</strong> JWT secret not found → check config-repo/application.properties has jwt.secret</div></div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">6</div><div class="step-title">Start api-gateway (port 8080)</div></div><div class="step-body"><p><strong>Why this order:</strong> Start Gateway LAST — needs all services registered in Eureka so it can route to them.</p><p><strong>Console message to look for:</strong> <code>Started ApigatewayApplication</code></p><p><strong>Test URL:</strong> <code>GET http://localhost:8080/api/products (no token)</code></p><p><strong>Expected result:</strong> 401 Unauthorized — security is working</p><div class="note nred" style="margin:8px 0"><strong>Common error:</strong> Spring MVC on classpath → remove spring-boot-starter-web from pom.xml</div></div></div>
+<div style="background:var(--bg2);border:1px dashed var(--border2);border-radius:8px;padding:16px 20px;margin:14px 0;font-size:13.5px;color:var(--t3)"><strong style="color:var(--t2);font-size:12px;letter-spacing:.4px;text-transform:uppercase">Screenshot</strong><br><span style="color:var(--t2)">Eureka dashboard after all 6 services are running — all 6 appear as UP</span></div>
+</section>
+<section id="s-postman"><div class="sec-label">POSTMAN</div><h2>Complete Postman Test Table</h2>
+<p>All requests go through the Gateway on port 8080. Get a token from step 3 and use it as <code>Authorization: Bearer &lt;token&gt;</code> for all protected routes.</p>
+<div class="tw"><table><thead><tr><th>#</th><th>Method</th><th>URL</th><th>Request Body</th><th>Expected Status</th><th>Notes</th></tr></thead><tbody><tr><td>1</td><td>POST</td><td>http://localhost:8080/auth/register</td><td>{ "email": "test@test.com", "password": "pass123" }</td><td>200 OK</td><td>No token needed</td></tr><tr><td>2</td><td>POST</td><td>http://localhost:8080/auth/login</td><td>{ "email": "test@test.com", "password": "pass123" }</td><td>200 OK — returns token</td><td>Copy the token from the response</td></tr><tr><td>3</td><td>GET</td><td>http://localhost:8080/api/products</td><td>None</td><td>401 Unauthorized</td><td>No token — correct</td></tr><tr><td>4</td><td>GET</td><td>http://localhost:8080/api/products</td><td>None</td><td>200 OK</td><td>Add Authorization: Bearer &lt;token&gt; header</td></tr><tr><td>5</td><td>POST</td><td>http://localhost:8080/api/products</td><td>{ "name": "Laptop", "price": 75000 }</td><td>201 Created</td><td>With token</td></tr><tr><td>6</td><td>GET</td><td>http://localhost:8080/api/products/1</td><td>None</td><td>200 OK</td><td>With token — single product</td></tr><tr><td>7</td><td>GET</td><td>http://localhost:8080/api/orders</td><td>None</td><td>200 OK</td><td>With token</td></tr><tr><td>8</td><td>POST</td><td>http://localhost:8080/api/orders</td><td>{ "productId": 1, "quantity": 2 }</td><td>201 Created</td><td>With token — order uses real price via Feign</td></tr><tr><td>9</td><td>GET</td><td>http://localhost:8080/api/unknown</td><td>None</td><td>404 Not Found</td><td>No route matches this URL</td></tr></tbody></table></div>
+<div style="background:var(--bg2);border:1px dashed var(--border2);border-radius:8px;padding:16px 20px;margin:14px 0;font-size:13.5px;color:var(--t3)"><strong style="color:var(--t2);font-size:12px;letter-spacing:.4px;text-transform:uppercase">Screenshot</strong><br><span style="color:var(--t2)">Postman: POST /auth/login — response shows token field with JWT string</span></div>
+<div style="background:var(--bg2);border:1px dashed var(--border2);border-radius:8px;padding:16px 20px;margin:14px 0;font-size:13.5px;color:var(--t3)"><strong style="color:var(--t2);font-size:12px;letter-spacing:.4px;text-transform:uppercase">Screenshot</strong><br><span style="color:var(--t2)">Postman: GET /api/products with Authorization header — response 200 with product list</span></div>
+</section>
+<section id="s-errors"><div class="sec-label">COMMON ERRORS</div><h2>Common Errors and Exact Fixes</h2>
+<div class="tw"><table><thead><tr><th>#</th><th>Error Message</th><th>Why It Happens</th><th>Exact Fix</th></tr></thead><tbody><tr><td>1</td><td>Spring MVC found on classpath, incompatible with Spring Cloud Gateway</td><td>spring-boot-starter-web is in api-gateway pom.xml</td><td>Remove spring-boot-starter-web from api-gateway pom.xml. Gateway uses WebFlux.</td></tr><tr><td>2</td><td>Unable to find instance for product-service</td><td>product-service is not running or not registered in Eureka</td><td>Start product-service. Wait 30 seconds. Open http://localhost:8761 and confirm PRODUCT-SERVICE shows UP.</td></tr><tr><td>3</td><td>Connection refused to localhost:8761</td><td>Eureka Server is not running</td><td>Start eureka-server first before starting any other service.</td></tr><tr><td>4</td><td>Could not autowire ProductClient</td><td>@EnableFeignClients is missing from OrderServiceApplication</td><td>Add @EnableFeignClients to OrderServiceApplication.java main class.</td></tr><tr><td>5</td><td>Port 8080 / 8081 / 8082 already in use</td><td>Another process is using that port</td><td>Stop the other process, or change the port in application.properties.</td></tr><tr><td>6</td><td>401 on /auth/login (public route)</td><td>JwtAuthenticationFilter is checking /auth/login but it should be skipped</td><td>Add "/auth/login" and "/auth/register" to the PUBLIC_ROUTES list in JwtAuthenticationFilter.</td></tr><tr><td>7</td><td>Token accepted but data is wrong — 401 on every request</td><td>jwt.secret in auth-service and api-gateway do not match</td><td>Set the same jwt.secret value in both. With Config Server active, define it once in config-repo/application.properties.</td></tr></tbody></table></div>
+</section>
+<section id="s-p6"><div class="sec-label">POINT 6 — OPTIONAL</div><h2>Docker — Package and Deploy Everything (Do This Later)</h2>
+<div class="note nteal"><strong>Remember:</strong> Complete Points 1 to 5 and test the full system with all 6 services running before touching Docker. Docker adds a new layer of complexity and should only be added when everything works locally first.</div>
+<p>Docker packages each service into a container — a lightweight, isolated unit that runs the same on any machine. Instead of starting 6 services manually, <code>docker-compose up</code> starts all of them with one command.</p>
+<div class="tw"><table><thead><tr><th>What to Learn</th><th>What It Does</th><th>When to Learn It</th></tr></thead><tbody><tr><td>Dockerfile</td><td>A recipe that builds a container image for one service</td><td>After all 6 services work locally</td></tr><tr><td>docker-compose.yml</td><td>Runs all services together with one command</td><td>After writing Dockerfiles for all services</td></tr><tr><td>localhost to service-name change</td><td>In Docker, localhost means the container itself — you must change all localhost URLs to service names</td><td>The most important Docker gotcha — learn this first</td></tr><tr><td>spring-boot-maven-plugin config</td><td>Needed to build a Docker image from a Spring Boot JAR</td><td>When writing the Dockerfile</td></tr></tbody></table></div>
+<div class="note ngreen"><strong>Key:</strong> This is a separate topic from microservices. Do not mix it with Points 1–5. When you are ready, treat Docker as a new guide on its own.</div>
+</section>
+</div>
+</div>
+<script>const links=document.querySelectorAll('.ni');const secs=document.querySelectorAll('section');const pf=document.getElementById('pf');
+function mark(id){links.forEach(n=>n.classList.toggle('active',n.getAttribute('href')==='#s-'+id));const idx=[...secs].findIndex(s=>s.id==='s-'+id);if(pf)pf.style.width=Math.round((idx+1)/secs.length*100)+'%';}
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)mark(e.target.id.replace('s-',''));});},{rootMargin:'-25% 0px -65% 0px'});
+secs.forEach(s=>obs.observe(s));links.forEach(n=>n.addEventListener('click',e=>{e.preventDefault();const id=n.getAttribute('href').replace('#s-','');const el=document.getElementById('s-'+id);if(el){el.scrollIntoView({behavior:'smooth'});mark(id);}}));</script>
+</body>
+</html>
