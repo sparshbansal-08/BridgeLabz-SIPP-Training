@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS3 - Practice Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+<style>:root{--accent:#2965f1;--accent-soft:rgba(41,101,241,.12)}*{margin:0;padding:0;box-sizing:border-box}body{background:#0b0d12;color:#e8eaed;font-family:'Inter',sans-serif;line-height:1.65;overflow-x:hidden}.hero{padding:60px 24px 40px;text-align:center;border-bottom:1px solid #2a3142;background:linear-gradient(180deg,var(--accent-soft) 0%,transparent 100%)}.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#5c6478;letter-spacing:4px;text-transform:uppercase;margin-bottom:14px}.hero h1{font-family:'Instrument Serif',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:400;letter-spacing:-.02em;margin-bottom:14px;line-height:1.1}.hero h1 .accent{color:var(--accent);font-style:italic}.hero .subtitle{font-size:.95rem;color:#8b94a6;max-width:580px;margin:0 auto}.container{max-width:980px;margin:0 auto;padding:32px 24px 80px}.tabs{display:flex;gap:4px;overflow-x:auto;padding:5px;background:#131720;border:1px solid #2a3142;border-radius:12px;margin-bottom:32px;position:sticky;top:8px;z-index:100;-webkit-overflow-scrolling:touch}.tab{flex-shrink:0;padding:9px 16px;border:none;background:transparent;color:#8b94a6;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;cursor:pointer;border-radius:8px;transition:all .2s;white-space:nowrap}.tab:hover{color:#e8eaed;background:#1a1f2c}.tab.active{background:var(--accent);color:#fff;font-weight:600}.section{display:none;animation:fadeIn .3s ease}.section.active{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.section-title{font-family:'Instrument Serif',serif;font-size:1.9rem;font-weight:400;margin-bottom:6px}.section-desc{color:#8b94a6;margin-bottom:28px;font-size:.95rem}.qa-header{margin:36px 0 16px;font-family:'Instrument Serif',serif;font-size:1.4rem;color:var(--accent);font-weight:400;border-bottom:1px solid #2a3142;padding-bottom:8px}.concept{background:#131720;border:1px solid #2a3142;border-radius:12px;padding:22px 24px;margin-bottom:18px;transition:border-color .2s}.concept:hover{border-color:var(--accent)}.concept h3{font-weight:600;font-size:1.05rem;margin-bottom:12px;display:flex;align-items:center;gap:10px}.concept p,.concept li{color:#8b94a6;font-size:.92rem;line-height:1.75}.concept ul,.concept ol{padding-left:22px;margin-top:8px}.concept li{margin-bottom:5px}.concept code{background:#0d1218;color:var(--accent);padding:2px 7px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.85em;border:1px solid #1f2532}.concept strong{color:#e8eaed;font-weight:600}.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;background:#232938;color:var(--accent);border:1px solid #2a3142}.code-block{background:#05080d;border-radius:10px;overflow:hidden;margin:12px 0;border:1px solid #2a3142}.code-header{background:#1a1f2c;padding:7px 13px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #2a3142}.dot{width:9px;height:9px;border-radius:50%}.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}.code-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#5c6478;margin-left:8px}.code-body{padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:.81rem;line-height:1.85;overflow-x:auto;color:#d4d8e0;white-space:pre-wrap}.tag{color:#f87171}.attr{color:#fbbf24}.str{color:#86efac}.num{color:#c084fc}.kw{color:#f472b6}.fn{color:#60a5fa}.com{color:#5c6478;font-style:italic}.var{color:#93c5fd}.sel{color:#fb923c}.prop{color:#fbbf24}.val{color:#86efac}.tip-box{border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.88rem;color:#8b94a6}.tip-box strong{color:var(--accent)}.warn-box{border-left:3px solid #fb923c;background:rgba(251,146,60,.12);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.88rem;color:#fde0c4}.warn-box strong{color:#fb923c}.qa{background:#131720;border:1px solid #2a3142;border-radius:10px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}.qa:hover{border-color:var(--accent)}.qa summary{padding:14px 18px;cursor:pointer;font-weight:500;font-size:.9rem;display:flex;align-items:flex-start;gap:12px;list-style:none;color:#e8eaed;user-select:none}.qa summary::-webkit-details-marker{display:none}.qa summary::before{content:'+';color:var(--accent);font-weight:700;font-size:1.2rem;flex-shrink:0;transition:transform .3s;line-height:1;margin-top:1px}details[open] summary::before{transform:rotate(45deg)}.qnum{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:.78rem;flex-shrink:0;font-weight:700;min-width:32px}.qtext{flex:1}.qa-a{padding:0 18px 18px;color:#8b94a6;font-size:.88rem;line-height:1.8;border-top:1px solid #2a3142;padding-top:14px}.qa-a code{background:#0d1218;color:var(--accent);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.85em;border:1px solid #1f2532}.qa-a strong{color:#e8eaed}.qa-a pre{background:#05080d;border:1px solid #2a3142;border-radius:6px;padding:10px 12px;overflow-x:auto;margin:8px 0;font-family:'JetBrains Mono',monospace;font-size:.8rem;line-height:1.6;color:#d4d8e0;white-space:pre}.quiz-q{background:#131720;border:1px solid #2a3142;border-radius:10px;padding:18px 20px;margin-bottom:14px}.quiz-q h4{font-size:.92rem;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start;color:#e8eaed;font-weight:500}.options{display:flex;flex-direction:column;gap:7px}.option{padding:10px 14px;border:1.5px solid #2a3142;border-radius:7px;font-size:.84rem;cursor:pointer;transition:all .2s;background:#1a1f2c;color:#e8eaed}.option:hover{border-color:var(--accent);background:#232938}.option.correct{border-color:#4ade80;background:rgba(74,222,128,.12);color:#4ade80;font-weight:600}.option.wrong{border-color:#f87171;background:rgba(248,113,113,.12);color:#f87171}.option.disabled{pointer-events:none}.explanation{margin-top:12px;padding:11px 14px;border-radius:7px;font-size:.82rem;line-height:1.7;display:none}.explanation.show{display:block}.explanation.correct-exp{background:rgba(74,222,128,.12);color:#a7f3c4;border-left:3px solid #4ade80}.explanation.wrong-exp{background:rgba(248,113,113,.12);color:#fcb5b5;border-left:3px solid #f87171}.explanation code{background:rgba(0,0,0,.4);padding:1px 5px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:.9em}.score-bar{margin-bottom:20px;padding:12px 18px;background:#131720;border:1px solid #2a3142;border-radius:10px;text-align:center;font-weight:500;font-size:.9rem;color:#8b94a6}.score-bar span{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:700}.cheat-table{width:100%;border-collapse:collapse;background:#131720;border-radius:10px;overflow:hidden;border:1px solid #2a3142;margin-bottom:22px;font-size:.84rem}.cheat-table th{background:#1a1f2c;padding:10px 14px;text-align:left;font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.6px;color:#e8eaed;border-bottom:1px solid #2a3142}.cheat-table td{padding:10px 14px;border-bottom:1px solid #1f2532;vertical-align:top;color:#8b94a6}.cheat-table tr:last-child td{border-bottom:none}.cheat-table tr:hover td{background:#1a1f2c}.cheat-table code{background:#0d1218;color:var(--accent);padding:2px 7px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.85em;white-space:nowrap}.home-link{display:inline-block;margin:18px 24px 0;padding:7px 13px;background:#131720;border:1px solid #2a3142;border-radius:8px;color:#8b94a6;text-decoration:none;font-size:.78rem;transition:all .2s}.home-link:hover{border-color:var(--accent);color:var(--accent)}@media(max-width:700px){.tab{padding:8px 12px;font-size:.75rem}.concept{padding:18px}.container{padding:24px 16px 60px}}</style>
+</head>
+<body>
+<a class="home-link" href="00-index.html">← All Guides</a>
+<div class="hero">
+  <div class="hero-eyebrow">◆ &nbsp; G U I D E &nbsp; 2 &nbsp; / &nbsp; 5 &nbsp; ◆</div>
+  <h1>CSS3 — <span class="accent">Practice Guide</span></h1>
+  <p class="subtitle">5 modules covering selectors, the box model, styling, media queries, and responsive design. With 40+ practice Q&amp;A and a quiz.</p>
+</div>
+<div class="container">
+<div class="tabs">
+  <button class="tab active" onclick="show(0)">📘 Intro</button>
+  <button class="tab" onclick="show(1)">🎯 Selectors</button>
+  <button class="tab" onclick="show(2)">🎨 Styling</button>
+  <button class="tab" onclick="show(3)">📦 Box Model</button>
+  <button class="tab" onclick="show(4)">📱 Responsive</button>
+  <button class="tab" onclick="show(5)">🎯 Quiz</button>
+</div>
+
+<div class="section active">
+<h2 class="section-title">Module 1: Introduction to CSS3</h2>
+<p class="section-desc">CSS = Cascading Style Sheets — controls how HTML elements LOOK.</p>
+
+<div class="concept">
+<h3><span class="badge">CONCEPT</span> Need &amp; Benefits of CSS</h3>
+<ul>
+<li><strong>Separation of concerns:</strong> HTML = structure, CSS = presentation, JS = behavior</li>
+<li><strong>Reusability:</strong> One stylesheet styles hundreds of pages</li>
+<li><strong>Maintainability:</strong> Change a brand color in ONE place; updates everywhere</li>
+<li><strong>Smaller pages:</strong> No repeated style attributes</li>
+<li><strong>Responsive design:</strong> Same HTML adapts to any screen size</li>
+</ul>
+</div>
+
+<div class="concept">
+<h3><span class="badge">SYNTAX</span> CSS Rule Anatomy</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">CSS rule</span></div>
+<div class="code-body"><span class="sel">selector</span> {
+  <span class="prop">property</span>: <span class="val">value</span>;  <span class="com">/* declaration */</span>
+  <span class="prop">color</span>: <span class="val">red</span>;
+  <span class="prop">font-size</span>: <span class="val">16px</span>;
+}
+
+<span class="com">/* This is a CSS comment */</span></div></div>
+<ul>
+<li><strong>Selector:</strong> Which elements to style</li>
+<li><strong>Property:</strong> What aspect (color, margin)</li>
+<li><strong>Value:</strong> What to set it to</li>
+<li><strong>Declaration:</strong> property + value pair, ends with <code>;</code></li>
+</ul>
+</div>
+
+<div class="concept">
+<h3><span class="badge">METHODS</span> 3 Ways to Include CSS</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">1. Inline (avoid)</span></div>
+<div class="code-body"><span class="tag">&lt;p</span> <span class="attr">style</span>=<span class="str">"color: red; font-size: 16px;"</span><span class="tag">&gt;</span>Red text<span class="tag">&lt;/p&gt;</span></div></div>
+
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">2. Embedded (in &lt;head&gt;)</span></div>
+<div class="code-body"><span class="tag">&lt;style&gt;</span>
+  <span class="sel">p</span> { <span class="prop">color</span>: <span class="val">red</span>; }
+<span class="tag">&lt;/style&gt;</span></div></div>
+
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">3. External (BEST)</span></div>
+<div class="code-body"><span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="str">"stylesheet"</span> <span class="attr">href</span>=<span class="str">"styles.css"</span><span class="tag">&gt;</span></div></div>
+
+<table class="cheat-table">
+<thead><tr><th>Method</th><th>Specificity</th><th>Use Case</th></tr></thead>
+<tbody>
+<tr><td>Inline</td><td>Highest (1000)</td><td>Quick test or JS-set styles</td></tr>
+<tr><td>Embedded</td><td>Medium</td><td>Single-page styles</td></tr>
+<tr><td>External</td><td>Medium</td><td>✅ Production — recommended</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="concept">
+<h3><span class="badge">SYNTAX</span> CSS Comments</h3>
+<p>CSS uses ONLY <code>/* ... */</code> comments — no <code>//</code> single-line:</p>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Comments</span></div>
+<div class="code-body"><span class="com">/* Single line */</span>
+<span class="com">/*
+  Multi-line comment
+*/</span></div></div>
+</div>
+
+<h3 class="qa-header">Practice Q&amp;A — Introduction</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">What does CSS stand for, and what's its main purpose?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> CSS = <strong>Cascading Style Sheets</strong>. Controls the PRESENTATION of HTML — colors, fonts, spacing, layout, animations. "Cascading" means styles can come from multiple sources and cascade based on specificity rules.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">Name the 3 ways to add CSS to HTML, and which is best.</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ol>
+<li><strong>Inline:</strong> <code>style="..."</code> attribute. Highest specificity, hard to maintain.</li>
+<li><strong>Embedded:</strong> <code>&lt;style&gt;</code> in <code>&lt;head&gt;</code>. OK for single-page.</li>
+<li><strong>External:</strong> <code>&lt;link rel="stylesheet"&gt;</code>. ✅ Best — reusable, cacheable, maintainable.</li>
+</ol></div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">Write CSS to make all paragraphs blue with 18px font.</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>p {
+  color: blue;
+  font-size: 18px;
+}</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">What's the comment syntax in CSS?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> <code>/* comment */</code> only. CSS does NOT support <code>//</code> single-line comments. Both single and multi-line use <code>/* ... */</code>.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q5</span><span class="qtext">If inline, embedded, and external CSS all set <code>p { color }</code> — which wins?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> <strong>Inline wins</strong> (specificity 1000). Otherwise, the rule that comes LATER in document order wins. Specificity: inline (1000) &gt; ID (100) &gt; class/pseudo (10) &gt; element (1).</div></details>
+
+<details class="qa"><summary><span class="qnum">Q6</span><span class="qtext">List 4 benefits of external CSS over inline.</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ol>
+<li><strong>Reusable</strong> — one CSS styles all pages.</li>
+<li><strong>Cacheable</strong> — browser downloads once.</li>
+<li><strong>Maintainable</strong> — change in one place.</li>
+<li><strong>Separation of concerns</strong> — keeps HTML clean.</li>
+</ol></div></details>
+
+</div>
+
+<div class="section">
+<h2 class="section-title">Module 2: CSS3 Selectors</h2>
+<p class="section-desc">How to target the elements you want to style.</p>
+
+<div class="concept">
+<h3><span class="badge">BASIC</span> 5 Essential Selectors</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Basic selectors</span></div>
+<div class="code-body"><span class="com">/* 1. Universal — matches EVERYTHING */</span>
+<span class="sel">*</span> { <span class="prop">margin</span>: <span class="num">0</span>; }
+
+<span class="com">/* 2. Element/Type — all of that tag */</span>
+<span class="sel">p</span> { <span class="prop">color</span>: <span class="val">gray</span>; }
+
+<span class="com">/* 3. ID — # — UNIQUE element */</span>
+<span class="sel">#header</span> { <span class="prop">background</span>: <span class="val">black</span>; }
+
+<span class="com">/* 4. Class — . — multiple elements */</span>
+<span class="sel">.btn</span> { <span class="prop">padding</span>: <span class="num">10px</span>; }
+<span class="sel">.btn.primary</span> { <span class="prop">background</span>: <span class="val">blue</span>; }
+
+<span class="com">/* 5. Grouping — apply to many */</span>
+<span class="sel">h1, h2, h3</span> { <span class="prop">font-family</span>: <span class="val">serif</span>; }</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">COMBO</span> Combinator Selectors</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Combinators</span></div>
+<div class="code-body"><span class="com">/* Descendant — &lt;a&gt; INSIDE .nav, any depth */</span>
+<span class="sel">.nav a</span> { <span class="prop">color</span>: <span class="val">white</span>; }
+
+<span class="com">/* Child — DIRECT child only */</span>
+<span class="sel">ul &gt; li</span> { <span class="prop">list-style</span>: <span class="val">none</span>; }
+
+<span class="com">/* Adjacent sibling — IMMEDIATELY after */</span>
+<span class="sel">h2 + p</span> { <span class="prop">font-weight</span>: <span class="val">bold</span>; }
+
+<span class="com">/* General sibling — ANY following sibling */</span>
+<span class="sel">h2 ~ p</span> { <span class="prop">color</span>: <span class="val">gray</span>; }</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">PSEUDO</span> Pseudo-classes &amp; Pseudo-elements</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Pseudo selectors</span></div>
+<div class="code-body"><span class="com">/* Pseudo-classes (single colon) — STATE */</span>
+<span class="sel">a:hover</span> { <span class="prop">color</span>: <span class="val">red</span>; }
+<span class="sel">input:focus</span> { <span class="prop">outline</span>: <span class="val">2px solid blue</span>; }
+<span class="sel">li:first-child</span> { <span class="prop">font-weight</span>: <span class="val">bold</span>; }
+<span class="sel">li:nth-child(2n)</span> { <span class="prop">background</span>: <span class="val">#eee</span>; }
+
+<span class="com">/* Pseudo-elements (double colon) — VIRTUAL parts */</span>
+<span class="sel">p::first-line</span> { <span class="prop">font-weight</span>: <span class="val">bold</span>; }
+<span class="sel">p::first-letter</span> { <span class="prop">font-size</span>: <span class="val">2em</span>; }
+<span class="sel">.icon::before</span> { <span class="prop">content</span>: <span class="str">"★"</span>; }</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">CRITICAL</span> Specificity — Which Rule Wins?</h3>
+<table class="cheat-table">
+<thead><tr><th>Selector type</th><th>Score</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>Inline style</td><td>1000</td><td><code>style="..."</code></td></tr>
+<tr><td>ID</td><td>100</td><td><code>#header</code></td></tr>
+<tr><td>Class / attribute / pseudo-class</td><td>10</td><td><code>.btn</code>, <code>:hover</code></td></tr>
+<tr><td>Element / pseudo-element</td><td>1</td><td><code>p</code>, <code>::before</code></td></tr>
+<tr><td>Universal</td><td>0</td><td><code>*</code></td></tr>
+</tbody>
+</table>
+<p style="margin-top:8px">If specificity is tied, the LATER rule wins.</p>
+<div class="warn-box"><strong>⚠️ <code>!important</code> overrides everything.</strong> Use sparingly: <code>color: red !important;</code></div>
+</div>
+
+<h3 class="qa-header">Practice Q&amp;A — Selectors</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">What does <code>*</code> do in CSS?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> <strong>Universal selector</strong> — matches EVERY element. Often used to reset:
+<pre>* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">How do you select by id "main"? By class "card"?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li>By id: <code>#main { ... }</code> (hash prefix)</li>
+<li>By class: <code>.card { ... }</code> (dot prefix)</li>
+</ul></div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">How do you apply the same style to <code>h1</code>, <code>h2</code>, <code>h3</code> in one rule?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Use a <strong>grouping selector</strong>:
+<pre>h1, h2, h3 {
+  font-family: 'Georgia', serif;
+  color: navy;
+}</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">Difference between <code>.nav a</code> and <code>.nav &gt; a</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>.nav a</code> — <strong>descendant</strong>: any <code>&lt;a&gt;</code> inside <code>.nav</code>, any depth.</li>
+<li><code>.nav &gt; a</code> — <strong>child</strong>: only DIRECT children.</li>
+</ul>
+Example: <code>&lt;div class="nav"&gt;&lt;ul&gt;&lt;li&gt;&lt;a&gt;&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;</code> — <code>.nav a</code> matches; <code>.nav &gt; a</code> does NOT.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q5</span><span class="qtext">Which has higher specificity: <code>#main</code> or <code>.container.card</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> <code>#main</code> wins (100) over <code>.container.card</code> (20). An ID always beats any number of classes.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q6</span><span class="qtext">What does <code>li:nth-child(2n)</code> select?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Every EVEN <code>&lt;li&gt;</code> (2nd, 4th, 6th). Useful for striped tables.<br><br>Variants:
+<ul>
+<li><code>:nth-child(odd)</code> or <code>:nth-child(2n+1)</code> — odd</li>
+<li><code>:nth-child(3)</code> — exactly the 3rd</li>
+<li><code>:nth-child(3n)</code> — every 3rd</li>
+</ul></div></details>
+
+<details class="qa"><summary><span class="qnum">Q7</span><span class="qtext">Difference between <code>:hover</code> and <code>::before</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>:hover</code> — <strong>pseudo-class</strong>, single colon, targets a STATE of an element.</li>
+<li><code>::before</code> — <strong>pseudo-element</strong>, double colon, creates a VIRTUAL element.</li>
+</ul>
+Pseudo-elements need a <code>content</code> property (can be empty <code>""</code>).</div></details>
+
+</div>
+
+<div class="section">
+<h2 class="section-title">Module 3: Styling — Colors, Fonts, Text, Lists, Tables</h2>
+<p class="section-desc">The core visual properties you'll use every day.</p>
+
+<div class="concept">
+<h3><span class="badge">COLORS</span> CSS Color Values</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">5 ways to write color</span></div>
+<div class="code-body"><span class="sel">.box</span> {
+  <span class="prop">color</span>: <span class="val">red</span>;                 <span class="com">/* 1. Named */</span>
+  <span class="prop">color</span>: <span class="val">#ff0000</span>;              <span class="com">/* 2. Hex (long) */</span>
+  <span class="prop">color</span>: <span class="val">#f00</span>;                 <span class="com">/* 3. Hex (short) */</span>
+  <span class="prop">color</span>: <span class="val">rgb(255, 0, 0)</span>;        <span class="com">/* 4. RGB */</span>
+  <span class="prop">color</span>: <span class="val">rgba(255, 0, 0, 0.5)</span>;   <span class="com">/* 5. RGBA (alpha) */</span>
+  <span class="prop">color</span>: <span class="val">hsl(0, 100%, 50%)</span>;     <span class="com">/* 6. HSL */</span>
+}</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">BG</span> CSS Background</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Background</span></div>
+<div class="code-body"><span class="sel">.hero</span> {
+  <span class="prop">background-color</span>: <span class="val">#333</span>;
+  <span class="prop">background-image</span>: <span class="val">url('hero.jpg')</span>;
+  <span class="prop">background-repeat</span>: <span class="val">no-repeat</span>;
+  <span class="prop">background-position</span>: <span class="val">center center</span>;
+  <span class="prop">background-size</span>: <span class="val">cover</span>;
+  <span class="prop">background-attachment</span>: <span class="val">fixed</span>;
+
+  <span class="com">/* Or all in one shorthand: */</span>
+  <span class="prop">background</span>: <span class="val">#333 url('hero.jpg') no-repeat center/cover</span>;
+
+  <span class="com">/* Linear gradient */</span>
+  <span class="prop">background</span>: <span class="val">linear-gradient(to right, red, blue)</span>;
+}</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">FONTS</span> CSS Fonts</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Font properties</span></div>
+<div class="code-body"><span class="sel">body</span> {
+  <span class="prop">font-family</span>: <span class="val">'Helvetica', Arial, sans-serif</span>;
+  <span class="prop">font-size</span>: <span class="val">16px</span>;
+  <span class="prop">font-weight</span>: <span class="val">400</span>;
+  <span class="prop">font-style</span>: <span class="val">italic</span>;
+  <span class="prop">line-height</span>: <span class="val">1.6</span>;
+  <span class="prop">letter-spacing</span>: <span class="val">0.5px</span>;
+}</div></div>
+<div class="tip-box"><strong>Font fallback chain:</strong> List fonts in order of preference. Browser tries each until found. Always end with a generic family (<code>serif</code>, <code>sans-serif</code>, <code>monospace</code>).</div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">TEXT</span> CSS Text</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Text properties</span></div>
+<div class="code-body"><span class="sel">.article</span> {
+  <span class="prop">text-align</span>: <span class="val">center</span>;
+  <span class="prop">text-decoration</span>: <span class="val">underline</span>;
+  <span class="prop">text-transform</span>: <span class="val">uppercase</span>;
+  <span class="prop">text-indent</span>: <span class="val">2em</span>;
+  <span class="prop">text-shadow</span>: <span class="val">2px 2px 4px rgba(0,0,0,0.3)</span>;
+  <span class="prop">white-space</span>: <span class="val">nowrap</span>;
+  <span class="prop">word-break</span>: <span class="val">break-word</span>;
+}</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">LINKS</span> CSS Link States (LoVe HAte)</h3>
+<p>Links have 4 STATES — order matters!</p>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Link states</span></div>
+<div class="code-body"><span class="sel">a:link</span>    { <span class="prop">color</span>: <span class="val">blue</span>; }    <span class="com">/* unvisited */</span>
+<span class="sel">a:visited</span> { <span class="prop">color</span>: <span class="val">purple</span>; }  <span class="com">/* visited */</span>
+<span class="sel">a:hover</span>   { <span class="prop">color</span>: <span class="val">red</span>; }     <span class="com">/* mouse over */</span>
+<span class="sel">a:active</span>  { <span class="prop">color</span>: <span class="val">orange</span>; }  <span class="com">/* during click */</span></div></div>
+<div class="tip-box"><strong>Mnemonic:</strong> <strong>L</strong>o<strong>V</strong>e <strong>HA</strong>te → Link, Visited, Hover, Active.</div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">LISTS</span> CSS Lists</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">List styling</span></div>
+<div class="code-body"><span class="sel">ul</span> {
+  <span class="prop">list-style-type</span>: <span class="val">square</span>;     <span class="com">/* disc | circle | square | none */</span>
+  <span class="prop">list-style-position</span>: <span class="val">inside</span>;  <span class="com">/* inside | outside */</span>
+  <span class="prop">list-style-image</span>: <span class="val">url('bullet.png')</span>;
+}
+
+<span class="sel">ol</span> {
+  <span class="prop">list-style-type</span>: <span class="val">decimal</span>;       <span class="com">/* 1, 2, 3 */</span>
+  <span class="com">/* lower-alpha (a,b,c), upper-roman (I,II,III) */</span>
+}</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">TABLES</span> CSS Tables</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Table styling</span></div>
+<div class="code-body"><span class="sel">table</span> {
+  <span class="prop">border-collapse</span>: <span class="val">collapse</span>;  <span class="com">/* merges cell borders */</span>
+  <span class="prop">width</span>: <span class="val">100%</span>;
+}
+
+<span class="sel">th, td</span> {
+  <span class="prop">border</span>: <span class="val">1px solid #ddd</span>;
+  <span class="prop">padding</span>: <span class="val">8px</span>;
+  <span class="prop">text-align</span>: <span class="val">left</span>;
+}
+
+<span class="sel">tr:nth-child(even)</span> {
+  <span class="prop">background-color</span>: <span class="val">#f9f9f9</span>;  <span class="com">/* zebra stripes */</span>
+}</div></div>
+</div>
+
+<h3 class="qa-header">Practice Q&amp;A — Styling</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">List 4 ways to specify a color in CSS.</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ol>
+<li>Named: <code>red</code>, <code>cornflowerblue</code></li>
+<li>Hex: <code>#ff0000</code> or short <code>#f00</code></li>
+<li>RGB: <code>rgb(255, 0, 0)</code> or <code>rgba(255, 0, 0, 0.5)</code></li>
+<li>HSL: <code>hsl(0, 100%, 50%)</code> or <code>hsla(...)</code></li>
+</ol></div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">What's the difference between <code>background-size: cover</code> and <code>contain</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>cover</code> — fills entire container, may CROP. Used for hero images.</li>
+<li><code>contain</code> — entire image visible, may leave EMPTY SPACE. Used for logos.</li>
+</ul></div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">What's the correct order for link pseudo-classes and why?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> <strong>L</strong>ink → <strong>V</strong>isited → <strong>H</strong>over → <strong>A</strong>ctive (LoVe HAte).<br><br>CSS specificity ties go to LATER rule. If <code>:hover</code> comes before <code>:visited</code>, visited overrides hover. The "LVHA" order ensures all states display correctly.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">Why use a font fallback chain like <code>'Helvetica', Arial, sans-serif</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Not every user has every font. Browser tries each in order:
+<ol>
+<li>Try Helvetica (Mac users)</li>
+<li>If not, try Arial (Windows users)</li>
+<li>If neither, use ANY sans-serif font</li>
+</ol>
+Always end with a generic family (<code>serif</code>, <code>sans-serif</code>, <code>monospace</code>) as final fallback.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q5</span><span class="qtext">How do you create alternating row colors (zebra stripes) in a table?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>tr:nth-child(even) {
+  background-color: #f5f5f5;
+}</pre>
+<code>:nth-child()</code> with <code>even</code> or <code>2n</code> targets every 2nd row.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q6</span><span class="qtext">What does <code>border-collapse: collapse</code> do?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Merges adjacent table cell borders into single shared borders, removing the default double-border look. Without it, each cell has its own border with gaps between them.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q7</span><span class="qtext">Difference between <code>color</code> and <code>background-color</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>color</code> — sets the FOREGROUND text color.</li>
+<li><code>background-color</code> — sets the BACKGROUND color of the element.</li>
+</ul></div></details>
+
+</div>
+
+<div class="section">
+<h2 class="section-title">Module 4: CSS Box Model</h2>
+<p class="section-desc">The most important CSS concept — every element is a box made of 4 layers.</p>
+
+<div class="concept">
+<h3><span class="badge">CRITICAL</span> The Box Model</h3>
+<p>Every HTML element is a rectangular box composed of 4 layers (from inside out):</p>
+<ol>
+<li><strong>Content</strong> — actual text, image, etc.</li>
+<li><strong>Padding</strong> — space INSIDE the border (background color shows here)</li>
+<li><strong>Border</strong> — line around padding</li>
+<li><strong>Margin</strong> — space OUTSIDE the border (transparent, separates from other elements)</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Box model visualization</span></div>
+<div class="code-body">┌─────── margin ────────┐
+│  ┌──── border ────┐   │
+│  │  ┌─ padding ─┐ │   │
+│  │  │  content  │ │   │
+│  │  └───────────┘ │   │
+│  └────────────────┘   │
+└───────────────────────┘</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">PROPS</span> Margin &amp; Padding</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Shorthand</span></div>
+<div class="code-body"><span class="com">/* All sides */</span>
+<span class="prop">margin</span>: <span class="val">10px</span>;
+
+<span class="com">/* Vertical | Horizontal */</span>
+<span class="prop">margin</span>: <span class="val">10px 20px</span>;
+
+<span class="com">/* Top | Horizontal | Bottom */</span>
+<span class="prop">margin</span>: <span class="val">10px 20px 30px</span>;
+
+<span class="com">/* Top | Right | Bottom | Left (clockwise) */</span>
+<span class="prop">margin</span>: <span class="val">10px 20px 30px 40px</span>;
+
+<span class="com">/* Individual sides */</span>
+<span class="prop">margin-top</span>: <span class="val">10px</span>;
+<span class="prop">margin-right</span>: <span class="val">20px</span>;
+<span class="prop">margin-bottom</span>: <span class="val">30px</span>;
+<span class="prop">margin-left</span>: <span class="val">40px</span>;
+
+<span class="com">/* Center horizontally */</span>
+<span class="prop">margin</span>: <span class="val">0 auto</span>;</div></div>
+<p style="margin-top:8px"><code>padding</code> works exactly the same way — same shorthand rules.</p>
+</div>
+
+<div class="concept">
+<h3><span class="badge">PROPS</span> Border</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Border properties</span></div>
+<div class="code-body"><span class="sel">.box</span> {
+  <span class="com">/* Shorthand: width | style | color */</span>
+  <span class="prop">border</span>: <span class="val">2px solid red</span>;
+
+  <span class="com">/* Individual properties */</span>
+  <span class="prop">border-width</span>: <span class="val">2px</span>;
+  <span class="prop">border-style</span>: <span class="val">solid</span>;  <span class="com">/* solid | dashed | dotted | double | none */</span>
+  <span class="prop">border-color</span>: <span class="val">red</span>;
+  <span class="prop">border-radius</span>: <span class="val">8px</span>;  <span class="com">/* rounded corners */</span>
+
+  <span class="com">/* Per-side */</span>
+  <span class="prop">border-top</span>: <span class="val">2px solid red</span>;
+  <span class="prop">border-bottom</span>: <span class="val">1px dashed gray</span>;
+}</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">PROPS</span> Outline (Often Confused with Border)</h3>
+<table class="cheat-table">
+<thead><tr><th>Aspect</th><th>Border</th><th>Outline</th></tr></thead>
+<tbody>
+<tr><td>Takes up space?</td><td>✅ Yes — affects box size</td><td>❌ No — drawn OVER element</td></tr>
+<tr><td>Per-side control?</td><td>✅ Yes (border-top, etc.)</td><td>❌ No — all 4 sides at once</td></tr>
+<tr><td>Border-radius?</td><td>✅ Yes</td><td>❌ Not always</td></tr>
+<tr><td>Common use</td><td>Visual styling</td><td>Focus indicators</td></tr>
+</tbody>
+</table>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Outline</span></div>
+<div class="code-body"><span class="sel">input:focus</span> {
+  <span class="prop">outline</span>: <span class="val">2px solid blue</span>;
+  <span class="prop">outline-offset</span>: <span class="val">2px</span>;  <span class="com">/* gap between outline and element */</span>
+}</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">CRITICAL</span> box-sizing — content-box vs border-box</h3>
+<p>The KEY question: when you set <code>width: 200px</code>, does padding/border ADD to the width?</p>
+<table class="cheat-table">
+<thead><tr><th></th><th>content-box (default)</th><th>border-box (modern)</th></tr></thead>
+<tbody>
+<tr><td>width includes</td><td>Just content</td><td>Content + padding + border</td></tr>
+<tr><td>width: 200px + padding: 20px =</td><td>240px total width</td><td>200px total width</td></tr>
+<tr><td>Best for</td><td>Old code</td><td>✅ Modern layouts (predictable)</td></tr>
+</tbody>
+</table>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Modern reset</span></div>
+<div class="code-body"><span class="sel">*, *::before, *::after</span> {
+  <span class="prop">box-sizing</span>: <span class="val">border-box</span>;
+}</div></div>
+<div class="tip-box"><strong>Best practice:</strong> Apply <code>border-box</code> globally. Now <code>width: 50%</code> always means 50% — no math gymnastics.</div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">CRITICAL</span> visibility vs display</h3>
+<table class="cheat-table">
+<thead><tr><th>Property</th><th>Effect</th><th>Takes space?</th></tr></thead>
+<tbody>
+<tr><td><code>display: none</code></td><td>Element completely removed</td><td>❌ No</td></tr>
+<tr><td><code>visibility: hidden</code></td><td>Element invisible but reserved</td><td>✅ Yes (empty gap)</td></tr>
+<tr><td><code>opacity: 0</code></td><td>Transparent but interactable</td><td>✅ Yes (still clickable!)</td></tr>
+</tbody>
+</table>
+<div class="tip-box"><strong>Use cases:</strong> <code>display:none</code> for completely removing. <code>visibility:hidden</code> for keeping layout. <code>opacity:0</code> for fade animations.</div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">LAYOUT</span> Multiple Columns</h3>
+<p>CSS3 added native multi-column layout — like newspapers:</p>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Multi-column</span></div>
+<div class="code-body"><span class="sel">.article</span> {
+  <span class="prop">column-count</span>: <span class="val">3</span>;          <span class="com">/* exact number */</span>
+  <span class="prop">column-width</span>: <span class="val">200px</span>;       <span class="com">/* min width per column */</span>
+  <span class="prop">column-gap</span>: <span class="val">2em</span>;           <span class="com">/* space between columns */</span>
+  <span class="prop">column-rule</span>: <span class="val">1px solid #ccc</span>; <span class="com">/* divider line */</span>
+
+  <span class="com">/* Shorthand */</span>
+  <span class="prop">columns</span>: <span class="val">3 200px</span>;
+}</div></div>
+</div>
+
+<h3 class="qa-header">Practice Q&amp;A — Box Model</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">What are the 4 layers of the CSS box model (inside-out)?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ol>
+<li><strong>Content</strong> — text, image, etc.</li>
+<li><strong>Padding</strong> — space INSIDE the border (background shows here).</li>
+<li><strong>Border</strong> — line around the padding.</li>
+<li><strong>Margin</strong> — space OUTSIDE the border (transparent).</li>
+</ol></div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">What's the difference between margin and padding?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><strong>Padding</strong> — space INSIDE the border. Background color extends into padding.</li>
+<li><strong>Margin</strong> — space OUTSIDE the border. Always transparent. Pushes other elements away.</li>
+</ul></div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">What does <code>margin: 10px 20px 30px 40px</code> mean?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> 4 values are clockwise from top: <strong>Top, Right, Bottom, Left</strong>. So:
+<ul>
+<li>top: 10px, right: 20px, bottom: 30px, left: 40px</li>
+</ul>
+Mnemonic: <strong>TRBL</strong> ("trouble"). Same applies to <code>padding</code> and <code>border-width</code>.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">How do you center a block element horizontally?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>.element {
+  width: 600px;        /* must have explicit width */
+  margin: 0 auto;      /* auto on left & right */
+}</pre>
+The <code>auto</code> tells browser to distribute remaining horizontal space equally on both sides.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q5</span><span class="qtext">Difference between border and outline?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><strong>Border</strong> — TAKES UP SPACE, affects element's actual size. Per-side control. Supports <code>border-radius</code>.</li>
+<li><strong>Outline</strong> — Drawn OVER the element, doesn't affect layout. All 4 sides at once. Often used for focus indicators.</li>
+</ul></div></details>
+
+<details class="qa"><summary><span class="qnum">Q6</span><span class="qtext">If you set <code>width: 200px</code> and <code>padding: 20px</code>, what's the actual width?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Depends on <code>box-sizing</code>:
+<ul>
+<li><strong>content-box (default):</strong> 200 (content) + 40 (padding both sides) = <strong>240px total</strong></li>
+<li><strong>border-box:</strong> Total stays at <strong>200px</strong> — content shrinks to 160px to accommodate padding</li>
+</ul>
+Modern best practice: use <code>* { box-sizing: border-box; }</code> for predictable sizing.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q7</span><span class="qtext">Difference between <code>display: none</code>, <code>visibility: hidden</code>, and <code>opacity: 0</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>display: none</code> — Element completely REMOVED. No space taken.</li>
+<li><code>visibility: hidden</code> — Element invisible but space RESERVED (empty gap).</li>
+<li><code>opacity: 0</code> — Transparent, but still INTERACTABLE (clickable, takes space).</li>
+</ul></div></details>
+
+<details class="qa"><summary><span class="qnum">Q8</span><span class="qtext">How do you create rounded corners?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>.box {
+  border-radius: 8px;       /* all corners */
+  border-radius: 50%;       /* perfect circle */
+  border-radius: 8px 16px;  /* top-left/bottom-right | top-right/bottom-left */
+}</pre>
+Works without a visible border too — affects the background and any borders.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q9</span><span class="qtext">How do you split content into 3 columns like a newspaper?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>.article {
+  column-count: 3;
+  column-gap: 2em;
+  column-rule: 1px solid #ccc;
+}</pre>
+Text flows automatically across columns. Browser handles the splitting.</div></details>
+
+</div>
+
+<div class="section">
+<h2 class="section-title">Module 5: Media Queries &amp; Responsive Design</h2>
+<p class="section-desc">Make your site adapt to phones, tablets, and desktops.</p>
+
+<div class="concept">
+<h3><span class="badge">CONCEPT</span> What is Responsive Web Design (RWD)?</h3>
+<p><strong>Responsive Web Design</strong> is an approach where web pages adapt their layout to fit any screen size — phones, tablets, laptops, big monitors — using a single codebase.</p>
+<p style="margin-top:8px"><strong>Three pillars of RWD:</strong></p>
+<ol>
+<li><strong>Fluid grids</strong> — use percentages (<code>width: 50%</code>) instead of fixed pixels</li>
+<li><strong>Flexible images</strong> — <code>max-width: 100%</code> so images shrink with container</li>
+<li><strong>Media queries</strong> — apply different CSS at different screen sizes</li>
+</ol>
+</div>
+
+<div class="concept">
+<h3><span class="badge">SETUP</span> Viewport Meta Tag (Required!)</h3>
+<p>Without this, mobile browsers render at 980px wide and zoom out — your responsive CSS WON'T work.</p>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">In &lt;head&gt;</span></div>
+<div class="code-body"><span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="str">"viewport"</span> <span class="attr">content</span>=<span class="str">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span></div></div>
+<ul>
+<li><code>width=device-width</code> — page width matches device width</li>
+<li><code>initial-scale=1.0</code> — no zoom on load</li>
+</ul>
+</div>
+
+<div class="concept">
+<h3><span class="badge">SYNTAX</span> Media Queries</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Media query syntax</span></div>
+<div class="code-body"><span class="com">/* Apply styles only on screens 768px or wider */</span>
+<span class="kw">@media</span> (<span class="prop">min-width</span>: <span class="val">768px</span>) {
+  <span class="sel">.container</span> { <span class="prop">width</span>: <span class="val">750px</span>; }
+}
+
+<span class="com">/* Styles for screens 768px or smaller */</span>
+<span class="kw">@media</span> (<span class="prop">max-width</span>: <span class="val">768px</span>) {
+  <span class="sel">.sidebar</span> { <span class="prop">display</span>: <span class="val">none</span>; }
+}
+
+<span class="com">/* Range — between 768 and 1024 */</span>
+<span class="kw">@media</span> (<span class="prop">min-width</span>: <span class="val">768px</span>) <span class="kw">and</span> (<span class="prop">max-width</span>: <span class="val">1024px</span>) {
+  <span class="sel">.tablet-only</span> { <span class="prop">display</span>: <span class="val">block</span>; }
+}
+
+<span class="com">/* Different media types */</span>
+<span class="kw">@media</span> screen <span class="kw">and</span> (<span class="prop">orientation</span>: <span class="val">landscape</span>) { ... }
+<span class="kw">@media</span> print { ... }  <span class="com">/* styles when printing */</span></div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">BREAKPOINTS</span> Common Breakpoints</h3>
+<table class="cheat-table">
+<thead><tr><th>Device</th><th>Width</th><th>Common Breakpoint</th></tr></thead>
+<tbody>
+<tr><td>Mobile (phones)</td><td>320 - 575px</td><td><code>max-width: 575px</code></td></tr>
+<tr><td>Tablet</td><td>576 - 767px</td><td><code>min-width: 576px</code></td></tr>
+<tr><td>Small laptop</td><td>768 - 991px</td><td><code>min-width: 768px</code></td></tr>
+<tr><td>Desktop</td><td>992 - 1199px</td><td><code>min-width: 992px</code></td></tr>
+<tr><td>Large desktop</td><td>1200px+</td><td><code>min-width: 1200px</code></td></tr>
+</tbody>
+</table>
+<div class="tip-box"><strong>Mobile-first approach:</strong> Write base styles for mobile, then use <code>min-width</code> to ADD styles for larger screens. This is faster and cleaner than designing desktop-first.</div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">PATTERN</span> Mobile-First Example</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Mobile-first pattern</span></div>
+<div class="code-body"><span class="com">/* Mobile (default - no media query) */</span>
+<span class="sel">.container</span> {
+  <span class="prop">width</span>: <span class="val">100%</span>;
+  <span class="prop">padding</span>: <span class="val">10px</span>;
+}
+
+<span class="sel">.sidebar</span> {
+  <span class="prop">display</span>: <span class="val">none</span>;  <span class="com">/* hidden on mobile */</span>
+}
+
+<span class="com">/* Tablet and up */</span>
+<span class="kw">@media</span> (<span class="prop">min-width</span>: <span class="val">768px</span>) {
+  <span class="sel">.container</span> { <span class="prop">width</span>: <span class="val">750px</span>; <span class="prop">margin</span>: <span class="val">0 auto</span>; }
+  <span class="sel">.sidebar</span> { <span class="prop">display</span>: <span class="val">block</span>; }
+}
+
+<span class="com">/* Desktop and up */</span>
+<span class="kw">@media</span> (<span class="prop">min-width</span>: <span class="val">992px</span>) {
+  <span class="sel">.container</span> { <span class="prop">width</span>: <span class="val">970px</span>; }
+}</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">RESPONSIVE</span> Responsive Units</h3>
+<table class="cheat-table">
+<thead><tr><th>Unit</th><th>Relative to</th><th>Use</th></tr></thead>
+<tbody>
+<tr><td><code>px</code></td><td>Absolute pixels</td><td>Borders, fine details</td></tr>
+<tr><td><code>%</code></td><td>Parent element</td><td>Widths, fluid layouts</td></tr>
+<tr><td><code>em</code></td><td>Parent's font size</td><td>Spacing relative to text</td></tr>
+<tr><td><code>rem</code></td><td>Root (html) font size</td><td>✅ Consistent sizing</td></tr>
+<tr><td><code>vw</code></td><td>1% of viewport WIDTH</td><td>Hero text, full-screen sections</td></tr>
+<tr><td><code>vh</code></td><td>1% of viewport HEIGHT</td><td>Full-screen heights</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="concept">
+<h3><span class="badge">IMAGES</span> Responsive Images</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Make images responsive</span></div>
+<div class="code-body"><span class="sel">img</span> {
+  <span class="prop">max-width</span>: <span class="val">100%</span>;  <span class="com">/* never wider than container */</span>
+  <span class="prop">height</span>: <span class="val">auto</span>;     <span class="com">/* maintain aspect ratio */</span>
+}</div></div>
+</div>
+
+<h3 class="qa-header">Practice Q&amp;A — Responsive Design</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">What is Responsive Web Design (RWD)?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> An approach where web pages adapt their layout to fit ANY screen size using a single codebase. The 3 pillars are:
+<ol>
+<li>Fluid grids (% widths)</li>
+<li>Flexible images (max-width: 100%)</li>
+<li>Media queries (different CSS per screen size)</li>
+</ol></div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">Why is the viewport meta tag required for mobile?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Without it, mobile browsers render the page at a virtual 980px width and zoom out — making your media queries ineffective. The tag tells the browser to use the device's actual width:
+<pre>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">Write a media query that hides a sidebar on screens smaller than 768px.</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>@media (max-width: 767px) {
+  .sidebar {
+    display: none;
+  }
+}</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">What's the difference between <code>min-width</code> and <code>max-width</code> in media queries?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>min-width: 768px</code> — applies when screen is 768px OR LARGER (going up).</li>
+<li><code>max-width: 768px</code> — applies when screen is 768px OR SMALLER (going down).</li>
+</ul>
+Mobile-first approach uses <code>min-width</code>. Desktop-first uses <code>max-width</code>.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q5</span><span class="qtext">What's the "mobile-first" approach and why is it preferred?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Write base CSS for mobile (smallest screen), then use <code>min-width</code> media queries to ADD styles for larger screens.<br><br><strong>Why preferred:</strong>
+<ul>
+<li>Mobile is the most common device — get it right first</li>
+<li>Forces you to prioritize content (less screen space)</li>
+<li>Cleaner CSS — additive rather than overriding</li>
+<li>Better performance on mobile (less CSS to parse)</li>
+</ul></div></details>
+
+<details class="qa"><summary><span class="qnum">Q6</span><span class="qtext">How do you make an image responsive?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>img {
+  max-width: 100%;
+  height: auto;
+}</pre>
+<code>max-width: 100%</code> ensures it never overflows its container. <code>height: auto</code> maintains aspect ratio.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q7</span><span class="qtext">Difference between <code>em</code> and <code>rem</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>em</code> — relative to PARENT'S font size. Compounds when nested.</li>
+<li><code>rem</code> — relative to ROOT (html) font size. Always consistent.</li>
+</ul>
+Example: if root is 16px and parent is 20px, <code>1em</code> = 20px but <code>1rem</code> = 16px. Use <code>rem</code> for predictable sizing.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q8</span><span class="qtext">What's <code>1vw</code>? When would you use it?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> <code>1vw</code> = 1% of viewport WIDTH. <code>1vh</code> = 1% of viewport HEIGHT.<br><br><strong>Use cases:</strong>
+<ul>
+<li>Full-screen hero sections: <code>height: 100vh</code></li>
+<li>Fluid hero text: <code>font-size: 5vw</code> (scales with screen)</li>
+</ul></div></details>
+
+</div>
+
+<div class="section">
+<h2 class="section-title">CSS3 — Multiple Choice Quiz</h2>
+<p class="section-desc">15 questions covering all 5 modules.</p>
+<div class="score-bar">Score: <span id="sv">0</span> / <span id="tv">0</span></div>
+<div id="quiz"></div>
+</div>
+
+</div>
+<script>
+const Q=[{q:'What does CSS stand for?',o:['Computer Style Sheets','Cascading Style Sheets','Creative Style System','Coded Styling Syntax'],c:1,e:"CSS = Cascading Style Sheets. 'Cascading' refers to how multiple style sources combine based on specificity rules."},
+{q:'Which is the correct CSS comment syntax?',o:['// comment','# comment','&lt;!-- comment --&gt;','/* comment */'],c:3,e:'CSS uses /* ... */ for both single-line and multi-line comments. // is JavaScript, &lt;!-- --&gt; is HTML.'},
+{q:"How do you select an element with id 'main' in CSS?",o:['.main','#main','*main','main'],c:1,e:'# is the ID selector. . is for classes, * is the universal selector, plain text selects by tag name.'},
+{q:'Which has the HIGHEST specificity?',o:['Element selector (p)','Class selector (.btn)','ID selector (#header)',"Inline style (style='...')"],c:3,e:'Inline styles have specificity 1000, IDs are 100, classes/pseudo-classes are 10, elements are 1.'},
+{q:'What does <code>* { margin: 0; padding: 0; }</code> do?',o:['Resets margin/padding on all elements','Only on text elements','Only on the body','Throws an error'],c:0,e:'* is the universal selector — matches every element. Common reset pattern to remove default browser margins.'},
+{q:"What's the correct order for link pseudo-classes?",o:['Hover, Active, Link, Visited','Link, Visited, Hover, Active','Active, Hover, Visited, Link',"Order doesn't matter"],c:1,e:'LoVe HAte: Link, Visited, Hover, Active. CSS specificity ties go to the later rule, so this order ensures all states display correctly.'},
+{q:'What are the 4 layers of the box model (inside-out)?',o:['Border, padding, content, margin','Content, padding, border, margin','Margin, border, padding, content','Content, margin, padding, border'],c:1,e:'Inside-out: Content → Padding → Border → Margin. Padding is INSIDE the border, margin is OUTSIDE.'},
+{q:"With <code>box-sizing: border-box</code>, if width is 200px and padding is 20px, what's the rendered width?",o:['240px','200px','160px','220px'],c:1,e:'With border-box, padding is INCLUDED in the width. Total stays 200px, content shrinks to 160px. Without border-box (content-box), width would be 200+40=240px.'},
+{q:'How do you center a block element horizontally?',o:['text-align: center','margin: 0 auto','center: true','align: middle'],c:1,e:'margin: 0 auto with an explicit width centers a block element. text-align: center centers TEXT inside an element, not the element itself.'},
+{q:'Difference between <code>display: none</code> and <code>visibility: hidden</code>?',o:['No difference','display:none removes element completely; visibility:hidden keeps the space','visibility:hidden is faster','display:none only works on divs'],c:1,e:'display:none removes the element entirely (no space). visibility:hidden makes it invisible but RESERVES the space — leaving an empty gap.'},
+{q:"What's the syntax for a media query targeting screens 768px or wider?",o:['@media screen 768px {}','@media (min-width: 768px) {}','@if width &gt; 768px {}','@responsive 768px {}'],c:1,e:'@media (min-width: 768px) { ... } applies styles when viewport is 768px OR LARGER. Use max-width for the opposite.'},
+{q:'Why is the viewport meta tag required?',o:['For SEO','Without it, mobile browsers render at 980px wide and zoom out, breaking responsive layouts','To enable JavaScript','To set background color'],c:1,e:"Mobile browsers default to a virtual 980px viewport. The meta tag tells them to use the device's actual width — making media queries actually work."},
+{q:'How do you make images responsive?',o:['responsive: true','max-width: 100%; height: auto','fluid: true','width: auto'],c:1,e:'max-width: 100% prevents overflow. height: auto maintains aspect ratio. The image will shrink with its container but never exceed its natural size.'},
+{q:"What's the difference between <code>em</code> and <code>rem</code>?",o:['No difference','em is relative to parent; rem is relative to root','rem is for mobile','em is older syntax'],c:1,e:"em is relative to PARENT's font size (compounds when nested). rem is relative to ROOT (html) font size — always consistent."},
+{q:'Which selector targets every EVEN list item?',o:['li:every(2)','li:nth-child(2n)','li:even','li::n2'],c:1,e:"li:nth-child(2n) — '2n' means every 2nd. You can also write 'even'. For odd: 'odd' or '2n+1'."}];
+function show(i){document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx===i));document.querySelectorAll('.section').forEach((s,idx)=>s.classList.toggle('active',idx===i));window.scrollTo({top:200,behavior:'smooth'})}
+const quiz=document.getElementById('quiz');document.getElementById('tv').textContent=Q.length;let score=0;
+quiz.innerHTML=Q.map((q,i)=>`<div class="quiz-q"><h4><span class="qnum">Q${i+1}</span><span>${q.q}</span></h4><div class="options">${q.o.map((o,j)=>`<div class="option" onclick="ans(${i},${j})" id="o${i}_${j}">${String.fromCharCode(65+j)}. ${o}</div>`).join('')}</div><div class="explanation" id="e${i}"></div></div>`).join('');
+function ans(i,j){const q=Q[i];q.o.forEach((_,k)=>{const el=document.getElementById(`o${i}_${k}`);el.classList.add('disabled');if(k===q.c)el.classList.add('correct');else if(k===j&&j!==q.c)el.classList.add('wrong')});const ok=j===q.c;if(ok)score++;const exp=document.getElementById(`e${i}`);exp.className=`explanation show ${ok?'correct-exp':'wrong-exp'}`;exp.innerHTML=`${ok?'✅ Correct!':'❌ Incorrect.'} ${q.e}`;document.getElementById('sv').textContent=score}
+</script>
+</body>
+</html>

@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Design Patterns — With vs Without Comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #0e1116;
+  --ink2:     #1a1f2e;
+  --paper:    #fbfaf7;
+  --cream:    #f3f0e8;
+  --rule:     #e8e3d8;
+  --rule2:    #d4cdb8;
+
+  --crimson:  #be1e2d;
+  --crimson-l:#fde2e4;
+  --teal:     #0d7377;
+  --teal-l:   #d4f1f4;
+  --mustard:  #c08018;
+  --mustard-l:#fff0d4;
+  --plum:     #6c3082;
+  --plum-l:   #ede0f3;
+  --forest:   #2d5a3d;
+  --forest-l: #d4ebd9;
+  --slate:    #475569;
+  --rose:     #be185d;
+  --rose-l:   #fce7f3;
+  --indigo:   #3730a3;
+  --indigo-l: #e0e7ff;
+
+  --display: 'Fraunces', serif;
+  --body:    'Inter', sans-serif;
+  --mono:    'JetBrains Mono', monospace;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--body);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+/* ════════════ HERO ════════════ */
+.hero {
+  background: var(--ink);
+  color: white;
+  padding: 90px 40px 70px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 30%; left: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(190,30,45,.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -100px; right: -50px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(13,115,119,.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 2; }
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.18);
+  color: rgba(255,255,255,.85);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  padding: 6px 18px;
+  border-radius: 30px;
+  margin-bottom: 28px;
+}
+.hero h1 {
+  font-family: var(--display);
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  font-weight: 900;
+  line-height: 1.05;
+  margin-bottom: 22px;
+  letter-spacing: -0.02em;
+}
+.hero h1 em {
+  color: #f87171;
+  font-style: italic;
+  font-weight: 600;
+}
+.hero-sub {
+  font-size: 1.15rem;
+  color: rgba(255,255,255,.7);
+  max-width: 620px;
+  line-height: 1.65;
+  margin-bottom: 36px;
+}
+.pattern-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.chip {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.18);
+  color: rgba(255,255,255,.85);
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: .78rem;
+  font-weight: 500;
+}
+.chip.hot { background: rgba(190,30,45,.2); border-color: rgba(190,30,45,.5); color: #fda4af; }
+
+/* ════════════ NAV ════════════ */
+.sticky-nav {
+  position: sticky;
+  top: 0;
+  background: rgba(251,250,247,.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rule);
+  z-index: 100;
+  padding: 0 40px;
+  overflow-x: auto;
+}
+.sticky-nav-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  white-space: nowrap;
+}
+.nav-link {
+  padding: 16px 18px;
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--slate);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all .2s;
+}
+.nav-link:hover, .nav-link.active {
+  color: var(--crimson);
+  border-bottom-color: var(--crimson);
+}
+
+/* ════════════ LAYOUT ════════════ */
+.wrap { max-width: 900px; margin: 0 auto; padding: 0 40px; }
+
+/* ════════════ OVERVIEW ════════════ */
+.overview {
+  padding: 70px 0 30px;
+}
+.overview-title {
+  font-family: var(--display);
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 14px;
+}
+.overview-sub {
+  font-size: 1.05rem;
+  color: var(--slate);
+  margin-bottom: 36px;
+  max-width: 700px;
+}
+
+.importance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 24px 0 50px;
+}
+.imp-card {
+  background: white;
+  border: 1.5px solid var(--rule);
+  border-radius: 14px;
+  padding: 22px;
+  position: relative;
+}
+.imp-card.critical { border-color: var(--crimson); background: linear-gradient(135deg, #fff 0%, #fef5f6 100%); }
+.imp-card.important { border-color: var(--mustard); background: linear-gradient(135deg, #fff 0%, #fff9ec 100%); }
+.imp-card.useful { border-color: var(--teal); background: linear-gradient(135deg, #fff 0%, #f0fafa 100%); }
+.imp-badge {
+  display: inline-block;
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+.imp-badge.crit { background: var(--crimson); color: white; }
+.imp-badge.imp  { background: var(--mustard); color: white; }
+.imp-badge.use  { background: var(--teal); color: white; }
+.imp-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+.imp-card p { font-size: .85rem; color: var(--slate); line-height: 1.55; }
+
+/* ════════════ PATTERN SECTIONS ════════════ */
+.pattern {
+  padding: 70px 0;
+  border-top: 1px solid var(--rule);
+}
+.pattern:nth-child(odd) { background: var(--cream); }
+
+.pattern-header {
+  margin-bottom: 40px;
+}
+.pattern-num {
+  font-family: var(--display);
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--rule2);
+  margin-bottom: 8px;
+}
+.pattern-label {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--crimson);
+  margin-bottom: 8px;
+}
+.pattern-title {
+  font-family: var(--display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 18px;
+}
+.pattern-tagline {
+  font-size: 1.1rem;
+  color: var(--slate);
+  font-style: italic;
+}
+
+.def-block {
+  background: white;
+  border-radius: 14px;
+  padding: 30px;
+  margin-bottom: 30px;
+  border: 1px solid var(--rule);
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+.def-block h3 {
+  font-size: .85rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--crimson);
+  margin-bottom: 12px;
+}
+.def-block p { font-size: 1rem; line-height: 1.7; color: var(--ink); }
+
+/* When to use / not use */
+.when-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 28px 0;
+}
+.when-card {
+  border-radius: 14px;
+  padding: 24px;
+  border: 1.5px solid;
+}
+.when-card.do  { background: var(--forest-l); border-color: var(--forest); }
+.when-card.dont { background: var(--crimson-l); border-color: var(--crimson); }
+.when-card h4 {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.when-card.do h4 { color: var(--forest); }
+.when-card.dont h4 { color: var(--crimson); }
+.when-card ul { padding-left: 8px; list-style: none; }
+.when-card li {
+  font-size: .9rem;
+  margin-bottom: 8px;
+  padding-left: 22px;
+  position: relative;
+  line-height: 1.55;
+}
+.when-card.do li::before {
+  content: '✓';
+  position: absolute;
+  left: 0; top: 0;
+  font-weight: 700;
+  color: var(--forest);
+}
+.when-card.dont li::before {
+  content: '✗';
+  position: absolute;
+  left: 0; top: 0;
+  font-weight: 700;
+  color: var(--crimson);
+}
+
+/* ════════════ COMPARISON ════════════ */
+.compare-section {
+  margin: 36px 0;
+}
+.compare-title {
+  font-family: var(--display);
+  font-size: 1.7rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.compare-sub {
+  color: var(--slate);
+  margin-bottom: 24px;
+  font-size: .95rem;
+}
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.compare-card {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1.5px solid;
+}
+.compare-card.without {
+  border-color: var(--crimson);
+  background: white;
+}
+.compare-card.with {
+  border-color: var(--forest);
+  background: white;
+}
+.compare-header {
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.compare-card.without .compare-header { background: var(--crimson-l); }
+.compare-card.with .compare-header { background: var(--forest-l); }
+.compare-header h4 {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.compare-card.without .compare-header h4 { color: var(--crimson); }
+.compare-card.with .compare-header h4 { color: var(--forest); }
+.compare-emoji { font-size: 1.4rem; }
+.compare-body { padding: 0; }
+
+/* ════════════ CODE ════════════ */
+.code-wrap {
+  background: var(--ink);
+  margin: 0;
+}
+.code-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--ink2);
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.code-dot { width: 10px; height: 10px; border-radius: 50%; }
+.code-dot.r { background: #ff5f57; }
+.code-dot.y { background: #ffbd2e; }
+.code-dot.g { background: #28ca41; }
+.code-label {
+  font-size: .72rem;
+  color: rgba(255,255,255,.5);
+  font-family: var(--mono);
+  margin-left: 8px;
+}
+.code-body {
+  padding: 22px;
+  overflow-x: auto;
+}
+pre {
+  font-family: var(--mono);
+  font-size: .8rem;
+  line-height: 1.78;
+  color: #e2e8f0;
+}
+.kw  { color: #f9a8d4; }
+.cl  { color: #67e8f9; }
+.fn  { color: #a5f3fc; }
+.cm  { color: #475569; font-style: italic; }
+.st  { color: #bbf7d0; }
+.nm  { color: #fde68a; }
+.an  { color: #fbb6ce; }
+
+.compare-summary {
+  padding: 16px 22px;
+  background: white;
+  border-top: 1px solid var(--rule);
+  font-size: .85rem;
+  line-height: 1.55;
+}
+.compare-card.without .compare-summary strong { color: var(--crimson); }
+.compare-card.with .compare-summary strong { color: var(--forest); }
+
+/* ════════════ DIFF TABLE ════════════ */
+.diff-table {
+  margin-top: 30px;
+  background: white;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.diff-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr;
+  border-bottom: 1px solid var(--rule);
+}
+.diff-row:last-child { border-bottom: none; }
+.diff-row.head {
+  background: var(--ink);
+  color: white;
+  font-weight: 700;
+  font-size: .8rem;
+  letter-spacing: .04em;
+}
+.diff-row > div { padding: 14px 18px; font-size: .87rem; }
+.diff-row > div:first-child {
+  font-weight: 600;
+  background: var(--cream);
+  border-right: 1px solid var(--rule);
+}
+.diff-row.head > div:first-child { background: var(--ink); }
+.diff-row > div:nth-child(2) {
+  border-right: 1px solid var(--rule);
+  color: var(--crimson);
+}
+.diff-row > div:nth-child(3) { color: var(--forest); }
+
+/* ════════════ ANALOGY ════════════ */
+.analogy {
+  background: var(--plum-l);
+  border-left: 4px solid var(--plum);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin: 24px 0;
+}
+.analogy-label {
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--plum);
+  margin-bottom: 8px;
+}
+.analogy p { font-size: .95rem; line-height: 1.65; }
+
+/* ════════════ KEY TAKEAWAY ════════════ */
+.takeaway {
+  background: linear-gradient(135deg, var(--ink) 0%, var(--ink2) 100%);
+  color: white;
+  border-radius: 14px;
+  padding: 28px 32px;
+  margin: 36px 0 0;
+}
+.takeaway-label {
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #fbbf24;
+  margin-bottom: 10px;
+}
+.takeaway p { font-size: 1rem; line-height: 1.65; color: rgba(255,255,255,.92); }
+
+/* ════════════ INTRO BOX ════════════ */
+.intro-box {
+  background: white;
+  border-left: 4px solid var(--teal);
+  padding: 24px 28px;
+  border-radius: 0 12px 12px 0;
+  margin-bottom: 36px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+.intro-box p { font-size: 1.05rem; line-height: 1.7; }
+
+/* ════════════ FINAL TABLE ════════════ */
+.final-table-wrap {
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  margin: 30px 0;
+}
+table.final {
+  width: 100%;
+  border-collapse: collapse;
+}
+table.final th {
+  background: var(--ink);
+  color: white;
+  padding: 14px 16px;
+  text-align: left;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .05em;
+}
+table.final td {
+  padding: 14px 16px;
+  border-top: 1px solid var(--rule);
+  font-size: .85rem;
+  vertical-align: top;
+}
+table.final tr:nth-child(even) td { background: var(--cream); }
+table.final tr:hover td { background: #f1f5f9; }
+.pri-crit { color: var(--crimson); font-weight: 700; }
+.pri-imp  { color: var(--mustard); font-weight: 700; }
+.pri-use  { color: var(--teal); font-weight: 700; }
+
+/* ════════════ PROGRESS BAR ════════════ */
+.progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: var(--crimson);
+  width: 0%;
+  z-index: 200;
+  transition: width .1s;
+}
+
+/* ════════════ FOOTER ════════════ */
+footer {
+  background: var(--ink);
+  color: rgba(255,255,255,.55);
+  text-align: center;
+  padding: 50px 40px;
+}
+footer h3 {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  color: white;
+  margin-bottom: 6px;
+}
+
+@media (max-width: 700px) {
+  .hero { padding: 60px 22px 50px; }
+  .wrap { padding: 0 22px; }
+  .when-grid, .compare-grid { grid-template-columns: 1fr; }
+  .diff-row { grid-template-columns: 1fr; }
+  .diff-row > div { border: none !important; border-bottom: 1px solid var(--rule) !important; }
+  .pattern-num { font-size: 3.5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="prog"></div>
+
+<!-- ══════════════════════════════════════ HERO ══════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">⚡ Java Design Patterns</div>
+    <h1>Design Patterns<br><em>With vs Without</em><br>side-by-side.</h1>
+    <p class="hero-sub">Six essential Java design patterns explained with definitions, real-world analogies, when to use them, when NOT to use them, and code comparisons showing the difference.</p>
+    <div class="pattern-chips">
+      <span class="chip hot">Singleton</span>
+      <span class="chip hot">Factory</span>
+      <span class="chip hot">Observer</span>
+      <span class="chip hot">Strategy</span>
+      <span class="chip">Builder</span>
+      <span class="chip">Decorator</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ STICKY NAV ══════════════════════════════════════ -->
+<nav class="sticky-nav">
+  <div class="sticky-nav-inner">
+    <a href="#overview" class="nav-link">Overview</a>
+    <a href="#singleton" class="nav-link">Singleton</a>
+    <a href="#factory" class="nav-link">Factory</a>
+    <a href="#observer" class="nav-link">Observer</a>
+    <a href="#strategy" class="nav-link">Strategy</a>
+    <a href="#builder" class="nav-link">Builder</a>
+    <a href="#decorator" class="nav-link">Decorator</a>
+    <a href="#summary" class="nav-link">Summary</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════ OVERVIEW ══════════════════════════════════════ -->
+<section class="overview wrap" id="overview">
+  <div class="overview-title">What Are Design Patterns?</div>
+  <p class="overview-sub">Design patterns are <strong>reusable solutions</strong> to common software design problems. They're not code you copy-paste — they're proven blueprints that experienced developers apply when they recognise familiar problems.</p>
+
+  <div class="intro-box">
+    <p>Think of design patterns like cooking recipes. A chef doesn't reinvent how to make a stew every time — they use a proven recipe and adapt it. Similarly, when you need ONE database connection for the whole app, you use the <strong>Singleton</strong> recipe. When you need flexible object creation, you reach for <strong>Factory</strong>. These patterns save you from common mistakes and make your code easier for other developers to understand.</p>
+  </div>
+
+  <div class="overview-title" style="margin-top: 36px; font-size: 1.4rem;">Which Patterns Are Most Important?</div>
+  <div class="importance-grid">
+    <div class="imp-card critical">
+      <span class="imp-badge crit">Critical</span>
+      <h4>Singleton</h4>
+      <p>Found in 95% of real Java apps — for config, logging, DB connections.</p>
+    </div>
+    <div class="imp-card critical">
+      <span class="imp-badge crit">Critical</span>
+      <h4>Factory</h4>
+      <p>Backbone of Spring, JDBC, and almost every framework you'll touch.</p>
+    </div>
+    <div class="imp-card critical">
+      <span class="imp-badge crit">Critical</span>
+      <h4>Strategy</h4>
+      <p>The cleanest way to handle "different ways to do the same thing" — payments, sorts, validations.</p>
+    </div>
+    <div class="imp-card important">
+      <span class="imp-badge imp">Important</span>
+      <h4>Observer</h4>
+      <p>Foundation of event-driven systems, GUI listeners, messaging queues.</p>
+    </div>
+    <div class="imp-card important">
+      <span class="imp-badge imp">Important</span>
+      <h4>Builder</h4>
+      <p>Essential for creating complex objects with many optional parameters cleanly.</p>
+    </div>
+    <div class="imp-card useful">
+      <span class="imp-badge use">Useful</span>
+      <h4>Decorator</h4>
+      <p>Wrap objects to add behaviour — used in Java I/O streams.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ PATTERN 1: SINGLETON ══════════════════════════════════════ -->
+<section class="pattern" id="singleton">
+  <div class="wrap">
+    <div class="pattern-header">
+      <div class="pattern-num">01</div>
+      <div class="pattern-label">Creational Pattern · Critical</div>
+      <h2 class="pattern-title">Singleton Pattern</h2>
+      <p class="pattern-tagline">One instance, accessible everywhere — for shared resources.</p>
+    </div>
+
+    <div class="def-block">
+      <h3>Definition</h3>
+      <p>The <strong>Singleton</strong> pattern ensures a class has <strong>only ONE instance</strong> during the entire program execution, and provides a global access point to that instance. The class itself controls its instantiation.</p>
+    </div>
+
+    <div class="analogy">
+      <div class="analogy-label">🏛️ Real-World Analogy</div>
+      <p>A country has only ONE president (or prime minister) at a time. Any minister, citizen, or media reporter who wants to talk to "the president" refers to the same person. You can't accidentally create a second president — the constitution prevents it. That's exactly what Singleton does for objects.</p>
+    </div>
+
+    <div class="when-grid">
+      <div class="when-card do">
+        <h4>✅ When to USE Singleton</h4>
+        <ul>
+          <li>Database connection pools — one shared pool for the app</li>
+          <li>Logger — one logger that writes to one log file</li>
+          <li>Configuration manager — app-wide settings</li>
+          <li>Cache — one in-memory cache shared by all services</li>
+          <li>Thread pools, print spoolers, hardware drivers</li>
+        </ul>
+      </div>
+      <div class="when-card dont">
+        <h4>❌ When NOT to USE Singleton</h4>
+        <ul>
+          <li>When you need different instances with different configurations</li>
+          <li>For business entities like User, Order, Product — they should have many instances</li>
+          <li>When testing — singletons make unit tests hard (global state)</li>
+          <li>In multi-threaded apps without proper locking — race conditions</li>
+          <li>Just because you want "global access" — that's not a good reason alone</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="compare-section">
+      <div class="compare-title">With vs Without Singleton</div>
+      <p class="compare-sub">Scenario: Your app needs a database connection. Compare both approaches.</p>
+
+      <div class="compare-grid">
+        <!-- WITHOUT -->
+        <div class="compare-card without">
+          <div class="compare-header">
+            <span class="compare-emoji">❌</span>
+            <h4>WITHOUT Singleton — Multiple DB Connections</h4>
+          </div>
+          <div class="code-wrap">
+            <div class="code-top">
+              <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+              <span class="code-label">Without — wasteful</span>
+            </div>
+            <div class="code-body"><pre><span class="kw">public class</span> <span class="cl">DatabaseConnection</span> {
+    <span class="kw">private</span> <span class="cl">Connection</span> conn;
+
+    <span class="kw">public</span> <span class="fn">DatabaseConnection</span>() {
+        <span class="cm">// Each `new` opens a fresh connection</span>
+        conn = <span class="cl">DriverManager</span>.<span class="fn">getConnection</span>(URL);
+        <span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"NEW connection opened"</span>);
+    }
+
+    <span class="kw">public</span> <span class="cl">Connection</span> <span class="fn">getConn</span>() { <span class="kw">return</span> conn; }
+}
+
+<span class="cm">// USAGE — disaster!</span>
+<span class="kw">public class</span> <span class="cl">App</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="cl">String</span>[] args) {
+        <span class="cl">DatabaseConnection</span> db1 = <span class="kw">new</span> <span class="cl">DatabaseConnection</span>();
+        <span class="cl">DatabaseConnection</span> db2 = <span class="kw">new</span> <span class="cl">DatabaseConnection</span>();
+        <span class="cl">DatabaseConnection</span> db3 = <span class="kw">new</span> <span class="cl">DatabaseConnection</span>();
+        <span class="cm">// → 3 separate connections opened!</span>
+        <span class="cm">// → 3x memory, 3x CPU, 3x DB load</span>
+        <span class="cm">// → DB connection limit hits quickly</span>
+    }
+}</pre>
+            </div>
+          </div>
+          <div class="compare-summary">
+            <strong>Problems:</strong> Memory waste, connection limit exhaustion, inconsistent state across copies, slower performance.
+          </div>
+        </div>
+
+        <!-- WITH -->
+        <div class="compare-card with">
+          <div class="compare-header">
+            <span class="compare-emoji">✅</span>
+            <h4>WITH Singleton — ONE Shared Connection</h4>
+          </div>
+          <div class="code-wrap">
+            <div class="code-top">
+              <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+              <span class="code-label">With — efficient</span>
+            </div>
+            <div class="code-body"><pre><span class="kw">public class</span> <span class="cl">DatabaseConnection</span> {
+    <span class="kw">private static</span> <span class="cl">DatabaseConnection</span> instance;
+    <span class="kw">private</span> <span class="cl">Connection</span> conn;
+
+    <span class="cm">// PRIVATE constructor — no external `new`</span>
+    <span class="kw">private</span> <span class="fn">DatabaseConnection</span>() {
+        conn = <span class="cl">DriverManager</span>.<span class="fn">getConnection</span>(URL);
+        <span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"Connection opened"</span>);
+    }
+
+    <span class="cm">// Public access method</span>
+    <span class="kw">public static synchronized</span> <span class="cl">DatabaseConnection</span> <span class="fn">getInstance</span>() {
+        <span class="kw">if</span> (instance == <span class="kw">null</span>) {
+            instance = <span class="kw">new</span> <span class="cl">DatabaseConnection</span>();
+        }
+        <span class="kw">return</span> instance;
+    }
+
+    <span class="kw">public</span> <span class="cl">Connection</span> <span class="fn">getConn</span>() { <span class="kw">return</span> conn; }
+}
+
+<span class="cm">// USAGE — clean!</span>
+<span class="kw">public class</span> <span class="cl">App</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="cl">String</span>[] args) {
+        <span class="cl">DatabaseConnection</span> db1 = <span class="cl">DatabaseConnection</span>.<span class="fn">getInstance</span>();
+        <span class="cl">DatabaseConnection</span> db2 = <span class="cl">DatabaseConnection</span>.<span class="fn">getInstance</span>();
+        <span class="cm">// db1 == db2 → SAME instance, ONE connection</span>
+    }
+}</pre>
+            </div>
+          </div>
+          <div class="compare-summary">
+            <strong>Benefits:</strong> One connection saves memory, prevents limit issues, consistent state, faster app startup.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="diff-table">
+      <div class="diff-row head">
+        <div>Aspect</div>
+        <div>Without Singleton</div>
+        <div>With Singleton</div>
+      </div>
+      <div class="diff-row">
+        <div>Number of Instances</div>
+        <div>Unlimited (one per <code>new</code>)</div>
+        <div>Exactly ONE</div>
+      </div>
+      <div class="diff-row">
+        <div>Memory Usage</div>
+        <div>Grows with each instance</div>
+        <div>Constant — one object</div>
+      </div>
+      <div class="diff-row">
+        <div>DB Connections Used</div>
+        <div>3 connections for 3 instances</div>
+        <div>1 connection for entire app</div>
+      </div>
+      <div class="diff-row">
+        <div>Constructor</div>
+        <div><code>public</code> — anyone can call</div>
+        <div><code>private</code> — controlled access</div>
+      </div>
+      <div class="diff-row">
+        <div>Access Method</div>
+        <div><code>new DatabaseConnection()</code></div>
+        <div><code>DatabaseConnection.getInstance()</code></div>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <div class="takeaway-label">Key Takeaway</div>
+      <p>Use Singleton when you have a <strong>truly shared resource</strong> that should NEVER be duplicated — database connections, loggers, config managers. Don't use it just for "convenience" — it creates hidden global state that makes testing painful.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ PATTERN 2: FACTORY ══════════════════════════════════════ -->
+<section class="pattern" id="factory">
+  <div class="wrap">
+    <div class="pattern-header">
+      <div class="pattern-num">02</div>
+      <div class="pattern-label">Creational Pattern · Critical</div>
+      <h2 class="pattern-title">Factory Pattern</h2>
+      <p class="pattern-tagline">Centralised object creation — hide the complexity, expose a clean API.</p>
+    </div>
+
+    <div class="def-block">
+      <h3>Definition</h3>
+      <p>The <strong>Factory</strong> pattern provides a centralised method for creating objects, allowing the calling code to request an object by type or parameter <strong>without knowing the exact class</strong> being created. The factory decides which concrete class to instantiate.</p>
+    </div>
+
+    <div class="analogy">
+      <div class="analogy-label">🏭 Real-World Analogy</div>
+      <p>When you order a pizza at Domino's, you say "I want a Margherita" or "I want a Pepperoni." You don't open the oven, make the dough, slice cheese, and bake it yourself. The pizzeria's kitchen (the factory) handles all that complexity. You give a simple input ("Margherita") and get a finished pizza. Factory pattern works the same way in code.</p>
+    </div>
+
+    <div class="when-grid">
+      <div class="when-card do">
+        <h4>✅ When to USE Factory</h4>
+        <ul>
+          <li>You have multiple subclasses and the choice depends on input/config</li>
+          <li>Object creation logic is complex (validation, multiple steps)</li>
+          <li>You want to hide concrete class names from clients</li>
+          <li>You expect to add new types frequently — Factory makes this easy</li>
+          <li>Frameworks: Spring beans, JDBC drivers, Logger factories</li>
+        </ul>
+      </div>
+      <div class="when-card dont">
+        <h4>❌ When NOT to USE Factory</h4>
+        <ul>
+          <li>When there's only ONE class to create — use <code>new</code> directly</li>
+          <li>Object creation is trivial (just constructor parameters)</li>
+          <li>You'll never add more types — over-engineering</li>
+          <li>For very simple value objects (DTOs, POJOs)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="compare-section">
+      <div class="compare-title">With vs Without Factory</div>
+      <p class="compare-sub">Scenario: You need to create different shapes (Circle, Square, Triangle) in your drawing app.</p>
+
+      <div class="compare-grid">
+        <div class="compare-card without">
+          <div class="compare-header">
+            <span class="compare-emoji">❌</span>
+            <h4>WITHOUT Factory — Direct Instantiation</h4>
+          </div>
+          <div class="code-wrap">
+            <div class="code-top">
+              <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+              <span class="code-label">Without — coupled</span>
+            </div>
+            <div class="code-body"><pre><span class="kw">interface</span> <span class="cl">Shape</span> { <span class="kw">void</span> <span class="fn">draw</span>(); }
+<span class="kw">class</span> <span class="cl">Circle</span>   <span class="kw">implements</span> <span class="cl">Shape</span> { <span class="kw">public void</span> <span class="fn">draw</span>(){<span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"Circle"</span>);} }
+<span class="kw">class</span> <span class="cl">Square</span>   <span class="kw">implements</span> <span class="cl">Shape</span> { <span class="kw">public void</span> <span class="fn">draw</span>(){<span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"Square"</span>);} }
+<span class="kw">class</span> <span class="cl">Triangle</span> <span class="kw">implements</span> <span class="cl">Shape</span> { <span class="kw">public void</span> <span class="fn">draw</span>(){<span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"Triangle"</span>);} }
+
+<span class="kw">public class</span> <span class="cl">DrawingApp</span> {
+    <span class="kw">public void</span> <span class="fn">drawShape</span>(<span class="cl">String</span> type) {
+        <span class="cl">Shape</span> shape;
+        <span class="cm">// Logic scattered everywhere</span>
+        <span class="kw">if</span> (type.<span class="fn">equals</span>(<span class="st">"circle"</span>)) {
+            shape = <span class="kw">new</span> <span class="cl">Circle</span>();
+        } <span class="kw">else if</span> (type.<span class="fn">equals</span>(<span class="st">"square"</span>)) {
+            shape = <span class="kw">new</span> <span class="cl">Square</span>();
+        } <span class="kw">else if</span> (type.<span class="fn">equals</span>(<span class="st">"triangle"</span>)) {
+            shape = <span class="kw">new</span> <span class="cl">Triangle</span>();
+        } <span class="kw">else</span> {
+            <span class="kw">throw new</span> <span class="cl">RuntimeException</span>();
+        }
+        shape.<span class="fn">draw</span>();
+    }
+    <span class="cm">// If you add Star, you must change THIS class AND</span>
+    <span class="cm">// every other place that creates shapes!</span>
+}</pre>
+            </div>
+          </div>
+          <div class="compare-summary">
+            <strong>Problems:</strong> <code>DrawingApp</code> directly depends on Circle, Square, Triangle. Adding a new shape requires editing existing code. Logic duplicated wherever shapes are created.
+          </div>
+        </div>
+
+        <div class="compare-card with">
+          <div class="compare-header">
+            <span class="compare-emoji">✅</span>
+            <h4>WITH Factory — Centralised Creation</h4>
+          </div>
+          <div class="code-wrap">
+            <div class="code-top">
+              <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+              <span class="code-label">With — decoupled</span>
+            </div>
+            <div class="code-body"><pre><span class="kw">interface</span> <span class="cl">Shape</span> { <span class="kw">void</span> <span class="fn">draw</span>(); }
+<span class="kw">class</span> <span class="cl">Circle</span>   <span class="kw">implements</span> <span class="cl">Shape</span> { <span class="cm">/* draw() */</span> }
+<span class="kw">class</span> <span class="cl">Square</span>   <span class="kw">implements</span> <span class="cl">Shape</span> { <span class="cm">/* draw() */</span> }
+<span class="kw">class</span> <span class="cl">Triangle</span> <span class="kw">implements</span> <span class="cl">Shape</span> { <span class="cm">/* draw() */</span> }
+
+<span class="cm">// THE FACTORY</span>
+<span class="kw">public class</span> <span class="cl">ShapeFactory</span> {
+    <span class="kw">public static</span> <span class="cl">Shape</span> <span class="fn">create</span>(<span class="cl">String</span> type) {
+        <span class="kw">switch</span> (type.<span class="fn">toLowerCase</span>()) {
+            <span class="kw">case</span> <span class="st">"circle"</span>:   <span class="kw">return new</span> <span class="cl">Circle</span>();
+            <span class="kw">case</span> <span class="st">"square"</span>:   <span class="kw">return new</span> <span class="cl">Square</span>();
+            <span class="kw">case</span> <span class="st">"triangle"</span>: <span class="kw">return new</span> <span class="cl">Triangle</span>();
+            <span class="kw">default</span>: <span class="kw">throw new</span> <span class="cl">RuntimeException</span>();
+        }
+    }
+}
+
+<span class="kw">public class</span> <span class="cl">DrawingApp</span> {
+    <span class="kw">public void</span> <span class="fn">drawShape</span>(<span class="cl">String</span> type) {
+        <span class="cl">Shape</span> shape = <span class="cl">ShapeFactory</span>.<span class="fn">create</span>(type);  <span class="cm">// clean!</span>
+        shape.<span class="fn">draw</span>();
+    }
+    <span class="cm">// To add Star: only change ShapeFactory, NOT DrawingApp</span>
+}</pre>
+            </div>
+          </div>
+          <div class="compare-summary">
+            <strong>Benefits:</strong> <code>DrawingApp</code> only knows about <code>Shape</code> interface. Adding a new shape requires only editing the factory. All creation logic in ONE place.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="diff-table">
+      <div class="diff-row head">
+        <div>Aspect</div>
+        <div>Without Factory</div>
+        <div>With Factory</div>
+      </div>
+      <div class="diff-row">
+        <div>Adding New Shape</div>
+        <div>Edit every <code>if/else</code> block in client code</div>
+        <div>Add one line to <code>ShapeFactory</code></div>
+      </div>
+      <div class="diff-row">
+        <div>Client Knows</div>
+        <div>Circle, Square, Triangle (tightly coupled)</div>
+        <div>Only Shape interface (loose coupling)</div>
+      </div>
+      <div class="diff-row">
+        <div>Creation Logic</div>
+        <div>Duplicated everywhere shapes are needed</div>
+        <div>In ONE central place</div>
+      </div>
+      <div class="diff-row">
+        <div>Testing</div>
+        <div>Hard — must mock multiple classes</div>
+        <div>Easy — mock the factory</div>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <div class="takeaway-label">Key Takeaway</div>
+      <p>Factory is the <strong>backbone of most Java frameworks</strong> — Spring's BeanFactory, JDBC's DriverManager, Logger factories all use this pattern. Use it whenever you have multiple implementations and want to keep creation logic isolated.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ PATTERN 3: OBSERVER ══════════════════════════════════════ -->
+<section class="pattern" id="observer">
+  <div class="wrap">
+    <div class="pattern-header">
+      <div class="pattern-num">03</div>
+      <div class="pattern-label">Behavioral Pattern · Important</div>
+      <h2 class="pattern-title">Observer Pattern</h2>
+      <p class="pattern-tagline">When something changes, automatically notify everyone who cares.</p>
+    </div>
+
+    <div class="def-block">
+      <h3>Definition</h3>
+      <p>The <strong>Observer</strong> pattern defines a <strong>one-to-many dependency</strong> between objects. When one object (the Subject) changes state, all dependent objects (Observers) are automatically notified. The Subject doesn't need to know who's listening or what they do.</p>
+    </div>
+
+    <div class="analogy">
+      <div class="analogy-label">📰 Real-World Analogy</div>
+      <p>A YouTube channel publishes a new video. The channel doesn't manually call each subscriber — it just publishes, and YouTube automatically notifies all subscribers via the bell icon. The channel is the Subject; subscribers are Observers. When you unsubscribe, you stop receiving notifications — but the channel doesn't change.</p>
+    </div>
+
+    <div class="when-grid">
+      <div class="when-card do">
+        <h4>✅ When to USE Observer</h4>
+        <ul>
+          <li>One change should trigger updates in many places (event-driven systems)</li>
+          <li>GUI event listeners — button click triggers many handlers</li>
+          <li>Stock market apps — price change notifies all watchers</li>
+          <li>Pub/Sub systems — Kafka, RabbitMQ, MQTT</li>
+          <li>Real-time dashboards, chat applications, notification systems</li>
+        </ul>
+      </div>
+      <div class="when-card dont">
+        <h4>❌ When NOT to USE Observer</h4>
+        <ul>
+          <li>Only one component needs to react to changes — use direct call</li>
+          <li>Order of notifications matters — Observer doesn't guarantee order</li>
+          <li>Synchronous flow where you need return values</li>
+          <li>You need a strict chain of responsibility — use Chain pattern instead</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="compare-section">
+      <div class="compare-title">With vs Without Observer</div>
+      <p class="compare-sub">Scenario: A YouTube channel posts a new video; subscribers should get notified.</p>
+
+      <div class="compare-grid">
+        <div class="compare-card without">
+          <div class="compare-header">
+            <span class="compare-emoji">❌</span>
+            <h4>WITHOUT Observer — Manual Notification</h4>
+          </div>
+          <div class="code-wrap">
+            <div class="code-top">
+              <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+              <span class="code-label">Without — fragile</span>
+            </div>
+            <div class="code-body"><pre><span class="kw">public class</span> <span class="cl">YouTubeChannel</span> {
+    <span class="kw">public void</span> <span class="fn">postVideo</span>(<span class="cl">String</span> title) {
+        <span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"New video: "</span> + title);
+
+        <span class="cm">// MUST manually call each subscriber</span>
+        <span class="cl">Subscriber</span> sub1 = <span class="kw">new</span> <span class="cl">Subscriber</span>(<span class="st">"Rahul"</span>);
+        sub1.<span class="fn">sendNotification</span>(title);
+
+        <span class="cl">Subscriber</span> sub2 = <span class="kw">new</span> <span class="cl">Subscriber</span>(<span class="st">"Priya"</span>);
+        sub2.<span class="fn">sendNotification</span>(title);
+
+        <span class="cl">EmailService</span> email = <span class="kw">new</span> <span class="cl">EmailService</span>();
+        email.<span class="fn">sendEmail</span>(title);
+
+        <span class="cl">PushNotification</span> push = <span class="kw">new</span> <span class="cl">PushNotification</span>();
+        push.<span class="fn">send</span>(title);
+
+        <span class="cm">// New subscriber? You MUST edit this method!</span>
+        <span class="cm">// Forget to update? They miss the notification.</span>
+    }
+}</pre>
+            </div>
+          </div>
+          <div class="compare-summary">
+            <strong>Problems:</strong> Channel must know every subscriber. Adding/removing subscribers requires changing the channel class. Tight coupling. Brittle code.
+          </div>
+        </div>
+
+        <div class="compare-card with">
+          <div class="compare-header">
+            <span class="compare-emoji">✅</span>
+            <h4>WITH Observer — Automatic Notification</h4>
+          </div>
+          <div class="code-wrap">
+            <div class="code-top">
+              <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+              <span class="code-label">With — flexible</span>
+            </div>
+            <div class="code-body"><pre><span class="kw">interface</span> <span class="cl">Observer</span> { <span class="kw">void</span> <span class="fn">update</span>(<span class="cl">String</span> video); }
+
+<span class="kw">public class</span> <span class="cl">YouTubeChannel</span> {
+    <span class="kw">private</span> <span class="cl">List</span>&lt;<span class="cl">Observer</span>&gt; subscribers = <span class="kw">new</span> <span class="cl">ArrayList</span>&lt;&gt;();
+
+    <span class="kw">public void</span> <span class="fn">subscribe</span>(<span class="cl">Observer</span> o)   { subscribers.<span class="fn">add</span>(o); }
+    <span class="kw">public void</span> <span class="fn">unsubscribe</span>(<span class="cl">Observer</span> o) { subscribers.<span class="fn">remove</span>(o); }
+
+    <span class="kw">public void</span> <span class="fn">postVideo</span>(<span class="cl">String</span> title) {
+        <span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"New video: "</span> + title);
+        <span class="cm">// Notify ALL — no hardcoded list</span>
+        <span class="kw">for</span> (<span class="cl">Observer</span> o : subscribers) {
+            o.<span class="fn">update</span>(title);
+        }
+    }
+}
+
+<span class="kw">class</span> <span class="cl">EmailSubscriber</span> <span class="kw">implements</span> <span class="cl">Observer</span> {
+    <span class="kw">public void</span> <span class="fn">update</span>(<span class="cl">String</span> v) { <span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"📧 "</span>+v); }
+}
+<span class="kw">class</span> <span class="cl">PushSubscriber</span> <span class="kw">implements</span> <span class="cl">Observer</span> {
+    <span class="kw">public void</span> <span class="fn">update</span>(<span class="cl">String</span> v) { <span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"🔔 "</span>+v); }
+}
+
+<span class="cm">// USAGE</span>
+<span class="cl">YouTubeChannel</span> ch = <span class="kw">new</span> <span class="cl">YouTubeChannel</span>();
+ch.<span class="fn">subscribe</span>(<span class="kw">new</span> <span class="cl">EmailSubscriber</span>());
+ch.<span class="fn">subscribe</span>(<span class="kw">new</span> <span class="cl">PushSubscriber</span>());
+ch.<span class="fn">postVideo</span>(<span class="st">"Java Patterns"</span>);
+<span class="cm">// → Both get notified automatically</span></pre>
+            </div>
+          </div>
+          <div class="compare-summary">
+            <strong>Benefits:</strong> Channel knows nothing about specific subscribers. Add or remove subscribers at runtime. New subscriber types don't require channel changes.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="diff-table">
+      <div class="diff-row head">
+        <div>Aspect</div>
+        <div>Without Observer</div>
+        <div>With Observer</div>
+      </div>
+      <div class="diff-row">
+        <div>Coupling</div>
+        <div>Subject knows every subscriber class</div>
+        <div>Subject only knows Observer interface</div>
+      </div>
+      <div class="diff-row">
+        <div>Add New Subscriber</div>
+        <div>Edit the Subject's code</div>
+        <div>Just call <code>subscribe()</code> — no Subject changes</div>
+      </div>
+      <div class="diff-row">
+        <div>Runtime Changes</div>
+        <div>Impossible — list is hardcoded</div>
+        <div>Subscribe/unsubscribe anytime</div>
+      </div>
+      <div class="diff-row">
+        <div>Java Built-in</div>
+        <div>N/A</div>
+        <div><code>java.util.Observable</code>, <code>PropertyChangeListener</code></div>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <div class="takeaway-label">Key Takeaway</div>
+      <p>Observer pattern is the foundation of <strong>event-driven programming</strong>. Java's built-in listeners (Swing, JavaFX), Spring's <code>ApplicationEventPublisher</code>, and messaging systems like Kafka all use this pattern.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ PATTERN 4: STRATEGY ══════════════════════════════════════ -->
+<section class="pattern" id="strategy">
+  <div class="wrap">
+    <div class="pattern-header">
+      <div class="pattern-num">04</div>
+      <div class="pattern-label">Behavioral Pattern · Critical</div>
+      <h2 class="pattern-title">Strategy Pattern</h2>
+      <p class="pattern-tagline">Pick the algorithm at runtime — no more giant if/else chains.</p>
+    </div>
+
+    <div class="def-block">
+      <h3>Definition</h3>
+      <p>The <strong>Strategy</strong> pattern defines a family of algorithms (or behaviors), encapsulates each one as a separate class, and makes them <strong>interchangeable at runtime</strong>. The client picks which strategy to use without changing the code that uses it.</p>
+    </div>
+
+    <div class="analogy">
+      <div class="analogy-label">🗺️ Real-World Analogy</div>
+      <p>When you open Google Maps to navigate from A to B, it asks: drive, walk, public transport, or bike? Each option uses a different algorithm to calculate the route. The Maps app itself doesn't change — you just plug in a different strategy. That's exactly how the Strategy pattern works.</p>
+    </div>
+
+    <div class="when-grid">
+      <div class="when-card do">
+        <h4>✅ When to USE Strategy</h4>
+        <ul>
+          <li>Multiple ways to do the same task — payment, sorting, validation</li>
+          <li>You have a large if/else or switch deciding behaviour</li>
+          <li>Algorithm should be selectable at runtime</li>
+          <li>New algorithms might be added in the future</li>
+          <li>Compression formats, encryption methods, pricing rules</li>
+        </ul>
+      </div>
+      <div class="when-card dont">
+        <h4>❌ When NOT to USE Strategy</h4>
+        <ul>
+          <li>Only one algorithm — no need for switching</li>
+          <li>The algorithm rarely changes</li>
+          <li>The strategies share no common interface (forcing one is awkward)</li>
+          <li>Performance is critical and indirection has measurable cost</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="compare-section">
+      <div class="compare-title">With vs Without Strategy</div>
+      <p class="compare-sub">Scenario: Your e-commerce app accepts multiple payment methods — Credit Card, UPI, Wallet.</p>
+
+      <div class="compare-grid">
+        <div class="compare-card without">
+          <div class="compare-header">
+            <span class="compare-emoji">❌</span>
+            <h4>WITHOUT Strategy — if/else Conditional</h4>
+          </div>
+          <div class="code-wrap">
+            <div class="code-top">
+              <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+              <span class="code-label">Without — rigid</span>
+            </div>
+            <div class="code-body"><pre><span class="kw">public class</span> <span class="cl">PaymentService</span> {
+    <span class="kw">public void</span> <span class="fn">processPayment</span>(<span class="cl">String</span> method, <span class="kw">double</span> amount) {
+        <span class="kw">if</span> (method.<span class="fn">equals</span>(<span class="st">"creditcard"</span>)) {
+            <span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"Processing card ₹"</span> + amount);
+            <span class="cm">// Validate card number, CVV</span>
+            <span class="cm">// Call card gateway API</span>
+            <span class="cm">// Charge card</span>
+        } <span class="kw">else if</span> (method.<span class="fn">equals</span>(<span class="st">"upi"</span>)) {
+            <span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"Processing UPI ₹"</span> + amount);
+            <span class="cm">// Validate UPI ID</span>
+            <span class="cm">// Send UPI collect request</span>
+            <span class="cm">// Wait for approval</span>
+        } <span class="kw">else if</span> (method.<span class="fn">equals</span>(<span class="st">"wallet"</span>)) {
+            <span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"Processing wallet ₹"</span> + amount);
+            <span class="cm">// Check wallet balance</span>
+            <span class="cm">// Deduct from wallet</span>
+        } <span class="kw">else</span> {
+            <span class="kw">throw new</span> <span class="cl">RuntimeException</span>(<span class="st">"Unknown method"</span>);
+        }
+    }
+    <span class="cm">// Add CryptoPayment? Edit this method.</span>
+    <span class="cm">// Add BNPL? Edit this method.</span>
+    <span class="cm">// Violates Open/Closed Principle</span>
+}</pre>
+            </div>
+          </div>
+          <div class="compare-summary">
+            <strong>Problems:</strong> Class grows uncontrollably. Adding a new method means editing existing code (risky). Testing each branch separately is hard. Violates Single Responsibility &amp; Open/Closed principles.
+          </div>
+        </div>
+
+        <div class="compare-card with">
+          <div class="compare-header">
+            <span class="compare-emoji">✅</span>
+            <h4>WITH Strategy — Pluggable Algorithms</h4>
+          </div>
+          <div class="code-wrap">
+            <div class="code-top">
+              <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+              <span class="code-label">With — flexible</span>
+            </div>
+            <div class="code-body"><pre><span class="cm">// The Strategy interface</span>
+<span class="kw">interface</span> <span class="cl">PaymentStrategy</span> { <span class="kw">void</span> <span class="fn">pay</span>(<span class="kw">double</span> amount); }
+
+<span class="cm">// Each algorithm is its OWN class</span>
+<span class="kw">class</span> <span class="cl">CreditCardPayment</span> <span class="kw">implements</span> <span class="cl">PaymentStrategy</span> {
+    <span class="kw">public void</span> <span class="fn">pay</span>(<span class="kw">double</span> a) {
+        <span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"💳 Card: ₹"</span> + a);
+    }
+}
+<span class="kw">class</span> <span class="cl">UPIPayment</span> <span class="kw">implements</span> <span class="cl">PaymentStrategy</span> {
+    <span class="kw">public void</span> <span class="fn">pay</span>(<span class="kw">double</span> a) {
+        <span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"📱 UPI: ₹"</span> + a);
+    }
+}
+<span class="kw">class</span> <span class="cl">WalletPayment</span> <span class="kw">implements</span> <span class="cl">PaymentStrategy</span> {
+    <span class="kw">public void</span> <span class="fn">pay</span>(<span class="kw">double</span> a) {
+        <span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(<span class="st">"👛 Wallet: ₹"</span> + a);
+    }
+}
+
+<span class="cm">// The Context — uses the chosen strategy</span>
+<span class="kw">public class</span> <span class="cl">PaymentService</span> {
+    <span class="kw">private</span> <span class="cl">PaymentStrategy</span> strategy;
+
+    <span class="kw">public void</span> <span class="fn">setStrategy</span>(<span class="cl">PaymentStrategy</span> s) { <span class="kw">this</span>.strategy = s; }
+
+    <span class="kw">public void</span> <span class="fn">checkout</span>(<span class="kw">double</span> amount) {
+        strategy.<span class="fn">pay</span>(amount);
+    }
+}
+
+<span class="cm">// USAGE</span>
+<span class="cl">PaymentService</span> svc = <span class="kw">new</span> <span class="cl">PaymentService</span>();
+svc.<span class="fn">setStrategy</span>(<span class="kw">new</span> <span class="cl">UPIPayment</span>());
+svc.<span class="fn">checkout</span>(<span class="nm">500</span>);
+<span class="cm">// To add Crypto: just create new class — no edits!</span></pre>
+            </div>
+          </div>
+          <div class="compare-summary">
+            <strong>Benefits:</strong> Each algorithm in its own class. Add new payment methods without touching <code>PaymentService</code>. Easy to test each strategy independently. Follows Open/Closed Principle.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="diff-table">
+      <div class="diff-row head">
+        <div>Aspect</div>
+        <div>Without Strategy</div>
+        <div>With Strategy</div>
+      </div>
+      <div class="diff-row">
+        <div>Code Structure</div>
+        <div>One method with growing if/else</div>
+        <div>One interface + N small classes</div>
+      </div>
+      <div class="diff-row">
+        <div>Adding Payment Method</div>
+        <div>Edit <code>processPayment()</code> method</div>
+        <div>Create new class, no edits needed</div>
+      </div>
+      <div class="diff-row">
+        <div>Testing</div>
+        <div>Test all branches together</div>
+        <div>Test each strategy independently</div>
+      </div>
+      <div class="diff-row">
+        <div>Runtime Switching</div>
+        <div>String parameter — error-prone</div>
+        <div>Type-safe object — compile checked</div>
+      </div>
+      <div class="diff-row">
+        <div>Principles</div>
+        <div>Violates Open/Closed, SRP</div>
+        <div>Follows Open/Closed, SRP</div>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <div class="takeaway-label">Key Takeaway</div>
+      <p>If you ever write a switch/if-else that picks BEHAVIOUR based on a type, <strong>Strategy is almost always the right pattern</strong>. It transforms unstable code (where every new option breaks existing logic) into stable code (where you add a class and walk away).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ PATTERN 5: BUILDER ══════════════════════════════════════ -->
+<section class="pattern" id="builder">
+  <div class="wrap">
+    <div class="pattern-header">
+      <div class="pattern-num">05</div>
+      <div class="pattern-label">Creational Pattern · Important</div>
+      <h2 class="pattern-title">Builder Pattern</h2>
+      <p class="pattern-tagline">Build complex objects step by step — readable, flexible, immutable.</p>
+    </div>
+
+    <div class="def-block">
+      <h3>Definition</h3>
+      <p>The <strong>Builder</strong> pattern constructs a complex object step by step, allowing optional fields and clear method chaining. Especially useful when an object has <strong>many constructor parameters</strong>, some of which are optional.</p>
+    </div>
+
+    <div class="analogy">
+      <div class="analogy-label">🍔 Real-World Analogy</div>
+      <p>At Subway, you build your sandwich step by step — pick the bread, then the protein, then veggies, then sauces. Each step is optional and you control the order. Compare that to a fixed menu where you must order a "Combo #5" with no customisation — that's a constructor with required positional parameters.</p>
+    </div>
+
+    <div class="when-grid">
+      <div class="when-card do">
+        <h4>✅ When to USE Builder</h4>
+        <ul>
+          <li>Object has 4+ constructor parameters</li>
+          <li>Many parameters are optional or have defaults</li>
+          <li>You want immutable objects with readable construction</li>
+          <li>Object construction has multiple steps or validation</li>
+          <li>SQL query builders, HTTP request builders, document creators</li>
+        </ul>
+      </div>
+      <div class="when-card dont">
+        <h4>❌ When NOT to USE Builder</h4>
+        <ul>
+          <li>Object has only 1-3 simple parameters — constructor is fine</li>
+          <li>Object is mutable and small — setters work</li>
+          <li>For simple DTOs or POJOs</li>
+          <li>When you want to enforce all fields are required at construction</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="compare-section">
+      <div class="compare-title">With vs Without Builder</div>
+      <p class="compare-sub">Scenario: Creating a Pizza with many optional toppings.</p>
+
+      <div class="compare-grid">
+        <div class="compare-card without">
+          <div class="compare-header">
+            <span class="compare-emoji">❌</span>
+            <h4>WITHOUT Builder — Telescoping Constructor</h4>
+          </div>
+          <div class="code-wrap">
+            <div class="code-top">
+              <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+              <span class="code-label">Without — unreadable</span>
+            </div>
+            <div class="code-body"><pre><span class="kw">public class</span> <span class="cl">Pizza</span> {
+    <span class="kw">private</span> <span class="cl">String</span> size;
+    <span class="kw">private</span> <span class="cl">String</span> crust;
+    <span class="kw">private boolean</span> cheese, pepperoni, mushroom, onion, olives, jalapeno;
+
+    <span class="cm">// Many constructors for many combinations — UGH</span>
+    <span class="kw">public</span> <span class="fn">Pizza</span>(<span class="cl">String</span> s, <span class="cl">String</span> c) {
+        <span class="kw">this</span>(s, c, <span class="kw">false</span>, <span class="kw">false</span>, <span class="kw">false</span>, <span class="kw">false</span>, <span class="kw">false</span>, <span class="kw">false</span>);
+    }
+    <span class="kw">public</span> <span class="fn">Pizza</span>(<span class="cl">String</span> s, <span class="cl">String</span> c, <span class="kw">boolean</span> cheese) {
+        <span class="kw">this</span>(s, c, cheese, <span class="kw">false</span>, <span class="kw">false</span>, <span class="kw">false</span>, <span class="kw">false</span>, <span class="kw">false</span>);
+    }
+    <span class="kw">public</span> <span class="fn">Pizza</span>(<span class="cl">String</span> s, <span class="cl">String</span> c, <span class="kw">boolean</span> cheese,
+                 <span class="kw">boolean</span> pep, <span class="kw">boolean</span> mush, <span class="kw">boolean</span> onion,
+                 <span class="kw">boolean</span> olives, <span class="kw">boolean</span> jal) {
+        <span class="kw">this</span>.size=s; <span class="kw">this</span>.crust=c;
+        <span class="kw">this</span>.cheese=cheese; <span class="kw">this</span>.pepperoni=pep;
+        <span class="kw">this</span>.mushroom=mush; <span class="kw">this</span>.onion=onion;
+        <span class="kw">this</span>.olives=olives; <span class="kw">this</span>.jalapeno=jal;
+    }
+}
+
+<span class="cm">// USAGE — what do these booleans mean?!</span>
+<span class="cl">Pizza</span> p = <span class="kw">new</span> <span class="cl">Pizza</span>(<span class="st">"Large"</span>, <span class="st">"Thin"</span>,
+    <span class="kw">true</span>, <span class="kw">false</span>, <span class="kw">true</span>, <span class="kw">false</span>, <span class="kw">true</span>, <span class="kw">false</span>);
+<span class="cm">// Was mushroom 3rd or 4th? Confusing!</span></pre>
+            </div>
+          </div>
+          <div class="compare-summary">
+            <strong>Problems:</strong> Unreadable. Easy to swap parameters by mistake. Many constructor overloads. Cannot easily skip optional fields.
+          </div>
+        </div>
+
+        <div class="compare-card with">
+          <div class="compare-header">
+            <span class="compare-emoji">✅</span>
+            <h4>WITH Builder — Fluent &amp; Readable</h4>
+          </div>
+          <div class="code-wrap">
+            <div class="code-top">
+              <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+              <span class="code-label">With — clean</span>
+            </div>
+            <div class="code-body"><pre><span class="kw">public class</span> <span class="cl">Pizza</span> {
+    <span class="kw">private final</span> <span class="cl">String</span> size, crust;
+    <span class="kw">private final boolean</span> cheese, pepperoni, mushroom;
+
+    <span class="kw">private</span> <span class="fn">Pizza</span>(<span class="cl">Builder</span> b) {
+        <span class="kw">this</span>.size = b.size;
+        <span class="kw">this</span>.crust = b.crust;
+        <span class="kw">this</span>.cheese = b.cheese;
+        <span class="kw">this</span>.pepperoni = b.pepperoni;
+        <span class="kw">this</span>.mushroom = b.mushroom;
+    }
+
+    <span class="kw">public static class</span> <span class="cl">Builder</span> {
+        <span class="kw">private</span> <span class="cl">String</span> size, crust;
+        <span class="kw">private boolean</span> cheese, pepperoni, mushroom;
+
+        <span class="kw">public</span> <span class="cl">Builder</span> <span class="fn">size</span>(<span class="cl">String</span> s)         { <span class="kw">this</span>.size = s; <span class="kw">return this</span>; }
+        <span class="kw">public</span> <span class="cl">Builder</span> <span class="fn">crust</span>(<span class="cl">String</span> c)        { <span class="kw">this</span>.crust = c; <span class="kw">return this</span>; }
+        <span class="kw">public</span> <span class="cl">Builder</span> <span class="fn">addCheese</span>()             { <span class="kw">this</span>.cheese = <span class="kw">true</span>; <span class="kw">return this</span>; }
+        <span class="kw">public</span> <span class="cl">Builder</span> <span class="fn">addPepperoni</span>()          { <span class="kw">this</span>.pepperoni = <span class="kw">true</span>; <span class="kw">return this</span>; }
+        <span class="kw">public</span> <span class="cl">Builder</span> <span class="fn">addMushroom</span>()           { <span class="kw">this</span>.mushroom = <span class="kw">true</span>; <span class="kw">return this</span>; }
+
+        <span class="kw">public</span> <span class="cl">Pizza</span> <span class="fn">build</span>() { <span class="kw">return new</span> <span class="cl">Pizza</span>(<span class="kw">this</span>); }
+    }
+}
+
+<span class="cm">// USAGE — reads like English!</span>
+<span class="cl">Pizza</span> p = <span class="kw">new</span> <span class="cl">Pizza</span>.<span class="cl">Builder</span>()
+    .<span class="fn">size</span>(<span class="st">"Large"</span>)
+    .<span class="fn">crust</span>(<span class="st">"Thin"</span>)
+    .<span class="fn">addCheese</span>()
+    .<span class="fn">addMushroom</span>()
+    .<span class="fn">build</span>();</pre>
+            </div>
+          </div>
+          <div class="compare-summary">
+            <strong>Benefits:</strong> Reads like English. No parameter confusion. Optional fields are obvious. Object is immutable. Easy to extend.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <div class="takeaway-label">Key Takeaway</div>
+      <p>Use Builder whenever your class has <strong>more than 3-4 parameters</strong>, especially if some are optional. Real-world examples: <code>StringBuilder</code>, <code>Stream.builder()</code>, Lombok's <code>@Builder</code>, JPA <code>Criteria</code> API.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ PATTERN 6: DECORATOR ══════════════════════════════════════ -->
+<section class="pattern" id="decorator">
+  <div class="wrap">
+    <div class="pattern-header">
+      <div class="pattern-num">06</div>
+      <div class="pattern-label">Structural Pattern · Useful</div>
+      <h2 class="pattern-title">Decorator Pattern</h2>
+      <p class="pattern-tagline">Add features to an object without changing its class.</p>
+    </div>
+
+    <div class="def-block">
+      <h3>Definition</h3>
+      <p>The <strong>Decorator</strong> pattern lets you <strong>add new behavior to an object</strong> by wrapping it with another object that has the same interface. Multiple decorators can be stacked to combine behaviors.</p>
+    </div>
+
+    <div class="analogy">
+      <div class="analogy-label">☕ Real-World Analogy</div>
+      <p>At Starbucks, you start with a basic coffee (₹100). Add milk (+₹20), add caramel syrup (+₹30), add whipped cream (+₹40). Each addition is a "decorator" that wraps the previous order, adding cost and description without redesigning the coffee from scratch.</p>
+    </div>
+
+    <div class="when-grid">
+      <div class="when-card do">
+        <h4>✅ When to USE Decorator</h4>
+        <ul>
+          <li>Add responsibilities dynamically without subclassing</li>
+          <li>Behaviors can be combined in many ways</li>
+          <li>Java I/O Streams (BufferedReader wraps FileReader)</li>
+          <li>Adding logging, caching, encryption to existing services</li>
+          <li>UI components — borders, scrollbars on a window</li>
+        </ul>
+      </div>
+      <div class="when-card dont">
+        <h4>❌ When NOT to USE Decorator</h4>
+        <ul>
+          <li>Behavior never changes — just put it in the class</li>
+          <li>Only one or two combinations needed — subclassing is simpler</li>
+          <li>The base class is already complex</li>
+          <li>It creates many small classes that confuse developers</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="compare-section">
+      <div class="compare-title">With vs Without Decorator</div>
+      <p class="compare-sub">Scenario: Adding milk and sugar to a coffee.</p>
+
+      <div class="compare-grid">
+        <div class="compare-card without">
+          <div class="compare-header">
+            <span class="compare-emoji">❌</span>
+            <h4>WITHOUT Decorator — Subclass Explosion</h4>
+          </div>
+          <div class="code-wrap">
+            <div class="code-top">
+              <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+              <span class="code-label">Without</span>
+            </div>
+            <div class="code-body"><pre><span class="kw">class</span> <span class="cl">Coffee</span>                  { <span class="cm">/* ₹100 */</span> }
+<span class="kw">class</span> <span class="cl">CoffeeWithMilk</span>          <span class="kw">extends</span> <span class="cl">Coffee</span>           { <span class="cm">/* ₹120 */</span> }
+<span class="kw">class</span> <span class="cl">CoffeeWithSugar</span>         <span class="kw">extends</span> <span class="cl">Coffee</span>           { <span class="cm">/* ₹110 */</span> }
+<span class="kw">class</span> <span class="cl">CoffeeWithMilkAndSugar</span>  <span class="kw">extends</span> <span class="cl">Coffee</span>           { <span class="cm">/* ₹130 */</span> }
+<span class="kw">class</span> <span class="cl">CoffeeWithMilkSugarCream</span> <span class="kw">extends</span> <span class="cl">Coffee</span>           { <span class="cm">/* ₹160 */</span> }
+<span class="kw">class</span> <span class="cl">CoffeeWithMilkCream</span>     <span class="kw">extends</span> <span class="cl">Coffee</span>           { <span class="cm">/* ₹150 */</span> }
+<span class="cm">// 2^n classes for n additions — explodes quickly!</span>
+<span class="cm">// Add caramel? 12 more subclasses needed.</span></pre>
+            </div>
+          </div>
+          <div class="compare-summary">
+            <strong>Problems:</strong> Class explosion. Adding one new ingredient doubles the class count. Hard to maintain.
+          </div>
+        </div>
+
+        <div class="compare-card with">
+          <div class="compare-header">
+            <span class="compare-emoji">✅</span>
+            <h4>WITH Decorator — Wrap Layers</h4>
+          </div>
+          <div class="code-wrap">
+            <div class="code-top">
+              <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+              <span class="code-label">With</span>
+            </div>
+            <div class="code-body"><pre><span class="kw">interface</span> <span class="cl">Coffee</span> { <span class="kw">double</span> <span class="fn">cost</span>(); <span class="cl">String</span> <span class="fn">desc</span>(); }
+
+<span class="kw">class</span> <span class="cl">BasicCoffee</span> <span class="kw">implements</span> <span class="cl">Coffee</span> {
+    <span class="kw">public double</span> <span class="fn">cost</span>() { <span class="kw">return</span> <span class="nm">100</span>; }
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">desc</span>() { <span class="kw">return</span> <span class="st">"Coffee"</span>; }
+}
+
+<span class="kw">abstract class</span> <span class="cl">Decorator</span> <span class="kw">implements</span> <span class="cl">Coffee</span> {
+    <span class="kw">protected</span> <span class="cl">Coffee</span> coffee;
+    <span class="kw">public</span> <span class="fn">Decorator</span>(<span class="cl">Coffee</span> c) { <span class="kw">this</span>.coffee = c; }
+}
+
+<span class="kw">class</span> <span class="cl">Milk</span> <span class="kw">extends</span> <span class="cl">Decorator</span> {
+    <span class="kw">public</span> <span class="fn">Milk</span>(<span class="cl">Coffee</span> c) { <span class="kw">super</span>(c); }
+    <span class="kw">public double</span> <span class="fn">cost</span>() { <span class="kw">return</span> coffee.<span class="fn">cost</span>() + <span class="nm">20</span>; }
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">desc</span>() { <span class="kw">return</span> coffee.<span class="fn">desc</span>() + <span class="st">" + Milk"</span>; }
+}
+
+<span class="kw">class</span> <span class="cl">Sugar</span> <span class="kw">extends</span> <span class="cl">Decorator</span> {
+    <span class="kw">public</span> <span class="fn">Sugar</span>(<span class="cl">Coffee</span> c) { <span class="kw">super</span>(c); }
+    <span class="kw">public double</span> <span class="fn">cost</span>() { <span class="kw">return</span> coffee.<span class="fn">cost</span>() + <span class="nm">10</span>; }
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">desc</span>() { <span class="kw">return</span> coffee.<span class="fn">desc</span>() + <span class="st">" + Sugar"</span>; }
+}
+
+<span class="cm">// USAGE — combine layers like Lego</span>
+<span class="cl">Coffee</span> order = <span class="kw">new</span> <span class="cl">Sugar</span>(<span class="kw">new</span> <span class="cl">Milk</span>(<span class="kw">new</span> <span class="cl">BasicCoffee</span>()));
+<span class="cl">System</span>.<span class="fn">out</span>.<span class="fn">println</span>(order.<span class="fn">desc</span>() + <span class="st">" = ₹"</span> + order.<span class="fn">cost</span>());
+<span class="cm">// → Coffee + Milk + Sugar = ₹130</span></pre>
+            </div>
+          </div>
+          <div class="compare-summary">
+            <strong>Benefits:</strong> Mix and match endlessly with just 1 class per addition. New options don't break existing combinations.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <div class="takeaway-label">Key Takeaway</div>
+      <p>Decorator is everywhere in Java's <code>java.io</code> package — <code>new BufferedReader(new InputStreamReader(new FileInputStream(file)))</code> stacks decorators. Use it when you have many optional behaviours that combine in different ways.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ SUMMARY ══════════════════════════════════════ -->
+<section class="pattern" id="summary">
+  <div class="wrap">
+    <div class="pattern-header">
+      <div class="pattern-num">∞</div>
+      <div class="pattern-label">All Patterns</div>
+      <h2 class="pattern-title">Summary &amp; Priority Guide</h2>
+      <p class="pattern-tagline">Which patterns to master first, and where each one shines.</p>
+    </div>
+
+    <div class="final-table-wrap">
+      <table class="final">
+        <thead>
+          <tr>
+            <th>Pattern</th>
+            <th>Category</th>
+            <th>Importance</th>
+            <th>Use When</th>
+            <th>Real Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Singleton</strong></td>
+            <td>Creational</td>
+            <td><span class="pri-crit">CRITICAL</span></td>
+            <td>One shared instance for entire app</td>
+            <td>DB connections, Logger, Config, Cache</td>
+          </tr>
+          <tr>
+            <td><strong>Factory</strong></td>
+            <td>Creational</td>
+            <td><span class="pri-crit">CRITICAL</span></td>
+            <td>Multiple subclasses, runtime choice</td>
+            <td>Spring beans, JDBC drivers, Shape factories</td>
+          </tr>
+          <tr>
+            <td><strong>Strategy</strong></td>
+            <td>Behavioral</td>
+            <td><span class="pri-crit">CRITICAL</span></td>
+            <td>Multiple ways to do same thing</td>
+            <td>Payment methods, sort algorithms, validators</td>
+          </tr>
+          <tr>
+            <td><strong>Observer</strong></td>
+            <td>Behavioral</td>
+            <td><span class="pri-imp">IMPORTANT</span></td>
+            <td>One change → many reactions</td>
+            <td>Event listeners, Pub/Sub, Notifications</td>
+          </tr>
+          <tr>
+            <td><strong>Builder</strong></td>
+            <td>Creational</td>
+            <td><span class="pri-imp">IMPORTANT</span></td>
+            <td>Object with many optional params</td>
+            <td>StringBuilder, HTTP requests, Lombok @Builder</td>
+          </tr>
+          <tr>
+            <td><strong>Decorator</strong></td>
+            <td>Structural</td>
+            <td><span class="pri-use">USEFUL</span></td>
+            <td>Stack behaviors dynamically</td>
+            <td>Java I/O Streams, GUI components, middleware</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="def-block" style="margin-top:30px;">
+      <h3>Which to Learn First?</h3>
+      <p style="margin-bottom:14px;"><strong>If you have limited time:</strong> Master <strong>Singleton, Factory, and Strategy</strong> first. These three appear in almost every Java codebase you'll encounter, every Spring application, and every interview.</p>
+      <p style="margin-bottom:14px;"><strong>Next-level (after the basics):</strong> Learn <strong>Observer</strong> for event-driven systems and <strong>Builder</strong> for complex object construction. These come up in framework code and modern Java APIs.</p>
+      <p><strong>Eventually:</strong> Explore <strong>Decorator</strong>, <strong>Adapter</strong>, <strong>Facade</strong>, <strong>Template Method</strong>, and <strong>Command</strong>. These are powerful but more situational.</p>
+    </div>
+
+    <div class="takeaway" style="margin-top:30px;">
+      <div class="takeaway-label">Final Wisdom</div>
+      <p>Design patterns are <strong>tools, not laws</strong>. The goal is always cleaner, more maintainable code — not to use a pattern just because you know it. The best developers recognise when NOT to use a pattern: when simple code is good enough. Master the patterns, but use them sparingly and intentionally.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ FOOTER ══════════════════════════════════════ -->
+<footer>
+  <h3>Java Design Patterns — Complete Guide</h3>
+  <p>Singleton · Factory · Observer · Strategy · Builder · Decorator</p>
+  <p style="margin-top:8px;font-size:.78rem;">With vs Without comparisons · Real-world analogies · Code examples</p>
+</footer>
+
+<script>
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('prog').style.width = pct + '%';
+});
+
+const sections = document.querySelectorAll('.pattern, .overview');
+const navLinks = document.querySelectorAll('.nav-link');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector('.nav-link[href="#' + e.target.id + '"]');
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

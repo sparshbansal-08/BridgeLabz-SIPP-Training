@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bootstrap 5 - Practice Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+<style>:root{--accent:#7952b3;--accent-soft:rgba(121,82,179,.15)}*{margin:0;padding:0;box-sizing:border-box}body{background:#0b0d12;color:#e8eaed;font-family:'Inter',sans-serif;line-height:1.65;overflow-x:hidden}.hero{padding:60px 24px 40px;text-align:center;border-bottom:1px solid #2a3142;background:linear-gradient(180deg,var(--accent-soft) 0%,transparent 100%)}.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#5c6478;letter-spacing:4px;text-transform:uppercase;margin-bottom:14px}.hero h1{font-family:'Instrument Serif',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:400;letter-spacing:-.02em;margin-bottom:14px;line-height:1.1}.hero h1 .accent{color:var(--accent);font-style:italic}.hero .subtitle{font-size:.95rem;color:#8b94a6;max-width:580px;margin:0 auto}.container{max-width:980px;margin:0 auto;padding:32px 24px 80px}.tabs{display:flex;gap:4px;overflow-x:auto;padding:5px;background:#131720;border:1px solid #2a3142;border-radius:12px;margin-bottom:32px;position:sticky;top:8px;z-index:100;-webkit-overflow-scrolling:touch}.tab{flex-shrink:0;padding:9px 16px;border:none;background:transparent;color:#8b94a6;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;cursor:pointer;border-radius:8px;transition:all .2s;white-space:nowrap}.tab:hover{color:#e8eaed;background:#1a1f2c}.tab.active{background:var(--accent);color:#fff;font-weight:600}.section{display:none;animation:fadeIn .3s ease}.section.active{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.section-title{font-family:'Instrument Serif',serif;font-size:1.9rem;font-weight:400;margin-bottom:6px}.section-desc{color:#8b94a6;margin-bottom:28px;font-size:.95rem}.qa-header{margin:36px 0 16px;font-family:'Instrument Serif',serif;font-size:1.4rem;color:var(--accent);font-weight:400;border-bottom:1px solid #2a3142;padding-bottom:8px}.concept{background:#131720;border:1px solid #2a3142;border-radius:12px;padding:22px 24px;margin-bottom:18px;transition:border-color .2s}.concept:hover{border-color:var(--accent)}.concept h3{font-weight:600;font-size:1.05rem;margin-bottom:12px;display:flex;align-items:center;gap:10px}.concept p,.concept li{color:#8b94a6;font-size:.92rem;line-height:1.75}.concept ul,.concept ol{padding-left:22px;margin-top:8px}.concept li{margin-bottom:5px}.concept code{background:#0d1218;color:var(--accent);padding:2px 7px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.85em;border:1px solid #1f2532}.concept strong{color:#e8eaed;font-weight:600}.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;background:#232938;color:var(--accent);border:1px solid #2a3142}.code-block{background:#05080d;border-radius:10px;overflow:hidden;margin:12px 0;border:1px solid #2a3142}.code-header{background:#1a1f2c;padding:7px 13px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #2a3142}.dot{width:9px;height:9px;border-radius:50%}.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}.code-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#5c6478;margin-left:8px}.code-body{padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:.81rem;line-height:1.85;overflow-x:auto;color:#d4d8e0;white-space:pre-wrap}.tag{color:#f87171}.attr{color:#fbbf24}.str{color:#86efac}.num{color:#c084fc}.kw{color:#f472b6}.fn{color:#60a5fa}.com{color:#5c6478;font-style:italic}.var{color:#93c5fd}.sel{color:#fb923c}.prop{color:#fbbf24}.val{color:#86efac}.tip-box{border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.88rem;color:#8b94a6}.tip-box strong{color:var(--accent)}.warn-box{border-left:3px solid #fb923c;background:rgba(251,146,60,.12);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.88rem;color:#fde0c4}.warn-box strong{color:#fb923c}.qa{background:#131720;border:1px solid #2a3142;border-radius:10px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}.qa:hover{border-color:var(--accent)}.qa summary{padding:14px 18px;cursor:pointer;font-weight:500;font-size:.9rem;display:flex;align-items:flex-start;gap:12px;list-style:none;color:#e8eaed;user-select:none}.qa summary::-webkit-details-marker{display:none}.qa summary::before{content:'+';color:var(--accent);font-weight:700;font-size:1.2rem;flex-shrink:0;transition:transform .3s;line-height:1;margin-top:1px}details[open] summary::before{transform:rotate(45deg)}.qnum{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:.78rem;flex-shrink:0;font-weight:700;min-width:32px}.qtext{flex:1}.qa-a{padding:0 18px 18px;color:#8b94a6;font-size:.88rem;line-height:1.8;border-top:1px solid #2a3142;padding-top:14px}.qa-a code{background:#0d1218;color:var(--accent);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.85em;border:1px solid #1f2532}.qa-a strong{color:#e8eaed}.qa-a pre{background:#05080d;border:1px solid #2a3142;border-radius:6px;padding:10px 12px;overflow-x:auto;margin:8px 0;font-family:'JetBrains Mono',monospace;font-size:.8rem;line-height:1.6;color:#d4d8e0;white-space:pre}.quiz-q{background:#131720;border:1px solid #2a3142;border-radius:10px;padding:18px 20px;margin-bottom:14px}.quiz-q h4{font-size:.92rem;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start;color:#e8eaed;font-weight:500}.options{display:flex;flex-direction:column;gap:7px}.option{padding:10px 14px;border:1.5px solid #2a3142;border-radius:7px;font-size:.84rem;cursor:pointer;transition:all .2s;background:#1a1f2c;color:#e8eaed}.option:hover{border-color:var(--accent);background:#232938}.option.correct{border-color:#4ade80;background:rgba(74,222,128,.12);color:#4ade80;font-weight:600}.option.wrong{border-color:#f87171;background:rgba(248,113,113,.12);color:#f87171}.option.disabled{pointer-events:none}.explanation{margin-top:12px;padding:11px 14px;border-radius:7px;font-size:.82rem;line-height:1.7;display:none}.explanation.show{display:block}.explanation.correct-exp{background:rgba(74,222,128,.12);color:#a7f3c4;border-left:3px solid #4ade80}.explanation.wrong-exp{background:rgba(248,113,113,.12);color:#fcb5b5;border-left:3px solid #f87171}.explanation code{background:rgba(0,0,0,.4);padding:1px 5px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:.9em}.score-bar{margin-bottom:20px;padding:12px 18px;background:#131720;border:1px solid #2a3142;border-radius:10px;text-align:center;font-weight:500;font-size:.9rem;color:#8b94a6}.score-bar span{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:700}.cheat-table{width:100%;border-collapse:collapse;background:#131720;border-radius:10px;overflow:hidden;border:1px solid #2a3142;margin-bottom:22px;font-size:.84rem}.cheat-table th{background:#1a1f2c;padding:10px 14px;text-align:left;font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.6px;color:#e8eaed;border-bottom:1px solid #2a3142}.cheat-table td{padding:10px 14px;border-bottom:1px solid #1f2532;vertical-align:top;color:#8b94a6}.cheat-table tr:last-child td{border-bottom:none}.cheat-table tr:hover td{background:#1a1f2c}.cheat-table code{background:#0d1218;color:var(--accent);padding:2px 7px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.85em;white-space:nowrap}.home-link{display:inline-block;margin:18px 24px 0;padding:7px 13px;background:#131720;border:1px solid #2a3142;border-radius:8px;color:#8b94a6;text-decoration:none;font-size:.78rem;transition:all .2s}.home-link:hover{border-color:var(--accent);color:var(--accent)}@media(max-width:700px){.tab{padding:8px 12px;font-size:.75rem}.concept{padding:18px}.container{padding:24px 16px 60px}}</style>
+</head>
+<body>
+<a class="home-link" href="00-index.html">← All Guides</a>
+<div class="hero">
+  <div class="hero-eyebrow">◆ &nbsp; G U I D E &nbsp; 4 &nbsp; / &nbsp; 5 &nbsp; ◆</div>
+  <h1>Bootstrap 5 — <span class="accent">Practice Guide</span></h1>
+  <p class="subtitle">6 modules covering grid system, components, utilities, responsive design, and theming. With 40+ practice Q&amp;A and a quiz.</p>
+</div>
+<div class="container">
+<div class="tabs">
+  <button class="tab active" onclick="show(0)">📘 Intro</button>
+  <button class="tab" onclick="show(1)">📐 Layout</button>
+  <button class="tab" onclick="show(2)">🧩 Components</button>
+  <button class="tab" onclick="show(3)">🛠 Utilities</button>
+  <button class="tab" onclick="show(4)">📱 Responsive</button>
+  <button class="tab" onclick="show(5)">🎨 Custom</button>
+  <button class="tab" onclick="show(6)">🎯 Quiz</button>
+</div>
+
+<div class="section active">
+<h2 class="section-title">Module 1: Introduction to Bootstrap 5</h2>
+<p class="section-desc">The world's most popular CSS framework — get a polished site fast.</p>
+
+<div class="concept"><h3><span class="badge">CONCEPT</span> What is Bootstrap?</h3>
+<p><strong>Bootstrap</strong> is a free, open-source CSS framework that gives you pre-built, responsive, mobile-first components by adding CSS classes to your HTML.</p>
+<p style="margin-top:8px"><strong>Bootstrap 5</strong> (released 2021) — key changes from v4:</p>
+<ul>
+<li>✅ <strong>NO jQuery dependency</strong> — uses vanilla JavaScript</li>
+<li>✅ <strong>CSS custom properties</strong> (variables)</li>
+<li>✅ <strong>New <code>xxl</code> breakpoint</strong> (1400px)</li>
+<li>✅ <strong>RTL support</strong>, <strong>off-canvas component</strong></li>
+<li>❌ <strong>Dropped IE support</strong></li>
+</ul></div>
+
+<div class="concept"><h3><span class="badge">SETUP</span> CDN Setup (Easiest)</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Bootstrap CDN</span></div>
+<div class="code-body"><span class="com">&lt;!-- In &lt;head&gt; --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">href</span>=<span class="str">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"</span> <span class="attr">rel</span>=<span class="str">"stylesheet"</span><span class="tag">&gt;</span>
+
+<span class="com">&lt;!-- Before &lt;/body&gt; --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="str">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"</span><span class="tag">&gt;&lt;/script&gt;</span></div></div>
+<div class="tip-box"><strong>The <code>.bundle.</code> version</strong> includes Popper.js (needed for tooltips/dropdowns).</div></div>
+
+<div class="concept"><h3><span class="badge">SETUP</span> NPM Setup</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">npm</span></div>
+<div class="code-body"><span class="prop">$</span> <span class="cmd">npm install bootstrap</span>
+
+<span class="com">// In your JS:</span>
+<span class="kw">import</span> <span class="str">'bootstrap/dist/css/bootstrap.min.css'</span>;
+<span class="kw">import</span> <span class="str">'bootstrap'</span>;</div></div></div>
+
+<div class="concept"><h3><span class="badge">GRID</span> Grid System Basics</h3>
+<p>Bootstrap uses a 12-column grid. Three nesting levels: container → row → col.</p>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Basic grid</span></div>
+<div class="code-body"><span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"container"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"row"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"col"</span><span class="tag">&gt;</span>Col 1<span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"col"</span><span class="tag">&gt;</span>Col 2<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div></div>
+<ul><li><code>container</code> — fixed-width centered wrapper</li><li><code>row</code> — flex group of columns</li><li><code>col</code> — equal-width columns</li><li><code>col-6</code> — 6 of 12 (50% width)</li></ul></div>
+
+<h3 class="qa-header">Practice Q&amp;A — Introduction</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">What is Bootstrap?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> A free, open-source front-end CSS framework providing pre-built responsive components (buttons, forms, navbars, grids) you use by adding CSS classes — no need to write CSS from scratch.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">List 3 key changes in Bootstrap 5 over v4.</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ol><li><strong>No jQuery dependency</strong> — vanilla JavaScript</li>
+<li><strong>CSS custom properties</strong> for theming</li>
+<li><strong>New <code>xxl</code> breakpoint</strong> (1400px)</li>
+<li><strong>Off-canvas component</strong>, RTL support, dropped IE</li></ol></div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">How do you set up Bootstrap via CDN?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>&lt;!-- CSS in &lt;head&gt; --&gt;
+&lt;link href="...bootstrap.min.css" rel="stylesheet"&gt;
+
+&lt;!-- JS before &lt;/body&gt; --&gt;
+&lt;script src="...bootstrap.bundle.min.js"&gt;&lt;/script&gt;</pre>
+The <code>.bundle.</code> version includes Popper.js for dropdowns/tooltips.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">How do you install Bootstrap via npm?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>npm install bootstrap
+
+// In your JS:
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap';</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q5</span><span class="qtext">How many columns in Bootstrap's grid? Why?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> <strong>12 columns</strong>. Divisible by 1, 2, 3, 4, 6, 12 — easy to create equal layouts at many fractions.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q6</span><span class="qtext">What's the basic grid structure?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Three nested levels:
+<pre>&lt;div class="container"&gt;
+  &lt;div class="row"&gt;
+    &lt;div class="col"&gt;...&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+Always: container → row → cols.</div></details>
+</div>
+
+<div class="section">
+<h2 class="section-title">Module 2: Layout &amp; Grid System</h2>
+<p class="section-desc">Containers, breakpoints, columns, nesting, and flexbox.</p>
+
+<div class="concept"><h3><span class="badge">CONTAINERS</span> Container Types</h3>
+<table class="cheat-table"><thead><tr><th>Class</th><th>Behavior</th></tr></thead><tbody>
+<tr><td><code>.container</code></td><td>Fixed max-width per breakpoint, centered</td></tr>
+<tr><td><code>.container-fluid</code></td><td>100% width at all sizes</td></tr>
+<tr><td><code>.container-{sm|md|lg|xl|xxl}</code></td><td>100% wide until breakpoint, then fixed</td></tr>
+</tbody></table></div>
+
+<div class="concept"><h3><span class="badge">BREAKPOINTS</span> Responsive Breakpoints</h3>
+<table class="cheat-table"><thead><tr><th>Prefix</th><th>Min Width</th><th>Device</th></tr></thead><tbody>
+<tr><td>(none) xs</td><td>&lt;576px</td><td>Phones portrait</td></tr>
+<tr><td><code>sm</code></td><td>≥576px</td><td>Phones landscape</td></tr>
+<tr><td><code>md</code></td><td>≥768px</td><td>Tablets</td></tr>
+<tr><td><code>lg</code></td><td>≥992px</td><td>Desktops</td></tr>
+<tr><td><code>xl</code></td><td>≥1200px</td><td>Large desktops</td></tr>
+<tr><td><code>xxl</code></td><td>≥1400px</td><td>NEW in v5</td></tr>
+</tbody></table></div>
+
+<div class="concept"><h3><span class="badge">COLUMNS</span> Column Widths</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Column patterns</span></div>
+<div class="code-body"><span class="com">&lt;!-- Equal auto columns --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"row"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"col"</span><span class="tag">&gt;</span>1<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"col"</span><span class="tag">&gt;</span>2<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="com">&lt;!-- Specific widths (out of 12) --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"row"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"col-8"</span><span class="tag">&gt;</span>2/3<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"col-4"</span><span class="tag">&gt;</span>1/3<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="com">&lt;!-- Responsive: stack mobile, side-by-side tablet+ --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"row"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"col-12 col-md-6"</span><span class="tag">&gt;</span>Half<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"col-12 col-md-6"</span><span class="tag">&gt;</span>Half<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div></div></div>
+
+<div class="concept"><h3><span class="badge">NEST</span> Nesting Grids</h3>
+<p>You can nest a row inside a column to create sub-grids — the inner row resets to 12 columns based on parent column's width.</p></div>
+
+<div class="concept"><h3><span class="badge">FLEX</span> Flexbox Utilities</h3>
+<table class="cheat-table"><thead><tr><th>Class</th><th>Effect</th></tr></thead><tbody>
+<tr><td><code>d-flex</code></td><td><code>display: flex</code></td></tr>
+<tr><td><code>flex-row</code> / <code>flex-column</code></td><td>Direction</td></tr>
+<tr><td><code>justify-content-{start|center|end|between|around}</code></td><td>Horizontal alignment</td></tr>
+<tr><td><code>align-items-{start|center|end}</code></td><td>Vertical alignment</td></tr>
+<tr><td><code>flex-wrap</code> / <code>flex-nowrap</code></td><td>Wrap behavior</td></tr>
+<tr><td><code>gap-1</code> through <code>gap-5</code></td><td>Space between items</td></tr>
+</tbody></table>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Centering</span></div>
+<div class="code-body"><span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"d-flex justify-content-between align-items-center"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div&gt;</span>Logo<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;div&gt;</span>Menu<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div></div></div>
+
+<h3 class="qa-header">Practice Q&amp;A — Layout</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">Difference between <code>.container</code> and <code>.container-fluid</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul><li><code>.container</code> — fixed max-width per breakpoint, centered with margins.</li>
+<li><code>.container-fluid</code> — always 100% width, full edge-to-edge.</li></ul></div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">List Bootstrap 5's 6 breakpoints.</span></summary>
+<div class="qa-a"><strong>Answer:</strong> xs (&lt;576px), sm (≥576px), md (≥768px), lg (≥992px), xl (≥1200px), xxl (≥1400px — NEW in v5).</div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">What does <code>col-md-6</code> mean?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> "On medium screens (≥768px) and above, take 6 of 12 columns (50% width)." On smaller screens, stacks to full width.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">How to make a layout that's full-width on mobile and 3 columns on desktop?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>&lt;div class="row"&gt;
+  &lt;div class="col-12 col-md-4"&gt;Card 1&lt;/div&gt;
+  &lt;div class="col-12 col-md-4"&gt;Card 2&lt;/div&gt;
+  &lt;div class="col-12 col-md-4"&gt;Card 3&lt;/div&gt;
+&lt;/div&gt;</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q5</span><span class="qtext">How to center items both horizontally and vertically?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>&lt;div class="d-flex justify-content-center align-items-center"&gt;
+  &lt;div&gt;Centered&lt;/div&gt;
+&lt;/div&gt;</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q6</span><span class="qtext">What does <code>justify-content-between</code> do?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Distributes flex items so the first is at the start, last is at the end, and equal space is between them. Common for navbar layouts.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q7</span><span class="qtext">Can you nest a row inside a column?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Yes. The inner row gets a fresh 12-column grid based on the parent column's width. Common pattern for complex layouts.</div></details>
+</div>
+
+<div class="section">
+<h2 class="section-title">Module 3: Essential Components</h2>
+<p class="section-desc">Buttons, forms, navbars, dropdowns, modals, alerts.</p>
+
+<div class="concept"><h3><span class="badge">BUTTONS</span> Buttons &amp; Button Groups</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Buttons</span></div>
+<div class="code-body"><span class="com">&lt;!-- Color variants --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"btn btn-primary"</span><span class="tag">&gt;</span>Primary<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"btn btn-success"</span><span class="tag">&gt;</span>Success<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"btn btn-danger"</span><span class="tag">&gt;</span>Danger<span class="tag">&lt;/button&gt;</span>
+
+<span class="com">&lt;!-- Outline --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"btn btn-outline-primary"</span><span class="tag">&gt;</span>Outline<span class="tag">&lt;/button&gt;</span>
+
+<span class="com">&lt;!-- Sizes --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"btn btn-primary btn-sm"</span><span class="tag">&gt;</span>Small<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"btn btn-primary btn-lg"</span><span class="tag">&gt;</span>Large<span class="tag">&lt;/button&gt;</span>
+
+<span class="com">&lt;!-- Group --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"btn-group"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"btn btn-primary"</span><span class="tag">&gt;</span>Left<span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"btn btn-primary"</span><span class="tag">&gt;</span>Right<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div></div>
+<p style="margin-top:8px"><strong>Color variants:</strong> primary, secondary, success, danger, warning, info, light, dark.</p></div>
+
+<div class="concept"><h3><span class="badge">FORMS</span> Forms &amp; Validation</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Bootstrap form</span></div>
+<div class="code-body"><span class="tag">&lt;form&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"mb-3"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;label</span> <span class="attr">class</span>=<span class="str">"form-label"</span><span class="tag">&gt;</span>Email<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"email"</span> <span class="attr">class</span>=<span class="str">"form-control"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"form-text"</span><span class="tag">&gt;</span>We won't share it.<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="tag">&lt;select</span> <span class="attr">class</span>=<span class="str">"form-select mb-3"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;option&gt;</span>Mumbai<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;/select&gt;</span>
+
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"form-check mb-3"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"checkbox"</span> <span class="attr">class</span>=<span class="str">"form-check-input"</span> <span class="attr">id</span>=<span class="str">"agree"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;label</span> <span class="attr">class</span>=<span class="str">"form-check-label"</span> <span class="attr">for</span>=<span class="str">"agree"</span><span class="tag">&gt;</span>I agree<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span> <span class="attr">class</span>=<span class="str">"btn btn-primary"</span><span class="tag">&gt;</span>Submit<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span></div></div>
+<p style="margin-top:8px"><strong>Validation:</strong> Add <code>is-valid</code> or <code>is-invalid</code> classes, plus <code>.valid-feedback</code> / <code>.invalid-feedback</code> for messages.</p></div>
+
+<div class="concept"><h3><span class="badge">NAV</span> Navbar (Responsive)</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Navbar</span></div>
+<div class="code-body"><span class="tag">&lt;nav</span> <span class="attr">class</span>=<span class="str">"navbar navbar-expand-lg navbar-light bg-light"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"container-fluid"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;a</span> <span class="attr">class</span>=<span class="str">"navbar-brand"</span> <span class="attr">href</span>=<span class="str">"#"</span><span class="tag">&gt;</span>MyApp<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"navbar-toggler"</span> <span class="attr">data-bs-toggle</span>=<span class="str">"collapse"</span> <span class="attr">data-bs-target</span>=<span class="str">"#nav"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"navbar-toggler-icon"</span><span class="tag">&gt;&lt;/span&gt;</span>
+    <span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"collapse navbar-collapse"</span> <span class="attr">id</span>=<span class="str">"nav"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;ul</span> <span class="attr">class</span>=<span class="str">"navbar-nav"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;li</span> <span class="attr">class</span>=<span class="str">"nav-item"</span><span class="tag">&gt;&lt;a</span> <span class="attr">class</span>=<span class="str">"nav-link"</span> <span class="attr">href</span>=<span class="str">"#"</span><span class="tag">&gt;</span>Home<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+      <span class="tag">&lt;/ul&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/nav&gt;</span></div></div></div>
+
+<div class="concept"><h3><span class="badge">DROPDOWN</span> Dropdown</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Dropdown</span></div>
+<div class="code-body"><span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"dropdown"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"btn btn-primary dropdown-toggle"</span> <span class="attr">data-bs-toggle</span>=<span class="str">"dropdown"</span><span class="tag">&gt;</span>
+    Options
+  <span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;ul</span> <span class="attr">class</span>=<span class="str">"dropdown-menu"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;li&gt;&lt;a</span> <span class="attr">class</span>=<span class="str">"dropdown-item"</span> <span class="attr">href</span>=<span class="str">"#"</span><span class="tag">&gt;</span>Action 1<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+  <span class="tag">&lt;/ul&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div></div></div>
+
+<div class="concept"><h3><span class="badge">MODAL</span> Modal Dialog</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Modal</span></div>
+<div class="code-body"><span class="com">&lt;!-- Trigger button --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"btn btn-primary"</span> <span class="attr">data-bs-toggle</span>=<span class="str">"modal"</span> <span class="attr">data-bs-target</span>=<span class="str">"#myModal"</span><span class="tag">&gt;</span>
+  Open Modal
+<span class="tag">&lt;/button&gt;</span>
+
+<span class="com">&lt;!-- Modal --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"modal fade"</span> <span class="attr">id</span>=<span class="str">"myModal"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"modal-dialog"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"modal-content"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"modal-header"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;h5</span> <span class="attr">class</span>=<span class="str">"modal-title"</span><span class="tag">&gt;</span>Title<span class="tag">&lt;/h5&gt;</span>
+        <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"btn-close"</span> <span class="attr">data-bs-dismiss</span>=<span class="str">"modal"</span><span class="tag">&gt;&lt;/button&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+      <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"modal-body"</span><span class="tag">&gt;</span>Body content<span class="tag">&lt;/div&gt;</span>
+      <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"modal-footer"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"btn btn-secondary"</span> <span class="attr">data-bs-dismiss</span>=<span class="str">"modal"</span><span class="tag">&gt;</span>Close<span class="tag">&lt;/button&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div></div></div>
+
+<div class="concept"><h3><span class="badge">ALERTS</span> Alerts</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Alert variants</span></div>
+<div class="code-body"><span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"alert alert-success"</span><span class="tag">&gt;</span>Success message!<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"alert alert-danger"</span><span class="tag">&gt;</span>Error message<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"alert alert-warning"</span><span class="tag">&gt;</span>Warning<span class="tag">&lt;/div&gt;</span>
+
+<span class="com">&lt;!-- Dismissible alert --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"alert alert-info alert-dismissible fade show"</span><span class="tag">&gt;</span>
+  Info message
+  <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"btn-close"</span> <span class="attr">data-bs-dismiss</span>=<span class="str">"alert"</span><span class="tag">&gt;&lt;/button&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div></div></div>
+
+<h3 class="qa-header">Practice Q&amp;A — Components</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">List 5 button color variants in Bootstrap.</span></summary>
+<div class="qa-a"><strong>Answer:</strong> <code>btn-primary</code>, <code>btn-secondary</code>, <code>btn-success</code>, <code>btn-danger</code>, <code>btn-warning</code>, <code>btn-info</code>, <code>btn-light</code>, <code>btn-dark</code>. Add <code>btn-outline-*</code> for outlined versions.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">How do you create a small button?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Add <code>btn-sm</code>: <code>&lt;button class="btn btn-primary btn-sm"&gt;Small&lt;/button&gt;</code>. For large: <code>btn-lg</code>.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">What classes do form inputs need in Bootstrap?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul><li><code>form-control</code> — for <code>&lt;input&gt;</code> and <code>&lt;textarea&gt;</code></li>
+<li><code>form-select</code> — for <code>&lt;select&gt;</code></li>
+<li><code>form-check-input</code> — for checkboxes/radios</li>
+<li><code>form-label</code> — for labels</li></ul></div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">How to make a navbar collapse on mobile?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Use <code>navbar-expand-lg</code> (collapses below lg breakpoint), then add a toggle button with <code>data-bs-toggle="collapse" data-bs-target="#navId"</code> matching the menu's id.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q5</span><span class="qtext">Which data attribute opens a modal?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>data-bs-toggle="modal"
+data-bs-target="#modalId"</pre>
+Note: Bootstrap 5 uses <code>data-bs-*</code> prefix (with "bs"). Bootstrap 4 used just <code>data-*</code>.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q6</span><span class="qtext">How do you create a dismissible alert?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>&lt;div class="alert alert-info alert-dismissible fade show"&gt;
+  Message
+  &lt;button class="btn-close" data-bs-dismiss="alert"&gt;&lt;/button&gt;
+&lt;/div&gt;</pre>
+The classes <code>alert-dismissible fade show</code> + a close button with <code>data-bs-dismiss="alert"</code>.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q7</span><span class="qtext">What's the difference between <code>btn-primary</code> and <code>btn-outline-primary</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul><li><code>btn-primary</code> — solid filled button with primary color background.</li>
+<li><code>btn-outline-primary</code> — transparent background with primary-colored border and text. Fills on hover.</li></ul></div></details>
+</div>
+
+<div class="section">
+<h2 class="section-title">Module 4: Utilities &amp; Helpers</h2>
+<p class="section-desc">Spacing, typography, display, and background utilities — the secret weapon of fast styling.</p>
+
+<div class="concept"><h3><span class="badge">SPACING</span> Margin &amp; Padding</h3>
+<p>Pattern: <code>{property}{sides}-{breakpoint}-{size}</code></p>
+<table class="cheat-table"><thead><tr><th>Letter</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><strong>Property</strong>: <code>m</code></td><td>margin</td></tr>
+<tr><td><strong>Property</strong>: <code>p</code></td><td>padding</td></tr>
+<tr><td><strong>Sides</strong>: <code>t</code> / <code>b</code> / <code>s</code> / <code>e</code></td><td>top / bottom / start (left) / end (right)</td></tr>
+<tr><td><strong>Sides</strong>: <code>x</code> / <code>y</code></td><td>horizontal (x) / vertical (y)</td></tr>
+<tr><td><strong>Sides</strong>: (none)</td><td>all 4 sides</td></tr>
+<tr><td><strong>Size</strong>: <code>0</code> through <code>5</code></td><td>0 = none, 5 = largest (3rem)</td></tr>
+<tr><td><strong>Size</strong>: <code>auto</code></td><td>auto margin (centering)</td></tr>
+</tbody></table>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Examples</span></div>
+<div class="code-body"><span class="com">&lt;!-- margin all sides, size 3 --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"m-3"</span><span class="tag">&gt;&lt;/div&gt;</span>
+
+<span class="com">&lt;!-- padding top + bottom, size 2 --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"py-2"</span><span class="tag">&gt;&lt;/div&gt;</span>
+
+<span class="com">&lt;!-- margin left only, size 4 --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"ms-4"</span><span class="tag">&gt;&lt;/div&gt;</span>
+
+<span class="com">&lt;!-- center horizontally --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"mx-auto"</span><span class="tag">&gt;&lt;/div&gt;</span>
+
+<span class="com">&lt;!-- responsive: m-1 mobile, m-3 tablet+ --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"m-1 m-md-3"</span><span class="tag">&gt;&lt;/div&gt;</span></div></div></div>
+
+<div class="concept"><h3><span class="badge">TYPOGRAPHY</span> Text Utilities</h3>
+<table class="cheat-table"><thead><tr><th>Class</th><th>Effect</th></tr></thead><tbody>
+<tr><td><code>text-start/center/end</code></td><td>Text alignment</td></tr>
+<tr><td><code>text-uppercase/lowercase/capitalize</code></td><td>Text transform</td></tr>
+<tr><td><code>fw-bold/fw-normal/fw-light</code></td><td>Font weight</td></tr>
+<tr><td><code>fst-italic</code></td><td>Italic text</td></tr>
+<tr><td><code>text-decoration-none/underline</code></td><td>Decoration</td></tr>
+<tr><td><code>text-primary/secondary/success/danger</code></td><td>Text color</td></tr>
+<tr><td><code>text-muted</code></td><td>Greyed out text</td></tr>
+<tr><td><code>fs-1</code> through <code>fs-6</code></td><td>Font size (matches h1-h6)</td></tr>
+<tr><td><code>text-truncate</code></td><td>Truncate with ellipsis</td></tr>
+</tbody></table></div>
+
+<div class="concept"><h3><span class="badge">DISPLAY</span> Display Utilities</h3>
+<p>Pattern: <code>d-{breakpoint}-{value}</code></p>
+<table class="cheat-table"><thead><tr><th>Class</th><th>CSS</th></tr></thead><tbody>
+<tr><td><code>d-none</code></td><td><code>display: none</code> (hide)</td></tr>
+<tr><td><code>d-block</code></td><td><code>display: block</code></td></tr>
+<tr><td><code>d-inline</code></td><td><code>display: inline</code></td></tr>
+<tr><td><code>d-inline-block</code></td><td><code>display: inline-block</code></td></tr>
+<tr><td><code>d-flex</code></td><td><code>display: flex</code></td></tr>
+<tr><td><code>d-grid</code></td><td><code>display: grid</code></td></tr>
+</tbody></table>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Responsive show/hide</span></div>
+<div class="code-body"><span class="com">&lt;!-- Hide on mobile, show on tablet+ --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"d-none d-md-block"</span><span class="tag">&gt;&lt;/div&gt;</span>
+
+<span class="com">&lt;!-- Show on mobile only --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"d-block d-md-none"</span><span class="tag">&gt;&lt;/div&gt;</span></div></div></div>
+
+<div class="concept"><h3><span class="badge">BG/BORDER</span> Background &amp; Border</h3>
+<table class="cheat-table"><thead><tr><th>Class</th><th>Effect</th></tr></thead><tbody>
+<tr><td><code>bg-primary/secondary/success/danger</code></td><td>Background color</td></tr>
+<tr><td><code>bg-light/dark/white/transparent</code></td><td>Neutral backgrounds</td></tr>
+<tr><td><code>bg-opacity-25/50/75</code></td><td>Background opacity (v5.1+)</td></tr>
+<tr><td><code>border</code></td><td>1px solid border on all sides</td></tr>
+<tr><td><code>border-top/end/bottom/start</code></td><td>Specific side</td></tr>
+<tr><td><code>border-0</code></td><td>Remove border</td></tr>
+<tr><td><code>border-primary/danger/...</code></td><td>Border color</td></tr>
+<tr><td><code>rounded</code></td><td>Standard border-radius</td></tr>
+<tr><td><code>rounded-circle</code></td><td>Perfect circle</td></tr>
+<tr><td><code>rounded-pill</code></td><td>Pill shape</td></tr>
+<tr><td><code>shadow-sm/shadow/shadow-lg</code></td><td>Box shadow</td></tr>
+</tbody></table></div>
+
+<h3 class="qa-header">Practice Q&amp;A — Utilities</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">What does <code>m-3</code> do?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Sets margin on all 4 sides at size 3 (1rem). Bootstrap spacing scale: 0=none, 1=0.25rem, 2=0.5rem, 3=1rem, 4=1.5rem, 5=3rem.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">Difference between <code>mx-auto</code> and <code>my-auto</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul><li><code>mx-auto</code> — auto margin on x-axis (left and right) → centers HORIZONTALLY</li>
+<li><code>my-auto</code> — auto margin on y-axis (top and bottom) → centers VERTICALLY (only works in flex/grid containers)</li></ul></div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">How do you hide an element on mobile but show on tablet+?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> <code>&lt;div class="d-none d-md-block"&gt;</code>
+<ul><li><code>d-none</code> — hidden by default (mobile)</li>
+<li><code>d-md-block</code> — display: block from md (768px) up</li></ul></div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">What does <code>py-3</code> mean?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Padding on Y-axis (top + bottom) at size 3 (1rem). <code>p</code>=padding, <code>y</code>=vertical, <code>3</code>=size. <code>px</code> would be horizontal padding.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q5</span><span class="qtext">How do you make text bold and red?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> <code>&lt;p class="fw-bold text-danger"&gt;Important!&lt;/p&gt;</code>. <code>fw-bold</code> = font-weight bold, <code>text-danger</code> = red color (Bootstrap's danger semantic color).</div></details>
+
+<details class="qa"><summary><span class="qnum">Q6</span><span class="qtext">How do you make an element a perfect circle?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Add the class <code>rounded-circle</code> — typically used for avatar images:
+<pre>&lt;img src="avatar.jpg" class="rounded-circle" width="80"&gt;</pre>
+Element should have equal width &amp; height for a perfect circle.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q7</span><span class="qtext">What's the difference between <code>start</code>/<code>end</code> and <code>left</code>/<code>right</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Bootstrap 5 uses <strong>start/end</strong> instead of left/right to support RTL (right-to-left) languages like Arabic and Hebrew. In RTL mode, <code>start</code> automatically becomes the right side. So <code>ms-3</code> = margin-start = margin-left in LTR, margin-right in RTL.</div></details>
+</div>
+
+<div class="section">
+<h2 class="section-title">Module 5: Responsive Design</h2>
+<p class="section-desc">Media queries, responsive images, and mobile-first navigation.</p>
+
+<div class="concept"><h3><span class="badge">CONCEPT</span> Mobile-First Approach</h3>
+<p>Bootstrap is built mobile-first. Default classes (no breakpoint prefix) apply to ALL screen sizes. Add breakpoint prefixes to OVERRIDE on larger screens.</p>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Mobile-first pattern</span></div>
+<div class="code-body"><span class="com">&lt;!-- Full width on mobile, half on tablet, third on desktop --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"col-12 col-md-6 col-lg-4"</span><span class="tag">&gt;&lt;/div&gt;</span>
+
+<span class="com">&lt;!-- Small text mobile, large desktop --&gt;</span>
+<span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="str">"fs-6 fs-md-4 fs-lg-2"</span><span class="tag">&gt;</span>Heading<span class="tag">&lt;/p&gt;</span>
+
+<span class="com">&lt;!-- Padding scales up on bigger screens --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"p-2 p-md-4 p-lg-5"</span><span class="tag">&gt;&lt;/div&gt;</span></div></div></div>
+
+<div class="concept"><h3><span class="badge">SETUP</span> Required Viewport Meta Tag</h3>
+<p>Bootstrap requires this in your HTML <code>&lt;head&gt;</code> for responsive features to work:</p>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Viewport</span></div>
+<div class="code-body"><span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="str">"viewport"</span> <span class="attr">content</span>=<span class="str">"width=device-width, initial-scale=1"</span><span class="tag">&gt;</span></div></div>
+<div class="warn-box"><strong>⚠️ Without this</strong>, mobile browsers will render at 980px wide and zoom out — breaking your responsive layout.</div></div>
+
+<div class="concept"><h3><span class="badge">IMAGES</span> Responsive Images</h3>
+<table class="cheat-table"><thead><tr><th>Class</th><th>Effect</th></tr></thead><tbody>
+<tr><td><code>img-fluid</code></td><td>max-width: 100%; height: auto — scales with container</td></tr>
+<tr><td><code>img-thumbnail</code></td><td>Adds rounded border + padding</td></tr>
+<tr><td><code>rounded</code></td><td>Rounded corners</td></tr>
+<tr><td><code>rounded-circle</code></td><td>Perfect circle (for avatars)</td></tr>
+</tbody></table>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Responsive images</span></div>
+<div class="code-body"><span class="com">&lt;!-- Scales with container --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"hero.jpg"</span> <span class="attr">class</span>=<span class="str">"img-fluid"</span> <span class="attr">alt</span>=<span class="str">"..."</span><span class="tag">&gt;</span>
+
+<span class="com">&lt;!-- Thumbnail with border --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"pic.jpg"</span> <span class="attr">class</span>=<span class="str">"img-thumbnail"</span><span class="tag">&gt;</span>
+
+<span class="com">&lt;!-- Avatar (circular) --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"avatar.jpg"</span> <span class="attr">class</span>=<span class="str">"rounded-circle"</span> <span class="attr">width</span>=<span class="str">"80"</span><span class="tag">&gt;</span></div></div></div>
+
+<div class="concept"><h3><span class="badge">NAV</span> Building Responsive Navigation</h3>
+<p>The full responsive navbar pattern:</p>
+<ul>
+<li><code>navbar-expand-lg</code> — collapses below lg breakpoint</li>
+<li><code>navbar-toggler</code> — hamburger menu button (auto-shown when collapsed)</li>
+<li><code>collapse navbar-collapse</code> — the menu container that hides/shows</li>
+<li><code>data-bs-toggle="collapse"</code> — connects toggle button to menu</li>
+</ul>
+<p style="margin-top:8px">Other expand options: <code>navbar-expand-sm</code>, <code>navbar-expand-md</code>, <code>navbar-expand-xl</code>.</p></div>
+
+<h3 class="qa-header">Practice Q&amp;A — Responsive</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">What does <code>img-fluid</code> do?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Applies <code>max-width: 100%; height: auto</code> — making images scale down with their container while maintaining aspect ratio. Essential for responsive images.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">What's the mobile-first approach in Bootstrap?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Default classes (no breakpoint prefix) apply to ALL screen sizes including the smallest (mobile). You add breakpoint prefixes (<code>md-</code>, <code>lg-</code>) only to OVERRIDE styles on larger screens.<br><br>Example: <code>col-12 col-md-6</code> means full width on mobile (default), then half width from medium screens up.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">Why is the viewport meta tag required?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Without it, mobile browsers default to a virtual 980px width and zoom out — making your media queries and responsive classes ineffective. The tag tells browsers to use the device's actual width.
+<pre>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">How do you make a circular avatar image?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>&lt;img src="avatar.jpg" class="rounded-circle" width="80" height="80"&gt;</pre>
+Class <code>rounded-circle</code> creates a perfect circle. Image should have equal width and height for the circle to look right.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q5</span><span class="qtext">What does <code>navbar-expand-lg</code> mean?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> The navbar shows EXPANDED (full menu visible) at the <code>lg</code> breakpoint and ABOVE (≥992px). Below lg, it COLLAPSES into a hamburger menu.<br><br>Variants: <code>navbar-expand-sm</code> / <code>md</code> / <code>xl</code> / <code>xxl</code>. Without any size, <code>navbar-expand</code> means "always expanded".</div></details>
+
+<details class="qa"><summary><span class="qnum">Q6</span><span class="qtext">Difference between <code>img-fluid</code> and <code>img-thumbnail</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul><li><code>img-fluid</code> — makes image scale responsively (max-width: 100%).</li>
+<li><code>img-thumbnail</code> — also responsive PLUS adds a 1px border, padding, and rounded corners. Thumbnail-style framed look.</li></ul></div></details>
+</div>
+
+<div class="section">
+<h2 class="section-title">Module 6: Customization &amp; Extensions</h2>
+<p class="section-desc">Theming, icons, and SASS basics.</p>
+
+<div class="concept"><h3><span class="badge">VARS</span> CSS Variables (Bootstrap 5)</h3>
+<p>Bootstrap 5 exposes its design tokens as CSS custom properties — easy theming without rebuilding from source:</p>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Override variables</span></div>
+<div class="code-body"><span class="com">/* In your CSS, AFTER Bootstrap is loaded */</span>
+<span class="sel">:root</span> {
+  <span class="prop">--bs-primary</span>: <span class="val">#ff6b35</span>;
+  <span class="prop">--bs-primary-rgb</span>: <span class="val">255, 107, 53</span>;
+  <span class="prop">--bs-body-font-family</span>: <span class="val">'Inter', sans-serif</span>;
+  <span class="prop">--bs-body-color</span>: <span class="val">#222</span>;
+  <span class="prop">--bs-border-radius</span>: <span class="val">12px</span>;
+}</div></div>
+<p style="margin-top:8px">Now every <code>btn-primary</code>, <code>text-primary</code>, etc. uses your custom color.</p></div>
+
+<div class="concept"><h3><span class="badge">ICONS</span> Bootstrap Icons</h3>
+<p>Bootstrap Icons is a separate library (~2,000 free SVG icons). Add it via CDN:</p>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Setup</span></div>
+<div class="code-body"><span class="com">&lt;!-- In &lt;head&gt; --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="str">"stylesheet"</span> <span class="attr">href</span>=<span class="str">"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"</span><span class="tag">&gt;</span>
+
+<span class="com">&lt;!-- Use anywhere as a font icon --&gt;</span>
+<span class="tag">&lt;i</span> <span class="attr">class</span>=<span class="str">"bi bi-heart-fill"</span><span class="tag">&gt;&lt;/i&gt;</span>
+<span class="tag">&lt;i</span> <span class="attr">class</span>=<span class="str">"bi bi-search"</span><span class="tag">&gt;&lt;/i&gt;</span>
+<span class="tag">&lt;i</span> <span class="attr">class</span>=<span class="str">"bi bi-trash"</span><span class="tag">&gt;&lt;/i&gt;</span>
+
+<span class="com">&lt;!-- In a button --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"btn btn-primary"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;i</span> <span class="attr">class</span>=<span class="str">"bi bi-download"</span><span class="tag">&gt;&lt;/i&gt;</span> Download
+<span class="tag">&lt;/button&gt;</span></div></div>
+<p style="margin-top:8px">Browse all icons at <code>icons.getbootstrap.com</code>.</p></div>
+
+<div class="concept"><h3><span class="badge">SASS</span> Introduction to SASS</h3>
+<p><strong>SASS (Syntactically Awesome Style Sheets)</strong> is a CSS preprocessor that adds variables, nesting, mixins, and functions. Bootstrap is BUILT in SASS — using it lets you customize at the source level.</p>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Custom Bootstrap with SASS</span></div>
+<div class="code-body"><span class="com">// custom.scss</span>
+
+<span class="com">// 1. Override Bootstrap variables BEFORE importing</span>
+<span class="prop">$primary</span>: <span class="val">#ff6b35</span>;
+<span class="prop">$body-bg</span>: <span class="val">#f8f8f8</span>;
+<span class="prop">$border-radius</span>: <span class="val">12px</span>;
+
+<span class="com">// 2. Import Bootstrap (or just the parts you need)</span>
+<span class="kw">@import</span> <span class="str">"~bootstrap/scss/bootstrap"</span>;
+
+<span class="com">// 3. Add your custom CSS below</span>
+<span class="sel">.my-component</span> {
+  <span class="prop">color</span>: <span class="val">$primary</span>;
+}</div></div>
+<div class="tip-box"><strong>Why SASS over CSS variables?</strong> CSS variables are runtime — only certain things are themable. SASS variables are compile-time — you can override anything Bootstrap uses internally, and unused parts get tree-shaken.</div></div>
+
+<h3 class="qa-header">Practice Q&amp;A — Customization</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">How do you customize Bootstrap's primary color without using SASS?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Override the CSS custom property in your own stylesheet (loaded AFTER Bootstrap):
+<pre>:root {
+  --bs-primary: #ff6b35;
+  --bs-primary-rgb: 255, 107, 53;
+}</pre>
+Now <code>btn-primary</code>, <code>text-primary</code>, <code>bg-primary</code> all use your color.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">What is Bootstrap Icons?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> A free SVG icon library (~2,000 icons) developed by Bootstrap. Loaded separately from Bootstrap CSS. Use icons by adding classes like <code>bi bi-heart</code>, <code>bi bi-search</code>:
+<pre>&lt;i class="bi bi-heart-fill"&gt;&lt;/i&gt;</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">What is SASS?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> SASS (Syntactically Awesome Style Sheets) is a CSS preprocessor that adds:
+<ul><li><strong>Variables</strong> — <code>$primary: blue;</code></li>
+<li><strong>Nesting</strong> — write rules inside other rules</li>
+<li><strong>Mixins</strong> — reusable rule blocks</li>
+<li><strong>Functions, partials, imports</strong></li></ul>
+SASS files (<code>.scss</code>) are compiled to plain CSS. Bootstrap is built in SASS.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">Difference between customizing Bootstrap with CSS variables vs SASS?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><strong>CSS variables (--bs-*):</strong> Easier setup. Runtime customization. Limited to what Bootstrap exposes as variables. Loaded CSS includes everything.</li>
+<li><strong>SASS:</strong> Requires build setup. Compile-time. Override ANY Bootstrap internal variable. Can selectively import only the components you use (smaller output).</li>
+</ul>
+Use CSS variables for quick theming. Use SASS for production builds or deep customization.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q5</span><span class="qtext">Write the SASS code to set Bootstrap's primary color to orange.</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>// custom.scss
+$primary: #ff6b35;
+
+@import "bootstrap/scss/bootstrap";</pre>
+⚠️ The override MUST come BEFORE the @import. After Bootstrap loads, <code>$primary</code> is already set internally.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q6</span><span class="qtext">How do you put a Bootstrap Icon inside a button?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>&lt;button class="btn btn-primary"&gt;
+  &lt;i class="bi bi-download"&gt;&lt;/i&gt; Download
+&lt;/button&gt;</pre>
+Use <code>&lt;i&gt;</code> with the <code>bi bi-{name}</code> classes. The icon inherits the button's color.</div></details>
+</div>
+
+<div class="section">
+<h2 class="section-title">Bootstrap 5 — Multiple Choice Quiz</h2>
+<p class="section-desc">15 questions covering all 6 modules.</p>
+<div class="score-bar">Score: <span id="sv">0</span> / <span id="tv">0</span></div>
+<div id="quiz"></div>
+</div>
+
+</div>
+<script>
+const Q=[{q:"How many columns does Bootstrap's grid system have?",o:['10','12','16','24'],c:1,e:'12 columns — divisible by 2, 3, 4, 6, allowing flexible layouts at many fractions.'},
+{q:'Which is the LARGEST breakpoint in Bootstrap 5?',o:['xl','xxl','xxxl','huge'],c:1,e:'xxl (≥1400px) is new in Bootstrap 5 — the largest breakpoint.'},
+{q:'What does <code>col-md-6</code> mean?',o:['Always 50% width','50% width on medium screens and up','Hidden on medium screens','Center on medium screens'],c:1,e:'col-md-6 = 6 of 12 columns (50%) starting from md (≥768px). On smaller screens, stacks to full width.'},
+{q:'Major change in Bootstrap 5 over v4?',o:['Added jQuery','Removed jQuery dependency','Switched to React','Removed grid system'],c:1,e:'Bootstrap 5 dropped jQuery — it now uses vanilla JavaScript. This reduces page weight and modernizes the framework.'},
+{q:'How do you make an element full-width on mobile and half-width on tablet+?',o:['col-half','col-12 col-md-6','col-50','col-mobile-12 col-tablet-6'],c:1,e:'col-12 = 100% on all sizes by default. col-md-6 overrides to 50% from medium screens up. Mobile-first approach.'},
+{q:'Which class makes a navbar collapse below large screens?',o:['navbar-collapse-lg','navbar-mobile-lg','navbar-expand-lg','navbar-fold-lg'],c:2,e:"navbar-expand-lg means 'expanded at lg and above, collapsed below'. The collapsed version shows a hamburger menu on smaller screens."},
+{q:'What does <code>data-bs-toggle="modal"</code> do?',o:['Closes the modal','Triggers a modal to open','Defines a modal','Validates a modal'],c:1,e:"This Bootstrap 5 data attribute makes a button trigger a modal. Pair with data-bs-target='#modalId'. Note: v5 uses 'data-bs-' prefix, v4 used just 'data-'."},
+{q:'What does the spacing class <code>m-3</code> apply?',o:['3px margin','3rem margin','Margin size 3 (1rem) on all sides','3% margin'],c:2,e:"m=margin, no side specifier=all sides, 3=size 3 from Bootstrap's spacing scale (0.25rem * 4 = 1rem). Sizes: 0=none, 5=largest."},
+{q:'How do you center an element horizontally with margin?',o:['margin-center','mx-auto','m-center','mc-auto'],c:1,e:'mx-auto = margin auto on x-axis (left+right). Combined with an explicit width, this centers an element horizontally.'},
+{q:'Which class hides element on mobile but shows on tablet+?',o:['hide-mobile','d-none d-md-block','mobile-hidden','display-md-only'],c:1,e:'d-none hides by default. d-md-block restores display:block from md (768px) up. Bootstrap follows mobile-first: default applies to smallest, breakpoint prefixes override on larger.'},
+{q:'Class for a primary-colored button?',o:['button-primary','btn-blue','btn btn-primary','b-primary'],c:2,e:'Two classes needed: btn (base button styles) + btn-primary (color variant). Available variants: primary, secondary, success, danger, warning, info, light, dark.'},
+{q:'Which class makes an image scale responsively?',o:['img-responsive','img-fluid','img-scale','responsive-image'],c:1,e:'img-fluid applies max-width:100% and height:auto — image scales down with container while keeping aspect ratio. (img-responsive was Bootstrap 3.)'},
+{q:"What's the correct way to override Bootstrap's primary color via CSS?",o:['Edit bootstrap.min.css','--bs-primary: orange in :root','color: orange in body',"class='primary-orange'"],c:1,e:'Bootstrap 5 exposes design tokens as CSS custom properties prefixed with --bs-. Override --bs-primary in your CSS (loaded after Bootstrap) for global theme change.'},
+{q:'What is Bootstrap Icons?',o:['Built into Bootstrap CSS','A separate icon library you load via CDN','JavaScript only','An npm package only'],c:1,e:"Bootstrap Icons is a SEPARATE library (~2000 SVG icons). Add via its own CDN link. Use with classes like 'bi bi-heart'."},
+{q:'Why use SASS over CSS variables for Bootstrap customization?',o:['SASS is faster at runtime','SASS lets you override any internal variable + tree-shake unused parts',"CSS variables don't work in Bootstrap",'No real difference'],c:1,e:"SASS is compile-time — you can override any of Bootstrap's internal variables (not just exposed CSS vars), and unused components get excluded. CSS variables are runtime-only and limited to what's exposed."}];
+function show(i){document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx===i));document.querySelectorAll('.section').forEach((s,idx)=>s.classList.toggle('active',idx===i));window.scrollTo({top:200,behavior:'smooth'})}
+const quiz=document.getElementById('quiz');document.getElementById('tv').textContent=Q.length;let score=0;
+quiz.innerHTML=Q.map((q,i)=>`<div class="quiz-q"><h4><span class="qnum">Q${i+1}</span><span>${q.q}</span></h4><div class="options">${q.o.map((o,j)=>`<div class="option" onclick="ans(${i},${j})" id="o${i}_${j}">${String.fromCharCode(65+j)}. ${o}</div>`).join('')}</div><div class="explanation" id="e${i}"></div></div>`).join('');
+function ans(i,j){const q=Q[i];q.o.forEach((_,k)=>{const el=document.getElementById(`o${i}_${k}`);el.classList.add('disabled');if(k===q.c)el.classList.add('correct');else if(k===j&&j!==q.c)el.classList.add('wrong')});const ok=j===q.c;if(ok)score++;const exp=document.getElementById(`e${i}`);exp.className=`explanation show ${ok?'correct-exp':'wrong-exp'}`;exp.innerHTML=`${ok?'✅ Correct!':'❌ Incorrect.'} ${q.e}`;document.getElementById('sv').textContent=score}
+</script>
+</body>
+</html>

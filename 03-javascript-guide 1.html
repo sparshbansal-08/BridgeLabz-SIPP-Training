@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript - Practice Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+<style>:root{--accent:#f7df1e;--accent-soft:rgba(247,223,30,.12)}*{margin:0;padding:0;box-sizing:border-box}body{background:#0b0d12;color:#e8eaed;font-family:'Inter',sans-serif;line-height:1.65;overflow-x:hidden}.hero{padding:60px 24px 40px;text-align:center;border-bottom:1px solid #2a3142;background:linear-gradient(180deg,var(--accent-soft) 0%,transparent 100%)}.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#5c6478;letter-spacing:4px;text-transform:uppercase;margin-bottom:14px}.hero h1{font-family:'Instrument Serif',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:400;letter-spacing:-.02em;margin-bottom:14px;line-height:1.1}.hero h1 .accent{color:var(--accent);font-style:italic}.hero .subtitle{font-size:.95rem;color:#8b94a6;max-width:580px;margin:0 auto}.container{max-width:980px;margin:0 auto;padding:32px 24px 80px}.tabs{display:flex;gap:4px;overflow-x:auto;padding:5px;background:#131720;border:1px solid #2a3142;border-radius:12px;margin-bottom:32px;position:sticky;top:8px;z-index:100;-webkit-overflow-scrolling:touch}.tab{flex-shrink:0;padding:9px 16px;border:none;background:transparent;color:#8b94a6;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;cursor:pointer;border-radius:8px;transition:all .2s;white-space:nowrap}.tab:hover{color:#e8eaed;background:#1a1f2c}.tab.active{background:var(--accent);color:#fff;font-weight:600}.section{display:none;animation:fadeIn .3s ease}.section.active{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.section-title{font-family:'Instrument Serif',serif;font-size:1.9rem;font-weight:400;margin-bottom:6px}.section-desc{color:#8b94a6;margin-bottom:28px;font-size:.95rem}.qa-header{margin:36px 0 16px;font-family:'Instrument Serif',serif;font-size:1.4rem;color:var(--accent);font-weight:400;border-bottom:1px solid #2a3142;padding-bottom:8px}.concept{background:#131720;border:1px solid #2a3142;border-radius:12px;padding:22px 24px;margin-bottom:18px;transition:border-color .2s}.concept:hover{border-color:var(--accent)}.concept h3{font-weight:600;font-size:1.05rem;margin-bottom:12px;display:flex;align-items:center;gap:10px}.concept p,.concept li{color:#8b94a6;font-size:.92rem;line-height:1.75}.concept ul,.concept ol{padding-left:22px;margin-top:8px}.concept li{margin-bottom:5px}.concept code{background:#0d1218;color:var(--accent);padding:2px 7px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.85em;border:1px solid #1f2532}.concept strong{color:#e8eaed;font-weight:600}.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;background:#232938;color:var(--accent);border:1px solid #2a3142}.code-block{background:#05080d;border-radius:10px;overflow:hidden;margin:12px 0;border:1px solid #2a3142}.code-header{background:#1a1f2c;padding:7px 13px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #2a3142}.dot{width:9px;height:9px;border-radius:50%}.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}.code-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#5c6478;margin-left:8px}.code-body{padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:.81rem;line-height:1.85;overflow-x:auto;color:#d4d8e0;white-space:pre-wrap}.tag{color:#f87171}.attr{color:#fbbf24}.str{color:#86efac}.num{color:#c084fc}.kw{color:#f472b6}.fn{color:#60a5fa}.com{color:#5c6478;font-style:italic}.var{color:#93c5fd}.sel{color:#fb923c}.prop{color:#fbbf24}.val{color:#86efac}.tip-box{border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.88rem;color:#8b94a6}.tip-box strong{color:var(--accent)}.warn-box{border-left:3px solid #fb923c;background:rgba(251,146,60,.12);padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.88rem;color:#fde0c4}.warn-box strong{color:#fb923c}.qa{background:#131720;border:1px solid #2a3142;border-radius:10px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}.qa:hover{border-color:var(--accent)}.qa summary{padding:14px 18px;cursor:pointer;font-weight:500;font-size:.9rem;display:flex;align-items:flex-start;gap:12px;list-style:none;color:#e8eaed;user-select:none}.qa summary::-webkit-details-marker{display:none}.qa summary::before{content:'+';color:var(--accent);font-weight:700;font-size:1.2rem;flex-shrink:0;transition:transform .3s;line-height:1;margin-top:1px}details[open] summary::before{transform:rotate(45deg)}.qnum{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:.78rem;flex-shrink:0;font-weight:700;min-width:32px}.qtext{flex:1}.qa-a{padding:0 18px 18px;color:#8b94a6;font-size:.88rem;line-height:1.8;border-top:1px solid #2a3142;padding-top:14px}.qa-a code{background:#0d1218;color:var(--accent);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.85em;border:1px solid #1f2532}.qa-a strong{color:#e8eaed}.qa-a pre{background:#05080d;border:1px solid #2a3142;border-radius:6px;padding:10px 12px;overflow-x:auto;margin:8px 0;font-family:'JetBrains Mono',monospace;font-size:.8rem;line-height:1.6;color:#d4d8e0;white-space:pre}.quiz-q{background:#131720;border:1px solid #2a3142;border-radius:10px;padding:18px 20px;margin-bottom:14px}.quiz-q h4{font-size:.92rem;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start;color:#e8eaed;font-weight:500}.options{display:flex;flex-direction:column;gap:7px}.option{padding:10px 14px;border:1.5px solid #2a3142;border-radius:7px;font-size:.84rem;cursor:pointer;transition:all .2s;background:#1a1f2c;color:#e8eaed}.option:hover{border-color:var(--accent);background:#232938}.option.correct{border-color:#4ade80;background:rgba(74,222,128,.12);color:#4ade80;font-weight:600}.option.wrong{border-color:#f87171;background:rgba(248,113,113,.12);color:#f87171}.option.disabled{pointer-events:none}.explanation{margin-top:12px;padding:11px 14px;border-radius:7px;font-size:.82rem;line-height:1.7;display:none}.explanation.show{display:block}.explanation.correct-exp{background:rgba(74,222,128,.12);color:#a7f3c4;border-left:3px solid #4ade80}.explanation.wrong-exp{background:rgba(248,113,113,.12);color:#fcb5b5;border-left:3px solid #f87171}.explanation code{background:rgba(0,0,0,.4);padding:1px 5px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:.9em}.score-bar{margin-bottom:20px;padding:12px 18px;background:#131720;border:1px solid #2a3142;border-radius:10px;text-align:center;font-weight:500;font-size:.9rem;color:#8b94a6}.score-bar span{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:700}.cheat-table{width:100%;border-collapse:collapse;background:#131720;border-radius:10px;overflow:hidden;border:1px solid #2a3142;margin-bottom:22px;font-size:.84rem}.cheat-table th{background:#1a1f2c;padding:10px 14px;text-align:left;font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.6px;color:#e8eaed;border-bottom:1px solid #2a3142}.cheat-table td{padding:10px 14px;border-bottom:1px solid #1f2532;vertical-align:top;color:#8b94a6}.cheat-table tr:last-child td{border-bottom:none}.cheat-table tr:hover td{background:#1a1f2c}.cheat-table code{background:#0d1218;color:var(--accent);padding:2px 7px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.85em;white-space:nowrap}.home-link{display:inline-block;margin:18px 24px 0;padding:7px 13px;background:#131720;border:1px solid #2a3142;border-radius:8px;color:#8b94a6;text-decoration:none;font-size:.78rem;transition:all .2s}.home-link:hover{border-color:var(--accent);color:var(--accent)}@media(max-width:700px){.tab{padding:8px 12px;font-size:.75rem}.concept{padding:18px}.container{padding:24px 16px 60px}}</style>
+</head>
+<body>
+<a class="home-link" href="00-index.html">← All Guides</a>
+<div class="hero">
+  <div class="hero-eyebrow">◆ &nbsp; G U I D E &nbsp; 3 &nbsp; / &nbsp; 5 &nbsp; ◆</div>
+  <h1>JavaScript — <span class="accent">Practice Guide</span></h1>
+  <p class="subtitle">5 modules covering syntax, DOM manipulation, events, objects, async, and ES6+ features. With 50+ practice Q&amp;A and a quiz.</p>
+</div>
+<div class="container">
+<div class="tabs">
+  <button class="tab active" onclick="show(0)">📘 Intro</button>
+  <button class="tab" onclick="show(1)">⚙️ Basics</button>
+  <button class="tab" onclick="show(2)">🌳 DOM</button>
+  <button class="tab" onclick="show(3)">📦 Objects</button>
+  <button class="tab" onclick="show(4)">⚡ Advanced</button>
+  <button class="tab" onclick="show(5)">🎯 Quiz</button>
+</div>
+
+<div class="section active">
+<h2 class="section-title">Module 1: Introduction to JavaScript</h2>
+<p class="section-desc">The programming language of the web. Adds interactivity to HTML.</p>
+
+<div class="concept">
+<h3><span class="badge">CONCEPT</span> What is JavaScript?</h3>
+<p><strong>JavaScript (JS)</strong> is a high-level, interpreted programming language that runs in web browsers (and on servers via Node.js). It's the THIRD pillar of web development:</p>
+<ul>
+<li><strong>HTML</strong> — structure</li>
+<li><strong>CSS</strong> — appearance</li>
+<li><strong>JavaScript</strong> — behavior &amp; interactivity</li>
+</ul>
+<div class="tip-box"><strong>Despite the name,</strong> JavaScript has nothing to do with Java. It was named for marketing reasons in 1995 when Java was popular. The official standardized name is <strong>ECMAScript</strong>.</div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">SETUP</span> Setting Up the Environment</h3>
+<p>JavaScript runs in any modern browser — no installation needed for client-side code.</p>
+<ul>
+<li><strong>Browser:</strong> Open DevTools Console (F12) → type JS directly</li>
+<li><strong>Code editor:</strong> VS Code with Live Server extension</li>
+<li><strong>Node.js</strong> (optional): Run JS outside the browser, on your computer</li>
+</ul>
+</div>
+
+<div class="concept">
+<h3><span class="badge">METHODS</span> 3 Ways to Embed JavaScript</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">1. Inline (avoid)</span></div>
+<div class="code-body"><span class="tag">&lt;button</span> <span class="attr">onclick</span>=<span class="str">"alert('Hi')"</span><span class="tag">&gt;</span>Click<span class="tag">&lt;/button&gt;</span></div></div>
+
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">2. Internal (in &lt;script&gt; tag)</span></div>
+<div class="code-body"><span class="tag">&lt;script&gt;</span>
+  console.log(<span class="str">'Hello'</span>);
+<span class="tag">&lt;/script&gt;</span></div></div>
+
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">3. External (BEST)</span></div>
+<div class="code-body"><span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="str">"app.js"</span> <span class="attr">defer</span><span class="tag">&gt;&lt;/script&gt;</span></div></div>
+<p style="margin-top:8px"><strong>Use <code>defer</code></strong> so the script loads in parallel but runs AFTER HTML is parsed. Or place <code>&lt;script&gt;</code> tags at the end of <code>&lt;body&gt;</code>.</p>
+</div>
+
+<h3 class="qa-header">Practice Q&amp;A — Introduction</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">What is JavaScript and what does it do?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> JavaScript is a programming language that runs in web browsers. It adds INTERACTIVITY and BEHAVIOR to web pages — handling clicks, validating forms, fetching data from APIs, animating elements. It's the third pillar of the web alongside HTML (structure) and CSS (style).</div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">Is JavaScript related to Java?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> NO. Despite the name, they're completely different languages. JavaScript was originally called "LiveScript" but renamed for marketing in 1995 when Java was popular. The official standardized name is <strong>ECMAScript</strong>.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">Name 3 ways to embed JavaScript in HTML.</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ol>
+<li><strong>Inline:</strong> <code>onclick="..."</code> attributes (avoid in production)</li>
+<li><strong>Internal:</strong> <code>&lt;script&gt;</code> tag in HTML</li>
+<li><strong>External:</strong> <code>&lt;script src="app.js" defer&gt;&lt;/script&gt;</code> ✅ Best</li>
+</ol></div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">Why use <code>defer</code> on script tags?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> <code>defer</code> tells the browser to:
+<ol>
+<li>Download the script in parallel with HTML parsing (no blocking)</li>
+<li>Execute it ONLY after HTML is fully parsed</li>
+</ol>
+This means your script can safely access DOM elements without checking if they exist yet.</div></details>
+
+</div>
+
+<div class="section">
+<h2 class="section-title">Module 2: JavaScript Basics</h2>
+<p class="section-desc">Syntax, data types, operators, control flow, and functions.</p>
+
+<div class="concept">
+<h3><span class="badge">SYNTAX</span> Variables</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Variable declarations</span></div>
+<div class="code-body"><span class="kw">let</span> <span class="var">name</span> = <span class="str">'Alice'</span>;     <span class="com">// can be reassigned</span>
+<span class="kw">const</span> <span class="var">PI</span> = <span class="num">3.14</span>;          <span class="com">// CANNOT be reassigned (modern best)</span>
+<span class="kw">var</span> <span class="var">old</span> = <span class="str">'avoid'</span>;       <span class="com">// old syntax — has scope issues</span></div></div>
+<div class="tip-box"><strong>Modern best practice:</strong> Use <code>const</code> by default. Use <code>let</code> only when you need to reassign. Avoid <code>var</code>.</div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">TYPES</span> Data Types</h3>
+<table class="cheat-table">
+<thead><tr><th>Type</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><strong>String</strong></td><td><code>'hello'</code> or <code>"hello"</code> or <code>`hello ${name}`</code></td></tr>
+<tr><td><strong>Number</strong></td><td><code>42</code>, <code>3.14</code>, <code>-7</code> (no separate int/float)</td></tr>
+<tr><td><strong>Boolean</strong></td><td><code>true</code>, <code>false</code></td></tr>
+<tr><td><strong>null</strong></td><td><code>null</code> — intentional "no value"</td></tr>
+<tr><td><strong>undefined</strong></td><td><code>undefined</code> — variable declared but not assigned</td></tr>
+<tr><td><strong>Object</strong></td><td><code>{ name: 'Alice', age: 30 }</code></td></tr>
+<tr><td><strong>Array</strong></td><td><code>[1, 2, 3]</code> (technically a special object)</td></tr>
+<tr><td><strong>Symbol</strong></td><td>Unique identifiers (advanced)</td></tr>
+<tr><td><strong>BigInt</strong></td><td>Large integers: <code>9999999999n</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="concept">
+<h3><span class="badge">OPS</span> Operators</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Operators</span></div>
+<div class="code-body"><span class="com">// Arithmetic</span>
+<span class="num">5</span> + <span class="num">3</span>;   <span class="com">// 8</span>
+<span class="num">10</span> % <span class="num">3</span>;  <span class="com">// 1 (modulo / remainder)</span>
+<span class="num">2</span> ** <span class="num">3</span>;  <span class="com">// 8 (exponent)</span>
+
+<span class="com">// Comparison — STRICT vs loose</span>
+<span class="num">5</span> == <span class="str">'5'</span>;   <span class="com">// true (loose, type coercion)</span>
+<span class="num">5</span> === <span class="str">'5'</span>;  <span class="com">// false (strict — must be same type)</span>
+
+<span class="com">// Logical</span>
+<span class="kw">true</span> && <span class="kw">false</span>;  <span class="com">// false (AND)</span>
+<span class="kw">true</span> || <span class="kw">false</span>;  <span class="com">// true (OR)</span>
+!<span class="kw">true</span>;          <span class="com">// false (NOT)</span>
+
+<span class="com">// Nullish coalescing — uses fallback only if null/undefined</span>
+<span class="kw">const</span> <span class="var">name</span> = <span class="var">user</span>.name ?? <span class="str">'Guest'</span>;</div></div>
+<div class="warn-box"><strong>⚠️ Always use <code>===</code></strong> instead of <code>==</code>. Loose <code>==</code> does type coercion which causes bugs (e.g., <code>0 == ''</code> is true, <code>null == undefined</code> is true).</div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">FLOW</span> Control Flow</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">if/else, switch, loops</span></div>
+<div class="code-body"><span class="com">// if / else if / else</span>
+<span class="kw">if</span> (<span class="var">age</span> &gt;= <span class="num">18</span>) {
+  console.log(<span class="str">'Adult'</span>);
+} <span class="kw">else if</span> (<span class="var">age</span> &gt;= <span class="num">13</span>) {
+  console.log(<span class="str">'Teen'</span>);
+} <span class="kw">else</span> {
+  console.log(<span class="str">'Child'</span>);
+}
+
+<span class="com">// Ternary (shorthand if/else)</span>
+<span class="kw">const</span> <span class="var">status</span> = <span class="var">age</span> &gt;= <span class="num">18</span> ? <span class="str">'Adult'</span> : <span class="str">'Minor'</span>;
+
+<span class="com">// switch</span>
+<span class="kw">switch</span> (<span class="var">day</span>) {
+  <span class="kw">case</span> <span class="str">'Mon'</span>: console.log(<span class="str">'Monday'</span>); <span class="kw">break</span>;
+  <span class="kw">case</span> <span class="str">'Tue'</span>: console.log(<span class="str">'Tuesday'</span>); <span class="kw">break</span>;
+  <span class="kw">default</span>: console.log(<span class="str">'Other'</span>);
+}
+
+<span class="com">// for loop</span>
+<span class="kw">for</span> (<span class="kw">let</span> <span class="var">i</span> = <span class="num">0</span>; <span class="var">i</span> &lt; <span class="num">5</span>; <span class="var">i</span>++) {
+  console.log(<span class="var">i</span>);
+}
+
+<span class="com">// for...of (arrays)</span>
+<span class="kw">for</span> (<span class="kw">const</span> <span class="var">item</span> <span class="kw">of</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]) { console.log(<span class="var">item</span>); }
+
+<span class="com">// for...in (object keys)</span>
+<span class="kw">for</span> (<span class="kw">const</span> <span class="var">key</span> <span class="kw">in</span> <span class="var">obj</span>) { console.log(<span class="var">key</span>, <span class="var">obj</span>[<span class="var">key</span>]); }
+
+<span class="com">// while</span>
+<span class="kw">while</span> (<span class="var">x</span> &lt; <span class="num">10</span>) { <span class="var">x</span>++; }</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">FUNC</span> Functions</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">3 ways to declare</span></div>
+<div class="code-body"><span class="com">// 1. Function declaration (hoisted)</span>
+<span class="kw">function</span> <span class="fn">greet</span>(<span class="var">name</span>) {
+  <span class="kw">return</span> <span class="str">`Hello, ${name}`</span>;
+}
+
+<span class="com">// 2. Function expression</span>
+<span class="kw">const</span> <span class="var">greet</span> = <span class="kw">function</span>(<span class="var">name</span>) {
+  <span class="kw">return</span> <span class="str">`Hello, ${name}`</span>;
+};
+
+<span class="com">// 3. Arrow function (modern, concise)</span>
+<span class="kw">const</span> <span class="var">greet</span> = (<span class="var">name</span>) =&gt; <span class="str">`Hello, ${name}`</span>;
+<span class="kw">const</span> <span class="var">add</span> = (<span class="var">a</span>, <span class="var">b</span>) =&gt; <span class="var">a</span> + <span class="var">b</span>;
+
+<span class="com">// Default parameter</span>
+<span class="kw">function</span> <span class="fn">greet</span>(<span class="var">name</span> = <span class="str">'Stranger'</span>) {
+  <span class="kw">return</span> <span class="str">`Hi, ${name}`</span>;
+}</div></div>
+</div>
+
+<h3 class="qa-header">Practice Q&amp;A — Basics</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">What's the difference between <code>let</code>, <code>const</code>, and <code>var</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>const</code> — block-scoped, CANNOT be reassigned. ✅ Use by default.</li>
+<li><code>let</code> — block-scoped, CAN be reassigned. Use when you need to reassign.</li>
+<li><code>var</code> — function-scoped (older), can be reassigned. ❌ Avoid in modern code.</li>
+</ul>
+Block scope means a variable only exists within <code>{ }</code> braces. <code>var</code> ignores blocks, causing bugs.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">What's the difference between <code>==</code> and <code>===</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>==</code> — loose equality. Performs TYPE COERCION (converts types). <code>5 == '5'</code> is <strong>true</strong>.</li>
+<li><code>===</code> — strict equality. Both VALUE and TYPE must match. <code>5 === '5'</code> is <strong>false</strong>.</li>
+</ul>
+<strong>Always use <code>===</code></strong> to avoid bugs. Same for <code>!==</code> instead of <code>!=</code>.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">List the 7 primitive data types in JavaScript.</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ol>
+<li><strong>String</strong> — <code>'hello'</code></li>
+<li><strong>Number</strong> — <code>42</code>, <code>3.14</code></li>
+<li><strong>Boolean</strong> — <code>true</code>/<code>false</code></li>
+<li><strong>null</strong> — intentional empty</li>
+<li><strong>undefined</strong> — not assigned</li>
+<li><strong>Symbol</strong> — unique identifiers</li>
+<li><strong>BigInt</strong> — huge integers</li>
+</ol>
+Plus <strong>Object</strong> (which includes Array, Function, etc.) — but that's not a primitive.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">Difference between <code>null</code> and <code>undefined</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>undefined</code> — variable declared but not assigned. JavaScript sets this automatically.</li>
+<li><code>null</code> — explicitly assigned by developer to mean "intentionally empty/no value".</li>
+</ul>
+<pre>let x;          // x is undefined
+let y = null;   // y is null (intentional)</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q5</span><span class="qtext">Write a function that adds two numbers, using arrow syntax.</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>const add = (a, b) =&gt; a + b;
+
+// Or with explicit return:
+const add = (a, b) =&gt; {
+  return a + b;
+};</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q6</span><span class="qtext">What does the modulo operator <code>%</code> do?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Returns the REMAINDER after division.
+<pre>10 % 3   // 1 (10 ÷ 3 = 3 remainder 1)
+8 % 2    // 0 (even number — useful for parity check!)
+17 % 5   // 2</pre>
+Common use: check if a number is even with <code>n % 2 === 0</code>.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q7</span><span class="qtext">What's a template literal?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> A string syntax using BACKTICKS that allows variable interpolation and multi-line strings:
+<pre>const name = 'Alice';
+const age = 30;
+
+// Old way (concatenation)
+const msg1 = 'Hi ' + name + ', age ' + age;
+
+// Template literal (modern)
+const msg2 = `Hi ${name}, age ${age}`;
+
+// Multi-line works naturally
+const html = `&lt;div&gt;
+  Content
+&lt;/div&gt;`;</pre></div></details>
+
+</div>
+
+<div class="section">
+<h2 class="section-title">Module 3: DOM Manipulation &amp; Events</h2>
+<p class="section-desc">How JavaScript reads and modifies HTML — the heart of interactive web pages.</p>
+
+<div class="concept">
+<h3><span class="badge">CONCEPT</span> What is the DOM?</h3>
+<p><strong>DOM (Document Object Model)</strong> represents the page as a TREE of nodes. JavaScript can read and modify this tree to change the page dynamically.</p>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">DOM tree</span></div>
+<div class="code-body">document
+  └── html
+      ├── head
+      │   └── title
+      └── body
+          ├── h1
+          └── p
+              └── "Hello"</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">SELECT</span> Selecting Elements</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Selection methods</span></div>
+<div class="code-body"><span class="com">// By id (returns ONE element or null)</span>
+<span class="kw">const</span> <span class="var">header</span> = document.getElementById(<span class="str">'main-header'</span>);
+
+<span class="com">// querySelector (returns FIRST match — uses CSS selectors)</span>
+<span class="kw">const</span> <span class="var">btn</span> = document.querySelector(<span class="str">'.btn'</span>);
+<span class="kw">const</span> <span class="var">first</span> = document.querySelector(<span class="str">'#nav li:first-child'</span>);
+
+<span class="com">// querySelectorAll (returns ALL matches as a NodeList)</span>
+<span class="kw">const</span> <span class="var">items</span> = document.querySelectorAll(<span class="str">'.list-item'</span>);
+<span class="var">items</span>.forEach(<span class="var">item</span> =&gt; console.log(<span class="var">item</span>));
+
+<span class="com">// Older methods (still work)</span>
+document.getElementsByClassName(<span class="str">'btn'</span>);
+document.getElementsByTagName(<span class="str">'p'</span>);</div></div>
+<div class="tip-box"><strong>Modern recommendation:</strong> Use <code>querySelector</code> and <code>querySelectorAll</code> — they support full CSS selector syntax and are more flexible.</div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">MODIFY</span> Manipulating Elements</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Reading &amp; changing</span></div>
+<div class="code-body"><span class="com">// TEXT (safe — no HTML parsing)</span>
+<span class="var">el</span>.textContent = <span class="str">'New text'</span>;
+
+<span class="com">// HTML (parses tags — risky with user input!)</span>
+<span class="var">el</span>.innerHTML = <span class="str">'&lt;b&gt;Bold&lt;/b&gt;'</span>;
+
+<span class="com">// ATTRIBUTES</span>
+<span class="var">img</span>.src = <span class="str">'pic.jpg'</span>;
+<span class="var">link</span>.href = <span class="str">'/about'</span>;
+<span class="var">el</span>.setAttribute(<span class="str">'data-id'</span>, <span class="str">'42'</span>);
+<span class="var">el</span>.getAttribute(<span class="str">'href'</span>);
+
+<span class="com">// CSS CLASSES</span>
+<span class="var">el</span>.classList.add(<span class="str">'active'</span>);
+<span class="var">el</span>.classList.remove(<span class="str">'hidden'</span>);
+<span class="var">el</span>.classList.toggle(<span class="str">'open'</span>);
+<span class="var">el</span>.classList.contains(<span class="str">'active'</span>); <span class="com">// returns boolean</span>
+
+<span class="com">// INLINE STYLE</span>
+<span class="var">el</span>.style.color = <span class="str">'red'</span>;
+<span class="var">el</span>.style.backgroundColor = <span class="str">'#fff'</span>; <span class="com">// camelCase!</span></div></div>
+<div class="warn-box"><strong>⚠️ <code>innerHTML</code> with user input is dangerous (XSS attack risk).</strong> Always use <code>textContent</code> for user-provided strings unless you've sanitized them.</div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">CREATE</span> Creating &amp; Removing Elements</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">DOM modification</span></div>
+<div class="code-body"><span class="com">// Create</span>
+<span class="kw">const</span> <span class="var">div</span> = document.createElement(<span class="str">'div'</span>);
+<span class="var">div</span>.textContent = <span class="str">'Hello'</span>;
+<span class="var">div</span>.classList.add(<span class="str">'card'</span>);
+
+<span class="com">// Append (add as last child)</span>
+document.body.appendChild(<span class="var">div</span>);
+<span class="var">parent</span>.append(<span class="var">div</span>); <span class="com">// modern, can take strings too</span>
+
+<span class="com">// Insert before another element</span>
+<span class="var">parent</span>.insertBefore(<span class="var">newEl</span>, <span class="var">existingEl</span>);
+
+<span class="com">// Remove</span>
+<span class="var">el</span>.remove();</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">EVENTS</span> Event Handling</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">addEventListener</span></div>
+<div class="code-body"><span class="com">// Modern way (best)</span>
+<span class="var">btn</span>.addEventListener(<span class="str">'click'</span>, <span class="kw">function</span>(<span class="var">event</span>) {
+  console.log(<span class="str">'Clicked!'</span>);
+  <span class="var">event</span>.preventDefault(); <span class="com">// stop default action</span>
+});
+
+<span class="com">// With arrow function</span>
+<span class="var">btn</span>.addEventListener(<span class="str">'click'</span>, (<span class="var">e</span>) =&gt; {
+  console.log(<span class="var">e</span>.target); <span class="com">// element that was clicked</span>
+});
+
+<span class="com">// Remove listener (must be a NAMED function)</span>
+<span class="kw">function</span> <span class="fn">handleClick</span>() { ... }
+<span class="var">btn</span>.addEventListener(<span class="str">'click'</span>, <span class="var">handleClick</span>);
+<span class="var">btn</span>.removeEventListener(<span class="str">'click'</span>, <span class="var">handleClick</span>);</div></div>
+</div>
+
+<h3 class="qa-header">Practice Q&amp;A — DOM &amp; Events</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">What is the DOM?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> <strong>Document Object Model</strong> — a tree representation of the HTML page. Each HTML tag becomes a node in the tree. JavaScript reads and modifies this tree to change the page dynamically. The DOM is created by the browser when the page loads.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">What's the difference between <code>getElementById</code> and <code>querySelector</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>getElementById('foo')</code> — only finds by ID. Faster but limited.</li>
+<li><code>querySelector('.foo')</code> — uses ANY CSS selector. More flexible. Returns first match.</li>
+</ul>
+<code>querySelector('#foo')</code> is equivalent to <code>getElementById('foo')</code>. Modern code generally uses <code>querySelector</code> for consistency.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">Difference between <code>textContent</code> and <code>innerHTML</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>textContent</code> — treats input as plain text. <code>'&lt;b&gt;Hi&lt;/b&gt;'</code> shows as literal text.</li>
+<li><code>innerHTML</code> — parses input as HTML. <code>'&lt;b&gt;Hi&lt;/b&gt;'</code> shows as bold "Hi".</li>
+</ul>
+⚠️ Using <code>innerHTML</code> with user input creates XSS vulnerabilities. Use <code>textContent</code> for safety unless you've sanitized the input.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">How do you add a CSS class to an element?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>el.classList.add('active');           // add
+el.classList.remove('hidden');        // remove
+el.classList.toggle('open');          // toggle on/off
+el.classList.contains('active');      // check if has class
+el.classList.replace('old', 'new');   // swap</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q5</span><span class="qtext">Why use <code>addEventListener</code> instead of <code>onclick</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ol>
+<li><strong>Multiple handlers</strong> — addEventListener allows MANY listeners per event. <code>onclick</code> only stores ONE.</li>
+<li><strong>Removable</strong> — <code>removeEventListener</code> can detach later.</li>
+<li><strong>Separation of concerns</strong> — keeps HTML clean.</li>
+<li><strong>Capture phase</strong> — third argument controls event flow direction.</li>
+</ol></div></details>
+
+<details class="qa"><summary><span class="qnum">Q6</span><span class="qtext">What does <code>event.preventDefault()</code> do?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Stops the browser's DEFAULT action for that event.<br><br>Examples:
+<ul>
+<li>On a form submit: prevents the page from reloading</li>
+<li>On a link click: prevents navigating to the URL</li>
+<li>On a checkbox: prevents toggling</li>
+</ul>
+<pre>form.addEventListener('submit', (e) =&gt; {
+  e.preventDefault();  // stop page reload
+  // handle submission with JS
+});</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q7</span><span class="qtext">How do you create a new <code>&lt;div&gt;</code> and add it to the body?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>const div = document.createElement('div');
+div.textContent = 'Hello';
+div.classList.add('my-class');
+document.body.appendChild(div);</pre>
+Steps: create the element, set its content/attributes/classes, then append it to a parent in the DOM.</div></details>
+
+</div>
+
+<div class="section">
+<h2 class="section-title">Module 4: Objects, Arrays &amp; JSON</h2>
+<p class="section-desc">JavaScript's most-used data structures.</p>
+
+<div class="concept">
+<h3><span class="badge">OBJECTS</span> Working with Objects</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Objects</span></div>
+<div class="code-body"><span class="com">// Create</span>
+<span class="kw">const</span> <span class="var">user</span> = {
+  name: <span class="str">'Alice'</span>,
+  age: <span class="num">30</span>,
+  greet() { console.log(<span class="str">`Hi, ${this.name}`</span>); } <span class="com">// method</span>
+};
+
+<span class="com">// Access properties</span>
+<span class="var">user</span>.name;            <span class="com">// "Alice" (dot notation)</span>
+<span class="var">user</span>[<span class="str">'name'</span>];         <span class="com">// "Alice" (bracket notation)</span>
+
+<span class="com">// Update / add properties</span>
+<span class="var">user</span>.age = <span class="num">31</span>;
+<span class="var">user</span>.email = <span class="str">'a@x.com'</span>; <span class="com">// add new property</span>
+
+<span class="com">// Delete a property</span>
+<span class="kw">delete</span> <span class="var">user</span>.email;
+
+<span class="com">// Loop through keys</span>
+<span class="kw">for</span> (<span class="kw">const</span> <span class="var">key</span> <span class="kw">in</span> <span class="var">user</span>) {
+  console.log(<span class="var">key</span>, <span class="var">user</span>[<span class="var">key</span>]);
+}
+
+<span class="com">// Modern methods</span>
+Object.keys(<span class="var">user</span>);     <span class="com">// ['name', 'age', 'greet']</span>
+Object.values(<span class="var">user</span>);   <span class="com">// ['Alice', 30, function]</span>
+Object.entries(<span class="var">user</span>);  <span class="com">// [['name','Alice'], ['age',30], ...]</span>
+
+<span class="com">// Destructuring</span>
+<span class="kw">const</span> { name, age } = <span class="var">user</span>;
+<span class="com">// Now: name === 'Alice', age === 30</span>
+
+<span class="com">// Spread operator (copy / merge)</span>
+<span class="kw">const</span> <span class="var">copy</span> = { ...<span class="var">user</span> };
+<span class="kw">const</span> <span class="var">updated</span> = { ...<span class="var">user</span>, age: <span class="num">31</span> };</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">ARRAYS</span> Working with Arrays</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">Arrays</span></div>
+<div class="code-body"><span class="com">// Create</span>
+<span class="kw">const</span> <span class="var">fruits</span> = [<span class="str">'apple'</span>, <span class="str">'banana'</span>, <span class="str">'cherry'</span>];
+
+<span class="com">// Access (zero-indexed)</span>
+<span class="var">fruits</span>[<span class="num">0</span>];          <span class="com">// 'apple'</span>
+<span class="var">fruits</span>.length;       <span class="com">// 3</span>
+
+<span class="com">// Add / remove</span>
+<span class="var">fruits</span>.push(<span class="str">'date'</span>);     <span class="com">// add to END</span>
+<span class="var">fruits</span>.pop();           <span class="com">// remove from END</span>
+<span class="var">fruits</span>.unshift(<span class="str">'aprcot'</span>); <span class="com">// add to START</span>
+<span class="var">fruits</span>.shift();         <span class="com">// remove from START</span>
+
+<span class="com">// Find / search</span>
+<span class="var">fruits</span>.indexOf(<span class="str">'banana'</span>);   <span class="com">// 1</span>
+<span class="var">fruits</span>.includes(<span class="str">'apple'</span>);    <span class="com">// true</span>
+<span class="var">fruits</span>.find(<span class="var">f</span> =&gt; <span class="var">f</span>.length &gt; <span class="num">5</span>); <span class="com">// 'banana'</span>
+
+<span class="com">// Iteration methods (modern, very common)</span>
+<span class="var">fruits</span>.forEach(<span class="var">f</span> =&gt; console.log(<span class="var">f</span>));
+
+<span class="com">// map — transform each item</span>
+<span class="kw">const</span> <span class="var">upper</span> = <span class="var">fruits</span>.map(<span class="var">f</span> =&gt; <span class="var">f</span>.toUpperCase());
+
+<span class="com">// filter — keep matching items</span>
+<span class="kw">const</span> <span class="var">long</span> = <span class="var">fruits</span>.filter(<span class="var">f</span> =&gt; <span class="var">f</span>.length &gt; <span class="num">5</span>);
+
+<span class="com">// reduce — combine into single value</span>
+<span class="kw">const</span> <span class="var">total</span> = [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>].reduce((<span class="var">sum</span>, <span class="var">n</span>) =&gt; <span class="var">sum</span> + <span class="var">n</span>, <span class="num">0</span>); <span class="com">// 6</span>
+
+<span class="com">// sort, reverse, slice, splice...</span>
+<span class="var">fruits</span>.sort();
+<span class="var">fruits</span>.slice(<span class="num">1</span>, <span class="num">3</span>);   <span class="com">// non-destructive copy</span>
+<span class="var">fruits</span>.splice(<span class="num">1</span>, <span class="num">1</span>);  <span class="com">// destructive remove</span></div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">JSON</span> JSON Basics</h3>
+<p><strong>JSON (JavaScript Object Notation)</strong> is a text format for data exchange. Looks like JS objects but with strict rules:</p>
+<ul>
+<li>Keys MUST be in double quotes</li>
+<li>Strings must use double quotes (no single)</li>
+<li>No comments, no functions, no <code>undefined</code></li>
+<li>Trailing commas are forbidden</li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">JSON example</span></div>
+<div class="code-body"><span class="com">// JSON string (note: keys in double quotes!)</span>
+<span class="kw">const</span> <span class="var">jsonStr</span> = <span class="str">'{"name": "Alice", "age": 30, "active": true}'</span>;
+
+<span class="com">// Parse JSON → JS object</span>
+<span class="kw">const</span> <span class="var">obj</span> = JSON.parse(<span class="var">jsonStr</span>);
+console.log(<span class="var">obj</span>.name); <span class="com">// "Alice"</span>
+
+<span class="com">// Stringify JS object → JSON</span>
+<span class="kw">const</span> <span class="var">str</span> = JSON.stringify(<span class="var">obj</span>);
+console.log(<span class="var">str</span>); <span class="com">// '{"name":"Alice","age":30,...}'</span>
+
+<span class="com">// Pretty-print with indent</span>
+JSON.stringify(<span class="var">obj</span>, <span class="kw">null</span>, <span class="num">2</span>);</div></div>
+</div>
+
+<h3 class="qa-header">Practice Q&amp;A — Objects, Arrays &amp; JSON</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">How do you access object properties? Two ways.</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>const user = { name: 'Alice', age: 30 };
+
+// 1. Dot notation (preferred when possible)
+user.name;     // "Alice"
+
+// 2. Bracket notation (needed for dynamic keys or special chars)
+user['name'];  // "Alice"
+const key = 'name';
+user[key];     // "Alice"</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">What does the spread operator <code>...</code> do?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Spreads (expands) array/object contents.
+<pre>// Copy array
+const copy = [...arr];
+
+// Merge arrays
+const combined = [...arr1, ...arr2];
+
+// Copy object
+const newUser = { ...user };
+
+// Update object property (without mutating original)
+const older = { ...user, age: user.age + 1 };
+
+// Function arguments
+Math.max(...[1, 2, 3]);  // 3</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">Difference between <code>map</code>, <code>filter</code>, and <code>forEach</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>forEach</code> — runs a function for each item. Returns NOTHING (undefined). Just for side effects.</li>
+<li><code>map</code> — TRANSFORMS each item, returns a NEW array of same length.</li>
+<li><code>filter</code> — KEEPS items where callback returns true. Returns shorter array.</li>
+</ul>
+<pre>[1,2,3].forEach(n =&gt; console.log(n));     // logs 1, 2, 3
+[1,2,3].map(n =&gt; n * 2);                  // [2, 4, 6]
+[1,2,3].filter(n =&gt; n &gt; 1);               // [2, 3]</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">What's the difference between <code>push</code>/<code>pop</code> and <code>shift</code>/<code>unshift</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>push(item)</code> — adds to END</li>
+<li><code>pop()</code> — removes from END</li>
+<li><code>shift()</code> — removes from START</li>
+<li><code>unshift(item)</code> — adds to START</li>
+</ul>
+<pre>const arr = [2, 3];
+arr.push(4);     // [2, 3, 4]
+arr.unshift(1);  // [1, 2, 3, 4]
+arr.pop();       // [1, 2, 3]
+arr.shift();     // [2, 3]</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q5</span><span class="qtext">What does <code>JSON.parse()</code> do vs <code>JSON.stringify()</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>JSON.parse(str)</code> — converts a JSON STRING into a JavaScript OBJECT.</li>
+<li><code>JSON.stringify(obj)</code> — converts a JavaScript OBJECT into a JSON STRING.</li>
+</ul>
+<pre>const str = '{"name":"Alice"}';
+const obj = JSON.parse(str);
+console.log(obj.name);  // "Alice"
+
+const back = JSON.stringify(obj);
+console.log(back);  // '{"name":"Alice"}'</pre>
+Use <code>parse</code> when receiving data from APIs or localStorage. Use <code>stringify</code> when sending data or saving.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q6</span><span class="qtext">What's destructuring? Show an example.</span></summary>
+<div class="qa-a"><strong>Answer:</strong> A shortcut to extract values from objects/arrays into variables:
+<pre>// Object destructuring
+const user = { name: 'Alice', age: 30 };
+const { name, age } = user;
+// name === 'Alice', age === 30
+
+// With renaming
+const { name: userName } = user;
+// userName === 'Alice'
+
+// Array destructuring
+const [first, second] = [1, 2, 3];
+// first === 1, second === 2
+
+// In function parameters
+function greet({ name }) {
+  console.log(`Hi ${name}`);
+}
+greet(user);</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q7</span><span class="qtext">How do you check if an array contains a value?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>const arr = ['apple', 'banana'];
+
+// Modern (preferred)
+arr.includes('apple');  // true
+
+// Older
+arr.indexOf('apple') !== -1;  // true
+
+// For complex objects, use find
+arr.find(x =&gt; x.id === 5);  // returns matching object or undefined</pre></div></details>
+
+</div>
+
+<div class="section">
+<h2 class="section-title">Module 5: Advanced JavaScript</h2>
+<p class="section-desc">Async, error handling, and ES6+ features.</p>
+
+<div class="concept">
+<h3><span class="badge">ASYNC</span> Asynchronous JavaScript</h3>
+<p>JavaScript runs single-threaded but can handle async tasks (network requests, timers) without blocking. Three approaches:</p>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">1. Callbacks (old)</span></div>
+<div class="code-body"><span class="fn">setTimeout</span>(() =&gt; {
+  console.log(<span class="str">'After 1 second'</span>);
+}, <span class="num">1000</span>);
+
+<span class="com">// "Callback hell" - nested callbacks</span>
+<span class="fn">getData</span>((<span class="var">err</span>, <span class="var">data</span>) =&gt; {
+  <span class="fn">processData</span>(<span class="var">data</span>, (<span class="var">err</span>, <span class="var">result</span>) =&gt; {
+    <span class="fn">saveData</span>(<span class="var">result</span>, ...);
+  });
+});</div></div>
+
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">2. Promises (better)</span></div>
+<div class="code-body"><span class="fn">fetch</span>(<span class="str">'/api/users'</span>)
+  .then(<span class="var">response</span> =&gt; <span class="var">response</span>.json())
+  .then(<span class="var">data</span> =&gt; console.log(<span class="var">data</span>))
+  .catch(<span class="var">err</span> =&gt; console.error(<span class="var">err</span>))
+  .finally(() =&gt; console.log(<span class="str">'Done'</span>));</div></div>
+
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">3. async/await (best — modern)</span></div>
+<div class="code-body"><span class="kw">async function</span> <span class="fn">loadUsers</span>() {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> <span class="var">response</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/users'</span>);
+    <span class="kw">const</span> <span class="var">data</span> = <span class="kw">await</span> <span class="var">response</span>.json();
+    console.log(<span class="var">data</span>);
+  } <span class="kw">catch</span> (<span class="var">err</span>) {
+    console.error(<span class="var">err</span>);
+  }
+}
+
+<span class="fn">loadUsers</span>();</div></div>
+<div class="tip-box"><strong>async/await</strong> is just syntactic sugar over Promises — but reads like normal sync code. Modern code uses this almost exclusively.</div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">ERRORS</span> Error Handling</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">try / catch / finally</span></div>
+<div class="code-body"><span class="kw">try</span> {
+  <span class="kw">const</span> <span class="var">data</span> = JSON.parse(<span class="var">badInput</span>); <span class="com">// might throw</span>
+  console.log(<span class="var">data</span>);
+} <span class="kw">catch</span> (<span class="var">error</span>) {
+  console.error(<span class="str">'Failed:'</span>, <span class="var">error</span>.message);
+} <span class="kw">finally</span> {
+  console.log(<span class="str">'Always runs'</span>);
+}
+
+<span class="com">// Throw your own errors</span>
+<span class="kw">function</span> <span class="fn">divide</span>(<span class="var">a</span>, <span class="var">b</span>) {
+  <span class="kw">if</span> (<span class="var">b</span> === <span class="num">0</span>) {
+    <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">'Cannot divide by zero'</span>);
+  }
+  <span class="kw">return</span> <span class="var">a</span> / <span class="var">b</span>;
+}</div></div>
+</div>
+
+<div class="concept">
+<h3><span class="badge">ES6+</span> Key ES6 Features</h3>
+<table class="cheat-table">
+<thead><tr><th>Feature</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><strong>let / const</strong></td><td>Block-scoped variables</td></tr>
+<tr><td><strong>Arrow functions</strong></td><td><code>(a, b) =&gt; a + b</code></td></tr>
+<tr><td><strong>Template literals</strong></td><td><code>`Hello ${name}`</code></td></tr>
+<tr><td><strong>Destructuring</strong></td><td><code>const { a, b } = obj;</code></td></tr>
+<tr><td><strong>Spread / Rest</strong></td><td><code>[...arr]</code> / <code>function(...args)</code></td></tr>
+<tr><td><strong>Default parameters</strong></td><td><code>function(name = 'Guest')</code></td></tr>
+<tr><td><strong>Classes</strong></td><td><code>class User { ... }</code></td></tr>
+<tr><td><strong>Modules</strong></td><td><code>import / export</code></td></tr>
+<tr><td><strong>Promises</strong></td><td><code>new Promise((resolve, reject) =&gt; ...)</code></td></tr>
+<tr><td><strong>Map / Set</strong></td><td>Modern alternatives to objects/arrays</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="concept">
+<h3><span class="badge">ES6</span> Modules: import / export</h3>
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">math.js</span></div>
+<div class="code-body"><span class="kw">export const</span> <span class="var">PI</span> = <span class="num">3.14</span>;
+
+<span class="kw">export function</span> <span class="fn">add</span>(<span class="var">a</span>, <span class="var">b</span>) {
+  <span class="kw">return</span> <span class="var">a</span> + <span class="var">b</span>;
+}
+
+<span class="kw">export default function</span> <span class="fn">multiply</span>(<span class="var">a</span>, <span class="var">b</span>) {
+  <span class="kw">return</span> <span class="var">a</span> * <span class="var">b</span>;
+}</div></div>
+
+<div class="code-block"><div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title">app.js</span></div>
+<div class="code-body"><span class="kw">import</span> <span class="var">multiply</span>, { <span class="var">PI</span>, <span class="var">add</span> } <span class="kw">from</span> <span class="str">'./math.js'</span>;
+
+console.log(<span class="fn">add</span>(<span class="num">2</span>, <span class="num">3</span>));      <span class="com">// 5</span>
+console.log(<span class="fn">multiply</span>(<span class="num">2</span>, <span class="num">3</span>)); <span class="com">// 6</span></div></div>
+</div>
+
+<h3 class="qa-header">Practice Q&amp;A — Advanced</h3>
+
+<details class="qa"><summary><span class="qnum">Q1</span><span class="qtext">What is a Promise?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> An object representing the eventual completion (or failure) of an asynchronous operation. Has 3 states:
+<ul>
+<li><strong>Pending</strong> — initial state, not yet completed</li>
+<li><strong>Fulfilled</strong> — completed successfully (use <code>.then()</code>)</li>
+<li><strong>Rejected</strong> — failed (use <code>.catch()</code>)</li>
+</ul>
+<pre>fetch('/api')
+  .then(res =&gt; res.json())
+  .then(data =&gt; console.log(data))
+  .catch(err =&gt; console.error(err));</pre></div></details>
+
+<details class="qa"><summary><span class="qnum">Q2</span><span class="qtext">What's the difference between <code>async/await</code> and <code>.then()</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> Both handle Promises but differ in syntax:
+<ul>
+<li><code>.then()</code> — chained methods. Functional style.</li>
+<li><code>async/await</code> — looks like synchronous code. Easier to read for sequential operations.</li>
+</ul>
+<pre>// .then chain
+fetch('/api').then(r =&gt; r.json()).then(data =&gt; ...)
+
+// async/await (same thing, cleaner)
+async function load() {
+  const r = await fetch('/api');
+  const data = await r.json();
+}</pre>
+Note: <code>await</code> only works inside <code>async</code> functions.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q3</span><span class="qtext">Why use <code>try/catch</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> To handle errors gracefully without crashing your code.
+<pre>try {
+  // code that might fail
+  const data = JSON.parse(badInput);
+} catch (error) {
+  // runs only if error thrown
+  console.error('Parse failed:', error.message);
+} finally {
+  // always runs (cleanup, e.g., close file)
+}</pre>
+Without try/catch, a thrown error stops execution and breaks your app.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q4</span><span class="qtext">List 5 ES6 features.</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ol>
+<li><strong>let / const</strong> — block-scoped variables</li>
+<li><strong>Arrow functions</strong> — <code>(a, b) =&gt; a + b</code></li>
+<li><strong>Template literals</strong> — <code>`Hello ${name}`</code></li>
+<li><strong>Destructuring</strong> — <code>const { x, y } = obj</code></li>
+<li><strong>Spread/Rest operators</strong> — <code>...arr</code></li>
+<li><strong>Default parameters</strong>, <strong>classes</strong>, <strong>modules</strong>, <strong>Promises</strong></li>
+</ol></div></details>
+
+<details class="qa"><summary><span class="qnum">Q5</span><span class="qtext">What's the difference between <code>throw</code> and <code>return</code>?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<ul>
+<li><code>return value</code> — exits function NORMALLY with that value.</li>
+<li><code>throw error</code> — exits function with an ERROR. Caller's code stops unless they have <code>try/catch</code>.</li>
+</ul>
+Use <code>throw</code> for error conditions that the caller must handle. Use <code>return null</code> for "absence" cases that aren't errors.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q6</span><span class="qtext">How do you import a function from another module?</span></summary>
+<div class="qa-a"><strong>Answer:</strong>
+<pre>// math.js — exports
+export function add(a, b) { return a + b; }
+export const PI = 3.14;
+export default function multiply(a, b) { return a*b; }
+
+// app.js — imports
+import multiply, { add, PI } from './math.js';
+//      ↑ default        ↑ named imports
+
+// Or import everything
+import * as math from './math.js';
+math.add(2, 3);</pre>
+Note: HTML must use <code>&lt;script type="module"&gt;</code> for imports to work.</div></details>
+
+<details class="qa"><summary><span class="qnum">Q7</span><span class="qtext">What's a callback function?</span></summary>
+<div class="qa-a"><strong>Answer:</strong> A function passed AS AN ARGUMENT to another function, called later when something happens.
+<pre>// setTimeout takes a CALLBACK
+setTimeout(function() {
+  console.log('Runs after 1 second');
+}, 1000);
+
+// addEventListener takes a callback
+btn.addEventListener('click', () =&gt; {
+  console.log('Clicked!');
+});</pre>
+Callbacks were the original async pattern, now mostly replaced by Promises and async/await.</div></details>
+
+</div>
+
+<div class="section">
+<h2 class="section-title">JavaScript — Multiple Choice Quiz</h2>
+<p class="section-desc">20 questions covering all 5 modules.</p>
+<div class="score-bar">Score: <span id="sv">0</span> / <span id="tv">0</span></div>
+<div id="quiz"></div>
+</div>
+
+</div>
+<script>
+const Q=[{q:"Which is the modern, recommended way to declare a variable that won't be reassigned?",o:['var x = 5','let x = 5','const x = 5','int x = 5'],c:2,e:"const for values that won't change. let for reassignable. var is older with scoping issues."},
+{q:"What does <code>5 === '5'</code> evaluate to?",o:['true','false','TypeError','undefined'],c:1,e:"=== is STRICT equality — checks both value AND type. Number 5 vs string '5' have different types, so false. With == (loose), it would be true due to type coercion."},
+{q:'Which is NOT a primitive type in JavaScript?',o:['string','number','array','boolean'],c:2,e:'Array is technically an OBJECT. The 7 primitives are: string, number, boolean, null, undefined, symbol, bigint.'},
+{q:"What's the difference between <code>null</code> and <code>undefined</code>?",o:['No difference','undefined is automatic; null is explicitly assigned by developer','null is older syntax','undefined throws errors'],c:1,e:"undefined is JS default (uninitialized variable). null is intentional assignment meaning 'no value here'."},
+{q:'Which method selects the FIRST element matching a CSS selector?',o:['getElementById','querySelector','getElementsByClass','querySelectorAll'],c:1,e:'querySelector returns first match using ANY CSS selector. querySelectorAll returns all matches as a NodeList.'},
+{q:"What does <code>el.classList.toggle('active')</code> do?",o:['Always adds the class','Always removes the class','Adds if absent, removes if present','Throws an error'],c:2,e:"toggle adds the class if it's not there, removes it if it is. Common for show/hide patterns."},
+{q:'Why use <code>textContent</code> instead of <code>innerHTML</code> for user input?',o:["It's faster",'Prevents XSS attacks (no HTML parsing)',"It's the only one that works",'No reason'],c:1,e:'innerHTML parses HTML — if user input contains &lt;script&gt; tags, they execute. textContent treats input as plain text, preventing XSS attacks.'},
+{q:'What does <code>event.preventDefault()</code> do?',o:['Removes event listener',"Stops the browser's default action",'Cancels the event','Logs the event'],c:1,e:'Prevents default behavior — like stopping a form from reloading the page on submit, or stopping a link from navigating.'},
+{q:'Which array method TRANSFORMS each item and returns a new array?',o:['forEach','filter','map','find'],c:2,e:'map transforms each item: [1,2,3].map(x =&gt; x*2) = [2,4,6]. filter keeps matching items. forEach returns nothing.'},
+{q:'What does <code>const { name } = user</code> do?',o:['Creates a function','Destructures user.name into a variable named name','Throws an error','Sets user.name to undefined'],c:1,e:"Object destructuring — creates a const variable 'name' set to user.name. Equivalent to: const name = user.name;"},
+{q:'Which spreads array elements into a new array?',o:['[arr]','[...arr]','[arr...]','arr.spread()'],c:1,e:'...arr is the spread operator. [...arr] copies the array. [...arr1, ...arr2] merges arrays.'},
+{q:'What does <code>JSON.parse(\'{"a":1}\')</code> return?',o:['The string \'{"a":1}\'','An object {a: 1}','An array [1]','An error'],c:1,e:'JSON.parse converts a JSON string into a JavaScript object. JSON.stringify does the reverse — object to string.'},
+{q:'Which keyword pauses an async function until a Promise resolves?',o:['pause','wait','await','sleep'],c:2,e:"await pauses execution inside an async function until the Promise resolves. Only works inside functions marked 'async'."},
+{q:'What are the 3 states of a Promise?',o:['start, middle, end','pending, fulfilled, rejected','loading, success, error','new, active, done'],c:1,e:'Pending (in progress), Fulfilled (success — use .then), Rejected (failed — use .catch).'},
+{q:'Which is the SAFE way to add an event handler?',o:["onclick='...'","el.addEventListener('click', handler)",'el.click = handler',"el.on('click')"],c:1,e:'addEventListener allows multiple handlers, can be removed, and separates JS from HTML. onclick attribute only allows one handler.'},
+{q:'What does <code>arr.length</code> return?',o:['The first item','The last item','The number of items','The array itself'],c:2,e:'length property returns the count of items. arr.length === 0 means empty.'},
+{q:'Which array method removes and returns the LAST item?',o:['pop()','shift()','unshift()','push()'],c:0,e:'pop() removes and returns the last item. shift() does the same from start. push/unshift ADD items.'},
+{q:'How do you check if an array contains a specific value?',o:['arr.has(value)','arr.contains(value)','arr.includes(value)','arr.exists(value)'],c:2,e:'includes(value) returns true/false. indexOf(value) !== -1 also works (older). For complex objects, use find().'},
+{q:'What is destructuring?',o:['Deleting a variable','Extracting values from objects/arrays into variables','Encrypting data','Converting types'],c:1,e:'Destructuring is a shortcut to extract values: const { name, age } = user pulls user.name and user.age into separate variables.'},
+{q:'Which is a PROPER ES6 module export?',o:['module.exports = func','export default func','exports func','public func'],c:1,e:"ES6 modules use 'export default' or named 'export'. module.exports is CommonJS (Node.js old style)."}];
+function show(i){document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx===i));document.querySelectorAll('.section').forEach((s,idx)=>s.classList.toggle('active',idx===i));window.scrollTo({top:200,behavior:'smooth'})}
+const quiz=document.getElementById('quiz');document.getElementById('tv').textContent=Q.length;let score=0;
+quiz.innerHTML=Q.map((q,i)=>`<div class="quiz-q"><h4><span class="qnum">Q${i+1}</span><span>${q.q}</span></h4><div class="options">${q.o.map((o,j)=>`<div class="option" onclick="ans(${i},${j})" id="o${i}_${j}">${String.fromCharCode(65+j)}. ${o}</div>`).join('')}</div><div class="explanation" id="e${i}"></div></div>`).join('');
+function ans(i,j){const q=Q[i];q.o.forEach((_,k)=>{const el=document.getElementById(`o${i}_${k}`);el.classList.add('disabled');if(k===q.c)el.classList.add('correct');else if(k===j&&j!==q.c)el.classList.add('wrong')});const ok=j===q.c;if(ok)score++;const exp=document.getElementById(`e${i}`);exp.className=`explanation show ${ok?'correct-exp':'wrong-exp'}`;exp.innerHTML=`${ok?'✅ Correct!':'❌ Incorrect.'} ${q.e}`;document.getElementById('sv').textContent=score}
+</script>
+</body>
+</html>

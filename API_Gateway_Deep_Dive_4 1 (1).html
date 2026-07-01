@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>API Gateway — Every Line, Every Detail</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
+:root{
+  --bg:#fff;--bg2:#f8f9fc;--bg3:#eef1f8;--border:#dde3f0;
+  --text:#1a1f2e;--t2:#4a5568;--t3:#8a94a6;
+  --blue:#2563eb;--green:#15803d;--orange:#c2410c;--purple:#7c3aed;
+  --teal:#0891b2;--red:#dc2626;--amber:#b45309;
+  --dark:#0f172a;--dark2:#1e293b;--dark3:#334155;--dtext:#e2e8f0;
+  --sw:270px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);
+     font-size:15px;line-height:1.85;display:flex}
+.sidebar{width:var(--sw);min-height:100vh;background:var(--bg2);
+  border-right:1px solid var(--border);position:fixed;top:0;left:0;bottom:0;
+  overflow-y:auto;z-index:100;padding-bottom:40px}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border)}
+.sb-top{padding:16px 15px 13px;border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg,#1d4ed8,#0891b2);color:#fff}
+.sb-top h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:800}
+.sb-top p{font-size:10.5px;opacity:.75;margin-top:3px}
+.nav-sec{padding:8px 15px 3px;font-size:9px;font-weight:700;letter-spacing:1.2px;
+  text-transform:uppercase;color:var(--t3)}
+.ni{display:block;padding:7px 15px;font-size:12px;font-weight:500;color:var(--t2);
+  text-decoration:none;border-left:3px solid transparent;transition:all .12s;line-height:1.5}
+.ni:hover{background:var(--bg3);color:var(--text)}
+.ni.active{background:#eff6ff;color:var(--blue);border-left-color:var(--blue);font-weight:600}
+.ni-sub{font-size:10px;color:var(--t3);display:block;margin-top:1px}
+.pbar{position:fixed;top:0;left:var(--sw);right:0;height:3px;background:var(--border);z-index:200}
+.pbar-f{height:3px;background:linear-gradient(90deg,var(--blue),var(--teal));transition:width .3s}
+.main{margin-left:var(--sw);flex:1;min-width:0}
+.hero{background:linear-gradient(135deg,#0f172a 0%,#1d4ed8 60%,#0891b2 100%);
+  color:#fff;padding:44px 52px 38px;position:relative;overflow:hidden}
+.phase-badge{display:inline-flex;background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.25);color:#fff;font-size:11px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:13px}
+.hero h1{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;line-height:1.15;margin-bottom:10px}
+.hero p{font-size:14.5px;opacity:.85;max-width:660px;line-height:1.75;margin-bottom:18px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:6px}
+.hero-chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  color:#fff;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+.content{padding:36px 52px}
+section{margin-bottom:54px;padding-bottom:48px;border-bottom:2px solid var(--border)}
+section:last-child{border-bottom:none}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--blue);margin-bottom:5px}
+h2{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:14px}
+h3{font-family:'Syne',sans-serif;font-size:16.5px;font-weight:700;color:var(--text);
+  margin:28px 0 10px;padding-left:13px;border-left:4px solid var(--blue)}
+h4{font-family:'Syne',sans-serif;font-size:14.5px;font-weight:800;color:var(--blue);margin:20px 0 8px}
+p{color:var(--t2);margin-bottom:11px;font-size:15px}
+p strong{color:var(--text)}
+ul,ol{padding-left:24px;margin-bottom:11px}
+li{color:var(--t2);margin-bottom:7px;line-height:1.8;font-size:15px}
+li strong{color:var(--text)}
+code{font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--bg3);
+  color:var(--orange);padding:2px 6px;border-radius:3px;border:1px solid var(--border)}
+/* CODE BLOCK */
+.cb{background:var(--dark);border-radius:10px;margin:13px 0;overflow:hidden;border:1px solid var(--dark2)}
+.cbh{display:flex;justify-content:space-between;align-items:center;padding:8px 17px;
+  background:var(--dark2);border-bottom:1px solid var(--dark3)}
+.cf{font-family:'JetBrains Mono',monospace;font-size:12px;color:#94a3b8;font-weight:500}
+.bd{font-size:9.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;
+  padding:2px 8px;border-radius:3px}
+.bj{background:rgba(194,65,12,.2);color:#fb923c}
+.bp{background:rgba(37,99,235,.2);color:#60a5fa}
+pre{padding:18px 20px;overflow-x:auto;font-family:'JetBrains Mono',monospace;
+  font-size:13px;line-height:2;color:var(--dtext);white-space:pre}
+pre::-webkit-scrollbar{height:3px}
+pre::-webkit-scrollbar-thumb{background:var(--dark3)}
+pre code{font-family:inherit;font-size:inherit;background:transparent;
+  color:inherit;padding:0;border:none}
+pre .kw{color:#c084fc}pre .an{color:#fbbf24}pre .cl{color:#67e8f9}
+pre .fn{color:#86efac}pre .st{color:#86efac}
+pre .cm{color:#475569;font-style:italic}
+pre .tg{color:#f87171}pre .prop{color:#67e8f9}pre .val{color:#86efac}
+pre .num{color:#fb923c}
+/* SUPER EXPLAIN CARD */
+.xcard{border-radius:12px;margin:20px 0;overflow:hidden;
+  border:2px solid var(--border);box-shadow:0 3px 12px rgba(0,0,0,.05)}
+.xcard-top{background:var(--dark);padding:13px 20px}
+.xcard-line{font-family:'JetBrains Mono',monospace;font-size:15px;
+  color:#fbbf24;font-weight:700;line-height:1.4}
+.xcard-file{font-size:11px;color:#475569;margin-top:3px}
+.xcard-body{}
+.xr{display:grid;grid-template-columns:140px 1fr;
+  border-bottom:1px solid var(--border)}
+.xr:last-child{border-bottom:none}
+.xl{padding:14px 16px;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.6px;text-align:center;line-height:1.5;
+  display:flex;align-items:flex-start;justify-content:center;flex-direction:column;gap:3px}
+.xl-what  {background:#eff6ff;color:#1d4ed8}
+.xl-simple{background:#ecfdf5;color:#065f46}
+.xl-why   {background:#faf5ff;color:#6d28d9}
+.xl-mand  {background:#fff7ed;color:#9a3412}
+.xl-remove{background:#fff1f2;color:var(--red)}
+.xl-when  {background:#fefce8;color:var(--amber)}
+.xl-eg    {background:#f0fdfa;color:var(--teal)}
+.xv{padding:14px 18px;font-size:14.5px;color:var(--t2);
+  border-left:2px solid var(--border);line-height:1.8}
+.xv strong{color:var(--text)}
+.xv code{font-size:13px}
+.badge-yes{display:inline-block;background:#dcfce7;color:#15803d;
+  font-weight:800;font-size:11px;padding:2px 9px;border-radius:12px;margin-right:6px}
+.badge-no{display:inline-block;background:#fef9c3;color:#92400e;
+  font-weight:800;font-size:11px;padding:2px 9px;border-radius:12px;margin-right:6px}
+/* ANALOGY BOX */
+.analogy{background:linear-gradient(135deg,#eff6ff,#ecfdf5);
+  border:1px solid #bfdbfe;border-radius:12px;padding:20px 24px;margin:16px 0}
+.analogy-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.5px;color:var(--teal);margin-bottom:10px}
+.analogy p{margin:6px 0;font-size:15px;color:var(--t2)}
+.analogy strong{color:var(--text)}
+/* WHEN GRID */
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.wbox{border-radius:10px;padding:18px;border:2px solid}
+.wbox-yes{background:#f0fdf4;border-color:#86efac}
+.wbox-no {background:#fff1f2;border-color:#fca5a5}
+.wbox h4{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;margin:0 0 12px}
+.wbox-yes h4{color:var(--green)}
+.wbox-no  h4{color:var(--red)}
+.wbox ul{padding-left:20px;margin:0}
+.wbox li{font-size:14.5px;margin-bottom:7px}
+/* STEP */
+.step{border-radius:10px;margin:14px 0;overflow:hidden;border:1px solid var(--border)}
+.step-hdr{background:var(--blue);color:#fff;padding:11px 18px;
+  display:flex;align-items:center;gap:13px}
+.step-num{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
+.step-title{font-family:'Syne',sans-serif;font-size:14.5px;font-weight:800;color:#fff}
+.step-body{padding:16px 18px;background:var(--bg)}
+.step-body p{font-size:15px;margin-bottom:9px}
+.step-body p:last-child{margin:0}
+/* ARCH */
+.arch{background:var(--bg2);border:2px solid var(--border);border-radius:12px;
+  padding:20px;margin:16px 0}
+.arch-title{font-family:'Syne',sans-serif;font-size:11.5px;font-weight:800;
+  letter-spacing:.5px;text-transform:uppercase;color:var(--blue);
+  margin-bottom:14px;text-align:center}
+.arch-row{display:flex;align-items:center;justify-content:center;
+  gap:0;flex-wrap:wrap;margin:6px 0}
+.abox{border-radius:9px;padding:10px 17px;font-size:13px;font-weight:700;
+  text-align:center;min-width:110px;line-height:1.4;font-family:'Syne',sans-serif;border:1px solid}
+.abox small{display:block;font-size:11px;font-weight:500;margin-top:3px;opacity:.8}
+.ab-blue  {background:#eff6ff;border-color:#bfdbfe;color:var(--blue)}
+.ab-green {background:#f0fdf4;border-color:#86efac;color:var(--green)}
+.ab-red   {background:#fff1f2;border-color:#fca5a5;color:var(--red)}
+.ab-teal  {background:#f0fdfa;border-color:#99f6e4;color:var(--teal)}
+.ab-purple{background:#faf5ff;border-color:#e9d5ff;color:var(--purple)}
+.ab-amber {background:#fefce8;border-color:#fcd34d;color:var(--amber)}
+.aarr{font-size:22px;color:var(--t3);padding:0 7px;font-weight:700}
+.aarr-v{font-size:18px;color:var(--t3);text-align:center;margin:4px 0;display:block}
+/* TABLE */
+.tw{overflow-x:auto;margin:11px 0;border-radius:9px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+thead{background:var(--bg3)}
+th{padding:10px 14px;text-align:left;font-size:10.5px;font-weight:700;
+  letter-spacing:.4px;color:var(--t2);border-bottom:1px solid var(--border)}
+td{padding:10px 14px;border-bottom:1px solid #f0f3f9;color:var(--t2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#eff6ff}
+td code{font-size:12.5px}
+td.ok{color:var(--green);font-weight:700}
+td.no{color:var(--red);font-weight:700}
+/* ERROR CARD */
+.ecard{border-radius:10px;margin:14px 0;border:2px solid #fca5a5;overflow:hidden}
+.ecard-hdr{background:var(--red);color:#fff;padding:11px 16px;
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:700;line-height:1.5}
+.ecard-body{padding:14px 16px;background:#fff9f9}
+.ecard-body p{font-size:14.5px;margin-bottom:9px;color:var(--t2)}
+.ecard-body p:last-child{margin:0}
+.ecard-body strong{color:var(--text)}
+/* NOTES */
+.note{border-radius:9px;padding:13px 17px;margin:12px 0;font-size:15px;
+  border-left:5px solid;line-height:1.8}
+.note strong{margin-right:5px}
+.nblue  {background:#eff6ff;border-color:var(--blue);color:#1e40af}
+.ngreen {background:#f0fdf4;border-color:var(--green);color:#14532d}
+.norange{background:#fff7ed;border-color:var(--orange);color:#9a3412}
+.nred   {background:#fff1f2;border-color:var(--red);color:#991b1b}
+.nteal  {background:#f0fdfa;border-color:var(--teal);color:#0f766e}
+.npurple{background:#faf5ff;border-color:var(--purple);color:#581c87}
+/* IQ */
+.iq-box{background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:16px 20px;margin:14px 0}
+.iq-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.5px;color:var(--amber);margin-bottom:12px}
+.iq-item{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.iq-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.iq-q{font-weight:700;color:var(--text);font-size:15px;margin-bottom:5px}
+.iq-a{color:var(--t2);font-size:14.5px;line-height:1.8}
+@media(max-width:960px){
+  :root{--sw:0px}.sidebar{display:none}
+  .hero{padding:22px 18px}.hero h1{font-size:24px}
+  .content{padding:22px 18px}
+  .wgrid{grid-template-columns:1fr}
+  .xr{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <div class="sb-top">
+    <h3>API Gateway</h3>
+    <p>Every Line — Every Detail</p>
+  </div>
+  <div class="nav-sec">Navigation</div>
+  <a href="#s-what" class="ni"><span class="ni-sub">WHAT IS IT?</span>API Gateway — The Simple Idea</a>
+<a href="#s-why" class="ni"><span class="ni-sub">WHY NEED IT?</span>5 Problems It Solves</a>
+<a href="#s-when" class="ni"><span class="ni-sub">WHEN USE/NOT USE</span>When to Use, When to Skip</a>
+<a href="#s-step1" class="ni"><span class="ni-sub">STEP 1</span>Create the Project</a>
+<a href="#s-pom" class="ni"><span class="ni-sub">STEP 2</span>pom.xml — Every Line</a>
+<a href="#s-main" class="ni"><span class="ni-sub">STEP 3</span>Main Class — Every Line</a>
+<a href="#s-props" class="ni"><span class="ni-sub">STEP 4</span>application.properties</a>
+<a href="#s-server-port" class="ni"><span class="ni-sub">→ server.port</span>server.port=8080</a>
+<a href="#s-app-name" class="ni"><span class="ni-sub">→ spring.application.name</span>spring.application.name=api-gateway</a>
+<a href="#s-eureka-url" class="ni"><span class="ni-sub">→ eureka.client.service-url</span>Eureka URL — why needed</a>
+<a href="#s-route-id" class="ni"><span class="ni-sub">→ routes[0].id</span>routes[0].id = route name</a>
+<a href="#s-route-uri" class="ni"><span class="ni-sub">→ routes[0].uri</span>routes[0].uri = lb://service</a>
+<a href="#s-route-pred" class="ni"><span class="ni-sub">→ routes[0].predicates</span>predicates[0] = Path=...</a>
+<a href="#s-all-predicates" class="ni"><span class="ni-sub">PREDICATES</span>All Predicate Types</a>
+<a href="#s-all-filters" class="ni"><span class="ni-sub">FILTERS</span>All Filter Types</a>
+<a href="#s-flow" class="ni"><span class="ni-sub">REQUEST FLOW</span>What Happens Step by Step</a>
+<a href="#s-errors" class="ni"><span class="ni-sub">ERRORS</span>Common Errors + Fixes</a>
+<a href="#s-test" class="ni"><span class="ni-sub">TESTING</span>Test Every Route</a>
+<a href="#s-iq" class="ni"><span class="ni-sub">INTERVIEW</span>10 Interview Questions</a>
+
+</div>
+<div class="pbar"><div class="pbar-f" id="pf" style="width:0%"></div></div>
+<div class="main">
+<div class="hero">
+  <div class="phase-badge">Deep Dive — Spring Cloud Gateway</div>
+  <h1>API Gateway —<br>Every Line Simply Explained</h1>
+  <p>Every single line of <strong>application.properties</strong>, every <strong>pom.xml dependency</strong>, every annotation — explained in the simplest possible way. Why each line is there. What it does. Is it mandatory. What breaks if you remove it. Real examples for everything.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">What it does</span>
+    <span class="hero-chip">Why needed</span>
+    <span class="hero-chip">Mandatory?</span>
+    <span class="hero-chip">If removed?</span>
+    <span class="hero-chip">Real examples</span>
+    <span class="hero-chip">All predicates</span>
+    <span class="hero-chip">All filters</span>
+    <span class="hero-chip">Common errors</span>
+  </div>
+</div>
+<div class="content" id="ct">
+<section id="s-what"><div class="sec-label">WHAT IS IT?</div><h2>What Is an API Gateway? (Very Simple)</h2><div class="analogy"><div class="analogy-title">🏨 Think of a Hotel</div><p>A hotel has 10 departments — restaurant, gym, pool, spa, room service, laundry, etc.</p><p><strong>Without a reception desk:</strong> every guest must memorise the direct phone number of every department. If the restaurant moves to a new floor, every guest must be told the new number. If the spa temporarily closes, guests still call it and get no answer.</p><p><strong>The reception desk (API Gateway):</strong> guests call ONE number. The receptionist says <em>"you want the restaurant? Let me connect you."</em> Guests never know or care about internal department numbers.</p><p><strong>In your microservices system:</strong> the "guests" are your mobile app, browser, and Postman. The "departments" are product-service (:8081), order-service (:8082), auth-service (:8085). The API Gateway is the reception desk on port :8080.</p></div>
+<div class="arch"><div class="arch-title">Without Gateway vs With Gateway — Visual Comparison</div><div class="arch-row" style="gap:8px;flex-wrap:wrap"><div style="width:100%;text-align:center;font-family:Syne,sans-serif;font-size:10.5px;font-weight:800;color:var(--red);text-transform:uppercase;margin-bottom:4px">❌ WITHOUT GATEWAY — Clients Must Know Every Port</div><div class="abox ab-red">Mobile App<small>calls :8081</small></div><div class="abox ab-red">Browser<small>calls :8082</small></div><div class="abox ab-red">Postman<small>calls :8085</small></div></div><div class="arch-row" style="gap:8px;flex-wrap:wrap;margin-top:12px"><div style="width:100%;text-align:center;font-family:Syne,sans-serif;font-size:10.5px;font-weight:800;color:var(--green);text-transform:uppercase;margin-bottom:4px">✅ WITH GATEWAY — Clients Know ONE Port</div><div class="abox ab-red">Mobile App<small>calls :8080 only</small></div><div class="abox ab-red">Browser<small>calls :8080 only</small></div><div class="abox ab-red">Postman<small>calls :8080 only</small></div></div><div class="arch-row"><span class="aarr-v">↓ all go to single address</span></div><div class="arch-row"><div class="abox ab-blue">API Gateway<small>:8080 — routes everything</small></div></div><div class="arch-row"><span class="aarr-v">↓ routes internally</span></div><div class="arch-row" style="gap:8px;flex-wrap:wrap"><div class="abox ab-teal">product-service<small>:8081</small></div><div class="abox ab-teal">order-service<small>:8082</small></div><div class="abox ab-teal">auth-service<small>:8085</small></div></div><div class="arch-row"><span class="aarr-v">↕ all register with</span></div><div class="arch-row"><div class="abox ab-green">Eureka Server<small>:8761</small></div></div></div>
+</section>
+<section id="s-why"><div class="sec-label">WHY NEED IT?</div><h2>Why Do We Need API Gateway? (5 Real Problems)</h2><div class="ecard" style="border-color:#bfdbfe"><div class="ecard-hdr" style="background:var(--blue)">Problem 1: Client Must Know Every Port</div><div class="ecard-body"><p><strong>Without Gateway:</strong> Your mobile app hardcodes <code>:8081</code> for products and <code>:8082</code> for orders. You add a payment service on <code>:8083</code>. Now you must update and redeploy the mobile app — and push an update to 1 million phones. That takes weeks.</p><div class="note ngreen"><strong>With Gateway:</strong> With Gateway: clients call <code>:8080</code> forever. You add 10 more services behind the Gateway without touching any client app.</div></div></div>
+<div class="ecard" style="border-color:#bfdbfe"><div class="ecard-hdr" style="background:var(--blue)">Problem 2: Authentication Code Is Repeated</div><div class="ecard-body"><p><strong>Without Gateway:</strong> Without Gateway, every service (product, order, auth, payment) must check JWT tokens itself. You write the same JWT validation code in 4 places. When the JWT secret key changes, you must update and redeploy all 4 services.</p><div class="note ngreen"><strong>With Gateway:</strong> With Gateway: JWT validation in the Gateway filter once. All services behind it trust all requests.</div></div></div>
+<div class="ecard" style="border-color:#bfdbfe"><div class="ecard-hdr" style="background:var(--blue)">Problem 3: No Central Logging</div><div class="ecard-body"><p><strong>Without Gateway:</strong> A customer reports: <em>'My order is missing.'</em> Their request touched auth-service, product-service, and order-service. Logs are in 3 different files on 3 different servers. Finding the root cause takes hours.</p><div class="note ngreen"><strong>With Gateway:</strong> With Gateway: every request is logged in one place — URL, response code, time taken — before anything else.</div></div></div>
+<div class="ecard" style="border-color:#bfdbfe"><div class="ecard-hdr" style="background:var(--blue)">Problem 4: Anyone Can Overload Your Services</div><div class="ecard-body"><p><strong>Without Gateway:</strong> A hacker sends 100,000 requests per second to <code>GET /api/products</code>. Your product-service runs out of memory and crashes. All users get errors.</p><div class="note ngreen"><strong>With Gateway:</strong> With Gateway: rate limiter allows 100 requests per second per IP. Everything above is rejected before reaching the service.</div></div></div>
+<div class="ecard" style="border-color:#bfdbfe"><div class="ecard-hdr" style="background:var(--blue)">Problem 5: CORS Configuration Duplicated</div><div class="ecard-body"><p><strong>Without Gateway:</strong> Your browser app needs CORS headers on every response. Without Gateway, every service adds its own CORS config. A new allowed origin means updating 5 services.</p><div class="note ngreen"><strong>With Gateway:</strong> With Gateway: CORS configured once. All services benefit automatically.</div></div></div>
+</section>
+<section id="s-when"><div class="sec-label">WHEN USE / NOT USE</div><h2>When to Use / When NOT to Use Gateway</h2><div class="wgrid"><div class="wbox wbox-yes"><h4>✅ Use Gateway When...</h4><ul><li>You have <strong>2 or more microservices</strong> that outside apps need to call</li><li>You are building a <strong>mobile app or website</strong> that should not know internal ports</li><li>You need <strong>JWT authentication</strong> checked in one place</li><li>You need <strong>rate limiting</strong> to protect your services</li><li>You want <strong>all request logs in one place</strong></li><li>You are deploying to <strong>production or cloud</strong></li><li>Different client types need <strong>different responses</strong> (mobile vs web)</li><li>Your team has <strong>different developers</strong> owning different services</li></ul></div><div class="wbox wbox-no"><h4>❌ Skip Gateway When...</h4><ul><li>You are <strong>still learning Phase 1–4</strong> — understand basics first</li><li>You have <strong>only 1 microservice</strong> — Gateway adds pointless complexity</li><li>Services talk <strong>to each other internally</strong> — Feign handles that, not Gateway</li><li>You are building a <strong>simple monolith</strong> — does not need Gateway at all</li><li>Your team has <strong>1–2 developers</strong> — overhead is not worth it yet</li><li>APIs are <strong>only called by other internal services</strong>, never by a browser or phone</li><li>You are just <strong>testing an idea quickly</strong> — focus on business logic first</li></ul></div></div>
+<div class="note ngreen"><strong>Key:</strong> You built Phases 1–6 without a Gateway and everything worked fine. The Gateway was added in Phase 7 because by then you had multiple services, external clients, and JWT security needs. Do not add it before you feel the pain of those problems.</div>
+</section>
+<section id="s-step1"><div class="sec-label">STEP 1: CREATE PROJECT</div><h2>Step 1 — Create the api-gateway Project (Start to Finish)</h2><div class="step"><div class="step-hdr"><div class="step-num">1</div><div class="step-title">Open https://start.spring.io in your browser</div></div><div class="step-body"><p>Go to <strong>https://start.spring.io</strong>. This is the official Spring Boot project generator. It creates a project with the right structure and dependencies for you automatically.</p></div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">2</div><div class="step-title">Fill in these exact settings</div></div><div class="step-body"><div class="tw"><table><thead><tr><th>Setting</th><th>What to Choose</th><th>Why This Value</th></tr></thead><tbody><tr><td >Project</td><td >Maven</td><td >Standard Java build tool — most tutorials use this</td></tr><tr><td >Language</td><td >Java</td><td >Our programming language</td></tr><tr><td >Spring Boot</td><td >3.2.0</td><td >Latest stable version — do NOT pick a SNAPSHOT version</td></tr><tr><td >Group</td><td >com.gateway</td><td >Your company/package name — can be anything you want</td></tr><tr><td >Artifact</td><td >api-gateway</td><td >This becomes the JAR filename: api-gateway.jar</td></tr><tr><td >Packaging</td><td >Jar</td><td >Standard way to package Spring Boot apps</td></tr><tr><td >Java</td><td >17</td><td >Long-term support version — works with Spring Boot 3</td></tr></tbody></table></div>
+</div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">3</div><div class="step-title">Add EXACTLY these 2 dependencies (search by name)</div></div><div class="step-body"><p><strong>Dependency 1:</strong> Search <em>"gateway"</em> → Select <em>"Gateway"</em> (full name: Spring Cloud Gateway).<br>This is the main engine that does all the routing.</p><p><strong>Dependency 2:</strong> Search <em>"eureka"</em> → Select <em>"Eureka Discovery Client"</em>.<br>This lets the Gateway find other services by name (product-service, order-service) instead of hardcoded URLs.</p><div class="note nred"><strong>Never:</strong> Do <strong>NOT</strong> add <code>Spring Web</code>. Gateway uses a different web system called WebFlux. If you add Spring Web AND Gateway, the app will CRASH at startup with: <em>Spring MVC found on classpath, which is incompatible with Spring Cloud Gateway.</em></div>
+</div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">4</div><div class="step-title">Click GENERATE → Extract ZIP → Open in IntelliJ</div></div><div class="step-body"><p>A ZIP file downloads. Extract it anywhere on your computer. Open IntelliJ IDEA. Click <em>File → Open</em> → select the extracted folder. Wait 2–3 minutes for Maven to download all libraries.</p></div></div>
+</section>
+<section id="s-pom"><div class="sec-label">STEP 2: pom.xml</div><h2>Step 2 — pom.xml: Every Dependency Simply Explained</h2><p>Open <code>pom.xml</code> in IntelliJ. Let us read every section and understand what it does and why it is there.</p>
+<div class="cb"><div class="cbh"><span class="cf">api-gateway/pom.xml — Complete File</span><span class="bd bp">XML</span></div><pre><code><span class="tg">&lt;parent&gt;</span>
+  <span class="tg">&lt;groupId&gt;</span>org.springframework.boot<span class="tg">&lt;/groupId&gt;</span>
+  <span class="tg">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="tg">&lt;/artifactId&gt;</span>
+  <span class="tg">&lt;version&gt;</span>3.2.0<span class="tg">&lt;/version&gt;</span>
+<span class="tg">&lt;/parent&gt;</span>
+
+<span class="tg">&lt;groupId&gt;</span>com.gateway<span class="tg">&lt;/groupId&gt;</span>
+<span class="tg">&lt;artifactId&gt;</span>api-gateway<span class="tg">&lt;/artifactId&gt;</span>
+
+<span class="tg">&lt;properties&gt;</span>
+  <span class="tg">&lt;java.version&gt;</span>17<span class="tg">&lt;/java.version&gt;</span>
+  <span class="tg">&lt;spring-cloud.version&gt;</span>2023.0.0<span class="tg">&lt;/spring-cloud.version&gt;</span>
+<span class="tg">&lt;/properties&gt;</span>
+
+<span class="tg">&lt;dependencies&gt;</span>
+
+  <span class="cm">&lt;!-- DEPENDENCY 1: The Gateway Engine --&gt;</span>
+  <span class="tg">&lt;dependency&gt;</span>
+    <span class="tg">&lt;groupId&gt;</span>org.springframework.cloud<span class="tg">&lt;/groupId&gt;</span>
+    <span class="tg">&lt;artifactId&gt;</span>spring-cloud-starter-gateway<span class="tg">&lt;/artifactId&gt;</span>
+  <span class="tg">&lt;/dependency&gt;</span>
+
+  <span class="cm">&lt;!-- DEPENDENCY 2: Eureka Client --&gt;</span>
+  <span class="tg">&lt;dependency&gt;</span>
+    <span class="tg">&lt;groupId&gt;</span>org.springframework.cloud<span class="tg">&lt;/groupId&gt;</span>
+    <span class="tg">&lt;artifactId&gt;</span>spring-cloud-starter-netflix-eureka-client<span class="tg">&lt;/artifactId&gt;</span>
+  <span class="tg">&lt;/dependency&gt;</span>
+
+  <span class="cm">&lt;!-- DEPENDENCY 3: Test Library (auto-added by Spring Initializr) --&gt;</span>
+  <span class="tg">&lt;dependency&gt;</span>
+    <span class="tg">&lt;groupId&gt;</span>org.springframework.boot<span class="tg">&lt;/groupId&gt;</span>
+    <span class="tg">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="tg">&lt;/artifactId&gt;</span>
+    <span class="tg">&lt;scope&gt;</span>test<span class="tg">&lt;/scope&gt;</span>
+  <span class="tg">&lt;/dependency&gt;</span>
+
+<span class="tg">&lt;/dependencies&gt;</span>
+
+<span class="cm">&lt;!-- VERSION CONTROL BLOCK — REQUIRED for Spring Cloud --&gt;</span>
+<span class="tg">&lt;dependencyManagement&gt;</span>
+  <span class="tg">&lt;dependencies&gt;</span>
+    <span class="tg">&lt;dependency&gt;</span>
+      <span class="tg">&lt;groupId&gt;</span>org.springframework.cloud<span class="tg">&lt;/groupId&gt;</span>
+      <span class="tg">&lt;artifactId&gt;</span>spring-cloud-dependencies<span class="tg">&lt;/artifactId&gt;</span>
+      <span class="tg">&lt;version&gt;</span>${spring-cloud.version}<span class="tg">&lt;/version&gt;</span>
+      <span class="tg">&lt;type&gt;</span>pom<span class="tg">&lt;/type&gt;</span>
+      <span class="tg">&lt;scope&gt;</span>import<span class="tg">&lt;/scope&gt;</span>
+    <span class="tg">&lt;/dependency&gt;</span>
+  <span class="tg">&lt;/dependencies&gt;</span>
+<span class="tg">&lt;/dependencyManagement&gt;</span></code></pre></div>
+<h3>Dependency 1: spring-cloud-starter-gateway</h3>
+<div class="xcard"><div class="xcard-top"><div class="xcard-line">spring-cloud-starter-gateway</div><div class="xcard-file">pom.xml → &lt;dependencies&gt;</div></div><div class="xcard-body"><div class="xr"><div class="xl xl-what">What it is</div><div class="xv">This is the <strong>main Gateway engine</strong>. When you add this to pom.xml, your Spring Boot app becomes an API Gateway. It includes: the routing system (reads routes from application.properties), WebFlux (a reactive web server using Netty instead of Tomcat), and Spring Cloud LoadBalancer (the part that resolves <code>lb://product-service</code> to a real address via Eureka).</div></div>
+<div class="xr"><div class="xl xl-simple">Simple words</div><div class="xv">Think of this as buying the reception desk for your hotel. Without this, your app is just an empty room. With this, it can receive requests and route them to the right department (service).</div></div>
+<div class="xr"><div class="xl xl-why">Why you need it</div><div class="xv">Without this, your project has no routing capability at all. It is just a plain empty Spring Boot application. No routes are registered. Every request returns 404 Not Found.</div></div>
+<div class="xr"><div class="xl xl-mand">Mandatory?</div><div class="xv"><span class="badge-yes">YES — Required</span> This IS the API Gateway. You cannot have a Gateway project without this dependency. It is the entire purpose of this project.</div></div>
+<div class="xr"><div class="xl xl-remove">If you remove it</div><div class="xv">The project compiles but the Gateway does nothing. <code>application.properties</code> routes are ignored. Every request to port 8080 returns 404. The app is just an empty Spring Boot application.</div></div>
+<div class="xr"><div class="xl xl-when">When to use / not use</div><div class="xv">Add it to the <strong>api-gateway project only</strong>. Never add it to product-service, order-service, auth-service, or any other microservice. Those services are the <em>destinations</em>, not the router. Only the router needs the routing engine.</div></div>
+<div class="xr"><div class="xl xl-eg">Example error if missing</div><div class="xv">You start the project, call <code>GET http://localhost:8080/api/products</code>. Response: <code>404 Not Found</code> — because there is no routing engine to process the request.</div></div>
+</div></div>
+<h3>Dependency 2: spring-cloud-starter-netflix-eureka-client</h3>
+<div class="xcard"><div class="xcard-top"><div class="xcard-line">spring-cloud-starter-netflix-eureka-client</div><div class="xcard-file">pom.xml → &lt;dependencies&gt;</div></div><div class="xcard-body"><div class="xr"><div class="xl xl-what">What it is</div><div class="xv">This makes the Gateway a <strong>Eureka client</strong>. It does two things: (1) registers the Gateway itself into Eureka so other services know the Gateway exists, and (2) allows the Gateway to <strong>ask Eureka for the current address of any service</strong> when it sees <code>lb://product-service</code> in a route.</div></div>
+<div class="xr"><div class="xl xl-simple">Simple words</div><div class="xv">This is like giving the receptionist access to the hotel's internal phone directory. Without the directory, the receptionist cannot forward your call — they don't know the room number of any department. With it, they look up 'product-service' and find its current phone number (address).</div></div>
+<div class="xr"><div class="xl xl-why">Why you need it</div><div class="xv">When a route says <code>uri=lb://product-service</code>, the Gateway must look up what address product-service is currently running on. This dependency provides that lookup ability by connecting to Eureka Server.</div></div>
+<div class="xr"><div class="xl xl-mand">Mandatory?</div><div class="xv"><span class="badge-yes">YES — if using lb:// URIs</span> &nbsp; <span class="badge-no">OPTIONAL — if hardcoding all URLs</span> In practice: always add it. Using <code>lb://</code> is the correct approach.</div></div>
+<div class="xr"><div class="xl xl-remove">If you remove it</div><div class="xv">Routes with <code>uri=lb://product-service</code> throw an error: <em>Unable to find instance for product-service. Is the configured service id correct?</em> The Gateway cannot resolve the service name to an address. You would have to replace every <code>lb://</code> with a hardcoded URL like <code>http://localhost:8081</code>.</div></div>
+<div class="xr"><div class="xl xl-when">When to use / not use</div><div class="xv">Add it whenever you have Eureka in your system (Phase 5 onwards). If you are in an early learning phase without Eureka and use hardcoded URLs, you can skip it. But for any real production system, always use Eureka + this dependency.</div></div>
+<div class="xr"><div class="xl xl-eg">Real example of what this enables</div><div class="xv">You start product-service on port 8081. It registers with Eureka as 'product-service'. You then start a second instance on port 8091. It also registers as 'product-service'. Now the Gateway has TWO addresses for product-service and load-balances between them automatically. This dependency makes all of that possible.</div></div>
+</div></div>
+<h3>Dependency 3: spring-boot-starter-test</h3>
+<div class="xcard"><div class="xcard-top"><div class="xcard-line">spring-boot-starter-test</div><div class="xcard-file">pom.xml → &lt;dependencies&gt; with scope=test</div></div><div class="xcard-body"><div class="xr"><div class="xl xl-what">What it is</div><div class="xv">Testing libraries: JUnit 5 (for writing test methods), Mockito (for mocking dependencies in tests), AssertJ (for readable assertions). Added automatically by Spring Initializr.</div></div>
+<div class="xr"><div class="xl xl-simple">Simple words</div><div class="xv">This lets you write test files like <code>ApiGatewayApplicationTests.java</code> that verify your app works correctly.</div></div>
+<div class="xr"><div class="xl xl-why">Why it has scope=test</div><div class="xv">The <code>&lt;scope&gt;test&lt;/scope&gt;</code> means these libraries are only included during testing. They are NOT included in the final JAR that runs in production. This keeps the production JAR smaller.</div></div>
+<div class="xr"><div class="xl xl-mand">Mandatory?</div><div class="xv"><span class="badge-no">OPTIONAL</span> You can delete it if you are not writing tests. The Gateway runs fine without it. But it is good practice to keep it.</div></div>
+<div class="xr"><div class="xl xl-remove">If you remove it</div><div class="xv">The Gateway still works completely. You just cannot write automated tests. No runtime effect.</div></div>
+<div class="xr"><div class="xl xl-when">When to change</div><div class="xv">Never change this during learning. Leave it as Spring Initializr generated it.</div></div>
+<div class="xr"><div class="xl xl-eg">What scope=test means</div><div class="xv">Your final <code>api-gateway.jar</code> file does NOT contain JUnit or Mockito libraries. They are only used when you run <code>mvn test</code>. This makes your production JAR smaller and cleaner.</div></div>
+</div></div>
+<h3>dependencyManagement Block — The Version Controller</h3>
+<div class="xcard"><div class="xcard-top"><div class="xcard-line">spring-cloud-dependencies (BOM Block)</div><div class="xcard-file">pom.xml → &lt;dependencyManagement&gt;</div></div><div class="xcard-body"><div class="xr"><div class="xl xl-what">What it is</div><div class="xv">A BOM (Bill of Materials) is a list of pre-tested, compatible library versions. When you write <code>${spring-cloud.version}</code> as the version and add this BOM block, Maven automatically uses the correct version for every Spring Cloud library (Gateway, Eureka Client, LoadBalancer) without you specifying them individually.</div></div>
+<div class="xr"><div class="xl xl-simple">Simple words</div><div class="xv">Imagine buying a car. Instead of individually choosing which tyres, engine parts, and electronics are compatible with each other, you buy a 'car package' where a professional already figured out which parts work together. The BOM block is that package — it says: 'Spring Cloud 2023.0.0 comes with these exact compatible library versions.'</div></div>
+<div class="xr"><div class="xl xl-why">Why you need it</div><div class="xv">Without this block, Maven picks the latest version of each Spring Cloud library independently. Gateway v4.0 might be incompatible with Eureka Client v4.1. You get cryptic startup errors or ClassNotFoundExceptions. The BOM ensures all libraries are tested together and known to be compatible.</div></div>
+<div class="xr"><div class="xl xl-mand">Mandatory?</div><div class="xv"><span class="badge-yes">YES — Required</span> whenever you use ANY Spring Cloud dependency. Without it, version conflicts cause hard-to-debug startup errors.</div></div>
+<div class="xr"><div class="xl xl-remove">If you remove it</div><div class="xv">Maven picks random/latest versions for Gateway, Eureka Client, and LoadBalancer. They may be incompatible. You get errors like: <em>ClassNotFoundException: EurekaInstanceConfigBean</em> or <em>NoSuchMethodError: ReactiveLoadBalancerClientFilter</em>. Very hard to debug.</div></div>
+<div class="xr"><div class="xl xl-when">When to change the version</div><div class="xv">Change <code>spring-cloud.version</code> when upgrading Spring Boot. The version must match: Spring Boot 3.2.x → Spring Cloud 2023.0.x. Never mix versions across major releases.</div></div>
+<div class="xr"><div class="xl xl-eg">Compatibility table</div><div class="xv"><div class="tw"><table><thead><tr><th>Spring Boot</th><th>Spring Cloud Version to Use</th></tr></thead><tbody><tr><td >3.2.x</td><td >2023.0.0</td></tr><tr><td >3.1.x</td><td >2022.0.x</td></tr><tr><td >3.0.x</td><td >2022.0.x</td></tr><tr><td >2.7.x</td><td >2021.0.x</td></tr></tbody></table></div>
+</div></div>
+</div></div>
+</section>
+<section id="s-main"><div class="sec-label">STEP 3: MAIN CLASS</div><h2>Step 3 — Main Class: Only One Annotation Needed</h2><div class="cb"><div class="cbh"><span class="cf">ApiGatewayApplication.java — The Full File</span><span class="bd bj">JAVA</span></div><pre><code><span class="kw">package</span> com.gateway;
+
+<span class="kw">import</span> org.springframework.boot.SpringApplication;
+<span class="kw">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
+
+<span class="an">@SpringBootApplication</span>
+<span class="kw">public class</span> <span class="cl">ApiGatewayApplication</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(String[] args) {
+        SpringApplication.run(ApiGatewayApplication.<span class="kw">class</span>, args);
+    }
+}</code></pre></div>
+<div class="xcard"><div class="xcard-top"><div class="xcard-line">@SpringBootApplication</div><div class="xcard-file">ApiGatewayApplication.java — Line above the class</div></div><div class="xcard-body"><div class="xr"><div class="xl xl-what">What it does</div><div class="xv">One annotation that secretly combines three annotations: <strong>@Configuration</strong> (this class can define Spring beans), <strong>@EnableAutoConfiguration</strong> (Spring Boot reads what is in pom.xml and automatically sets up Gateway routes, Eureka client, etc.), <strong>@ComponentScan</strong> (scans the package for @Component, @Service, @GlobalFilter classes you wrote).</div></div>
+<div class="xr"><div class="xl xl-simple">Simple words</div><div class="xv">This annotation is like a master switch. When Spring Boot starts, it sees this and says: <em>'OK, time to set up everything.'</em> It reads your pom.xml, sees spring-cloud-starter-gateway, and automatically creates the routing engine. It reads application.properties and loads all your routes. Without it, nothing happens.</div></div>
+<div class="xr"><div class="xl xl-why">Why it is here</div><div class="xv">Every Spring Boot application must have exactly one class with this annotation. It is the entry point. <code>SpringApplication.run()</code> tells Spring Boot to start the application using this class as the root.</div></div>
+<div class="xr"><div class="xl xl-mand">Mandatory?</div><div class="xv"><span class="badge-yes">YES — Required</span> Without it, Spring Boot does not start. The application exits immediately. The Gateway does nothing.</div></div>
+<div class="xr"><div class="xl xl-remove">If you remove it</div><div class="xv">The <code>main()</code> method still runs but Spring Boot's auto-configuration does not happen. No Netty server starts. No routes are loaded. No Eureka client registers. The program starts and immediately exits.</div></div>
+<div class="xr"><div class="xl xl-when">When to change / what not to add</div><div class="xv">Never change it. This annotation stays exactly as generated. Do NOT add these annotations — they are wrong for Gateway:<br><br><code>@EnableDiscoveryClient</code> — not needed in Spring Boot 3 (auto-configured)<br><code>@EnableFeignClients</code> — Gateway does not use Feign<br><code>@EnableEurekaServer</code> — turns your Gateway into a registry server (WRONG)<br><code>@EnableConfigServer</code> — turns your Gateway into a Config Server (WRONG)</div></div>
+<div class="xr"><div class="xl xl-eg">What happens inside when this runs</div><div class="xv">1. JVM starts. 2. Spring Boot reads pom.xml classpath — finds gateway jar. 3. Auto-configures routing engine. 4. Reads application.properties — loads your routes. 5. Reads <code>eureka.client.service-url.defaultZone</code> — registers with Eureka. 6. Starts Netty server on port 8080. 7. Prints: <em>Started ApiGatewayApplication in X seconds</em>.</div></div>
+</div></div>
+</section>
+<section id="s-props"><div class="sec-label">STEP 4: application.properties</div><h2>Step 4 — application.properties Overview</h2><p>This is the <strong>most important file</strong> in the Gateway project. The entire routing behaviour is controlled here. No Java code needed for routing — just properties.</p>
+<div class="cb"><div class="cbh"><span class="cf">api-gateway/src/main/resources/application.properties — Full File</span><span class="bd bp">PROPERTIES</span></div><pre><code><span class="cm"># ── WHO AM I AND WHAT PORT ──────────────────────────────────────</span>
+<span class="prop">server.port</span>=<span class="val">8080</span>
+<span class="prop">spring.application.name</span>=<span class="val">api-gateway</span>
+
+<span class="cm"># ── WHERE IS EUREKA SERVER ──────────────────────────────────────</span>
+<span class="prop">eureka.client.service-url.defaultZone</span>=<span class="val">http://localhost:8761/eureka/</span>
+
+<span class="cm"># ── ROUTE 1: All product requests go to product-service ─────────</span>
+<span class="prop">spring.cloud.gateway.routes[0].id</span>=<span class="val">product-service-route</span>
+<span class="prop">spring.cloud.gateway.routes[0].uri</span>=<span class="val">lb://product-service</span>
+<span class="prop">spring.cloud.gateway.routes[0].predicates[0]</span>=<span class="val">Path=/api/products/**</span>
+
+<span class="cm"># ── ROUTE 2: All order requests go to order-service ─────────────</span>
+<span class="prop">spring.cloud.gateway.routes[1].id</span>=<span class="val">order-service-route</span>
+<span class="prop">spring.cloud.gateway.routes[1].uri</span>=<span class="val">lb://order-service</span>
+<span class="prop">spring.cloud.gateway.routes[1].predicates[0]</span>=<span class="val">Path=/api/orders/**</span>
+
+<span class="cm"># ── ROUTE 3: Auth requests go to auth-service ───────────────────</span>
+<span class="prop">spring.cloud.gateway.routes[2].id</span>=<span class="val">auth-service-route</span>
+<span class="prop">spring.cloud.gateway.routes[2].uri</span>=<span class="val">lb://auth-service</span>
+<span class="prop">spring.cloud.gateway.routes[2].predicates[0]</span>=<span class="val">Path=/auth/**</span></code></pre></div>
+<div class="note ngreen"><strong>Key:</strong> Every route has exactly 3 required parts: <strong>id</strong> (a unique name), <strong>uri</strong> (where to send it), and <strong>predicates</strong> (when to use this route). Think of each route as one rule: IF the URL matches this pattern, THEN send to this service.</div>
+</section>
+<section id="s-server-port"><div class="sec-label">→ server.port</div><h2>server.port=8080 — In Deep Detail</h2><div class="xcard"><div class="xcard-top"><div class="xcard-line">server.port=8080</div><div class="xcard-file">application.properties — Line 1</div></div><div class="xcard-body"><div class="xr"><div class="xl xl-what">What it does</div><div class="xv">Tells the Gateway which port to listen on. After this is set, the Gateway starts a Netty server on port 8080 and waits for incoming requests. <strong>Every client — your mobile app, browser, Postman — sends all requests to this port.</strong></div></div>
+<div class="xr"><div class="xl xl-simple">Simple words</div><div class="xv">Think of this as the hotel's main telephone number. You print this on your business card. Everyone calls this number. The hotel (Gateway) picks up and routes the call internally. If you change this number, you must tell every customer.</div></div>
+<div class="xr"><div class="xl xl-why">Why 8080 specifically?</div><div class="xv">8080 is the industry convention for HTTP in development (production uses 80 for HTTP and 443 for HTTPS). Your other services use 8081, 8082, 8085 — so 8080 is free and makes logical sense as the front door.</div></div>
+<div class="xr"><div class="xl xl-mand">Mandatory?</div><div class="xv"><span class="badge-yes">YES</span> Well, not strictly — if you remove it, Spring Boot defaults to port 8080 anyway. But you should always write it explicitly so it is visible and obvious.</div></div>
+<div class="xr"><div class="xl xl-remove">If you remove this line</div><div class="xv">Gateway still starts on port 8080 (Spring Boot default). No visible difference. However, best practice is to always be explicit about which port your service uses. If you set it to a different value and remove the line, it goes back to 8080.</div></div>
+<div class="xr"><div class="xl xl-when">When to change it</div><div class="xv">Change if: 8080 is already occupied by another app on your computer, you want to run two Gateway instances on the same machine, or you are deploying to a cloud server that assigns a specific port. In Docker, this is overridden by the compose port mapping <code>-p 9090:8080</code>.</div></div>
+<div class="xr"><div class="xl xl-eg">Practical example</div><div class="xv">If you set <code>server.port=9090</code>, all your Postman requests change:<br>Before: <code>http://localhost:8080/api/products</code><br>After: <code>http://localhost:9090/api/products</code><br>Your clients (mobile app, browser) must also be updated to call 9090.</div></div>
+</div></div>
+</section>
+<section id="s-app-name"><div class="sec-label">→ spring.application.name</div><h2>spring.application.name=api-gateway — In Deep Detail</h2><div class="xcard"><div class="xcard-top"><div class="xcard-line">spring.application.name=api-gateway</div><div class="xcard-file">application.properties — Line 2</div></div><div class="xcard-body"><div class="xr"><div class="xl xl-what">What it does</div><div class="xv">Gives this application a name. This name is used in: (1) <strong>Eureka registration</strong> — the Gateway shows up as 'API-GATEWAY' in the Eureka dashboard, (2) <strong>Log files</strong> — every log line shows the application name so you know which service printed it, (3) <strong>Spring Boot Admin / monitoring tools</strong> — identifies this service in the monitoring dashboard.</div></div>
+<div class="xr"><div class="xl xl-simple">Simple words</div><div class="xv">This is like putting a name tag on the receptionist: 'Hi, I am the API Gateway.' When Eureka keeps a list of all running services, it lists this service under this name.</div></div>
+<div class="xr"><div class="xl xl-why">Why 'api-gateway'?</div><div class="xv">It is descriptive. When you look at the Eureka dashboard at http://localhost:8761, you see a list of services. This name tells you exactly which one is the Gateway. You could name it 'gateway', 'front-door', or anything — but 'api-gateway' is the industry convention.</div></div>
+<div class="xr"><div class="xl xl-mand">Mandatory?</div><div class="xv"><span class="badge-no">OPTIONAL</span> The Gateway works without it. But without it, the service shows as "unknown" in Eureka and logs. Every Spring Boot service should have a name — it is a best practice, not a rule.</div></div>
+<div class="xr"><div class="xl xl-remove">If you remove this line</div><div class="xv">Gateway still works for routing. But: in the Eureka dashboard it shows as 'UNKNOWN'. Log messages have no app name (hard to filter in Kibana/Splunk). Monitoring tools cannot identify this service.</div></div>
+<div class="xr"><div class="xl xl-when">When to change it</div><div class="xv">Keep it as 'api-gateway'. Only change if you have multiple Gateway instances with different purposes, like 'api-gateway-internal' and 'api-gateway-external'. The name must be unique per service type.</div></div>
+<div class="xr"><div class="xl xl-eg">What you see in Eureka when this is set</div><div class="xv">Open <code>http://localhost:8761</code>. You see:<br><code>API-GATEWAY</code> &nbsp; 1 instance &nbsp; localhost:api-gateway:8080 &nbsp; UP<br>If you removed this line, you would see:<br><code>UNKNOWN</code> &nbsp; 1 instance &nbsp; ... &nbsp; UP</div></div>
+</div></div>
+</section>
+<section id="s-eureka-url"><div class="sec-label">→ eureka.client.service-url</div><h2>eureka.client.service-url.defaultZone — In Deep Detail</h2><div class="xcard"><div class="xcard-top"><div class="xcard-line">eureka.client.service-url.defaultZone=http://localhost:8761/eureka/</div><div class="xcard-file">application.properties — Line 3</div></div><div class="xcard-body"><div class="xr"><div class="xl xl-what">What it does</div><div class="xv">Tells the Gateway WHERE the Eureka Server is running. The Gateway uses this address to: (1) <strong>Register itself</strong> — sends its own address to Eureka on startup, (2) <strong>Look up other services</strong> — when a route has <code>uri=lb://product-service</code>, the Gateway calls this Eureka URL and asks: <em>where is product-service right now?</em></div></div>
+<div class="xr"><div class="xl xl-simple">Simple words</div><div class="xv">This is the address of the hotel's internal phone directory. Without this, the receptionist has no directory to look up department numbers. They cannot forward any calls.</div></div>
+<div class="xr"><div class="xl xl-why">Why this exact URL format?</div><div class="xv"><code>http://</code> = the protocol. <code>localhost</code> = Eureka is running on the same machine. <code>:8761</code> = Eureka's port (industry standard). <code>/eureka/</code> = the path that Eureka's REST API is on. All three parts must be exactly correct.</div></div>
+<div class="xr"><div class="xl xl-mand">Mandatory?</div><div class="xv"><span class="badge-yes">YES — if you use lb:// URIs</span> Without this, <code>lb://product-service</code> cannot be resolved. Every request returns 503 Service Unavailable. Only optional if all routes use hardcoded URLs (not recommended).</div></div>
+<div class="xr"><div class="xl xl-remove">If you remove this line</div><div class="xv"><strong>All routes with lb:// stop working.</strong> You get error on startup: <em>Cannot execute request on any known server.</em> Then every request throws: <em>Unable to find instance for product-service.</em> The Gateway cannot find any service.</div></div>
+<div class="xr"><div class="xl xl-when">When to change it</div><div class="xv">Change <code>localhost</code> to the Eureka server's IP in production: <code>http://10.0.1.5:8761/eureka/</code>. In Docker Compose, change <code>localhost</code> to the Eureka service name: <code>http://eureka-server:8761/eureka/</code> — because in Docker, localhost means the container itself, not Eureka.</div></div>
+<div class="xr"><div class="xl xl-eg">What happens internally when Gateway starts</div><div class="xv">1. Gateway reads this URL. 2. Gateway sends HTTP POST to <code>http://localhost:8761/eureka/apps/API-GATEWAY</code> with its own host, port, and health info. 3. Eureka stores this. 4. When any route is called with <code>lb://product-service</code>, Gateway sends HTTP GET to <code>http://localhost:8761/eureka/apps/PRODUCT-SERVICE</code> and gets back a list of instances.</div></div>
+</div></div>
+</section>
+<section id="s-route-id"><div class="sec-label">→ routes[0].id</div><h2>routes[0].id — In Deep Detail</h2><div class="note nteal"><strong>Remember:</strong> Every route is defined with an index number in square brackets: <code>routes[0]</code> for the first route, <code>routes[1]</code> for the second, <code>routes[2]</code> for the third. Each route needs exactly three lines: <strong>id</strong>, <strong>uri</strong>, and <strong>predicates[0]</strong>.</div>
+<div class="xcard"><div class="xcard-top"><div class="xcard-line">spring.cloud.gateway.routes[0].id=product-service-route</div><div class="xcard-file">application.properties — Route 1, Part 1 of 3</div></div><div class="xcard-body"><div class="xr"><div class="xl xl-what">What it does</div><div class="xv">Sets a <strong>unique name for this route</strong>. The name <code>product-service-route</code> appears in: (1) Gateway log files — when a request is routed, the log prints which route matched, (2) Metrics and monitoring — you can count how many requests used each route, (3) Error messages — if a route fails, the error says which route caused the problem.</div></div>
+<div class="xr"><div class="xl xl-simple">Simple words</div><div class="xv">This is like naming a rule. Instead of 'Rule 1', you call it 'product-service-route' so everyone knows what this rule does. When something goes wrong, the logs say 'product-service-route failed' instead of 'some route failed'.</div></div>
+<div class="xr"><div class="xl xl-why">Why this naming convention?</div><div class="xv">The convention is <code>{service-name}-route</code>. Using the service name makes it instantly obvious which service this route is for. When you have 10 routes, meaningful names save hours of debugging.</div></div>
+<div class="xr"><div class="xl xl-mand">Mandatory?</div><div class="xv"><span class="badge-yes">YES — Required</span> Every route must have an id. If you remove this line, the Gateway fails to start with: <em>Route must have an id.</em></div></div>
+<div class="xr"><div class="xl xl-remove">If you remove this line</div><div class="xv">Gateway startup fails immediately: <em>Bean instantiation via constructor failed: Route must have a non-null id.</em> No routes are registered. All requests return 404.</div></div>
+<div class="xr"><div class="xl xl-when">When to change / rules to follow</div><div class="xv">1. Every route id must be unique. Two routes with the same id — the second one silently overwrites the first. 2. Use descriptive names: <code>product-read-route</code>, <code>product-write-route</code> if you split read/write. 3. The <code>[0]</code> index must be sequential — never skip numbers or repeat them.</div></div>
+<div class="xr"><div class="xl xl-eg">What you see in logs with this id set</div><div class="xv">Request comes in: <code>GET /api/products/1</code><br>Gateway log: <code>Matched route: product-service-route</code><br>If something goes wrong: <code>Error in route product-service-route: Connection refused</code><br>Without an id: <code>Error in route a3f2b1c0-...-uuid: ...</code> — much harder to read.</div></div>
+</div></div>
+</section>
+<section id="s-route-uri"><div class="sec-label">→ routes[0].uri</div><h2>routes[0].uri=lb://product-service — In Deep Detail</h2><div class="xcard"><div class="xcard-top"><div class="xcard-line">spring.cloud.gateway.routes[0].uri=lb://product-service</div><div class="xcard-file">application.properties — Route 1, Part 2 of 3 — THE MOST IMPORTANT LINE</div></div><div class="xcard-body"><div class="xr"><div class="xl xl-what">What it does</div><div class="xv">Tells the Gateway <strong>WHERE to forward the request</strong> when this route matches. <code>lb://</code> = load balanced (use Eureka to find the address). <code>product-service</code> = the service name to look up in Eureka. This must EXACTLY match the <code>spring.application.name</code> in product-service's application.properties.</div></div>
+<div class="xr"><div class="xl xl-simple">Simple words</div><div class="xv">This line answers: <em>where should I forward this request?</em> <code>lb://product-service</code> means: <em>ask the phone directory (Eureka) for 'product-service', pick one of the available numbers, and forward the call to that number.</em> You do not hardcode a specific phone number — you let the directory give you the current one.</div></div>
+<div class="xr"><div class="xl xl-why">Why lb:// instead of http://localhost:8081?</div><div class="xv"><strong>lb:// solves the hardcoded URL problem (Phase 4).</strong> With <code>http://localhost:8081</code>: if product-service moves to a new server, the Gateway breaks. If you start 3 instances on ports 8081, 8091, 8092, only 8081 gets traffic — the others are wasted. If product-service crashes and restarts on a different port, the Gateway still calls the old dead port. With <code>lb://product-service</code>: Eureka gives the current live addresses automatically.</div></div>
+<div class="xr"><div class="xl xl-mand">Mandatory?</div><div class="xv"><span class="badge-yes">YES — Required</span> Every route must have a uri. Without it, the Gateway does not know where to send matching requests. Startup fails: <em>URI must be set.</em></div></div>
+<div class="xr"><div class="xl xl-remove">If you remove this line</div><div class="xv">Gateway fails to start: <em>URI is required for route configuration.</em></div></div>
+<div class="xr"><div class="xl xl-when">When to use lb:// vs http://</div><div class="xv"><div class="tw"><table><thead><tr><th>URI Format</th><th>When to Use</th><th>Load Balancing?</th><th>Needs Eureka?</th></tr></thead><tbody><tr><td ><code>lb://product-service</code></td><td >Microservices with Eureka — recommended</td><td class="ok">YES — automatic</td><td class="ok">YES</td></tr><tr><td ><code>http://localhost:8081</code></td><td >Dev/testing without Eureka</td><td class="no">NO — one instance</td><td class="no">NO</td></tr><tr><td ><code>https://api.stripe.com</code></td><td >External APIs not in Eureka</td><td class="no">NO</td><td class="no">NO</td></tr></tbody></table></div>
+</div></div>
+<div class="xr"><div class="xl xl-eg">What happens step by step when this line is used</div><div class="xv">1. Request comes: <code>GET /api/products/1</code><br>2. Predicate matches (Path=/api/products/**)<br>3. Gateway sees <code>lb://product-service</code><br>4. Spring Cloud LoadBalancer asks Eureka: <em>what instances of PRODUCT-SERVICE are up right now?</em><br>5. Eureka returns: <code>[{localhost:8081}, {localhost:8091}]</code><br>6. LoadBalancer picks one: <code>localhost:8081</code> (round-robin)<br>7. URL built: <code>http://localhost:8081/api/products/1</code><br>8. Request forwarded. Response returned to client.</div></div>
+</div></div>
+</section>
+<section id="s-route-pred"><div class="sec-label">→ routes[0].predicates</div><h2>routes[0].predicates[0]=Path — In Deep Detail</h2><div class="xcard"><div class="xcard-top"><div class="xcard-line">spring.cloud.gateway.routes[0].predicates[0]=Path=/api/products/**</div><div class="xcard-file">application.properties — Route 1, Part 3 of 3</div></div><div class="xcard-body"><div class="xr"><div class="xl xl-what">What it does</div><div class="xv">A predicate is a <strong>condition that must be TRUE for this route to apply</strong>. <code>Path=/api/products/**</code> means: only use this route if the request URL starts with <code>/api/products/</code>. The <code>**</code> is a wildcard that matches anything after the prefix — so <code>/api/products</code>, <code>/api/products/1</code>, <code>/api/products/search?q=phone</code> all match.</div></div>
+<div class="xr"><div class="xl xl-simple">Simple words</div><div class="xv">This line answers: <em>when should I use this route?</em> Think of it as the sorting label at the post office: envelopes that say 'api/products' in the address go into the product-service bin. Envelopes that say 'api/orders' go into a different bin.</div></div>
+<div class="xr"><div class="xl xl-why">Why this is critical</div><div class="xv">Without predicates, the route would match EVERY request. Whether you call <code>/api/products</code> or <code>/api/orders</code> or <code>/auth/login</code>, all would go to product-service. Predicates are what makes each route selective — each route only handles what it is supposed to handle.</div></div>
+<div class="xr"><div class="xl xl-mand">Mandatory?</div><div class="xv"><span class="badge-yes">YES — At least one predicate required</span> Without predicates, a route matches nothing (or everything, depending on configuration). Best practice: always have at least one Path predicate.</div></div>
+<div class="xr"><div class="xl xl-remove">If you remove this line</div><div class="xv">The route has no condition. Depending on Gateway version, it either: (1) matches ALL requests — every request goes to product-service regardless of URL, or (2) throws a configuration error at startup. Neither is what you want.</div></div>
+<div class="xr"><div class="xl xl-when">When to change the pattern</div><div class="xv">Change the path to match your service's URL structure. If your product API is at <code>/products/v2/**</code>, write that. If your service only handles one endpoint, write the exact path: <code>/api/products/{id}</code>. The pattern must match exactly what your service controller expects.</div></div>
+<div class="xr"><div class="xl xl-eg">Pattern examples with what they match</div><div class="xv"><div class="tw"><table><thead><tr><th>Pattern</th><th>Matches</th><th>Does NOT Match</th></tr></thead><tbody><tr><td ><code>/api/products/**</code></td><td ><code>/api/products</code>, <code>/api/products/1</code>, <code>/api/products/search</code></td><td ><code>/products</code>, <code>/api/orders</code></td></tr><tr><td ><code>/api/products/{id}</code></td><td ><code>/api/products/1</code>, <code>/api/products/99</code></td><td ><code>/api/products</code>, <code>/api/products/1/reviews</code></td></tr><tr><td ><code>/auth/**</code></td><td ><code>/auth/login</code>, <code>/auth/register</code>, <code>/auth/refresh</code></td><td ><code>/api/auth/login</code></td></tr><tr><td ><code>/**</code></td><td >EVERYTHING</td><td >Nothing — this catches ALL unmatched requests</td></tr></tbody></table></div>
+</div></div>
+</div></div>
+</section>
+<section id="s-all-predicates"><div class="sec-label">PREDICATES</div><h2>All Predicate Types — When and How to Use Each</h2><p>A predicate is a condition on the incoming request. If ALL predicates on a route match, that route is used. You can combine multiple predicates by adding predicates[0], predicates[1], predicates[2]...</p>
+<h4>Path=/api/products/** <span style="background:var(--bg3);border:1px solid var(--border);color:var(--t3);font-family:JetBrains Mono,monospace;font-size:12px;font-weight:400;padding:2px 8px;border-radius:12px;margin-left:8px">URL Pattern Matching</span></h4>
+<p>Matches based on the URL path. Most used predicate.</p>
+<p><strong>Example matches:</strong> GET /api/products → ✅  GET /api/products/1 → ✅  GET /api/orders → ❌</p>
+<div class="cb"><div class="cbh"><span class="cf">Example: Path=/api/products/**</span><span class="bd bp">PROPERTIES</span></div><pre><code>routes[0].predicates[0]=Path=/api/products/**
+# Use when: routing by URL structure (almost always)
+# Not useful when: you route by something other than URL (rare)</code></pre></div>
+
+<h4>Method=GET <span style="background:var(--bg3);border:1px solid var(--border);color:var(--t3);font-family:JetBrains Mono,monospace;font-size:12px;font-weight:400;padding:2px 8px;border-radius:12px;margin-left:8px">HTTP Method Matching</span></h4>
+<p>Matches based on HTTP method. Combine with Path for fine-grained routing.</p>
+<p><strong>Example matches:</strong> GET request → ✅  POST request → ❌  DELETE request → ❌</p>
+<div class="cb"><div class="cbh"><span class="cf">Example: Method=GET</span><span class="bd bp">PROPERTIES</span></div><pre><code>routes[0].predicates[0]=Path=/api/products/**
+routes[0].predicates[1]=Method=GET
+# This route only handles GET /api/products/**
+# POST /api/products does not match — needs a separate route</code></pre></div>
+
+<h4>Header=Authorization, Bearer.* <span style="background:var(--bg3);border:1px solid var(--border);color:var(--t3);font-family:JetBrains Mono,monospace;font-size:12px;font-weight:400;padding:2px 8px;border-radius:12px;margin-left:8px">Request Header Matching</span></h4>
+<p>Matches if the request has a header whose value matches a regex.</p>
+<p><strong>Example matches:</strong> Header 'Authorization: Bearer eyJ...' → ✅  No header → ❌</p>
+<div class="cb"><div class="cbh"><span class="cf">Example: Header=Authorization, Bearer.*</span><span class="bd bp">PROPERTIES</span></div><pre><code>routes[0].predicates[0]=Path=/api/products/**
+routes[0].predicates[1]=Header=Authorization, Bearer.*
+# Route only applies if request has a valid Bearer token
+# Requests without auth header do not match this route</code></pre></div>
+
+<h4>Query=category, electronics <span style="background:var(--bg3);border:1px solid var(--border);color:var(--t3);font-family:JetBrains Mono,monospace;font-size:12px;font-weight:400;padding:2px 8px;border-radius:12px;margin-left:8px">Query Parameter Matching</span></h4>
+<p>Matches if the URL has a specific query parameter (optionally with a value regex).</p>
+<p><strong>Example matches:</strong> GET /api/products?category=electronics → ✅  GET /api/products?category=shoes → ❌</p>
+<div class="cb"><div class="cbh"><span class="cf">Example: Query=category, electronics</span><span class="bd bp">PROPERTIES</span></div><pre><code>routes[0].predicates[0]=Path=/api/products/**
+routes[0].predicates[1]=Query=category, electronics
+# Route electronics queries to a specialised service
+# All other categories go through a different route</code></pre></div>
+
+<h4>After=2025-01-01T00:00:00+05:30[Asia/Kolkata] <span style="background:var(--bg3);border:1px solid var(--border);color:var(--t3);font-family:JetBrains Mono,monospace;font-size:12px;font-weight:400;padding:2px 8px;border-radius:12px;margin-left:8px">Time-Based Matching</span></h4>
+<p>This route is only active AFTER the specified date and time. Before that, requests fall through to the next matching route.</p>
+<p><strong>Example matches:</strong> Request on Dec 31 2024 → ❌  Request on Jan 1 2025 → ✅</p>
+<div class="cb"><div class="cbh"><span class="cf">Example: After=2025-01-01T00:00:00+05:30[Asia/Kolkata]</span><span class="bd bp">PROPERTIES</span></div><pre><code>routes[0].predicates[0]=Path=/api/new-feature/**
+routes[0].predicates[1]=After=2025-01-01T00:00:00+05:30[Asia/Kolkata]
+# Feature goes live automatically at midnight Jan 1
+# No code deployment or restart needed</code></pre></div>
+
+</section>
+<section id="s-all-filters"><div class="sec-label">FILTERS</div><h2>All Filter Types — When and How to Use Each</h2><p>Filters modify the request BEFORE forwarding it to the service, or modify the response BEFORE returning it to the client. They run after the predicate matches.</p>
+<h4>AddRequestHeader=X-Source, api-gateway <span style="background:var(--bg3);border:1px solid var(--border);color:var(--t3);font-family:JetBrains Mono,monospace;font-size:12px;font-weight:400;padding:2px 8px;border-radius:12px;margin-left:8px">Request Header Filter</span></h4>
+<p>Adds a header to the request before forwarding it. The service receives this header as if the client sent it.</p>
+<p><strong>What it does:</strong> Client sends nothing. Product-service receives <code>X-Source: api-gateway</code> automatically.</p>
+<div class="cb"><div class="cbh"><span class="cf">Example: AddRequestHeader=X-Source, api-gateway</span><span class="bd bp">PROPERTIES</span></div><pre><code>routes[0].filters[0]=AddRequestHeader=X-Source, api-gateway
+# Product-service can log X-Source to know all traffic came via Gateway
+# Useful for: request tracing, identifying request source</code></pre></div>
+
+<h4>AddResponseHeader=X-Served-By, product <span style="background:var(--bg3);border:1px solid var(--border);color:var(--t3);font-family:JetBrains Mono,monospace;font-size:12px;font-weight:400;padding:2px 8px;border-radius:12px;margin-left:8px">Response Header Filter</span></h4>
+<p>Adds a header to the response before returning it to the client.</p>
+<p><strong>What it does:</strong> Client receives extra header <code>X-Served-By: product</code> in the response.</p>
+<div class="cb"><div class="cbh"><span class="cf">Example: AddResponseHeader=X-Served-By, product</span><span class="bd bp">PROPERTIES</span></div><pre><code>routes[0].filters[0]=AddResponseHeader=X-Served-By, product-service
+# Client can see which service handled their request
+# Useful for: debugging, identifying which instance responded</code></pre></div>
+
+<h4>StripPrefix=1 <span style="background:var(--bg3);border:1px solid var(--border);color:var(--t3);font-family:JetBrains Mono,monospace;font-size:12px;font-weight:400;padding:2px 8px;border-radius:12px;margin-left:8px">Path Strip Filter</span></h4>
+<p>Removes N segments from the beginning of the URL path before forwarding. Client calls <code>/api/products/1</code> → after StripPrefix=1 → service receives <code>/products/1</code>.</p>
+<p><strong>What it does:</strong> Client: <code>/v1/api/products/1</code> → StripPrefix=1 → Service: <code>/api/products/1</code></p>
+<div class="cb"><div class="cbh"><span class="cf">Example: StripPrefix=1</span><span class="bd bp">PROPERTIES</span></div><pre><code>routes[0].predicates[0]=Path=/v1/**
+routes[0].filters[0]=StripPrefix=1
+# Client: GET /v1/api/products/1
+# Service receives: GET /api/products/1
+# The "/v1" prefix is stripped</code></pre></div>
+
+<h4>RewritePath=/old/(?&lt;seg&gt;.*), /new/$&#123;seg&#125; <span style="background:var(--bg3);border:1px solid var(--border);color:var(--t3);font-family:JetBrains Mono,monospace;font-size:12px;font-weight:400;padding:2px 8px;border-radius:12px;margin-left:8px">Path Rewrite Filter</span></h4>
+<p>Rewrites the URL path using a regex pattern. The captured group <code>(?&lt;seg&gt;.*)</code> is reused in the replacement.</p>
+<p><strong>What it does:</strong> Client: <code>/v1/products/1</code> → Rewrite → Service: <code>/api/products/1</code></p>
+<div class="cb"><div class="cbh"><span class="cf">Example: RewritePath=/old/(?&lt;seg&gt;.*), /new/$&#123;seg&#125;</span><span class="bd bp">PROPERTIES</span></div><pre><code>routes[0].predicates[0]=Path=/v1/products/**
+routes[0].filters[0]=RewritePath=/v1/products/(?&lt;seg&gt;.*), /api/products/$&#123;seg&#125;
+# Client calls old URL: /v1/products/1
+# Service receives new URL: /api/products/1
+# Used for API versioning migrations</code></pre></div>
+
+<h4>CircuitBreaker=name=productCB,fallbackUri=forward:/fallback <span style="background:var(--bg3);border:1px solid var(--border);color:var(--t3);font-family:JetBrains Mono,monospace;font-size:12px;font-weight:400;padding:2px 8px;border-radius:12px;margin-left:8px">Circuit Breaker Filter</span></h4>
+<p>If product-service fails repeatedly (connection errors), the circuit 'opens' and requests immediately get a fallback response without trying the broken service.</p>
+<p><strong>What it does:</strong> Product-service down → client gets /fallback response instead of error</p>
+<div class="cb"><div class="cbh"><span class="cf">Example: CircuitBreaker=name=productCB,fallbackUri=forward:/fallback</span><span class="bd bp">PROPERTIES</span></div><pre><code>routes[0].filters[0]=CircuitBreaker=name=productCB,fallbackUri=forward:/fallback
+# Add this @GetMapping("/fallback") in a Gateway controller:
+# return "Product service is temporarily unavailable";
+# Used when: you want graceful degradation instead of hard errors</code></pre></div>
+
+</section>
+<section id="s-flow"><div class="sec-label">REQUEST FLOW</div><h2>What Happens Step by Step — Complete Request Flow</h2><p>Let us trace <code>GET http://localhost:8080/api/products/1</code> through the entire Gateway from start to finish.</p>
+<div class="step"><div class="step-hdr"><div class="step-num">1</div><div class="step-title">Client sends request to Gateway</div></div><div class="step-body"><p>The client (Postman, browser, mobile app) sends: <code>GET http://localhost:8080/api/products/1</code>. The client knows nothing about port 8081. It only knows port 8080.</p></div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">2</div><div class="step-title">Netty server receives the request</div></div><div class="step-body"><p>The Gateway uses Netty (a non-blocking server, different from Tomcat). Netty receives the request on port 8080 and passes it to the Gateway pipeline.</p></div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">3</div><div class="step-title">GlobalFilters run first</div></div><div class="step-body"><p>If you have a GlobalFilter (like the JWT filter from Phase 8), it runs on EVERY request. It checks for <code>Authorization: Bearer token</code>. If missing or invalid → 401 returned immediately. If valid → continues to next step.</p></div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">4</div><div class="step-title">Gateway checks routes in order — routes[0] first</div></div><div class="step-body"><p>Is <code>/api/products/1</code> matched by <code>Path=/api/products/**</code>? <strong>YES.</strong> Route selected: <code>product-service-route</code>. Gateway stops checking other routes.</p></div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">5</div><div class="step-title">Route filters run (pre-request)</div></div><div class="step-body"><p>Any <code>filters[N]</code> defined for this route run now. Example: <code>AddRequestHeader=X-Source, api-gateway</code> adds the header to the forwarded request.</p></div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">6</div><div class="step-title">lb:// resolved via Eureka</div></div><div class="step-body"><p>Gateway calls LoadBalancer: <em>where is PRODUCT-SERVICE?</em> LoadBalancer queries local Eureka cache. Returns: <code>[localhost:8081, localhost:8091]</code>. Picks: <code>localhost:8081</code> (round-robin).</p></div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">7</div><div class="step-title">Request forwarded to product-service</div></div><div class="step-body"><p>Final URL: <code>http://localhost:8081/api/products/1</code>. All original headers are preserved. Any added headers are included.</p></div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">8</div><div class="step-title">product-service processes the request</div></div><div class="step-body"><p>ProductController.getProductById(1) runs. ProductService queries MySQL. Returns ProductDTO as JSON.</p></div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">9</div><div class="step-title">Response travels back through Gateway</div></div><div class="step-body"><p>Response goes back through the Gateway. Response filters run (e.g., <code>AddResponseHeader</code>). Any response transformations happen here.</p></div></div>
+<div class="step"><div class="step-hdr"><div class="step-num">10</div><div class="step-title">Client receives the response</div></div><div class="step-body"><p><code>HTTP 200 OK</code> with product JSON. The client received a response from port 8080. The client has no idea that port 8081 was involved.</p></div></div>
+</section>
+<section id="s-errors"><div class="sec-label">ERRORS</div><h2>Common Errors — Exact Message + Cause + Fix</h2><div class="ecard"><div class="ecard-hdr">Spring MVC found on classpath, which is incompatible with Spring Cloud Gateway</div><div class="ecard-body"><p><strong>Why this happens:</strong> You added <code>spring-boot-starter-web</code> to pom.xml. Gateway uses WebFlux (Netty). Spring Web uses Tomcat. They cannot run together.</p><p><strong>How to fix it:</strong> Remove <code>spring-boot-starter-web</code> from pom.xml. Save, reimport Maven. Restart the Gateway.</p></div></div>
+<div class="ecard"><div class="ecard-hdr">Unable to find instance for product-service</div><div class="ecard-body"><p><strong>Why this happens:</strong> (1) Product-service is not running. (2) Product-service is running but not yet registered in Eureka (takes ~30 seconds). (3) <code>spring.application.name</code> in product-service does not match what you wrote after <code>lb://</code>. Example: product-service has <code>spring.application.name=products</code> but Gateway says <code>lb://product-service</code>.</p><p><strong>How to fix it:</strong> 1. Start product-service. 2. Wait 30 seconds. Open http://localhost:8761 — confirm PRODUCT-SERVICE shows UP. 3. Check the name matches exactly: <code>spring.application.name=product-service</code> ↔ <code>lb://product-service</code>.</p></div></div>
+<div class="ecard"><div class="ecard-hdr">404 Not Found — No route found</div><div class="ecard-body"><p><strong>Why this happens:</strong> The request URL does not match any predicate in any route. Example: you call <code>GET /products/1</code> but your predicate is <code>Path=/api/products/**</code>. Missing the <code>/api/</code> prefix.</p><p><strong>How to fix it:</strong> Check your URL. It must start with exactly what the predicate expects. Add <code>routes[N].predicates[0]=Path=/**</code> as the LAST route to catch all unmatched requests for debugging.</p></div></div>
+<div class="ecard"><div class="ecard-hdr">Cannot execute request on any known server</div><div class="ecard-body"><p><strong>Why this happens:</strong> Gateway cannot connect to Eureka Server. Either: Eureka is not running, or the <code>eureka.client.service-url.defaultZone</code> URL is wrong.</p><p><strong>How to fix it:</strong> 1. Start Eureka Server FIRST before starting Gateway. 2. Verify the URL: open <code>http://localhost:8761</code> in browser — you should see the Eureka dashboard. 3. If in Docker, change <code>localhost</code> to <code>eureka-server</code>.</p></div></div>
+<div class="ecard"><div class="ecard-hdr">Route must have a non-null id</div><div class="ecard-body"><p><strong>Why this happens:</strong> One of your routes in application.properties is missing the <code>.id=</code> line, or has a typo in the property name.</p><p><strong>How to fix it:</strong> Add the id line: <code>spring.cloud.gateway.routes[N].id=any-unique-name</code>. Check all routes have id, uri, and predicates.</p></div></div>
+<div class="ecard"><div class="ecard-hdr">Routes overwrite each other silently</div><div class="ecard-body"><p><strong>Why this happens:</strong> Two routes have the same index: two lines start with <code>routes[0]</code>. The second one overwrites the first.</p><p><strong>How to fix it:</strong> Use sequential unique indices: routes[0], routes[1], routes[2]. Never repeat an index number.</p></div></div>
+</section>
+<section id="s-test"><div class="sec-label">TESTING</div><h2>Testing Every Route Through the Gateway</h2><div class="cb"><div class="cbh"><span class="cf">Start services in this order</span><span class="bd bp">BASH</span></div><pre><code># STEP 1: Start Eureka Server (MUST be first)
+cd eureka-server
+mvn spring-boot:run
+# Wait until you see: Started EurekaServerApplication
+
+# STEP 2: Start your microservices
+cd product-service
+mvn spring-boot:run
+
+cd order-service
+mvn spring-boot:run
+
+# STEP 3: Start Gateway LAST (it needs services in Eureka)
+cd api-gateway
+mvn spring-boot:run
+# Wait until you see: Started ApiGatewayApplication</code></pre></div>
+<div class="cb"><div class="cbh"><span class="cf">All test requests — all go through port 8080</span><span class="bd bp">BASH</span></div><pre><code># ── PRODUCT SERVICE TESTS (via Gateway) ─────────────────────
+GET    http://localhost:8080/api/products
+GET    http://localhost:8080/api/products/1
+POST   http://localhost:8080/api/products
+       Body: { "name": "iPhone 15", "price": 79999 }
+PUT    http://localhost:8080/api/products/1
+       Body: { "name": "iPhone 15 Pro", "price": 89999 }
+DELETE http://localhost:8080/api/products/1
+
+# ── ORDER SERVICE TESTS (via Gateway) ───────────────────────
+GET    http://localhost:8080/api/orders
+POST   http://localhost:8080/api/orders
+       Body: { "productId": 1, "customerId": 42, "quantity": 2 }
+
+# ── VERIFY GATEWAY IS WORKING (not just direct service) ─────
+# Both should return same data:
+GET http://localhost:8080/api/products    ← THROUGH Gateway
+GET http://localhost:8081/api/products    ← DIRECT to service
+
+# ── TEST UNKNOWN ROUTE ──────────────────────────────────────
+GET http://localhost:8080/unknown         ← expect 404
+
+# ── CHECK EUREKA SHOWS GATEWAY ──────────────────────────────
+GET http://localhost:8761                 ← Eureka dashboard
+# Should show: PRODUCT-SERVICE, ORDER-SERVICE, API-GATEWAY all UP</code></pre></div>
+</section>
+<section id="s-iq"><div class="sec-label">INTERVIEW Q&A</div><h2>10 Interview Questions with Complete Answers</h2><div class="iq-box"><div class="iq-title">10 Interview Questions — API Gateway</div>
+<div class="iq-item"><div class="iq-q">Q: What is an API Gateway? Explain in simple terms.</div><div class="iq-a">A: An API Gateway is a single entry point for all client requests. Instead of clients knowing multiple service ports (8081 for products, 8082 for orders), all requests go to one port (8080). The Gateway reads the URL and routes to the correct service. It also handles authentication, logging, and rate limiting in one place.</div></div>
+<div class="iq-item"><div class="iq-q">Q: Why can't you add spring-boot-starter-web to the Gateway project?</div><div class="iq-a">A: Gateway uses Spring WebFlux (reactive) which runs on Netty server. spring-boot-starter-web uses Spring MVC which runs on Tomcat. They cannot run together. Adding both causes startup failure: 'Spring MVC found on classpath, which is incompatible with Spring Cloud Gateway'.</div></div>
+<div class="iq-item"><div class="iq-q">Q: What does lb://product-service mean?</div><div class="iq-a">A: lb:// stands for 'load balanced'. Instead of a hardcoded URL, the Gateway asks Eureka: where is product-service right now? Eureka returns all current live instances. The Gateway picks one using round-robin and forwards the request. If product-service moves ports, scales to 5 instances, or crashes — the Gateway adapts automatically without any code change.</div></div>
+<div class="iq-item"><div class="iq-q">Q: What are the three required parts of every Gateway route?</div><div class="iq-a">A: id (unique name for the route — used in logs and metrics), uri (where to forward matching requests — lb://service-name or http://host:port), predicates (conditions that must match — at least one, usually Path=). Missing any of these causes a startup error.</div></div>
+<div class="iq-item"><div class="iq-q">Q: What is a predicate and why is it important?</div><div class="iq-a">A: A predicate is a condition. Only if the condition is true does the route apply. Without predicates, a route would match ALL requests — every URL would go to the same service regardless of what it is. Predicates (especially Path) ensure product requests go to product-service, order requests go to order-service, etc.</div></div>
+<div class="iq-item"><div class="iq-q">Q: What is a GlobalFilter vs a route filter?</div><div class="iq-a">A: A GlobalFilter runs on EVERY request through the Gateway, regardless of which route matches. Used for JWT validation, logging, rate limiting. A route filter (filters[0], filters[1] in properties) runs only for requests matching its specific route. Used for header manipulation, path rewriting, circuit breaking on individual services.</div></div>
+<div class="iq-item"><div class="iq-q">Q: What happens if no route matches an incoming request?</div><div class="iq-a">A: Gateway returns 404 Not Found with message 'No route found for URI'. This is correct — the Gateway only forwards requests it has explicit rules for. To handle unknown routes, add a catch-all route with Path=/** as the VERY LAST route — it matches anything that didn't match earlier routes.</div></div>
+<div class="iq-item"><div class="iq-q">Q: What is the route matching order?</div><div class="iq-a">A: Routes are checked in index order: routes[0] first, then routes[1], routes[2], etc. The FIRST matching route is used. Other routes are not checked. This means more specific routes must come before general routes. A catch-all Path=/** must always be LAST, otherwise it catches everything and no other route gets a chance.</div></div>
+<div class="iq-item"><div class="iq-q">Q: What error occurs when routes[0] is defined twice?</div><div class="iq-a">A: No error at startup — the second definition silently overwrites the first. The first route disappears. Requests that were supposed to use the first route get 404 (no route found). Always use unique sequential indices: routes[0], routes[1], routes[2]. Never repeat an index.</div></div>
+<div class="iq-item"><div class="iq-q">Q: When should you NOT use an API Gateway?</div><div class="iq-a">A: When you have only 1 service (unnecessary overhead). When you are still learning basics (adds complexity before you understand the core). For internal service-to-service calls (Feign handles those, not Gateway). When all APIs are internal only with no external clients. When your team is 1-2 developers and the operational complexity outweighs the benefits.</div></div>
+</div>
+</section>
+
+</div>
+</div>
+<script>
+const links=document.querySelectorAll('.ni');
+const secs=document.querySelectorAll('section');
+const pf=document.getElementById('pf');
+function mark(id){
+  links.forEach(n=>n.classList.toggle('active',n.getAttribute('href')==='#s-'+id));
+  const idx=[...secs].findIndex(s=>s.id==='s-'+id);
+  if(pf)pf.style.width=Math.round((idx+1)/secs.length*100)+'%';
+}
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)mark(e.target.id.replace('s-',''));});
+},{rootMargin:'-25% 0px -65% 0px'});
+secs.forEach(s=>obs.observe(s));
+links.forEach(n=>n.addEventListener('click',e=>{
+  e.preventDefault();
+  const id=n.getAttribute('href').replace('#s-','');
+  const el=document.getElementById('s-'+id);
+  if(el){el.scrollIntoView({behavior:'smooth'});mark(id);}
+}));
+</script>
+</body>
+</html>

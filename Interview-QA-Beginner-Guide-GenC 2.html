@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Questions and Answers - GenC Fresher Mock Practice Guide</title>
+<style>
+    :root {
+        --primary: #1f2a52;
+        --secondary: #34508f;
+        --accent: #0b6e7c;
+        --light: #f3f5fa;
+        --border: #cfd6e4;
+        --text: #1f2933;
+        --muted: #54607a;
+        --code-bg: #11182b;
+        --qbar: #34508f;
+    }
+    * { box-sizing: border-box; }
+    body {
+        font-family: "Segoe UI", Calibri, Arial, sans-serif;
+        color: var(--text);
+        line-height: 1.55;
+        padding: 0 48px 64px 48px;
+        max-width: 1000px;
+        margin: 0 auto;
+        background: #ffffff;
+    }
+    h1, h2, h3 { color: var(--primary); font-weight: 600; }
+    h1 { font-size: 28px; margin: 0 0 4px 0; }
+    h2 {
+        font-size: 22px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 3px solid var(--secondary);
+        padding-bottom: 6px;
+        margin-top: 44px;
+    }
+    h3 { font-size: 16px; margin-top: 26px; color: var(--accent); }
+    p { margin: 8px 0; }
+
+    code {
+        font-family: "Consolas", "Courier New", monospace;
+        background: var(--light);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        padding: 1px 5px;
+        font-size: 12.5px;
+        color: #b03060;
+    }
+    pre {
+        font-family: "Consolas", "Courier New", monospace;
+        background: var(--code-bg);
+        color: #e8eef5;
+        border-radius: 6px;
+        padding: 14px 16px;
+        font-size: 12px;
+        line-height: 1.5;
+        overflow-x: auto;
+        white-space: pre;
+    }
+
+    .cover {
+        text-align: center;
+        padding: 80px 0 56px 0;
+        border-bottom: 3px solid var(--primary);
+        margin-bottom: 10px;
+    }
+    .cover .subtitle { font-size: 16px; color: var(--muted); margin-top: 8px; }
+    .cover .meta { font-size: 13px; color: var(--muted); margin-top: 32px; }
+    .badge {
+        display: inline-block;
+        background: var(--accent);
+        color: #fff;
+        font-size: 12px;
+        padding: 4px 12px;
+        border-radius: 14px;
+        margin: 4px;
+    }
+
+    .qa { margin: 12px 0; padding-left: 14px; border-left: 3px solid var(--qbar); }
+    .q { font-weight: 600; color: var(--primary); margin-bottom: 3px; }
+    .a { margin: 0 0 4px 0; }
+    .a ul { margin: 4px 0 4px 18px; padding: 0; }
+    .a li { margin: 2px 0; }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 12px 0;
+        font-size: 12.5px;
+    }
+    th, td { border: 1px solid var(--border); padding: 7px 10px; text-align: left; vertical-align: top; }
+    th { background: var(--primary); color: #fff; }
+    tr:nth-child(even) td { background: var(--light); }
+
+    .toc { columns: 2; column-gap: 36px; font-size: 13.5px; }
+    .toc a { color: var(--secondary); text-decoration: none; line-height: 1.9; }
+
+    footer {
+        margin-top: 50px;
+        border-top: 1px solid var(--border);
+        padding-top: 12px;
+        font-size: 12px;
+        color: var(--muted);
+        text-align: center;
+    }
+    @media print {
+        body { padding: 0 12px; }
+        h2 { page-break-after: avoid; page-break-before: always; }
+        .qa, pre, table { page-break-inside: avoid; }
+        .cover { padding: 60px 0 40px 0; }
+        #toc-section { page-break-after: always; }
+    }
+</style>
+</head>
+<body>
+
+<div class="cover">
+    <h1>Interview Questions and Answers</h1>
+    <div class="subtitle">GenC Fresher Mock-Interview Practice Guide for Java Full-Stack Developers</div>
+    <div style="margin-top:22px;">
+        <span class="badge">Core Java</span>
+        <span class="badge">Spring MVC</span>
+        <span class="badge">Web</span>
+        <span class="badge">Git</span>
+        <span class="badge">Agile</span>
+        <span class="badge">Logging</span>
+        <span class="badge">HR &amp; Project</span>
+    </div>
+    <div class="meta">
+        GenC Fresher Focus &bull; Mock-Interview Practice &bull; 21 Questions Per Topic &bull; With Answers
+    </div>
+</div>
+
+<div id="toc-section">
+<h2>Table of Contents</h2>
+<div class="toc">
+    <a href="#m1">1. Introduction and Self Presentation</a><br>
+    <a href="#m2">2. OOP Concepts</a><br>
+    <a href="#m3">3. Collections Framework</a><br>
+    <a href="#m4">4. Multithreading</a><br>
+    <a href="#m5">5. Exception Handling</a><br>
+    <a href="#m6">6. Git</a><br>
+    <a href="#m7">7. HTML</a><br>
+    <a href="#m8">8. CSS</a><br>
+    <a href="#m9">9. JavaScript</a><br>
+    <a href="#m10">10. Bootstrap 5</a><br>
+    <a href="#m11">11. Agile</a><br>
+    <a href="#m12">12. Software Engineering</a><br>
+    <a href="#m13">13. Project Explanation (Spring MVC)</a><br>
+    <a href="#m14">14. Logging</a><br>
+    <a href="#m15">15. SLF4J</a><br>
+    <a href="#m16">16. Log4j and SLF4J Together</a><br>
+    <a href="#m17">17. General Interview Questions</a><br>
+    <a href="#m18">18. Project Challenges</a><br>
+</div>
+</div>
+
+<!-- ==================== MODULE 1: INTRODUCTION ==================== -->
+<h2 id="m1">1. Introduction and Self Presentation</h2>
+
+<div class="qa"><div class="q">1. Tell me about yourself.</div><div class="a">Start with your name, education, and key skills, then mention a recent project and your career interest. Example: "I am a computer science graduate skilled in Java, Spring Boot, and SQL. In my last project I built a web application using Spring MVC and MySQL. I enjoy backend development and want to grow as a full-stack developer."</div></div>
+<div class="qa"><div class="q">2. Why did you choose software development?</div><div class="a">I enjoy solving problems logically and seeing my code turn into a working product that people use. Software development lets me keep learning new technologies continuously.</div></div>
+<div class="qa"><div class="q">3. What are your key technical skills?</div><div class="a">Core Java, OOP, Spring MVC, Spring Boot, REST APIs, SQL/MySQL, HTML, CSS, JavaScript, Git, and basic knowledge of testing with JUnit. Tailor this list to the job description.</div></div>
+<div class="qa"><div class="q">4. What are your strengths?</div><div class="a">Quick learner, strong problem-solving ability, good teamwork, and attention to detail. Always back a strength with a short real example.</div></div>
+<div class="qa"><div class="q">5. What is your weakness?</div><div class="a">Pick a genuine but non-critical weakness and show improvement. Example: "I used to hesitate asking for help, but I now reach out early, which saves time for the whole team."</div></div>
+<div class="qa"><div class="q">6. Where do you see yourself in five years?</div><div class="a">I see myself as an experienced developer who has grown into a senior or lead role, mentoring juniors and contributing to important technical decisions.</div></div>
+<div class="qa"><div class="q">7. Why should we hire you?</div><div class="a">I have the required technical skills, I learn quickly, and I am a reliable team player. I am confident I can contribute value and grow with the company.</div></div>
+<div class="qa"><div class="q">8. What motivates you?</div><div class="a">Solving challenging problems, learning new technologies, and seeing my work create real impact for users.</div></div>
+<div class="qa"><div class="q">9. How do you handle pressure and deadlines?</div><div class="a">I break the work into smaller tasks, prioritize the most important ones, and communicate early if I need help. Staying organized keeps me calm under pressure.</div></div>
+<div class="qa"><div class="q">10. Do you prefer working in a team or alone?</div><div class="a">I am comfortable with both. I enjoy team collaboration for sharing ideas, and I can also work independently when a task needs focus.</div></div>
+<div class="qa"><div class="q">11. How do you keep your skills updated?</div><div class="a">I follow technical blogs and documentation, take online courses, build small practice projects, and learn from code reviews.</div></div>
+<div class="qa"><div class="q">12. What do you know about our company?</div><div class="a">Research the company before the interview. Mention its products, services, technology stack, and values, and connect them to your interest.</div></div>
+<div class="qa"><div class="q">13. Briefly describe your most recent project.</div><div class="a">State the goal, your role, the technologies used, and the outcome. Keep it to a few sentences and be ready for follow-up questions.</div></div>
+<div class="qa"><div class="q">14. What is your biggest achievement?</div><div class="a">Pick one concrete accomplishment, such as delivering a project on time or solving a tough bug, and explain the impact it had.</div></div>
+<div class="qa"><div class="q">15. How do you handle feedback or criticism?</div><div class="a">I see feedback as a chance to improve. I listen carefully, ask questions if needed, and apply the suggestions in my work.</div></div>
+<div class="qa"><div class="q">16. What are your hobbies?</div><div class="a">Mention genuine hobbies that show positive traits, such as reading, sports, or coding side projects.</div></div>
+<div class="qa"><div class="q">17. Why do you want to start your career in the IT industry?</div><div class="a">I enjoy technology and problem-solving, and the IT industry lets me keep learning and build solutions that create real impact. It matches my skills and long-term interest.</div></div>
+<div class="qa"><div class="q">18. How do you quickly learn a new technology or tool?</div><div class="a">I start with the official documentation and tutorials, build a small practice example, and apply it to a real task step by step. I also ask seniors or refer to trusted resources when stuck.</div></div>
+<div class="qa"><div class="q">19. What kind of role are you looking for?</div><div class="a">A role where I can apply my Java and web development skills, learn from experienced colleagues, and grow technically as a developer.</div></div>
+<div class="qa"><div class="q">20. How do you prioritize your work?</div><div class="a">I list my tasks, judge them by urgency and importance, handle high-priority items first, and keep my team informed of progress.</div></div>
+<div class="qa"><div class="q">21. Do you have any questions for us?</div><div class="a">Always ask one or two thoughtful questions, such as about the training program, team structure, technology stack, or growth opportunities. It shows genuine interest.</div></div>
+
+<!-- ==================== MODULE 2: OOP ==================== -->
+<h2 id="m2">2. OOP Concepts</h2>
+
+<div class="qa"><div class="q">1. What is Object-Oriented Programming?</div><div class="a">OOP is a way of designing software around objects that combine data (fields) and behavior (methods). It makes code modular, reusable, and easier to maintain.</div></div>
+<div class="qa"><div class="q">2. What are the four pillars of OOP?</div><div class="a">Encapsulation, Inheritance, Polymorphism, and Abstraction.</div></div>
+<div class="qa"><div class="q">3. What is a class and an object?</div><div class="a">A class is a blueprint that defines fields and methods. An object is a real instance created from that class. Example: Car is a class; myCar is an object.</div></div>
+<div class="qa"><div class="q">4. What is encapsulation?</div><div class="a">Wrapping data and methods together and hiding internal details. We make fields private and expose them through public getters and setters.</div></div>
+<div class="qa"><div class="q">5. What is inheritance?</div><div class="a">A mechanism where one class (child) acquires the fields and methods of another class (parent) using the <code>extends</code> keyword. It promotes code reuse.</div></div>
+<div class="qa"><div class="q">6. What is polymorphism?</div><div class="a">The ability of one action to behave differently based on the object. It comes in two forms: compile-time (overloading) and runtime (overriding).</div></div>
+<div class="qa"><div class="q">7. What is the difference between compile-time and runtime polymorphism?</div><div class="a">Compile-time polymorphism is achieved by method overloading and resolved by the compiler. Runtime polymorphism is achieved by method overriding and resolved during execution.</div></div>
+<div class="qa"><div class="q">8. What is the difference between overloading and overriding?</div>
+<div class="a"><ul>
+<li>Overloading: same method name, different parameters, within one class.</li>
+<li>Overriding: subclass redefines a parent method with the same signature.</li>
+</ul></div></div>
+<div class="qa"><div class="q">9. What is abstraction?</div><div class="a">Hiding complex implementation and showing only the essential features. Achieved using abstract classes and interfaces.</div></div>
+<div class="qa"><div class="q">10. What is the difference between an abstract class and an interface?</div>
+<div class="a"><ul>
+<li>Abstract class: can have both abstract and concrete methods, fields, and constructors; a class extends only one.</li>
+<li>Interface: defines a contract; from Java 8 it can have default and static methods; a class can implement many.</li>
+</ul></div></div>
+<div class="qa"><div class="q">11. What is a constructor?</div><div class="a">A special method with the same name as the class, used to initialize objects. It has no return type and runs automatically when an object is created.</div></div>
+<div class="qa"><div class="q">12. What is constructor overloading?</div><div class="a">Defining multiple constructors in the same class with different parameter lists to create objects in different ways.</div></div>
+<div class="qa"><div class="q">13. What does the <code>this</code> keyword do?</div><div class="a">It refers to the current object. It is used to access the current object's fields and methods, often to resolve naming conflicts.</div></div>
+<div class="qa"><div class="q">14. What does the <code>super</code> keyword do?</div><div class="a">It refers to the parent class. It is used to call the parent's constructor or access parent methods and fields.</div></div>
+<div class="qa"><div class="q">15. What does the <code>static</code> keyword mean?</div><div class="a">Static members belong to the class rather than any object. They are shared across all instances and can be accessed without creating an object.</div></div>
+<div class="qa"><div class="q">16. What does the <code>final</code> keyword mean?</div>
+<div class="a"><ul>
+<li>final variable: value cannot be changed.</li>
+<li>final method: cannot be overridden.</li>
+<li>final class: cannot be inherited.</li>
+</ul></div></div>
+<div class="qa"><div class="q">17. What are association, aggregation, and composition?</div><div class="a">All describe relationships between objects. Association is a general "uses" link. Aggregation is a weak whole-part where parts can exist alone. Composition is a strong whole-part where parts cannot exist without the whole.</div></div>
+<div class="qa"><div class="q">18. What is coupling and cohesion?</div><div class="a">Coupling is the degree of dependency between classes (low is better). Cohesion is how focused a class is on a single task (high is better).</div></div>
+<div class="qa"><div class="q">19. Can you override a static method?</div><div class="a">No. Static methods belong to the class and are not polymorphic. Redeclaring one in a subclass is method hiding, not overriding.</div></div>
+<div class="qa"><div class="q">20. What is the difference between is-a and has-a relationships?</div><div class="a">"Is-a" represents inheritance (a Dog is an Animal). "Has-a" represents composition or association (a Car has an Engine).</div></div>
+<div class="qa"><div class="q">21. What is the diamond problem?</div><div class="a">An ambiguity when a class inherits the same method from two parents. Java avoids it by not allowing multiple class inheritance; interfaces with default methods resolve it explicitly.</div></div>
+
+<!-- ==================== MODULE 3: COLLECTIONS ==================== -->
+<h2 id="m3">3. Collections Framework</h2>
+
+<div class="qa"><div class="q">1. What is the Collections Framework?</div><div class="a">A set of ready-made classes and interfaces in <code>java.util</code> for storing and manipulating groups of objects, such as List, Set, Map, and Queue.</div></div>
+<div class="qa"><div class="q">2. What is the difference between Collection and Collections?</div><div class="a"><code>Collection</code> is the root interface of the framework. <code>Collections</code> is a utility class with static helper methods like <code>sort()</code> and <code>reverse()</code>.</div></div>
+<div class="qa"><div class="q">3. What is the difference between List, Set, and Map?</div>
+<div class="a"><ul>
+<li>List: ordered, allows duplicates.</li>
+<li>Set: no duplicates.</li>
+<li>Map: stores key-value pairs with unique keys.</li>
+</ul></div></div>
+<div class="qa"><div class="q">4. What is the difference between ArrayList and LinkedList?</div><div class="a">ArrayList uses a dynamic array, fast for random access. LinkedList uses a doubly linked list, faster for frequent insertions and deletions.</div></div>
+<div class="qa"><div class="q">5. What is the difference between ArrayList and Vector?</div><div class="a">Both are dynamic arrays. Vector is synchronized (thread-safe but slower); ArrayList is not synchronized and is preferred in single-threaded code.</div></div>
+<div class="qa"><div class="q">6. What is the difference between HashSet, LinkedHashSet, and TreeSet?</div>
+<div class="a"><ul>
+<li>HashSet: no order, fastest.</li>
+<li>LinkedHashSet: maintains insertion order.</li>
+<li>TreeSet: keeps elements sorted.</li>
+</ul></div></div>
+<div class="qa"><div class="q">7. What is the difference between HashMap and Hashtable?</div><div class="a">HashMap is not synchronized and allows one null key; Hashtable is synchronized and allows no null keys or values. HashMap is generally preferred.</div></div>
+<div class="qa"><div class="q">8. What is the difference between HashMap, LinkedHashMap, and TreeMap?</div><div class="a">HashMap has no order, LinkedHashMap preserves insertion order, and TreeMap keeps keys sorted.</div></div>
+<div class="qa"><div class="q">9. How does HashMap work internally?</div><div class="a">It stores entries in buckets based on the key's hash code. On collision it chains entries (linked list, converting to a balanced tree after a threshold in modern Java).</div></div>
+<div class="qa"><div class="q">10. What is the contract between hashCode and equals?</div><div class="a">If two objects are equal by <code>equals()</code>, they must return the same <code>hashCode()</code>. Breaking this contract causes bugs in hash-based collections.</div></div>
+<div class="qa"><div class="q">11. What is the difference between fail-fast and fail-safe iterators?</div><div class="a">Fail-fast iterators throw <code>ConcurrentModificationException</code> if the collection changes during iteration. Fail-safe iterators (in concurrent collections) work on a copy and do not throw.</div></div>
+<div class="qa"><div class="q">12. What is the difference between Iterator and ListIterator?</div><div class="a">Iterator moves forward only. ListIterator can move both forward and backward and can add or replace elements.</div></div>
+<div class="qa"><div class="q">13. What is the difference between Comparable and Comparator?</div><div class="a">Comparable defines a natural ordering through <code>compareTo()</code> inside the class. Comparator defines custom orderings through <code>compare()</code> in a separate class.</div></div>
+<div class="qa"><div class="q">14. What is the difference between Queue and Deque?</div><div class="a">A Queue processes elements first-in-first-out. A Deque (double-ended queue) allows adding and removing from both ends.</div></div>
+<div class="qa"><div class="q">15. What is a PriorityQueue?</div><div class="a">A queue where elements are ordered by priority (natural order or a comparator) rather than insertion order.</div></div>
+<div class="qa"><div class="q">16. What is the difference between synchronized and concurrent collections?</div><div class="a">Synchronized collections lock the whole object per operation. Concurrent collections like <code>ConcurrentHashMap</code> use finer-grained locking for better performance.</div></div>
+<div class="qa"><div class="q">17. What is ConcurrentHashMap?</div><div class="a">A thread-safe map that allows concurrent reads and segmented writes without locking the entire map, making it efficient in multithreaded code.</div></div>
+<div class="qa"><div class="q">18. What are load factor and initial capacity in HashMap?</div><div class="a">Initial capacity is the starting number of buckets. Load factor (default 0.75) decides when the map resizes. The map grows when entries exceed capacity times load factor.</div></div>
+<div class="qa"><div class="q">19. How do you make a collection read-only?</div><div class="a">Wrap it with <code>Collections.unmodifiableList()</code> (or similar), or use <code>List.of()</code> to create an immutable collection.</div></div>
+<div class="qa"><div class="q">20. What is the difference between an array and an ArrayList?</div><div class="a">An array has a fixed size and can hold primitives. An ArrayList is resizable, holds objects, and provides many built-in methods.</div></div>
+<div class="qa"><div class="q">21. What are generics in collections?</div><div class="a">Generics let you specify the element type, like <code>List&lt;String&gt;</code>. They provide compile-time type safety and remove the need for casting.</div></div>
+
+<!-- ==================== MODULE 4: MULTITHREADING ==================== -->
+<h2 id="m4">4. Multithreading</h2>
+
+<div class="qa"><div class="q">1. What is a thread and a process?</div><div class="a">A process is an independent running program with its own memory. A thread is a lightweight unit of execution inside a process; multiple threads share the process memory.</div></div>
+<div class="qa"><div class="q">2. What are the ways to create a thread in Java?</div><div class="a">By extending the <code>Thread</code> class or by implementing the <code>Runnable</code> interface (preferred). You can also use <code>Callable</code> with an ExecutorService.</div></div>
+<div class="qa"><div class="q">3. Why is Runnable preferred over extending Thread?</div><div class="a">Implementing Runnable keeps your class free to extend another class and separates the task from the thread, which is cleaner and more flexible.</div></div>
+<div class="qa"><div class="q">4. What are the states in a thread lifecycle?</div><div class="a">New, Runnable, Running, Blocked/Waiting, and Terminated.</div></div>
+<div class="qa"><div class="q">5. What is the difference between start() and run()?</div><div class="a"><code>start()</code> creates a new thread and then calls <code>run()</code> on it. Calling <code>run()</code> directly executes it on the current thread, with no new thread created.</div></div>
+<div class="qa"><div class="q">6. What is the difference between sleep() and wait()?</div><div class="a"><code>sleep()</code> pauses a thread for a time and keeps the lock. <code>wait()</code> releases the lock and waits until notified. <code>sleep()</code> is in Thread; <code>wait()</code> is in Object.</div></div>
+<div class="qa"><div class="q">7. What is synchronization?</div><div class="a">A mechanism that allows only one thread at a time to access a shared resource, preventing data corruption in multithreaded programs.</div></div>
+<div class="qa"><div class="q">8. What is the difference between a synchronized method and a synchronized block?</div><div class="a">A synchronized method locks the whole method. A synchronized block locks only a chosen section, which is more efficient.</div></div>
+<div class="qa"><div class="q">9. What is a deadlock?</div><div class="a">A situation where two or more threads are blocked forever, each waiting for a lock held by the other.</div></div>
+<div class="qa"><div class="q">10. What is a race condition?</div><div class="a">When two threads access shared data at the same time and the final result depends on timing, causing inconsistent output. Synchronization prevents it.</div></div>
+<div class="qa"><div class="q">11. What does the volatile keyword do?</div><div class="a">It tells the JVM that a variable may change across threads, so each read comes from main memory rather than a cached copy, ensuring visibility.</div></div>
+<div class="qa"><div class="q">12. What is a thread pool and ExecutorService?</div><div class="a">A thread pool reuses a fixed set of threads for many tasks. ExecutorService manages this pool, avoiding the cost of creating threads repeatedly.</div></div>
+<div class="qa"><div class="q">13. What is the difference between Runnable and Callable?</div><div class="a">Runnable's <code>run()</code> returns nothing and cannot throw checked exceptions. Callable's <code>call()</code> returns a result and can throw checked exceptions.</div></div>
+<div class="qa"><div class="q">14. What is the difference between notify() and notifyAll()?</div><div class="a"><code>notify()</code> wakes one waiting thread; <code>notifyAll()</code> wakes all waiting threads, which then compete for the lock.</div></div>
+<div class="qa"><div class="q">15. What is a daemon thread?</div><div class="a">A background thread (like garbage collection) that does not prevent the JVM from exiting once all user threads finish.</div></div>
+<div class="qa"><div class="q">16. What does the join() method do?</div><div class="a">It makes the current thread wait until the thread it is called on finishes execution.</div></div>
+<div class="qa"><div class="q">17. What is thread safety?</div><div class="a">Code is thread-safe when it behaves correctly even when accessed by multiple threads at the same time.</div></div>
+<div class="qa"><div class="q">18. What is the difference between synchronized and Lock?</div><div class="a"><code>synchronized</code> is simpler and automatic. The <code>Lock</code> interface offers more control, such as try-lock, timed lock, and fairness, but must be released manually.</div></div>
+<div class="qa"><div class="q">19. What are atomic variables?</div><div class="a">Classes like <code>AtomicInteger</code> that perform thread-safe operations without locks using low-level atomic instructions.</div></div>
+<div class="qa"><div class="q">20. What does the yield() method do?</div><div class="a">It hints to the scheduler that the current thread is willing to pause so other threads of equal priority can run. It is only a hint.</div></div>
+<div class="qa"><div class="q">21. What is the producer-consumer problem?</div><div class="a">A classic concurrency problem where producers add items to a shared buffer and consumers remove them, coordinated using wait/notify or a blocking queue.</div></div>
+
+<!-- ==================== MODULE 5: EXCEPTION HANDLING ==================== -->
+<h2 id="m5">5. Exception Handling</h2>
+
+<div class="qa"><div class="q">1. What is an exception?</div><div class="a">An unwanted event that disrupts the normal flow of a program at runtime, such as dividing by zero or accessing a null object.</div></div>
+<div class="qa"><div class="q">2. What is the difference between an Exception and an Error?</div><div class="a">Exceptions are conditions an application can catch and handle. Errors (like <code>OutOfMemoryError</code>) are serious problems that usually cannot be recovered from.</div></div>
+<div class="qa"><div class="q">3. What is the difference between checked and unchecked exceptions?</div><div class="a">Checked exceptions are checked at compile time and must be handled or declared (e.g., <code>IOException</code>). Unchecked exceptions occur at runtime (e.g., <code>NullPointerException</code>).</div></div>
+<div class="qa"><div class="q">4. What is the use of try-catch-finally?</div><div class="a"><code>try</code> holds risky code, <code>catch</code> handles the exception, and <code>finally</code> runs cleanup code whether or not an exception occurs.</div></div>
+<div class="qa"><div class="q">5. Can the finally block be skipped?</div><div class="a">Almost never. It is skipped only if the JVM exits (<code>System.exit()</code>) or the thread is killed.</div></div>
+<div class="qa"><div class="q">6. What is the difference between throw and throws?</div><div class="a"><code>throw</code> actually throws an exception object. <code>throws</code> declares in the method signature that a method may throw exceptions.</div></div>
+<div class="qa"><div class="q">7. Can we have multiple catch blocks?</div><div class="a">Yes. A try can have several catch blocks for different exception types, ordered from most specific to most general.</div></div>
+<div class="qa"><div class="q">8. What is try-with-resources?</div><div class="a">A feature where resources declared in the <code>try(...)</code> are closed automatically, as long as they implement <code>AutoCloseable</code>.</div></div>
+<div class="qa"><div class="q">9. How do you create a custom exception?</div><div class="a">Create a class that extends <code>Exception</code> (checked) or <code>RuntimeException</code> (unchecked) and provide constructors that pass a message to the parent.</div></div>
+<div class="qa"><div class="q">10. What is the exception hierarchy?</div><div class="a"><code>Throwable</code> is the root, with two branches: <code>Error</code> and <code>Exception</code>. <code>RuntimeException</code> is a subclass of Exception for unchecked exceptions.</div></div>
+<div class="qa"><div class="q">11. What is the difference between finally and finalize?</div><div class="a"><code>finally</code> is a block for cleanup after try-catch. <code>finalize()</code> was a method called before garbage collection (now deprecated).</div></div>
+<div class="qa"><div class="q">12. Can we have a try without a catch?</div><div class="a">Yes, if it is paired with a <code>finally</code> block or used as try-with-resources.</div></div>
+<div class="qa"><div class="q">13. What are common causes of NullPointerException?</div><div class="a">Calling a method or accessing a field on a null reference, or accessing an element of a null array. Always check or initialize objects first.</div></div>
+<div class="qa"><div class="q">14. What are best practices in exception handling?</div>
+<div class="a"><ul>
+<li>Catch specific exceptions, not just <code>Exception</code>.</li>
+<li>Never leave a catch block empty.</li>
+<li>Log exceptions with context and clean up resources.</li>
+</ul></div></div>
+<div class="qa"><div class="q">15. Give examples of checked exceptions.</div><div class="a"><code>IOException</code>, <code>SQLException</code>, and <code>FileNotFoundException</code>.</div></div>
+<div class="qa"><div class="q">16. Give examples of unchecked exceptions.</div><div class="a"><code>NullPointerException</code>, <code>ArrayIndexOutOfBoundsException</code>, and <code>ArithmeticException</code>.</div></div>
+<div class="qa"><div class="q">17. What is exception propagation?</div><div class="a">If a method does not handle an exception, it passes up the call stack to the caller until it is caught or reaches the JVM.</div></div>
+<div class="qa"><div class="q">18. Can a constructor throw an exception?</div><div class="a">Yes. A constructor can throw exceptions to signal that an object could not be created in a valid state.</div></div>
+<div class="qa"><div class="q">19. What is rethrowing an exception?</div><div class="a">Catching an exception and throwing it again, often after logging or wrapping it in a more meaningful exception.</div></div>
+<div class="qa"><div class="q">20. What is multi-catch?</div><div class="a">A single catch block handling multiple exception types using the pipe symbol, for example <code>catch (IOException | SQLException e)</code>.</div></div>
+<div class="qa"><div class="q">21. What happens if an exception is not handled?</div><div class="a">It propagates up the stack; if never caught, the program terminates and the JVM prints the stack trace.</div></div>
+
+<!-- ==================== MODULE 6: GIT ==================== -->
+<h2 id="m6">6. Git</h2>
+
+<div class="qa"><div class="q">1. What is Git?</div><div class="a">Git is a distributed version control system that tracks changes in source code and lets multiple developers collaborate efficiently.</div></div>
+<div class="qa"><div class="q">2. What is the difference between Git and GitHub?</div><div class="a">Git is the tool that manages versions on your computer. GitHub is an online platform that hosts Git repositories for sharing and collaboration.</div></div>
+<div class="qa"><div class="q">3. What is a repository?</div><div class="a">A repository (repo) is a project folder tracked by Git, containing all files and the full history of changes.</div></div>
+<div class="qa"><div class="q">4. What does git init do?</div><div class="a">It creates a new, empty Git repository in the current folder by adding a hidden <code>.git</code> directory.</div></div>
+<div class="qa"><div class="q">5. What does git clone do?</div><div class="a">It downloads a complete copy of an existing remote repository, including its history, to your local machine.</div></div>
+<div class="qa"><div class="q">6. What does git add do?</div><div class="a">It moves changes from the working directory to the staging area, marking them to be included in the next commit.</div></div>
+<div class="qa"><div class="q">7. What does git commit do?</div><div class="a">It permanently records the staged changes in the local repository along with a descriptive message.</div></div>
+<div class="qa"><div class="q">8. What is the staging area?</div><div class="a">An intermediate area (the index) where you assemble exactly which changes will go into the next commit.</div></div>
+<div class="qa"><div class="q">9. What does git push do?</div><div class="a">It uploads your local commits to the remote repository so others can see them.</div></div>
+<div class="qa"><div class="q">10. What does git pull do?</div><div class="a">It downloads changes from the remote and merges them into your current branch. It is a fetch plus a merge.</div></div>
+<div class="qa"><div class="q">11. What is the difference between git fetch and git pull?</div><div class="a"><code>git fetch</code> only downloads new commits without changing your working branch. <code>git pull</code> downloads and merges them.</div></div>
+<div class="qa"><div class="q">12. What is a branch?</div><div class="a">A branch is an independent line of development, letting you work on features without affecting the main code.</div></div>
+<div class="qa"><div class="q">13. How do you create and switch to a branch?</div><div class="a">Use <code>git branch name</code> to create and <code>git checkout name</code> to switch, or do both with <code>git checkout -b name</code> (or <code>git switch -c name</code>).</div></div>
+<div class="qa"><div class="q">14. What is merging?</div><div class="a">Combining the changes from one branch into another, for example bringing a feature branch into main.</div></div>
+<div class="qa"><div class="q">15. What is the difference between merge and rebase?</div><div class="a">Merge keeps both histories and creates a merge commit. Rebase replays your commits on top of another branch to create a clean, linear history.</div></div>
+<div class="qa"><div class="q">16. What is a merge conflict?</div><div class="a">It happens when two branches change the same lines of a file, and Git cannot decide automatically which version to keep.</div></div>
+<div class="qa"><div class="q">17. How do you resolve a merge conflict?</div><div class="a">Open the conflicted file, choose the correct code, remove the conflict markers, then <code>git add</code> the file and commit (or continue the rebase).</div></div>
+<div class="qa"><div class="q">18. What does git status show?</div><div class="a">It shows which files are modified, staged, or untracked, and the current branch.</div></div>
+<div class="qa"><div class="q">19. What does git log show?</div><div class="a">It shows the commit history, including commit IDs, authors, dates, and messages.</div></div>
+<div class="qa"><div class="q">20. What is a .gitignore file?</div><div class="a">A file that lists patterns for files and folders Git should ignore, such as build outputs, logs, and IDE settings.</div></div>
+<div class="qa"><div class="q">21. What is the difference between git revert and git reset?</div><div class="a"><code>git revert</code> creates a new commit that undoes a previous one, keeping history safe. <code>git reset</code> moves the branch pointer back and can rewrite history.</div></div>
+
+<!-- ==================== MODULE 7: HTML ==================== -->
+<h2 id="m7">7. HTML</h2>
+
+<div class="qa"><div class="q">1. What is HTML?</div><div class="a">HTML (HyperText Markup Language) is the standard language used to create the structure and content of web pages using elements and tags.</div></div>
+<div class="qa"><div class="q">2. What is the difference between HTML and HTML5?</div><div class="a">HTML5 is the latest version. It adds semantic tags, audio and video support, canvas, local storage, and new form input types.</div></div>
+<div class="qa"><div class="q">3. What is the basic structure of an HTML document?</div><div class="a">It starts with <code>&lt;!DOCTYPE html&gt;</code>, then <code>&lt;html&gt;</code> containing a <code>&lt;head&gt;</code> (metadata) and a <code>&lt;body&gt;</code> (visible content).</div></div>
+<div class="qa"><div class="q">4. What is the difference between block and inline elements?</div><div class="a">Block elements (like <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>) start on a new line and take full width. Inline elements (like <code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>) sit within a line.</div></div>
+<div class="qa"><div class="q">5. What are semantic elements?</div><div class="a">Tags that describe their meaning, such as <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;article&gt;</code>, and <code>&lt;footer&gt;</code>. They improve readability and SEO.</div></div>
+<div class="qa"><div class="q">6. What is the difference between id and class?</div><div class="a">An <code>id</code> is unique to one element. A <code>class</code> can be shared by many elements. CSS targets <code>id</code> with <code>#</code> and <code>class</code> with a dot.</div></div>
+<div class="qa"><div class="q">7. What are attributes in HTML?</div><div class="a">Extra information added to elements, written as name-value pairs in the opening tag, such as <code>&lt;img src="logo.png" alt="Logo"&gt;</code>.</div></div>
+<div class="qa"><div class="q">8. What is the difference between the alt and title attributes?</div><div class="a"><code>alt</code> provides alternative text for images when they cannot load and aids accessibility. <code>title</code> shows a tooltip on hover.</div></div>
+<div class="qa"><div class="q">9. How do you create a hyperlink?</div><div class="a">Use the anchor tag: <code>&lt;a href="https://example.com"&gt;Visit&lt;/a&gt;</code>.</div></div>
+<div class="qa"><div class="q">10. What is the difference between ordered and unordered lists?</div><div class="a"><code>&lt;ol&gt;</code> creates a numbered list; <code>&lt;ul&gt;</code> creates a bulleted list. Both contain <code>&lt;li&gt;</code> items.</div></div>
+<div class="qa"><div class="q">11. How do you insert an image?</div><div class="a">Use the self-closing <code>&lt;img&gt;</code> tag with <code>src</code> and <code>alt</code> attributes.</div></div>
+<div class="qa"><div class="q">12. What are the main elements of a table?</div><div class="a"><code>&lt;table&gt;</code>, <code>&lt;tr&gt;</code> (row), <code>&lt;th&gt;</code> (header cell), and <code>&lt;td&gt;</code> (data cell).</div></div>
+<div class="qa"><div class="q">13. What is the difference between GET and POST in forms?</div><div class="a">GET appends data to the URL and is for non-sensitive requests. POST sends data in the request body and is for sensitive or large data.</div></div>
+<div class="qa"><div class="q">14. What are common form input types?</div><div class="a">text, password, email, number, radio, checkbox, date, file, and submit.</div></div>
+<div class="qa"><div class="q">15. What is the difference between the action and method form attributes?</div><div class="a"><code>action</code> sets the URL where the form data is sent; <code>method</code> sets how it is sent (GET or POST).</div></div>
+<div class="qa"><div class="q">16. What does the required attribute do?</div><div class="a">It marks a form field as mandatory, so the browser blocks submission until it is filled.</div></div>
+<div class="qa"><div class="q">17. What is the difference between div and span?</div><div class="a"><code>&lt;div&gt;</code> is a block-level container; <code>&lt;span&gt;</code> is an inline container for small pieces of content.</div></div>
+<div class="qa"><div class="q">18. What is the purpose of the doctype declaration?</div><div class="a">It tells the browser which version of HTML the page uses so it renders in standards mode.</div></div>
+<div class="qa"><div class="q">19. What is the difference between the head and body sections?</div><div class="a">The <code>&lt;head&gt;</code> holds metadata, titles, and links to styles and scripts. The <code>&lt;body&gt;</code> holds the visible page content.</div></div>
+<div class="qa"><div class="q">20. What are void or self-closing elements?</div><div class="a">Elements with no closing tag and no content, such as <code>&lt;br&gt;</code>, <code>&lt;hr&gt;</code>, <code>&lt;img&gt;</code>, and <code>&lt;input&gt;</code>.</div></div>
+<div class="qa"><div class="q">21. What is the difference between local storage and session storage?</div><div class="a">Both store data in the browser. Local storage persists until cleared; session storage lasts only for the browser tab session.</div></div>
+
+<!-- ==================== MODULE 8: CSS ==================== -->
+<h2 id="m8">8. CSS</h2>
+
+<div class="qa"><div class="q">1. What is CSS?</div><div class="a">CSS (Cascading Style Sheets) describes how HTML elements look, controlling colors, fonts, spacing, and layout.</div></div>
+<div class="qa"><div class="q">2. What are the three ways to apply CSS?</div><div class="a">Inline (in the element's style attribute), internal (in a <code>&lt;style&gt;</code> tag), and external (in a separate .css file linked to the page).</div></div>
+<div class="qa"><div class="q">3. What is the difference between class and id selectors?</div><div class="a">A class selector uses a dot (<code>.name</code>) and can apply to many elements. An id selector uses a hash (<code>#name</code>) and targets one unique element.</div></div>
+<div class="qa"><div class="q">4. What is the CSS box model?</div><div class="a">Every element is a box made of content, padding, border, and margin, from inside out.</div></div>
+<div class="qa"><div class="q">5. What is the difference between padding and margin?</div><div class="a">Padding is space inside an element, between content and border. Margin is space outside the border, between elements.</div></div>
+<div class="qa"><div class="q">6. What is specificity in CSS?</div><div class="a">A ranking that decides which rule wins when several target the same element. Inline styles beat ids, which beat classes, which beat element selectors.</div></div>
+<div class="qa"><div class="q">7. What is the difference between relative, absolute, and fixed positioning?</div>
+<div class="a"><ul>
+<li>relative: positioned relative to its normal place.</li>
+<li>absolute: positioned relative to the nearest positioned ancestor.</li>
+<li>fixed: positioned relative to the viewport and stays on scroll.</li>
+</ul></div></div>
+<div class="qa"><div class="q">8. What is the difference between display none and visibility hidden?</div><div class="a"><code>display:none</code> removes the element and its space. <code>visibility:hidden</code> hides it but keeps its space.</div></div>
+<div class="qa"><div class="q">9. What is Flexbox?</div><div class="a">A one-dimensional layout system that arranges items in a row or column and makes alignment and spacing easy.</div></div>
+<div class="qa"><div class="q">10. What is CSS Grid?</div><div class="a">A two-dimensional layout system that arranges content into rows and columns at the same time.</div></div>
+<div class="qa"><div class="q">11. What is the difference between Flexbox and Grid?</div><div class="a">Flexbox is best for one-dimensional layouts (a row or a column). Grid is best for two-dimensional layouts (rows and columns together).</div></div>
+<div class="qa"><div class="q">12. What are pseudo-classes?</div><div class="a">Keywords that style an element in a special state, such as <code>:hover</code>, <code>:focus</code>, and <code>:first-child</code>.</div></div>
+<div class="qa"><div class="q">13. What is the difference between em and rem units?</div><div class="a"><code>em</code> is relative to the parent element's font size; <code>rem</code> is relative to the root element's font size, making it more predictable.</div></div>
+<div class="qa"><div class="q">14. What is the difference between absolute and relative units?</div><div class="a">Absolute units (px, pt) are fixed. Relative units (em, rem, %, vw, vh) scale with context, which helps responsive design.</div></div>
+<div class="qa"><div class="q">15. What is a media query?</div><div class="a">A CSS rule that applies styles based on screen conditions like width, used to make pages responsive across devices.</div></div>
+<div class="qa"><div class="q">16. What does the z-index property do?</div><div class="a">It controls the stacking order of overlapping elements. A higher z-index appears in front.</div></div>
+<div class="qa"><div class="q">17. What is the difference between inline, inline-block, and block?</div><div class="a">Inline flows in text and ignores width/height. Block takes full width on a new line. Inline-block flows inline but accepts width and height.</div></div>
+<div class="qa"><div class="q">18. How do you center an element horizontally?</div><div class="a">For block elements, use <code>margin: 0 auto</code> with a set width. With Flexbox, use <code>justify-content: center</code> on the container.</div></div>
+<div class="qa"><div class="q">19. What is the difference between absolute and relative paths in CSS links?</div><div class="a">An absolute path gives the full URL. A relative path is based on the current file's location.</div></div>
+<div class="qa"><div class="q">20. What does the cascade mean in CSS?</div><div class="a">When multiple rules apply, the final style is decided by importance, specificity, and source order.</div></div>
+<div class="qa"><div class="q">21. What are CSS variables?</div><div class="a">Custom properties defined with <code>--name</code> and used with <code>var(--name)</code>, allowing reusable values like colors across the stylesheet.</div></div>
+
+<!-- ==================== MODULE 9: JAVASCRIPT ==================== -->
+<h2 id="m9">9. JavaScript</h2>
+
+<div class="qa"><div class="q">1. What is JavaScript?</div><div class="a">A scripting language that adds interactivity and dynamic behavior to web pages, running in the browser.</div></div>
+<div class="qa"><div class="q">2. What is the difference between var, let, and const?</div>
+<div class="a"><ul>
+<li>var: function-scoped, can be redeclared.</li>
+<li>let: block-scoped, can be reassigned.</li>
+<li>const: block-scoped, cannot be reassigned.</li>
+</ul></div></div>
+<div class="qa"><div class="q">3. What are the data types in JavaScript?</div><div class="a">Primitives: string, number, boolean, null, undefined, symbol, and bigint. Plus the object type for collections and functions.</div></div>
+<div class="qa"><div class="q">4. What is the difference between == and ===?</div><div class="a"><code>==</code> compares values after type conversion. <code>===</code> compares both value and type, which is safer.</div></div>
+<div class="qa"><div class="q">5. What is the difference between null and undefined?</div><div class="a"><code>undefined</code> means a variable was declared but not assigned. <code>null</code> is an intentional empty value set by the developer.</div></div>
+<div class="qa"><div class="q">6. What is hoisting?</div><div class="a">JavaScript's behavior of moving variable and function declarations to the top of their scope before execution.</div></div>
+<div class="qa"><div class="q">7. What is a closure?</div><div class="a">A function that remembers variables from the scope where it was created, even after that scope has finished running.</div></div>
+<div class="qa"><div class="q">8. What is the difference between function declaration and function expression?</div><div class="a">A declaration is hoisted and can be called before it appears. An expression is assigned to a variable and is not hoisted as a callable.</div></div>
+<div class="qa"><div class="q">9. What is an arrow function?</div><div class="a">A shorter function syntax using <code>=&gt;</code>. It does not have its own <code>this</code> and inherits it from the surrounding scope.</div></div>
+<div class="qa"><div class="q">10. What is the difference between synchronous and asynchronous code?</div><div class="a">Synchronous code runs line by line and blocks. Asynchronous code (callbacks, promises, async/await) lets long tasks run without blocking the rest.</div></div>
+<div class="qa"><div class="q">11. What is a promise?</div><div class="a">An object representing the eventual result of an asynchronous operation, with states pending, fulfilled, or rejected.</div></div>
+<div class="qa"><div class="q">12. What is async/await?</div><div class="a">Syntax that makes asynchronous code read like synchronous code. <code>await</code> pauses until a promise resolves inside an <code>async</code> function.</div></div>
+<div class="qa"><div class="q">13. What is the DOM?</div><div class="a">The Document Object Model is a tree representation of the page that JavaScript can read and modify to change content and structure.</div></div>
+<div class="qa"><div class="q">14. How do you select elements in the DOM?</div><div class="a">With methods like <code>getElementById</code>, <code>querySelector</code>, and <code>querySelectorAll</code>.</div></div>
+<div class="qa"><div class="q">15. What is event bubbling?</div><div class="a">When an event on an element travels up to its ancestors, triggering their handlers too. It can be stopped with <code>stopPropagation()</code>.</div></div>
+<div class="qa"><div class="q">16. What is the difference between map, filter, and forEach?</div>
+<div class="a"><ul>
+<li>map: returns a new array of transformed values.</li>
+<li>filter: returns a new array of items that pass a test.</li>
+<li>forEach: loops over items but returns nothing.</li>
+</ul></div></div>
+<div class="qa"><div class="q">17. What is the difference between an array and an object?</div><div class="a">An array stores ordered values accessed by index. An object stores data as key-value pairs accessed by key.</div></div>
+<div class="qa"><div class="q">18. What does the this keyword refer to?</div><div class="a">It refers to the object that is calling the current function, which depends on how the function is invoked.</div></div>
+<div class="qa"><div class="q">19. What is JSON?</div><div class="a">JavaScript Object Notation, a lightweight text format for exchanging data, using key-value pairs and arrays.</div></div>
+<div class="qa"><div class="q">20. What is the difference between local storage, session storage, and cookies?</div><div class="a">All store data in the browser. Local storage persists, session storage lasts per tab, and cookies are small and sent with HTTP requests.</div></div>
+<div class="qa"><div class="q">21. What is the difference between undefined and not defined?</div><div class="a"><code>undefined</code> means a declared variable has no value. "Not defined" is a reference error for a variable that was never declared.</div></div>
+
+<!-- ==================== MODULE 10: BOOTSTRAP 5 ==================== -->
+<h2 id="m10">10. Bootstrap 5</h2>
+
+<div class="qa"><div class="q">1. What is Bootstrap?</div><div class="a">Bootstrap is a popular front-end CSS framework that provides ready-made components and a responsive grid to build websites quickly.</div></div>
+<div class="qa"><div class="q">2. What are the advantages of Bootstrap?</div><div class="a">It is responsive, saves development time, ensures consistency, works across browsers, and offers many reusable components.</div></div>
+<div class="qa"><div class="q">3. What is new in Bootstrap 5?</div><div class="a">It dropped jQuery, added new utilities, improved the grid with an xxl breakpoint, and introduced custom CSS variables.</div></div>
+<div class="qa"><div class="q">4. How do you add Bootstrap to a project?</div><div class="a">Either link the Bootstrap CDN in the HTML head, or install it through a package manager and import the CSS and JS files.</div></div>
+<div class="qa"><div class="q">5. What is the Bootstrap grid system?</div><div class="a">A responsive 12-column layout built with flexbox, using containers, rows, and columns to arrange content.</div></div>
+<div class="qa"><div class="q">6. What is the difference between container and container-fluid?</div><div class="a"><code>container</code> has a fixed responsive width with margins. <code>container-fluid</code> spans the full width of the viewport.</div></div>
+<div class="qa"><div class="q">7. Why must grid columns add up to 12?</div><div class="a">The grid divides each row into 12 units. Columns summing to 12 fit on one line; more than 12 wraps to a new line.</div></div>
+<div class="qa"><div class="q">8. What are the responsive breakpoints in Bootstrap 5?</div><div class="a">sm (576px), md (768px), lg (992px), xl (1200px), and xxl (1400px), with extra-small as the default below 576px.</div></div>
+<div class="qa"><div class="q">9. What does col-12 col-md-6 mean?</div><div class="a">The column is full width on small screens and half width from the medium breakpoint upward. This is mobile-first design.</div></div>
+<div class="qa"><div class="q">10. What are Bootstrap utility classes?</div><div class="a">Small single-purpose classes for spacing, color, display, and alignment, such as <code>m-2</code>, <code>p-3</code>, and <code>text-center</code>.</div></div>
+<div class="qa"><div class="q">11. How do you make an element a flex container?</div><div class="a">Add the <code>d-flex</code> class. Combine it with direction and alignment classes as needed.</div></div>
+<div class="qa"><div class="q">12. How do you center content with Bootstrap flex utilities?</div><div class="a">Use <code>d-flex justify-content-center</code> for horizontal centering and <code>align-items-center</code> for vertical centering.</div></div>
+<div class="qa"><div class="q">13. What are Bootstrap spacing utilities?</div><div class="a">Classes for margin (<code>m</code>) and padding (<code>p</code>) with a side and size, such as <code>mt-3</code> (margin-top) and <code>px-2</code> (horizontal padding).</div></div>
+<div class="qa"><div class="q">14. What are Bootstrap cards?</div><div class="a">Flexible content containers with optional headers, bodies, footers, and images, used to display grouped information.</div></div>
+<div class="qa"><div class="q">15. How do you create a button in Bootstrap?</div><div class="a">Use the <code>btn</code> class plus a style class, for example <code>&lt;button class="btn btn-primary"&gt;Save&lt;/button&gt;</code>.</div></div>
+<div class="qa"><div class="q">16. What is a Bootstrap navbar?</div><div class="a">A responsive navigation header component that can collapse into a toggle menu on small screens.</div></div>
+<div class="qa"><div class="q">17. What is a Bootstrap modal?</div><div class="a">A dialog box that appears on top of the page content, used for forms, alerts, or confirmations.</div></div>
+<div class="qa"><div class="q">18. How does Bootstrap support responsive design?</div><div class="a">Through its mobile-first grid, responsive breakpoints, and utilities that adjust layout and visibility per screen size.</div></div>
+<div class="qa"><div class="q">19. What are display utilities in Bootstrap?</div><div class="a">Classes like <code>d-none</code>, <code>d-block</code>, and <code>d-md-flex</code> that show, hide, or change an element's display at specific breakpoints.</div></div>
+<div class="qa"><div class="q">20. How do you hide an element on small screens only?</div><div class="a">Use <code>d-none d-md-block</code>, which hides the element by default and shows it from the medium breakpoint upward.</div></div>
+<div class="qa"><div class="q">21. What is the difference between Bootstrap and CSS?</div><div class="a">CSS is the core styling language. Bootstrap is a framework built on CSS that provides predefined classes and components for faster development.</div></div>
+
+<!-- ==================== MODULE 11: AGILE ==================== -->
+<h2 id="m11">11. Agile</h2>
+
+<div class="qa"><div class="q">1. What is Agile?</div><div class="a">Agile is an iterative approach to software development that delivers work in small increments with continuous feedback and flexibility to change.</div></div>
+<div class="qa"><div class="q">2. What is the difference between Agile and Waterfall?</div><div class="a">Waterfall is sequential and rigid. Agile is iterative and flexible, delivering working software frequently and adapting to change.</div></div>
+<div class="qa"><div class="q">3. What is Scrum?</div><div class="a">Scrum is the most popular Agile framework. It organizes work into sprints with defined roles, events, and artifacts.</div></div>
+<div class="qa"><div class="q">4. What is a sprint?</div><div class="a">A fixed-length iteration, usually one to four weeks, in which the team delivers a usable increment of the product.</div></div>
+<div class="qa"><div class="q">5. What are the roles in Scrum?</div><div class="a">Product Owner, Scrum Master, and the Development Team.</div></div>
+<div class="qa"><div class="q">6. What does the Product Owner do?</div><div class="a">Owns and prioritizes the product backlog and represents the customer to maximize product value.</div></div>
+<div class="qa"><div class="q">7. What does the Scrum Master do?</div><div class="a">Facilitates the Scrum process, removes impediments, and coaches the team, without acting as a traditional manager.</div></div>
+<div class="qa"><div class="q">8. What are the main Scrum ceremonies?</div><div class="a">Sprint Planning, Daily Standup, Sprint Review, and Sprint Retrospective.</div></div>
+<div class="qa"><div class="q">9. What happens in Sprint Planning?</div><div class="a">The team selects backlog items for the sprint and defines the sprint goal and plan.</div></div>
+<div class="qa"><div class="q">10. What is the Daily Standup?</div><div class="a">A short daily meeting, about 15 minutes, where members share progress, plans, and blockers.</div></div>
+<div class="qa"><div class="q">11. What are the three Daily Standup questions?</div><div class="a">What did I do yesterday? What will I do today? Are there any blockers?</div></div>
+<div class="qa"><div class="q">12. What happens in the Sprint Review?</div><div class="a">The team demonstrates the completed increment to stakeholders and collects feedback.</div></div>
+<div class="qa"><div class="q">13. What is the Sprint Retrospective?</div><div class="a">A meeting where the team reflects on the process and agrees on improvements for the next sprint.</div></div>
+<div class="qa"><div class="q">14. What is a product backlog?</div><div class="a">An ordered list of all desired features, fixes, and work for the product, maintained by the Product Owner.</div></div>
+<div class="qa"><div class="q">15. What is a sprint backlog?</div><div class="a">The set of backlog items chosen for the current sprint plus the plan to complete them.</div></div>
+<div class="qa"><div class="q">16. What is a user story?</div><div class="a">A short, simple description of a feature from the user's perspective: "As a user, I want to ... so that ...".</div></div>
+<div class="qa"><div class="q">17. What are story points?</div><div class="a">A relative measure of the effort and complexity of a user story, often estimated using Fibonacci numbers.</div></div>
+<div class="qa"><div class="q">18. What is velocity?</div><div class="a">The average amount of work, in story points, that a team completes per sprint, used for forecasting.</div></div>
+<div class="qa"><div class="q">19. What is the Definition of Done?</div><div class="a">A shared checklist of conditions a backlog item must meet to be considered complete, such as coded, tested, and reviewed.</div></div>
+<div class="qa"><div class="q">20. What is a burndown chart?</div><div class="a">A graph showing remaining work against time in a sprint, helping the team track progress toward the goal.</div></div>
+<div class="qa"><div class="q">21. What is the difference between Scrum and Kanban?</div><div class="a">Scrum works in fixed sprints with defined roles. Kanban is a continuous flow that visualizes work and limits work in progress, without sprints.</div></div>
+
+<!-- ==================== MODULE 12: SOFTWARE ENGINEERING ==================== -->
+<h2 id="m12">12. Software Engineering</h2>
+
+<div class="qa"><div class="q">1. What is software engineering?</div><div class="a">A disciplined approach to designing, building, testing, and maintaining software using engineering principles to ensure quality and reliability.</div></div>
+<div class="qa"><div class="q">2. What is the Software Development Life Cycle?</div><div class="a">The SDLC is the process of building software through stages: requirements, design, implementation, testing, deployment, and maintenance.</div></div>
+<div class="qa"><div class="q">3. What are common SDLC models?</div><div class="a">Waterfall, Iterative, Spiral, V-Model, and Agile.</div></div>
+<div class="qa"><div class="q">4. What does SOLID stand for?</div><div class="a">Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, and Dependency Inversion.</div></div>
+<div class="qa"><div class="q">5. What is the Single Responsibility Principle?</div><div class="a">A class should have only one reason to change, meaning it should do only one job.</div></div>
+<div class="qa"><div class="q">6. What is the Open/Closed Principle?</div><div class="a">Software should be open for extension but closed for modification, so new behavior is added without changing existing code.</div></div>
+<div class="qa"><div class="q">7. What is the Dependency Inversion Principle?</div><div class="a">High-level modules should depend on abstractions, not concrete classes, which reduces coupling and improves testability.</div></div>
+<div class="qa"><div class="q">8. What is a design pattern?</div><div class="a">A reusable, proven solution to a common software design problem.</div></div>
+<div class="qa"><div class="q">9. What are the three categories of design patterns?</div><div class="a">Creational, Structural, and Behavioral.</div></div>
+<div class="qa"><div class="q">10. What is the Singleton pattern?</div><div class="a">A creational pattern that ensures a class has only one instance and provides a global access point to it.</div></div>
+<div class="qa"><div class="q">11. What is the Factory pattern?</div><div class="a">A creational pattern that creates objects without exposing the creation logic, returning a type based on input.</div></div>
+<div class="qa"><div class="q">12. What is the difference between cohesion and coupling?</div><div class="a">Cohesion is how focused a module is on one task (high is good). Coupling is how dependent modules are on each other (low is good).</div></div>
+<div class="qa"><div class="q">13. What is UML?</div><div class="a">Unified Modeling Language, a standard visual notation for designing and documenting software systems.</div></div>
+<div class="qa"><div class="q">14. What is a class diagram?</div><div class="a">A UML diagram that shows classes, their fields and methods, and the relationships between them.</div></div>
+<div class="qa"><div class="q">15. What is a sequence diagram?</div><div class="a">A UML diagram that shows how objects interact over time through an ordered series of messages.</div></div>
+<div class="qa"><div class="q">16. What is the difference between aggregation and composition?</div><div class="a">Aggregation is a weak whole-part where parts can exist alone. Composition is a strong whole-part where parts cannot exist without the whole.</div></div>
+<div class="qa"><div class="q">17. What is functional versus non-functional requirement?</div><div class="a">A functional requirement defines what the system does. A non-functional requirement defines qualities like performance, security, and usability.</div></div>
+<div class="qa"><div class="q">18. What is technical debt?</div><div class="a">The future cost of choosing a quick solution now instead of a better approach, which must be fixed later.</div></div>
+<div class="qa"><div class="q">19. What is refactoring?</div><div class="a">Improving the internal structure of code without changing its external behavior, to make it cleaner and easier to maintain.</div></div>
+<div class="qa"><div class="q">20. What is the DRY principle?</div><div class="a">Do not Repeat Yourself: avoid duplicating code by extracting common logic into reusable methods or classes.</div></div>
+<div class="qa"><div class="q">21. What is the KISS principle?</div><div class="a">Keep It Simple, Stupid: favor simple, clear solutions over unnecessary complexity.</div></div>
+
+<!-- ==================== MODULE 13: PROJECT EXPLANATION (SPRING MVC) ==================== -->
+<h2 id="m13">13. Project Explanation (Spring MVC)</h2>
+
+<div class="qa"><div class="q">1. Can you explain your Spring MVC project?</div><div class="a">Describe a user authentication and management web application built with Spring MVC, Thymeleaf, and MySQL. Users register and log in; based on their role they access different dashboards. Mention your role, the layers, and the outcome.</div></div>
+<div class="qa"><div class="q">2. What is Spring MVC?</div><div class="a">Spring MVC is a web framework in the Spring ecosystem that follows the Model-View-Controller pattern to build web applications in a structured way.</div></div>
+<div class="qa"><div class="q">3. What is the MVC pattern?</div>
+<div class="a"><ul>
+<li>Model: the data and business logic.</li>
+<li>View: the user interface (Thymeleaf templates).</li>
+<li>Controller: handles requests and connects model and view.</li>
+</ul></div></div>
+<div class="qa"><div class="q">4. What is the DispatcherServlet?</div><div class="a">The front controller in Spring MVC. It receives every HTTP request and routes it to the correct controller, then returns the response.</div></div>
+<div class="qa"><div class="q">5. What is the role of the controller?</div><div class="a">It handles incoming requests, calls the service layer, puts data into the model, and returns a view name to render.</div></div>
+<div class="qa"><div class="q">6. What is the difference between @Controller and @RestController?</div><div class="a"><code>@Controller</code> returns view names for web pages. <code>@RestController</code> returns data directly as JSON or text for REST APIs.</div></div>
+<div class="qa"><div class="q">7. What is the difference between @GetMapping and @PostMapping?</div><div class="a"><code>@GetMapping</code> handles GET requests for reading data or showing pages. <code>@PostMapping</code> handles POST requests for submitting data.</div></div>
+<div class="qa"><div class="q">8. What is the service layer?</div><div class="a">A layer that holds the business logic. The controller calls it, keeping logic separate from request handling.</div></div>
+<div class="qa"><div class="q">9. What is the repository layer?</div><div class="a">The data access layer that talks to the database, usually built with Spring Data JPA interfaces.</div></div>
+<div class="qa"><div class="q">10. What is Spring Data JPA?</div><div class="a">A Spring module that simplifies database access by providing ready-made repository interfaces, removing most boilerplate SQL code.</div></div>
+<div class="qa"><div class="q">11. What is an entity?</div><div class="a">A Java class annotated with <code>@Entity</code> that maps to a database table, where each field maps to a column.</div></div>
+<div class="qa"><div class="q">12. What is Thymeleaf?</div><div class="a">A server-side Java template engine that generates HTML pages by merging model data into templates.</div></div>
+<div class="qa"><div class="q">13. How does data flow in your project?</div><div class="a">Browser to controller, controller to service, service to repository, repository to MySQL, and the result returns through the model to a Thymeleaf view rendered as HTML.</div></div>
+<div class="qa"><div class="q">14. What is dependency injection?</div><div class="a">A design pattern where Spring supplies an object's dependencies automatically rather than the object creating them, which reduces coupling.</div></div>
+<div class="qa"><div class="q">15. What is the difference between @Autowired and constructor injection?</div><div class="a"><code>@Autowired</code> can inject into fields or setters. Constructor injection passes dependencies through the constructor and is the recommended approach.</div></div>
+<div class="qa"><div class="q">16. How did you connect to MySQL?</div><div class="a">By setting the datasource URL, username, and password in <code>application.properties</code> and adding the MySQL driver dependency, with JPA managing the tables.</div></div>
+<div class="qa"><div class="q">17. How did you handle user authentication?</div><div class="a">Using Spring Security with form login, a custom UserDetailsService that loads users from MySQL, and BCrypt to hash and verify passwords.</div></div>
+<div class="qa"><div class="q">18. How did you implement role-based access?</div><div class="a">By configuring URL rules in the security configuration so each role can access only its allowed pages, and denying others with a 403 error.</div></div>
+<div class="qa"><div class="q">19. What is application.properties used for?</div><div class="a">A central configuration file for settings like the database connection, server port, JPA behavior, and logging levels.</div></div>
+<div class="qa"><div class="q">20. How did you handle errors in the project?</div><div class="a">By using exception handling with <code>@ControllerAdvice</code> and custom error pages, and by validating user input before processing.</div></div>
+<div class="qa"><div class="q">21. What would you improve in your project?</div><div class="a">Add more automated tests, introduce REST APIs for a front-end framework, improve validation and security, and add features like password reset and pagination.</div></div>
+
+<!-- ==================== MODULE 14: LOGGING ==================== -->
+<h2 id="m14">14. Logging</h2>
+
+<div class="qa"><div class="q">1. What is logging?</div><div class="a">Logging is recording messages about what an application does at runtime, used for monitoring, debugging, and auditing.</div></div>
+<div class="qa"><div class="q">2. Why is logging important?</div><div class="a">It helps developers understand application behavior, diagnose problems in production, track errors, and audit activity without a debugger.</div></div>
+<div class="qa"><div class="q">3. Why is logging better than System.out.println?</div>
+<div class="a"><ul>
+<li>It supports severity levels.</li>
+<li>It can be turned on or off through configuration.</li>
+<li>It can write to files and other destinations with timestamps and context.</li>
+</ul></div></div>
+<div class="qa"><div class="q">4. What are the common logging levels?</div><div class="a">TRACE, DEBUG, INFO, WARN, ERROR, and FATAL, in increasing order of severity.</div></div>
+<div class="qa"><div class="q">5. What is the difference between DEBUG and INFO?</div><div class="a">DEBUG provides detailed diagnostic information for developers. INFO records high-level milestones of normal operation.</div></div>
+<div class="qa"><div class="q">6. What is the difference between WARN and ERROR?</div><div class="a">WARN signals an unexpected but recoverable situation. ERROR signals a failure in the current operation that needs attention.</div></div>
+<div class="qa"><div class="q">7. If the level is set to WARN, which messages appear?</div><div class="a">Only WARN, ERROR, and FATAL. Lower levels like INFO and DEBUG are suppressed.</div></div>
+<div class="qa"><div class="q">8. What is an appender?</div><div class="a">A component that decides where log output goes, such as the console, a file, a database, or email.</div></div>
+<div class="qa"><div class="q">9. What is a console appender?</div><div class="a">An appender that writes log messages to the console or standard output.</div></div>
+<div class="qa"><div class="q">10. What is a rolling file appender?</div><div class="a">An appender that writes to a file and starts a new file when the current one reaches a size limit or a time period.</div></div>
+<div class="qa"><div class="q">11. What is a log layout or pattern?</div><div class="a">A format that defines how each log line looks, including timestamp, level, logger name, thread, and message.</div></div>
+<div class="qa"><div class="q">12. Can a logger use multiple appenders?</div><div class="a">Yes. A logger can send the same messages to several destinations at once, such as console and file.</div></div>
+<div class="qa"><div class="q">13. What is a logger?</div><div class="a">An object used in code to create log messages, usually created per class to identify the message source.</div></div>
+<div class="qa"><div class="q">14. What are popular logging frameworks in Java?</div><div class="a">Log4j 2, Logback, and the SLF4J facade, plus the built-in java.util.logging.</div></div>
+<div class="qa"><div class="q">15. What is parameterized logging?</div><div class="a">Using placeholders like <code>log.info("User {} logged in", id)</code> so the message string is built only when that level is enabled.</div></div>
+<div class="qa"><div class="q">16. Why is parameterized logging preferred?</div><div class="a">It avoids unnecessary string concatenation when the level is disabled, improving performance.</div></div>
+<div class="qa"><div class="q">17. What is the FATAL level?</div><div class="a">The most severe level, used for critical failures that may cause the application to stop. It exists in Log4j.</div></div>
+<div class="qa"><div class="q">18. How do you configure logging in Spring Boot?</div><div class="a">Through <code>application.properties</code> for levels, or by adding a logback or log4j2 configuration file for advanced control.</div></div>
+<div class="qa"><div class="q">19. What is log rotation?</div><div class="a">Automatically archiving old log files and starting new ones to prevent a single file from growing too large.</div></div>
+<div class="qa"><div class="q">20. What should you avoid logging?</div><div class="a">Sensitive data such as passwords, card numbers, and personal information, for security and privacy.</div></div>
+<div class="qa"><div class="q">21. What is the benefit of log levels in production?</div><div class="a">You can run at INFO or WARN in production and increase to DEBUG temporarily to investigate issues, all without changing code.</div></div>
+
+<!-- ==================== MODULE 15: SLF4J ==================== -->
+<h2 id="m15">15. SLF4J</h2>
+
+<div class="qa"><div class="q">1. What is SLF4J?</div><div class="a">SLF4J (Simple Logging Facade for Java) is an abstraction layer that provides a common API for various logging frameworks.</div></div>
+<div class="qa"><div class="q">2. What does facade mean in SLF4J?</div><div class="a">A facade is a single, simple interface in front of different implementations. You code against SLF4J, and it delegates to the real logging framework.</div></div>
+<div class="qa"><div class="q">3. Why use SLF4J instead of a logging framework directly?</div><div class="a">It lets you switch the underlying framework (Logback, Log4j 2) without changing application code, avoiding vendor lock-in.</div></div>
+<div class="qa"><div class="q">4. Is SLF4J a logging framework?</div><div class="a">No. SLF4J is only an API or facade. It needs a real implementation like Logback or Log4j 2 behind it to actually log.</div></div>
+<div class="qa"><div class="q">5. How do you create a logger with SLF4J?</div><div class="a">Use <code>LoggerFactory.getLogger(MyClass.class)</code> to get a <code>Logger</code>, typically stored in a private static final field.</div></div>
+<div class="qa"><div class="q">6. What is the typical import for SLF4J?</div><div class="a"><code>org.slf4j.Logger</code> and <code>org.slf4j.LoggerFactory</code>.</div></div>
+<div class="qa"><div class="q">7. What logging methods does SLF4J provide?</div><div class="a">Methods named after levels: <code>trace()</code>, <code>debug()</code>, <code>info()</code>, <code>warn()</code>, and <code>error()</code>.</div></div>
+<div class="qa"><div class="q">8. Does SLF4J support placeholders?</div><div class="a">Yes. It supports the <code>{}</code> placeholder, for example <code>log.info("Order {} created", id)</code>.</div></div>
+<div class="qa"><div class="q">9. What is the advantage of SLF4J placeholders?</div><div class="a">The final message is built only if the level is active, which improves performance and keeps code clean.</div></div>
+<div class="qa"><div class="q">10. What is a binding in SLF4J?</div><div class="a">A binding is the adapter that connects SLF4J to a specific logging implementation, such as the Logback or Log4j 2 binding.</div></div>
+<div class="qa"><div class="q">11. What happens if no binding is found?</div><div class="a">SLF4J prints a warning that no implementation was found and discards log messages with a no-operation logger.</div></div>
+<div class="qa"><div class="q">12. Can you have multiple bindings?</div><div class="a">You should have only one. Multiple bindings cause a warning, and SLF4J picks one unpredictably.</div></div>
+<div class="qa"><div class="q">13. What is the difference between SLF4J and Logback?</div><div class="a">SLF4J is the API. Logback is an implementation that natively supports SLF4J and does the actual logging work.</div></div>
+<div class="qa"><div class="q">14. Does Spring Boot use SLF4J?</div><div class="a">Yes. Spring Boot uses SLF4J as the logging facade with Logback as the default implementation.</div></div>
+<div class="qa"><div class="q">15. How do you log an exception with SLF4J?</div><div class="a">Pass the exception as the last argument, for example <code>log.error("Failed for {}", id, e)</code>, to print the stack trace.</div></div>
+<div class="qa"><div class="q">16. Why is coding against an interface like SLF4J good practice?</div><div class="a">It decouples your code from a specific library, making the application flexible, maintainable, and easy to change later.</div></div>
+<div class="qa"><div class="q">17. What is the MDC in SLF4J?</div><div class="a">Mapped Diagnostic Context, a per-thread map for adding contextual data like a user ID or request ID to every log line.</div></div>
+<div class="qa"><div class="q">18. Can SLF4J work with Log4j?</div><div class="a">Yes. With the proper SLF4J-to-Log4j binding, SLF4J calls are routed to Log4j as the implementation.</div></div>
+<div class="qa"><div class="q">19. Is SLF4J dependent on a specific framework?</div><div class="a">No. That independence is its main purpose. It works with any supported logging backend.</div></div>
+<div class="qa"><div class="q">20. What are the benefits of SLF4J in large projects?</div><div class="a">Consistent logging API across modules, easy framework switching, better performance with placeholders, and cleaner code.</div></div>
+<div class="qa"><div class="q">21. What is the simplest SLF4J usage example?</div>
+<div class="a"><pre>private static final Logger log =
+    LoggerFactory.getLogger(MyService.class);
+
+log.info("Service started");
+log.error("Something failed", exception);</pre></div></div>
+
+<!-- ==================== MODULE 16: LOG4J AND SLF4J TOGETHER ==================== -->
+<h2 id="m16">16. Log4j and SLF4J Together</h2>
+
+<div class="qa"><div class="q">1. How do Log4j and SLF4J work together?</div><div class="a">You write code against the SLF4J API, and Log4j 2 acts as the implementation behind it through a binding adapter. SLF4J is the front; Log4j does the work.</div></div>
+<div class="qa"><div class="q">2. What is the main difference between SLF4J and Log4j?</div><div class="a">SLF4J is a facade or API. Log4j is a concrete logging framework. SLF4J defines how to log; Log4j performs the logging.</div></div>
+<div class="qa"><div class="q">3. Why combine SLF4J with Log4j?</div><div class="a">To get a flexible, vendor-neutral API (SLF4J) while using the powerful features and configuration of Log4j 2 underneath.</div></div>
+<div class="qa"><div class="q">4. What is the role of the binding between them?</div><div class="a">The binding is an adapter library that routes SLF4J calls to Log4j, so the two can communicate.</div></div>
+<div class="qa"><div class="q">5. Is Log4j an implementation or a facade?</div><div class="a">Log4j is an implementation. It can also be used directly, but it is commonly paired behind the SLF4J facade.</div></div>
+<div class="qa"><div class="q">6. Can you use Log4j without SLF4J?</div><div class="a">Yes. Log4j has its own API and can be used alone, but using it through SLF4J is more flexible.</div></div>
+<div class="qa"><div class="q">7. Can you use SLF4J without Log4j?</div><div class="a">Yes. SLF4J can run with other implementations such as Logback or java.util.logging.</div></div>
+<div class="qa"><div class="q">8. Which is better, Log4j or SLF4J?</div><div class="a">It is not either-or. SLF4J is the recommended API to code against, and Log4j 2 or Logback is the implementation. They complement each other.</div></div>
+<div class="qa"><div class="q">9. What is Log4j 2?</div><div class="a">The modern version of Log4j, offering better performance, asynchronous logging, and flexible configuration over the original Log4j 1.</div></div>
+<div class="qa"><div class="q">10. How is Log4j 2 configured?</div><div class="a">Through a configuration file such as <code>log4j2.xml</code>, which defines appenders, layouts, and logger levels.</div></div>
+<div class="qa"><div class="q">11. What does a typical Log4j 2 configuration contain?</div><div class="a">Appenders (console, file), pattern layouts for formatting, and loggers with levels and appender references.</div></div>
+<div class="qa"><div class="q">12. What is the recommended logging setup in modern Java?</div><div class="a">Code against SLF4J and use Logback or Log4j 2 as the backend, keeping the application independent of the implementation.</div></div>
+<div class="qa"><div class="q">13. How do SLF4J levels map to Log4j levels?</div><div class="a">They align directly: TRACE, DEBUG, INFO, WARN, and ERROR map one to one between the two.</div></div>
+<div class="qa"><div class="q">14. What happens if both Logback and Log4j bindings are present?</div><div class="a">SLF4J warns about multiple bindings and uses one unpredictably. Keep only one implementation on the classpath.</div></div>
+<div class="qa"><div class="q">15. What is the advantage of this layered approach?</div><div class="a">You can swap the logging backend without touching application code, since all logging calls go through SLF4J.</div></div>
+<div class="qa"><div class="q">16. What is asynchronous logging in Log4j 2?</div><div class="a">A feature that logs messages on a separate thread, improving performance under heavy load.</div></div>
+<div class="qa"><div class="q">17. What was the Log4Shell vulnerability?</div><div class="a">A serious security flaw in older Log4j 2 versions. The fix is to upgrade to a patched version, which is an important best practice.</div></div>
+<div class="qa"><div class="q">18. How do you write a log statement in this setup?</div><div class="a">The same SLF4J way: get a logger from <code>LoggerFactory</code> and call <code>log.info(...)</code>. Log4j handles output behind the scenes.</div></div>
+<div class="qa"><div class="q">19. Does the application code change when switching backends?</div><div class="a">No. With SLF4J, only the dependencies and configuration change, not the logging code in your classes.</div></div>
+<div class="qa"><div class="q">20. What is the benefit for a team using SLF4J plus Log4j?</div><div class="a">A consistent API for all developers, powerful configuration from Log4j, and freedom to change the backend later.</div></div>
+<div class="qa"><div class="q">21. Summarize the relationship in one line.</div><div class="a">SLF4J is the standard interface you program to, and Log4j 2 is the engine that carries out the logging behind it.</div></div>
+
+<!-- ==================== MODULE 17: GENERAL ==================== -->
+<h2 id="m17">17. General Interview Questions</h2>
+
+<div class="qa"><div class="q">1. What is the difference between JDK, JRE, and JVM?</div>
+<div class="a"><ul>
+<li>JVM: runs Java bytecode.</li>
+<li>JRE: JVM plus libraries to run programs.</li>
+<li>JDK: JRE plus tools to develop programs.</li>
+</ul></div></div>
+<div class="qa"><div class="q">2. What is the difference between a compiler and an interpreter?</div><div class="a">A compiler translates the whole program before running. An interpreter translates and runs line by line. Java uses both: it compiles to bytecode, then interprets and JIT-compiles it.</div></div>
+<div class="qa"><div class="q">3. What is the difference between an API and a library?</div><div class="a">A library is reusable code. An API is the set of methods and rules that define how to interact with that code or a service.</div></div>
+<div class="qa"><div class="q">4. What is the difference between a database and a DBMS?</div><div class="a">A database is an organized collection of data. A DBMS is the software, like MySQL, used to manage and access that data.</div></div>
+<div class="qa"><div class="q">5. What is the difference between SQL and NoSQL?</div><div class="a">SQL databases are relational with fixed schemas and tables. NoSQL databases are non-relational and flexible, storing documents, key-values, or graphs.</div></div>
+<div class="qa"><div class="q">6. What is a primary key?</div><div class="a">A column or set of columns that uniquely identifies each row in a table and cannot be null.</div></div>
+<div class="qa"><div class="q">7. What is a foreign key?</div><div class="a">A column that links to the primary key of another table, enforcing a relationship between the two.</div></div>
+<div class="qa"><div class="q">8. What is the difference between a primary key and a unique key?</div><div class="a">A table has one primary key that cannot be null. It can have many unique keys, which allow a single null depending on the database.</div></div>
+<div class="qa"><div class="q">9. What is normalization?</div><div class="a">Organizing database tables to reduce redundancy and improve data integrity by splitting data into related tables.</div></div>
+<div class="qa"><div class="q">10. What is a join in SQL?</div><div class="a">An operation that combines rows from two or more tables based on a related column, such as inner join and left join.</div></div>
+<div class="qa"><div class="q">11. What is a REST API?</div><div class="a">An architectural style for web services that uses HTTP methods like GET, POST, PUT, and DELETE to work with resources.</div></div>
+<div class="qa"><div class="q">12. What are common HTTP status codes?</div><div class="a">200 OK, 201 Created, 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, and 500 Internal Server Error.</div></div>
+<div class="qa"><div class="q">13. What is the difference between GET and POST?</div><div class="a">GET retrieves data and sends parameters in the URL. POST sends data in the request body, suitable for creating or sensitive data.</div></div>
+<div class="qa"><div class="q">14. What is the difference between authentication and authorization?</div><div class="a">Authentication verifies who you are. Authorization decides what you are allowed to do.</div></div>
+<div class="qa"><div class="q">15. What is an IDE?</div><div class="a">An Integrated Development Environment, like IntelliJ IDEA or Eclipse, that provides editing, building, debugging, and other tools in one place.</div></div>
+<div class="qa"><div class="q">16. What is the difference between debugging and testing?</div><div class="a">Testing finds whether defects exist. Debugging locates and fixes the cause of a known defect.</div></div>
+<div class="qa"><div class="q">17. What is an algorithm?</div><div class="a">A step-by-step set of instructions to solve a problem or perform a task.</div></div>
+<div class="qa"><div class="q">18. What is the difference between time and space complexity?</div><div class="a">Time complexity measures how runtime grows with input size. Space complexity measures how memory use grows with input size.</div></div>
+<div class="qa"><div class="q">19. What is Big O notation?</div><div class="a">A way to describe the worst-case growth rate of an algorithm, such as O(1), O(n), or O(n squared).</div></div>
+<div class="qa"><div class="q">20. What is the difference between a stack and a queue?</div><div class="a">A stack is last-in-first-out. A queue is first-in-first-out.</div></div>
+<div class="qa"><div class="q">21. What is the difference between frontend and backend?</div><div class="a">The frontend is the user-facing part in the browser. The backend is the server-side logic and database that powers the application.</div></div>
+
+<!-- ==================== MODULE 18: PROJECT CHALLENGES ==================== -->
+<h2 id="m18">18. Project Challenges</h2>
+
+<div class="qa"><div class="q">1. What was the biggest challenge you faced in your project?</div><div class="a">Pick a real example, such as implementing secure login with role-based access. Explain the problem, what you tried, and how you solved it using Spring Security and BCrypt.</div></div>
+<div class="qa"><div class="q">2. How did you handle a difficult bug?</div><div class="a">Describe reproducing the bug, checking logs, isolating the cause, fixing it, and adding a test to prevent it from returning.</div></div>
+<div class="qa"><div class="q">3. How did you handle database connection issues?</div><div class="a">By verifying the connection settings, checking the driver dependency, reviewing error logs, and testing the credentials and database availability.</div></div>
+<div class="qa"><div class="q">4. How did you handle a tight deadline?</div><div class="a">I prioritized the most important features, broke work into small tasks, communicated progress, and focused on delivering a working core first.</div></div>
+<div class="qa"><div class="q">5. How did you handle a disagreement in the team?</div><div class="a">I listened to other views, focused on facts and project goals, and we reached a decision together. If needed, we escalated to the lead.</div></div>
+<div class="qa"><div class="q">6. How did you handle changing requirements?</div><div class="a">Agile helped. We discussed changes in planning, re-prioritized the backlog, and adjusted the next sprint without disrupting current work.</div></div>
+<div class="qa"><div class="q">7. How did you ensure code quality?</div><div class="a">Through code reviews, consistent coding standards, unit tests, and static analysis tools to catch issues early.</div></div>
+<div class="qa"><div class="q">8. How did you handle a performance problem?</div><div class="a">I identified the slow part using logs and profiling, then optimized it, for example by improving a query or adding caching.</div></div>
+<div class="qa"><div class="q">9. How did you handle a feature you had never built before?</div><div class="a">I researched the documentation, studied examples, built a small prototype, and asked teammates when needed before integrating it.</div></div>
+<div class="qa"><div class="q">10. How did you manage version control conflicts?</div><div class="a">By pulling changes frequently, communicating with teammates, and carefully resolving merge conflicts by reviewing both versions.</div></div>
+<div class="qa"><div class="q">11. How did you handle integrating multiple modules?</div><div class="a">By agreeing on clear interfaces, testing each module independently, and then testing them together during integration.</div></div>
+<div class="qa"><div class="q">12. How did you test your application?</div><div class="a">With unit tests for individual methods using JUnit and Mockito, plus manual testing of the full user flow.</div></div>
+<div class="qa"><div class="q">13. How did you handle security in your project?</div><div class="a">By hashing passwords with BCrypt, using role-based authorization, validating input, and avoiding logging sensitive data.</div></div>
+<div class="qa"><div class="q">14. What did you do when you got stuck?</div><div class="a">I broke the problem down, searched documentation, reviewed similar code, and discussed with teammates rather than staying blocked for long.</div></div>
+<div class="qa"><div class="q">15. How did you handle feedback from code reviews?</div><div class="a">I treated it as a learning opportunity, applied the suggestions, and used the lessons to write better code next time.</div></div>
+<div class="qa"><div class="q">16. How did you keep the project organized?</div><div class="a">By following a clear layered structure, naming conventions, version control with branches, and tracking tasks in a board.</div></div>
+<div class="qa"><div class="q">17. How did you handle a production issue?</div><div class="a">I checked logs to find the cause, applied a fix or a temporary workaround, verified it, and recorded the steps to prevent recurrence.</div></div>
+<div class="qa"><div class="q">18. What did you learn from your project?</div><div class="a">How to design layered applications, work with Spring and databases, collaborate with Git, and write cleaner, testable code.</div></div>
+<div class="qa"><div class="q">19. How did you balance multiple tasks?</div><div class="a">By prioritizing based on importance and deadlines, focusing on one task at a time, and keeping the team updated on progress.</div></div>
+<div class="qa"><div class="q">20. How did you handle a mistake you made?</div><div class="a">I acknowledged it quickly, fixed it, informed the team if it affected them, and learned from it to avoid repeating it.</div></div>
+<div class="qa"><div class="q">21. How do you approach learning a new technology for a project?</div><div class="a">I start with official documentation and tutorials, build a small sample, apply it to a real task gradually, and deepen my understanding over time.</div></div>
+
+<!-- END OF MODULES -->
+
+<footer>
+    Interview Questions and Answers &mdash; GenC Fresher Mock Practice Guide.<br>
+    Topics: Introduction &bull; OOP &bull; Collections &bull; Multithreading &bull; Exceptions &bull; Git &bull; HTML &bull; CSS &bull; JavaScript &bull; Bootstrap 5 &bull; Agile &bull; Software Engineering &bull; Spring MVC &bull; Logging &bull; SLF4J &bull; General &bull; Project Challenges.<br>
+    To export as PDF, open this file in a web browser and choose Print, then Save as PDF.
+</footer>
+
+</body>
+</html>

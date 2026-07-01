@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Core Java, SQL &amp; Spring - Beginner Interview Q&amp;A Guide</title>
+<style>
+    :root {
+        --primary: #11335b;
+        --secondary: #1f6fb2;
+        --accent: #b45309;
+        --light: #eef4fa;
+        --border: #c7d6e6;
+        --text: #1f2933;
+        --muted: #4a5b73;
+        --code-bg: #0d1f33;
+        --qbar: #1f6fb2;
+    }
+    * { box-sizing: border-box; }
+    body {
+        font-family: "Segoe UI", Calibri, Arial, sans-serif;
+        color: var(--text);
+        line-height: 1.55;
+        padding: 0 48px 64px 48px;
+        max-width: 1000px;
+        margin: 0 auto;
+        background: #ffffff;
+    }
+    h1, h2, h3 { color: var(--primary); font-weight: 600; }
+    h1 { font-size: 28px; margin: 0 0 4px 0; }
+    h2 {
+        font-size: 22px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 3px solid var(--secondary);
+        padding-bottom: 6px;
+        margin-top: 44px;
+    }
+    h3 { font-size: 16px; margin-top: 26px; color: var(--accent); }
+    p { margin: 8px 0; }
+
+    code {
+        font-family: "Consolas", "Courier New", monospace;
+        background: var(--light);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        padding: 1px 5px;
+        font-size: 12.5px;
+        color: #b03060;
+    }
+
+    .cover {
+        text-align: center;
+        padding: 80px 0 56px 0;
+        border-bottom: 3px solid var(--primary);
+        margin-bottom: 10px;
+    }
+    .cover .subtitle { font-size: 16px; color: var(--muted); margin-top: 8px; }
+    .cover .meta { font-size: 13px; color: var(--muted); margin-top: 32px; }
+    .badge {
+        display: inline-block;
+        background: var(--accent);
+        color: #fff;
+        font-size: 12px;
+        padding: 4px 12px;
+        border-radius: 14px;
+        margin: 4px;
+    }
+
+    .qa { margin: 14px 0; padding-left: 14px; border-left: 3px solid var(--qbar); }
+    .q { font-weight: 600; color: var(--primary); margin-bottom: 3px; }
+    .a { margin: 0 0 4px 0; }
+    .a ul { margin: 4px 0 4px 18px; padding: 0; }
+    .a li { margin: 2px 0; }
+
+    .why {
+        font-size: 12.5px;
+        color: var(--muted);
+        margin: 4px 0 0 0;
+        font-style: italic;
+    }
+    .why b { color: var(--accent); font-style: normal; }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 12px 0;
+        font-size: 12.5px;
+    }
+    th, td { border: 1px solid var(--border); padding: 7px 10px; text-align: left; vertical-align: top; }
+    th { background: var(--primary); color: #fff; }
+    tr:nth-child(even) td { background: var(--light); }
+
+    .note {
+        background: #eaf2fb;
+        border-left: 4px solid var(--accent);
+        padding: 10px 16px;
+        margin: 14px 0;
+        font-size: 13px;
+    }
+    .tip {
+        background: #eafaf1;
+        border-left: 4px solid #1f8a52;
+        padding: 10px 16px;
+        margin: 14px 0;
+        font-size: 13px;
+    }
+    .filebox {
+        background: #fffaf0;
+        border: 1px solid #e6cf9c;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 12px 0;
+        font-family: "Consolas", "Courier New", monospace;
+        font-size: 12px;
+        white-space: pre;
+        overflow-x: auto;
+    }
+    .filebox .cap {
+        display: block;
+        font-family: "Segoe UI", Arial, sans-serif;
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .kw { color: #b03060; }
+    .cm { color: #6f7d52; font-style: italic; }
+    .st { color: #1f7a4d; }
+
+    .toc { columns: 2; column-gap: 36px; font-size: 13.5px; }
+    .toc a { color: var(--secondary); text-decoration: none; line-height: 1.9; }
+
+    footer {
+        margin-top: 50px;
+        border-top: 1px solid var(--border);
+        padding-top: 12px;
+        font-size: 12px;
+        color: var(--muted);
+        text-align: center;
+    }
+    @media print {
+        body { padding: 0 12px; }
+        h2 { page-break-after: avoid; page-break-before: always; }
+        .qa, table, .note, .tip, .filebox { page-break-inside: avoid; }
+        .cover { padding: 60px 0 40px 0; }
+        #toc-section { page-break-after: always; }
+    }
+</style>
+</head>
+<body>
+
+<div class="cover">
+    <h1>Core Java, SQL &amp; Spring</h1>
+    <div class="subtitle">Beginner Interview Question &amp; Answer Guide &mdash; Explained in Simple Language</div>
+    <div style="margin-top:22px;">
+        <span class="badge">Java Basics</span>
+        <span class="badge">OOP</span>
+        <span class="badge">Strings</span>
+        <span class="badge">Collections</span>
+        <span class="badge">Exceptions</span>
+        <span class="badge">Threads</span>
+        <span class="badge">Java 8</span>
+        <span class="badge">JDBC &amp; JPA</span>
+        <span class="badge">SQL</span>
+        <span class="badge">Spring &amp; Spring Boot</span>
+        <span class="badge">HTML/CSS/JS</span>
+        <span class="badge">Git &amp; Unix</span>
+        <span class="badge">Agile &amp; SOLID</span>
+        <span class="badge">JUnit &amp; Mockito</span>
+        <span class="badge">Microservices</span>
+        <span class="badge">Scenario-Based</span>
+    </div>
+    <div class="meta">
+        Frequently Asked Beginner Questions &bull; With Clear Answers, Examples, and Code
+    </div>
+</div>
+
+<div id="toc-section">
+<h2>Table of Contents</h2>
+<div class="toc">
+    <a href="#j1">1. Java Fundamentals</a><br>
+    <a href="#j2">2. OOP Concepts</a><br>
+    <a href="#j3">3. Strings &amp; Immutability</a><br>
+    <a href="#j4">4. Collections Framework</a><br>
+    <a href="#j5">5. Exception Handling</a><br>
+    <a href="#j6">6. Threads &amp; Multithreading</a><br>
+    <a href="#j7">7. Java 8 Features</a><br>
+    <a href="#j8">8. JDBC, JPA &amp; Hibernate</a><br>
+    <a href="#j9">9. SQL Essentials</a><br>
+    <a href="#j10">10. Spring &amp; Spring Boot</a><br>
+    <a href="#j11">11. HTML, CSS &amp; JavaScript Basics</a><br>
+    <a href="#j12">12. Git &amp; Unix Commands</a><br>
+    <a href="#j13">13. Agile, SOLID &amp; Software Concepts</a><br>
+    <a href="#j14">14. More Core Java (Tricky &amp; Common)</a><br>
+    <a href="#j15">15. JUnit, Mockito &amp; Testing</a><br>
+    <a href="#j16">16. More Spring Boot &amp; Microservices</a><br>
+    <a href="#j17">17. More SQL (Normalization, Views, Triggers)</a><br>
+    <a href="#j18">18. Scenario-Based Questions (Beginner)</a><br>
+    <a href="#j19">19. Rapid-Fire Practice (Quick Q&amp;A)</a><br>
+</div>
+</div>
+
+<!-- ============ 1. JAVA FUNDAMENTALS ============ -->
+<h2 id="j1">1. Java Fundamentals</h2>
+
+<div class="qa"><div class="q">Q1. What is Java and what are its main features?</div>
+<div class="a">Java is a popular, object-oriented programming language that runs on any device with a JVM ("write once, run anywhere"). Key features: platform-independent, object-oriented, automatic memory management (garbage collection), secure, multithreaded, and robust.</div></div>
+
+<div class="qa"><div class="q">Q2. What is the difference between JDK, JRE, and JVM?</div>
+<div class="a"><ul>
+<li><b>JVM</b> (Java Virtual Machine): runs the bytecode.</li>
+<li><b>JRE</b> (Java Runtime Environment): JVM + libraries needed to run programs.</li>
+<li><b>JDK</b> (Java Development Kit): JRE + development tools like the compiler (<code>javac</code>).</li>
+</ul></div>
+<div class="why"><b>Simple way to remember:</b> JDK is to develop, JRE is to run, JVM actually executes.</div></div>
+
+<div class="qa"><div class="q">Q3. Which file is generated after compiling a Java source file?</div>
+<div class="a">A <code>.class</code> file containing <b>bytecode</b>. For example, compiling <code>Hello.java</code> produces <code>Hello.class</code>.</div></div>
+
+<div class="qa"><div class="q">Q4. How do you compile and run a Java file written in Notepad++?</div>
+<div class="a">Open a terminal in the folder and run:
+<div class="filebox"><span class="cap">Compile and run from the command line</span><span class="kw">javac</span> Hello.java    <span class="cm"># creates Hello.class (bytecode)</span>
+<span class="kw">java</span> Hello          <span class="cm"># runs the program (no .class extension)</span></div></div></div>
+
+<div class="qa"><div class="q">Q5. What is a classloader, and which one loads your class?</div>
+<div class="a">A classloader loads <code>.class</code> files into the JVM. There are three main ones:
+<ul>
+<li><b>Bootstrap</b> &mdash; loads core Java classes (<code>java.lang.*</code>).</li>
+<li><b>Extension/Platform</b> &mdash; loads extension libraries.</li>
+<li><b>Application/System</b> &mdash; loads <b>your</b> classes from the classpath.</li>
+</ul></div>
+<div class="why"><b>Answer to "which loads my class":</b> the Application (System) classloader.</div></div>
+
+<div class="qa"><div class="q">Q6. What are stack, heap, and method area?</div>
+<div class="a"><ul>
+<li><b>Stack:</b> stores method calls and local variables; one per thread.</li>
+<li><b>Heap:</b> stores all objects; shared by all threads.</li>
+<li><b>Method area:</b> stores class information, static variables, and method code.</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q7. What is garbage collection?</div>
+<div class="a">The automatic process where the JVM frees the memory of objects that are no longer referenced, so you do not free memory manually like in C/C++.</div></div>
+
+<!-- ============ 2. OOP ============ -->
+<h2 id="j2">2. OOP Concepts</h2>
+
+<div class="qa"><div class="q">Q1. What are the four pillars of OOP?</div>
+<div class="a"><b>Encapsulation, Inheritance, Polymorphism, Abstraction.</b></div></div>
+
+<div class="qa"><div class="q">Q2. What is encapsulation? (with example)</div>
+<div class="a">Hiding internal data by making fields <code>private</code> and exposing them through public getters/setters, so the object controls its own state.</div>
+<div class="filebox"><span class="cap">Encapsulation example</span><span class="kw">public class</span> Account {
+    <span class="kw">private double</span> balance;          <span class="cm">// hidden</span>
+
+    <span class="kw">public double</span> getBalance() {     <span class="cm">// controlled read</span>
+        <span class="kw">return</span> balance;
+    }
+    <span class="kw">public void</span> deposit(<span class="kw">double</span> amt) { <span class="cm">// controlled write</span>
+        <span class="kw">if</span> (amt &gt; <span class="st">0</span>) balance += amt;
+    }
+}</div>
+<div class="why"><b>Real-world analogy:</b> An ATM: you cannot touch the cash directly; you use buttons (methods) that control access.</div></div>
+
+<div class="qa"><div class="q">Q3. What is abstraction? (with example)</div>
+<div class="a">Showing only the essential features and hiding the complex details. Achieved with <b>abstract classes</b> and <b>interfaces</b>.</div>
+<div class="filebox"><span class="cap">Abstraction example</span><span class="kw">abstract class</span> Shape {
+    <span class="kw">abstract double</span> area();   <span class="cm">// what, not how</span>
+}
+<span class="kw">class</span> Circle <span class="kw">extends</span> Shape {
+    <span class="kw">double</span> r;
+    <span class="kw">double</span> area() { <span class="kw">return</span> <span class="st">3.14</span> * r * r; } <span class="cm">// the how</span>
+}</div>
+<div class="why"><b>Real-world analogy:</b> Driving a car: you use the steering and pedals (interface) without knowing the engine's internal workings.</div></div>
+
+<div class="qa"><div class="q">Q4. Difference between abstraction and encapsulation?</div>
+<div class="a"><ul>
+<li><b>Abstraction</b> hides <i>complexity</i> (shows what an object does, hides how).</li>
+<li><b>Encapsulation</b> hides <i>data</i> (keeps fields private behind methods).</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q5. Difference between an abstract class and an interface?</div>
+<div class="a">
+<table>
+<tr><th>Point</th><th>Abstract class</th><th>Interface</th></tr>
+<tr><td>Methods</td><td>Abstract + concrete</td><td>Mainly abstract; <code>default</code>/<code>static</code> allowed (Java 8+)</td></tr>
+<tr><td>Fields</td><td>Any fields</td><td>Only constants (<code>public static final</code>)</td></tr>
+<tr><td>Inheritance</td><td>Extend only one</td><td>Implement many</td></tr>
+<tr><td>Constructor</td><td>Yes</td><td>No</td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q6. Can we create an object of an abstract class or interface?</div>
+<div class="a">No, not directly. But you can create an object of a <b>subclass</b> and refer to it using the parent/interface type.</div>
+<div class="filebox"><span class="cap">Using a parent reference</span>Shape s = <span class="kw">new</span> Circle(); <span class="cm">// object is Circle, reference is Shape</span></div></div>
+
+<div class="qa"><div class="q">Q7. Difference between method overloading and overriding?</div>
+<div class="a"><ul>
+<li><b>Overloading:</b> same method name, different parameters, in the same class (compile-time).</li>
+<li><b>Overriding:</b> a subclass redefines a parent method with the same signature (runtime).</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q8. Can we change the return type in method overriding?</div>
+<div class="a">It must be the <b>same type</b> or a <b>subtype</b> (called a covariant return type). You cannot change it to an unrelated type.</div></div>
+
+<div class="qa"><div class="q">Q9. Difference between static binding and dynamic binding?</div>
+<div class="a"><ul>
+<li><b>Static (early) binding:</b> resolved at compile time, e.g. overloaded methods and static methods.</li>
+<li><b>Dynamic (late) binding:</b> resolved at runtime, e.g. overridden methods through a parent reference.</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q10. Why is multiple inheritance (with classes) not supported in Java?</div>
+<div class="a">To avoid the "diamond problem", where two parent classes provide the same method and the compiler cannot decide which to use. Java allows multiple inheritance only through <b>interfaces</b>, which avoids this confusion.</div></div>
+
+<!-- ============ 3. STRINGS ============ -->
+<h2 id="j3">3. Strings &amp; Immutability</h2>
+
+<div class="qa"><div class="q">Q1. Why are Strings immutable in Java?</div>
+<div class="a">Once created, a <code>String</code> cannot be changed. This gives:
+<ul>
+<li><b>Security:</b> safe to use for file paths, URLs, and passwords as keys.</li>
+<li><b>Caching:</b> strings can be shared in the String constant pool.</li>
+<li><b>Thread safety:</b> immutable objects can be shared freely.</li>
+<li><b>Reliable hashing:</b> the hash never changes, so they work well as map keys.</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q2. Difference between StringBuilder and StringBuffer?</div>
+<div class="a">Both are mutable (changeable). <b>StringBuilder</b> is faster but not thread-safe. <b>StringBuffer</b> is thread-safe (synchronized) but slightly slower.</div></div>
+
+<div class="qa"><div class="q">Q3. Difference between <code>==</code> and <code>.equals()</code>?</div>
+<div class="a"><code>==</code> compares references (same object in memory). <code>.equals()</code> compares the actual content/value.</div>
+<div class="filebox"><span class="cap">== vs equals</span>String a = <span class="kw">new</span> String(<span class="st">"hi"</span>);
+String b = <span class="kw">new</span> String(<span class="st">"hi"</span>);
+System.out.println(a == b);       <span class="cm">// false (different objects)</span>
+System.out.println(a.equals(b));  <span class="cm">// true  (same content)</span></div></div></div>
+
+<div class="qa"><div class="q">Q4. What is the String constant pool, and how is it different from the heap?</div>
+<div class="a">The <b>String constant pool</b> is a special area inside the heap where string literals are stored and reused. <code>String s = "hello";</code> goes to the pool; <code>String s = new String("hello");</code> creates a new object in the normal heap.</div>
+<div class="why"><b>Moving between them:</b> the <code>intern()</code> method returns the pooled version of a string, e.g. <code>s2.intern()</code>.</div></div>
+
+<div class="qa"><div class="q">Q5. Difference between <code>.equals()</code> and <code>.equalsIgnoreCase()</code>?</div>
+<div class="a"><code>.equals()</code> is case-sensitive; <code>.equalsIgnoreCase()</code> ignores upper/lower case. So <code>"Hello".equals("hello")</code> is <code>false</code> but <code>"Hello".equalsIgnoreCase("hello")</code> is <code>true</code>.</div></div>
+
+<div class="qa"><div class="q">Q6. Which class provides the <code>.equals()</code> method?</div>
+<div class="a">The <code>Object</code> class. <code>String</code> overrides it to compare characters instead of references.</div></div>
+
+<div class="qa"><div class="q">Q7. Program: reverse the words of a sentence ("Hello World" &rarr; "World Hello").</div>
+<div class="a">
+<div class="filebox"><span class="cap">Reverse word order</span>String input = <span class="st">"Hello World"</span>;
+String[] words = input.split(<span class="st">" "</span>);
+StringBuilder sb = <span class="kw">new</span> StringBuilder();
+<span class="kw">for</span> (<span class="kw">int</span> i = words.length - <span class="st">1</span>; i &gt;= <span class="st">0</span>; i--) {
+    sb.append(words[i]);
+    <span class="kw">if</span> (i &gt; <span class="st">0</span>) sb.append(<span class="st">" "</span>);
+}
+System.out.println(sb); <span class="cm">// World Hello</span></div></div></div>
+
+<div class="qa"><div class="q">Q8. Program: find duplicates in a String array.</div>
+<div class="a">
+<div class="filebox"><span class="cap">Find duplicates</span>String[] s = {<span class="st">"hello"</span>, <span class="st">"ant"</span>, <span class="st">"boy"</span>, <span class="st">"hello"</span>, <span class="st">"cat"</span>};
+Set&lt;String&gt; seen = <span class="kw">new</span> HashSet&lt;&gt;();
+<span class="kw">for</span> (String w : s) {
+    <span class="kw">if</span> (!seen.add(w)) {           <span class="cm">// add returns false if already present</span>
+        System.out.println(<span class="st">"Duplicate: "</span> + w); <span class="cm">// Duplicate: hello</span>
+    }
+}</div></div></div>
+
+<!-- ============ 4. COLLECTIONS ============ -->
+<h2 id="j4">4. Collections Framework</h2>
+
+<div class="qa"><div class="q">Q1. What is the Collections framework?</div>
+<div class="a">A set of ready-made classes and interfaces (<code>List</code>, <code>Set</code>, <code>Map</code>, <code>Queue</code>) for storing and managing groups of objects, with useful methods like add, remove, search, and sort.</div></div>
+
+<div class="qa"><div class="q">Q2. Difference between List, Set, and Map?</div>
+<div class="a"><ul>
+<li><b>List:</b> ordered, allows duplicates (e.g. <code>ArrayList</code>).</li>
+<li><b>Set:</b> no duplicates (e.g. <code>HashSet</code>).</li>
+<li><b>Map:</b> key-value pairs with unique keys (e.g. <code>HashMap</code>).</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q3. Difference between ArrayList and LinkedList?</div>
+<div class="a"><b>ArrayList</b> uses a dynamic array; fast for get-by-index, slow for inserts/removes in the middle. <b>LinkedList</b> uses nodes; fast for inserts/removes, slow for random access.</div>
+<div class="why"><b>When to use:</b> use ArrayList for mostly reading by index; use LinkedList for frequent inserts/deletes.</div></div>
+
+<div class="qa"><div class="q">Q4. Difference between ArrayList and Vector?</div>
+<div class="a">Both are growable arrays. <b>Vector</b> is synchronized (thread-safe) but slower; <b>ArrayList</b> is not synchronized and faster. Vector is mostly legacy.</div></div>
+
+<div class="qa"><div class="q">Q5. Difference between HashSet and HashMap?</div>
+<div class="a"><b>HashSet</b> stores unique <i>values</i>; <b>HashMap</b> stores <i>key-value</i> pairs. Internally, HashSet is backed by a HashMap.</div></div>
+
+<div class="qa"><div class="q">Q6. Difference between HashMap and Hashtable?</div>
+<div class="a"><b>HashMap</b> is not synchronized (faster) and allows one <code>null</code> key. <b>Hashtable</b> is synchronized (thread-safe) and allows no <code>null</code> key or value.</div></div>
+
+<div class="qa"><div class="q">Q7. How does a HashMap store data internally?</div>
+<div class="a">It stores entries in "buckets" based on the key's <code>hashCode()</code>. On lookup, it finds the bucket by hash, then uses <code>equals()</code> to match the exact key. Collisions are handled with linked lists (and trees for large buckets).</div></div>
+
+<div class="qa"><div class="q">Q8. Null keys/values: what is allowed?</div>
+<div class="a">
+<table>
+<tr><th>Collection</th><th>Null key</th><th>Null value</th></tr>
+<tr><td>HashMap</td><td>One allowed</td><td>Many allowed</td></tr>
+<tr><td>TreeMap</td><td>Not allowed (needs sorting)</td><td>Allowed</td></tr>
+<tr><td>TreeSet</td><td>Not allowed (needs sorting)</td><td>&mdash;</td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q9. Why are Maps not part of the Collection interface?</div>
+<div class="a">Because a <code>Collection</code> holds single elements, while a <code>Map</code> holds <b>pairs</b> (key and value). The structure is different, so Map is a separate hierarchy.</div></div>
+
+<div class="qa"><div class="q">Q10. Difference between fail-fast and fail-safe iterators?</div>
+<div class="a"><b>Fail-fast</b> throws <code>ConcurrentModificationException</code> if the collection changes during iteration (e.g. ArrayList). <b>Fail-safe</b> works on a copy and does not throw (e.g. <code>CopyOnWriteArrayList</code>).</div></div>
+
+<div class="qa"><div class="q">Q11. Difference between Comparable and Comparator?</div>
+<div class="a"><b>Comparable</b> defines the natural order inside the class via <code>compareTo()</code>. <b>Comparator</b> defines an external, custom order via <code>compare()</code>, useful for multiple sort orders.</div></div>
+
+<!-- ============ 5. EXCEPTIONS ============ -->
+<h2 id="j5">5. Exception Handling</h2>
+
+<div class="qa"><div class="q">Q1. What is exception handling?</div>
+<div class="a">A way to handle runtime errors gracefully using <code>try</code>, <code>catch</code>, <code>finally</code>, <code>throw</code>, and <code>throws</code>, so the program does not crash.</div></div>
+
+<div class="qa"><div class="q">Q2. What is the exception hierarchy?</div>
+<div class="a"><code>Throwable</code> is the root. It splits into <b>Error</b> (serious problems like <code>OutOfMemoryError</code>) and <b>Exception</b>. <code>Exception</code> splits into <b>checked</b> exceptions and <b>unchecked</b> (<code>RuntimeException</code>).</div></div>
+
+<div class="qa"><div class="q">Q3. Difference between checked and unchecked exceptions?</div>
+<div class="a"><ul>
+<li><b>Checked:</b> checked at compile time, must be handled or declared (e.g. <code>IOException</code>).</li>
+<li><b>Unchecked:</b> extend <code>RuntimeException</code>, occur at runtime (e.g. <code>NullPointerException</code>).</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q4. Difference between <code>throw</code> and <code>throws</code>?</div>
+<div class="a"><code>throw</code> actually throws an exception object; <code>throws</code> declares in the method signature that the method may throw an exception.</div></div>
+
+<div class="qa"><div class="q">Q5. Difference between final, finally, and finalize?</div>
+<div class="a"><ul>
+<li><b>final:</b> a keyword for constants, non-overridable methods, or non-extendable classes.</li>
+<li><b>finally:</b> a block that always runs after try/catch (used for cleanup).</li>
+<li><b>finalize:</b> an old method called before garbage collection (now deprecated).</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q6. Does the finally block always run?</div>
+<div class="a">Yes, whether or not an exception occurs &mdash; except in rare cases like <code>System.exit()</code> or JVM crash.</div></div>
+
+<div class="qa"><div class="q">Q7. Can we have try-finally without catch? Multiple catch blocks? Try inside finally?</div>
+<div class="a">Yes to all:
+<ul>
+<li><b>try-finally without catch:</b> allowed (the exception propagates, but cleanup runs).</li>
+<li><b>Multiple catch blocks:</b> allowed, ordered from specific to general.</li>
+<li><b>try-catch inside catch or finally:</b> allowed (nested try blocks are valid).</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q8. How do you create a custom exception?</div>
+<div class="a">Extend <code>Exception</code> (checked) or <code>RuntimeException</code> (unchecked).</div>
+<div class="filebox"><span class="cap">Custom exception</span><span class="kw">public class</span> InvalidAgeException <span class="kw">extends</span> RuntimeException {
+    <span class="kw">public</span> InvalidAgeException(String message) {
+        <span class="kw">super</span>(message);
+    }
+}
+<span class="cm">// usage:</span>
+<span class="kw">if</span> (age &lt; <span class="st">18</span>) <span class="kw">throw new</span> InvalidAgeException(<span class="st">"Age must be 18+"</span>);</div>
+<div class="why"><b>Why useful:</b> custom exceptions give clear, meaningful error names for your business rules.</div></div>
+
+<div class="qa"><div class="q">Q9. What is try-with-resources?</div>
+<div class="a">A try block that automatically closes resources (like files or DB connections) when done, so you do not need a finally block to close them.</div>
+<div class="filebox"><span class="cap">try-with-resources</span><span class="kw">try</span> (BufferedReader br = <span class="kw">new</span> BufferedReader(<span class="kw">new</span> FileReader(<span class="st">"a.txt"</span>))) {
+    System.out.println(br.readLine());
+} <span class="cm">// br is closed automatically here</span></div></div></div>
+
+<div class="qa"><div class="q">Q10. Program using ArithmeticException.</div>
+<div class="a">
+<div class="filebox"><span class="cap">Handle divide-by-zero</span><span class="kw">try</span> {
+    <span class="kw">int</span> result = <span class="st">10</span> / <span class="st">0</span>;        <span class="cm">// throws ArithmeticException</span>
+} <span class="kw">catch</span> (ArithmeticException e) {
+    System.out.println(<span class="st">"Cannot divide by zero"</span>);
+}</div></div></div>
+
+<!-- ============ 6. THREADS ============ -->
+<h2 id="j6">6. Threads &amp; Multithreading</h2>
+
+<div class="qa"><div class="q">Q1. What is a thread and what is multithreading?</div>
+<div class="a">A <b>thread</b> is a lightweight unit of execution. <b>Multithreading</b> means running several threads at once to do more work in parallel and use the CPU efficiently.</div></div>
+
+<div class="qa"><div class="q">Q2. How do you create a thread in Java?</div>
+<div class="a">Two ways:
+<ul>
+<li>Extend <code>Thread</code> and override <code>run()</code>.</li>
+<li>Implement <code>Runnable</code> and pass it to a <code>Thread</code> (preferred, because your class can still extend another class).</li>
+</ul></div>
+<div class="filebox"><span class="cap">Runnable example</span>Runnable task = () -&gt; System.out.println(<span class="st">"Running"</span>);
+<span class="kw">new</span> Thread(task).start();</div></div></div>
+
+<div class="qa"><div class="q">Q3. What is the thread lifecycle?</div>
+<div class="a"><b>New</b> &rarr; <b>Runnable</b> &rarr; <b>Running</b> &rarr; <b>Waiting/Blocked</b> &rarr; <b>Terminated</b>. A thread is created, becomes ready, runs, may wait, and finally finishes.</div></div>
+
+<div class="qa"><div class="q">Q4. What is the Runnable interface?</div>
+<div class="a">A functional interface with a single <code>run()</code> method that holds the code a thread will execute.</div></div>
+
+<div class="qa"><div class="q">Q5. What is synchronization?</div>
+<div class="a">It allows only one thread at a time to run a block or method, preventing data corruption when threads share a resource. Use the <code>synchronized</code> keyword.</div></div>
+
+<div class="qa"><div class="q">Q6. What do <code>wait()</code>, <code>notify()</code>, and <code>notifyAll()</code> do?</div>
+<div class="a">They coordinate threads. <code>wait()</code> makes a thread pause and release the lock; <code>notify()</code> wakes one waiting thread; <code>notifyAll()</code> wakes all of them. They are called inside synchronized blocks.</div></div>
+
+<div class="qa"><div class="q">Q7. What is the <code>volatile</code> keyword?</div>
+<div class="a">It marks a variable so every thread reads its latest value from main memory (not a cached copy). It ensures visibility of changes across threads.</div></div>
+
+<div class="qa"><div class="q">Q8. Difference between <code>transient</code> and <code>volatile</code>?</div>
+<div class="a"><code>transient</code> tells serialization to skip a field; <code>volatile</code> ensures a variable's value is always read fresh across threads. They solve completely different problems.</div></div>
+
+<!-- ============ 7. JAVA 8 ============ -->
+<h2 id="j7">7. Java 8 Features</h2>
+
+<div class="qa"><div class="q">Q1. What are the main Java 8 features?</div>
+<div class="a">Lambda expressions, Functional interfaces, Stream API, <code>Optional</code>, the new Date/Time API, and <code>default</code>/<code>static</code> methods in interfaces.</div></div>
+
+<div class="qa"><div class="q">Q2. What is a lambda expression?</div>
+<div class="a">A short way to write a function (an implementation of a functional interface) without a full class or method.</div>
+<div class="filebox"><span class="cap">Lambda example</span>List&lt;String&gt; names = List.of(<span class="st">"raj"</span>, <span class="st">"amit"</span>);
+names.forEach(n -&gt; System.out.println(n)); <span class="cm">// prints each name</span></div></div></div>
+
+<div class="qa"><div class="q">Q3. What is a functional interface?</div>
+<div class="a">An interface with exactly <b>one abstract method</b>, which a lambda can implement. Examples: <code>Runnable</code>, <code>Comparator</code>, <code>Predicate</code>, <code>Function</code>, <code>Supplier</code>, <code>Consumer</code>.</div></div>
+
+<div class="qa"><div class="q">Q4. What is the Stream API?</div>
+<div class="a">A way to process collections in a clean, pipeline style (filter, map, reduce) without writing manual loops.</div>
+<div class="filebox"><span class="cap">Stream example</span>List&lt;Integer&gt; nums = List.of(<span class="st">1</span>, <span class="st">2</span>, <span class="st">3</span>, <span class="st">4</span>);
+<span class="kw">int</span> sumEven = nums.stream()
+                 .filter(n -&gt; n % <span class="st">2</span> == <span class="st">0</span>)
+                 .mapToInt(Integer::intValue)
+                 .sum();
+System.out.println(sumEven); <span class="cm">// 6</span></div></div></div>
+
+<div class="qa"><div class="q">Q5. What is Optional and why use it?</div>
+<div class="a">A container that may or may not hold a value, used to avoid <code>NullPointerException</code> by forcing you to handle the "no value" case clearly.</div>
+<div class="filebox"><span class="cap">Optional example</span>Optional&lt;String&gt; name = Optional.ofNullable(getName());
+System.out.println(name.orElse(<span class="st">"Guest"</span>)); <span class="cm">// default if null</span></div></div></div>
+
+<!-- ============ 8. JDBC / JPA / HIBERNATE ============ -->
+<h2 id="j8">8. JDBC, JPA &amp; Hibernate</h2>
+
+<div class="qa"><div class="q">Q1. What is JDBC?</div>
+<div class="a">JDBC (Java Database Connectivity) is the lowest-level way to talk to a database in Java. You write SQL yourself and manage connections, statements, and results.</div></div>
+
+<div class="qa"><div class="q">Q2. Difference between Statement and PreparedStatement?</div>
+<div class="a"><b>Statement</b> runs plain SQL and is open to SQL injection. <b>PreparedStatement</b> uses parameters (<code>?</code>), is precompiled, faster for repeated use, and safer.</div></div>
+
+<div class="qa"><div class="q">Q3. What is JPA and what is Hibernate?</div>
+<div class="a"><b>JPA</b> is a specification (standard) for mapping Java objects to database tables. <b>Hibernate</b> is the most popular implementation of JPA that actually does the work and generates the SQL.</div></div>
+
+<div class="qa"><div class="q">Q4. What is Spring Data JPA?</div>
+<div class="a">A Spring layer on top of JPA/Hibernate. You define a repository interface and Spring generates the implementation, including ready methods like <code>save</code> and <code>findAll</code>.</div></div>
+
+<div class="qa"><div class="q">Q5. What is an Entity and a POJO?</div>
+<div class="a">A <b>POJO</b> (Plain Old Java Object) is a simple class with fields, a constructor, and getters/setters. An <b>Entity</b> is a POJO marked with <code>@Entity</code> so JPA maps it to a database table.</div></div>
+
+<div class="qa"><div class="q">Q6. Write a One-to-Many mapping.</div>
+<div class="a">
+<div class="filebox"><span class="cap">Department has many Employees</span><span class="kw">@Entity</span>
+<span class="kw">public class</span> Department {
+    <span class="kw">@Id</span> <span class="kw">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)
+    <span class="kw">private int</span> id;
+
+    <span class="kw">@OneToMany</span>(mappedBy = <span class="st">"department"</span>)
+    <span class="kw">private</span> List&lt;Employee&gt; employees;
+}
+
+<span class="kw">@Entity</span>
+<span class="kw">public class</span> Employee {
+    <span class="kw">@Id</span> <span class="kw">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)
+    <span class="kw">private int</span> id;
+
+    <span class="kw">@ManyToOne</span>
+    <span class="kw">@JoinColumn</span>(name = <span class="st">"department_id"</span>)
+    <span class="kw">private</span> Department department;
+}</div></div></div>
+
+<div class="qa"><div class="q">Q7. What is the difference between <code>transient</code> keyword and <code>@Transient</code> annotation?</div>
+<div class="a"><code>@Transient</code> (JPA) means "do not save this field to the database". The Java <code>transient</code> keyword means "do not include this field during serialization". Different purposes.</div></div>
+
+<!-- ============ 9. SQL ============ -->
+<h2 id="j9">9. SQL Essentials</h2>
+
+<div class="qa"><div class="q">Q1. What are the types of SQL commands?</div>
+<div class="a">
+<table>
+<tr><th>Type</th><th>Purpose</th><th>Examples</th></tr>
+<tr><td>DDL</td><td>Define structure</td><td>CREATE, ALTER, DROP, TRUNCATE</td></tr>
+<tr><td>DML</td><td>Change data</td><td>INSERT, UPDATE, DELETE</td></tr>
+<tr><td>DQL</td><td>Query data</td><td>SELECT</td></tr>
+<tr><td>DCL</td><td>Permissions</td><td>GRANT, REVOKE</td></tr>
+<tr><td>TCL</td><td>Transactions</td><td>COMMIT, ROLLBACK, SAVEPOINT</td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q2. Difference between a primary key and a foreign key?</div>
+<div class="a"><ul>
+<li><b>Primary key:</b> uniquely identifies each row in a table; cannot be null or duplicate.</li>
+<li><b>Foreign key:</b> a column that points to the primary key of another table, creating a relationship.</li>
+</ul></div>
+<div class="why"><b>Example:</b> In an <code>Orders</code> table, <code>customer_id</code> is a foreign key pointing to the <code>id</code> primary key in the <code>Customers</code> table.</div></div>
+
+<div class="qa"><div class="q">Q3. Difference between unique key and primary key?</div>
+<div class="a">Both enforce uniqueness. A table has <b>one</b> primary key (not null). It can have <b>many</b> unique keys, and a unique key may allow one null.</div></div>
+
+<div class="qa"><div class="q">Q4. What are SQL joins?</div>
+<div class="a">Joins combine rows from two or more tables based on a related column.
+<table>
+<tr><th>Join</th><th>Returns</th></tr>
+<tr><td>INNER JOIN</td><td>Only matching rows in both tables.</td></tr>
+<tr><td>LEFT JOIN</td><td>All rows from the left table + matches from the right.</td></tr>
+<tr><td>RIGHT JOIN</td><td>All rows from the right table + matches from the left.</td></tr>
+<tr><td>FULL OUTER JOIN</td><td>All rows from both tables, matched where possible.</td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q5. Difference between a join and a union?</div>
+<div class="a">A <b>join</b> combines columns from tables side by side (horizontally). A <b>union</b> stacks rows from two queries on top of each other (vertically); both queries must have the same columns.</div></div>
+
+<div class="qa"><div class="q">Q6. Difference between DELETE, DROP, and TRUNCATE?</div>
+<div class="a">
+<table>
+<tr><th>Command</th><th>What it removes</th><th>Can rollback?</th></tr>
+<tr><td>DELETE</td><td>Specific rows (with WHERE)</td><td>Yes</td></tr>
+<tr><td>TRUNCATE</td><td>All rows, keeps the table</td><td>No (usually)</td></tr>
+<tr><td>DROP</td><td>The entire table itself</td><td>No</td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q7. Difference between WHERE and HAVING?</div>
+<div class="a"><b>WHERE</b> filters rows before grouping; <b>HAVING</b> filters groups after <code>GROUP BY</code> (often with aggregate functions like <code>COUNT</code>).</div></div>
+
+<div class="qa"><div class="q">Q8. What are GROUP BY and ORDER BY?</div>
+<div class="a"><b>GROUP BY</b> groups rows that share a value so you can use aggregates (SUM, COUNT). <b>ORDER BY</b> sorts the result rows ascending or descending.</div></div>
+
+<div class="qa"><div class="q">Q9. Sample queries: insert and delete.</div>
+<div class="a">
+<div class="filebox"><span class="cap">Insert and delete</span><span class="kw">INSERT INTO</span> students (id, name) <span class="kw">VALUES</span> (<span class="st">1</span>, <span class="st">'Raj'</span>);
+
+<span class="kw">DELETE FROM</span> students <span class="kw">WHERE</span> id = <span class="st">1</span>;</div></div></div>
+
+<div class="qa"><div class="q">Q10. What are ACID properties?</div>
+<div class="a"><b>Atomicity</b> (all or nothing), <b>Consistency</b> (valid state), <b>Isolation</b> (transactions do not interfere), <b>Durability</b> (committed data is saved permanently).</div></div>
+
+<div class="qa"><div class="q">Q11. What is an index and why use it?</div>
+<div class="a">An index is a data structure that speeds up searching on a column, like a book's index. It makes reads faster but slightly slows down inserts/updates.</div></div>
+
+<!-- ============ 10. SPRING ============ -->
+<h2 id="j10">10. Spring &amp; Spring Boot</h2>
+
+<div class="qa"><div class="q">Q1. What is Spring and why use it?</div>
+<div class="a">Spring is a Java framework that manages object creation and wiring through IoC/DI, reducing tight coupling and boilerplate, with modules for web, data, and security.</div></div>
+
+<div class="qa"><div class="q">Q2. What are IoC and Dependency Injection?</div>
+<div class="a"><b>IoC (Inversion of Control):</b> the framework, not your code, creates and connects objects. <b>DI (Dependency Injection):</b> the way IoC is achieved &mdash; Spring supplies the objects a class needs.</div>
+<div class="why"><b>Types of DI:</b> constructor injection (preferred), setter injection, field injection.</div></div>
+
+<div class="qa"><div class="q">Q3. What is Spring Boot and how is it different from Spring?</div>
+<div class="a">Spring Boot is built on Spring. It removes most manual configuration using auto-configuration, starters, and an embedded server. <b>Spring Boot = Spring + auto-config + embedded server.</b></div></div>
+
+<div class="qa"><div class="q">Q4. What are the stereotype annotations?</div>
+<div class="a"><code>@Component</code> (generic bean), <code>@Service</code> (business logic), <code>@Repository</code> (data access, adds DB exception translation), <code>@Controller</code> (web views), <code>@RestController</code> (REST/JSON).</div></div>
+
+<div class="qa"><div class="q">Q5. Difference between @Component and @Bean?</div>
+<div class="a"><code>@Component</code> is put on your own class so Spring auto-detects it. <code>@Bean</code> is used inside a <code>@Configuration</code> class to register an object (often a third-party class you cannot annotate).</div></div>
+
+<div class="qa"><div class="q">Q6. What do @Configuration, @Qualifier, @Primary, and @ComponentScan do?</div>
+<div class="a"><ul>
+<li><code>@Configuration</code>: marks a class that defines beans.</li>
+<li><code>@Qualifier</code>: picks a specific bean when several match.</li>
+<li><code>@Primary</code>: marks a default bean when several match.</li>
+<li><code>@ComponentScan</code>: tells Spring which packages to scan for components.</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q7. Difference between @Controller and @RestController?</div>
+<div class="a"><code>@Controller</code> returns a view name (HTML page). <code>@RestController</code> = <code>@Controller</code> + <code>@ResponseBody</code>, returning data (JSON) directly. Yes, you can use REST APIs in Spring Boot with <code>@RestController</code>.</div></div>
+
+<div class="qa"><div class="q">Q8. Difference between @GetMapping, @PostMapping, @PutMapping, and @PatchMapping?</div>
+<div class="a"><ul>
+<li><code>@GetMapping</code>: read data (HTTP GET).</li>
+<li><code>@PostMapping</code>: create new data (HTTP POST).</li>
+<li><code>@PutMapping</code>: replace an entire resource (HTTP PUT).</li>
+<li><code>@PatchMapping</code>: update part of a resource (HTTP PATCH).</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q9. What are Spring bean scopes?</div>
+<div class="a"><b>singleton</b> (default, one shared instance), <b>prototype</b> (new each time), and web scopes <b>request</b>, <b>session</b>, <b>application</b>.</div></div>
+
+<div class="qa"><div class="q">Q10. What is the bean lifecycle?</div>
+<div class="a">Spring creates the bean, injects dependencies, runs init callbacks (<code>@PostConstruct</code>), the bean is used, then destroy callbacks (<code>@PreDestroy</code>) run at shutdown.</div></div>
+
+<div class="qa"><div class="q">Q11. How do you do global exception handling in Spring Boot?</div>
+<div class="a">Create a class annotated with <code>@RestControllerAdvice</code> and add <code>@ExceptionHandler</code> methods to handle exceptions across all controllers in one place.</div></div>
+
+<div class="qa"><div class="q">Q12. How do you connect a database in Spring Boot?</div>
+<div class="a">Add the database driver and <code>spring-boot-starter-data-jpa</code>, then set the connection in <code>application.properties</code> (URL, username, password). Spring Boot auto-configures the connection.</div></div>
+
+<div class="qa"><div class="q">Q13. What happens when a Spring Boot application starts?</div>
+<div class="a"><code>main()</code> calls <code>SpringApplication.run()</code>, which creates the application context, runs auto-configuration, scans components, creates beans, starts the embedded server, and the app is ready to handle requests.</div></div>
+
+<div class="qa"><div class="q">Q14. What is the default embedded server and how do you change the port?</div>
+<div class="a">The default is Tomcat. Change the port with <code>server.port=8088</code> in <code>application.properties</code>. The port number tells the browser which "door" of the server to connect to, e.g. <code>http://localhost:8088</code>.</div></div>
+
+<!-- ============ 11. HTML / CSS / JS ============ -->
+<h2 id="j11">11. HTML, CSS &amp; JavaScript Basics</h2>
+
+<div class="qa"><div class="q">Q1. What is the difference between HTML, CSS, and JavaScript?</div>
+<div class="a"><ul>
+<li><b>HTML</b> = structure/content of a page (the skeleton).</li>
+<li><b>CSS</b> = styling and layout (colors, fonts, spacing).</li>
+<li><b>JavaScript</b> = behavior and interactivity (clicks, validation, dynamic updates).</li>
+</ul></div>
+<div class="why"><b>Analogy:</b> HTML is the building, CSS is the paint and decoration, JavaScript is the electricity that makes things work.</div></div>
+
+<div class="qa"><div class="q">Q2. What are some common HTML tags?</div>
+<div class="a">
+<table>
+<tr><th>Tag</th><th>Purpose</th></tr>
+<tr><td><code>&lt;p&gt;</code></td><td>A paragraph of text.</td></tr>
+<tr><td><code>&lt;input type="text"&gt;</code></td><td>A single-line text box.</td></tr>
+<tr><td><code>&lt;textarea&gt;</code></td><td>A multi-line text box.</td></tr>
+<tr><td><code>&lt;ul&gt;</code> / <code>&lt;li&gt;</code></td><td>An unordered (bulleted) list and its items.</td></tr>
+<tr><td><code>&lt;ol&gt;</code> / <code>&lt;li&gt;</code></td><td>An ordered (numbered) list and its items.</td></tr>
+<tr><td><code>&lt;button&gt;</code></td><td>A clickable button.</td></tr>
+<tr><td><code>&lt;a&gt;</code></td><td>A hyperlink to another page.</td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q3. What is a void (empty) element in HTML?</div>
+<div class="a">A tag that has no closing tag and no content, because it cannot contain anything. Examples: <code>&lt;br&gt;</code>, <code>&lt;hr&gt;</code>, <code>&lt;img&gt;</code>, <code>&lt;input&gt;</code>.</div></div>
+
+<div class="qa"><div class="q">Q4. Difference between ordered and unordered lists?</div>
+<div class="a"><code>&lt;ol&gt;</code> shows numbered items (1, 2, 3) for steps in order; <code>&lt;ul&gt;</code> shows bullet points where order does not matter.</div></div>
+
+<div class="qa"><div class="q">Q5. How do you write a function in JavaScript?</div>
+<div class="a">
+<div class="filebox"><span class="cap">Three common ways</span><span class="cm">// 1. Function declaration</span>
+<span class="kw">function</span> add(a, b) {
+    <span class="kw">return</span> a + b;
+}
+
+<span class="cm">// 2. Function expression</span>
+<span class="kw">const</span> multiply = <span class="kw">function</span>(a, b) {
+    <span class="kw">return</span> a * b;
+};
+
+<span class="cm">// 3. Arrow function (short)</span>
+<span class="kw">const</span> square = (n) =&gt; n * n;
+
+console.log(add(<span class="st">2</span>, <span class="st">3</span>)); <span class="cm">// 5</span></div></div></div>
+
+<div class="qa"><div class="q">Q6. What is Bootstrap?</div>
+<div class="a">A popular CSS framework with ready-made styles and components (buttons, grids, forms) so you can build responsive, good-looking pages quickly without writing all the CSS yourself.</div></div>
+
+<!-- ============ 12. GIT / UNIX ============ -->
+<h2 id="j12">12. Git &amp; Unix Commands</h2>
+
+<div class="qa"><div class="q">Q1. What are the most common Git commands?</div>
+<div class="a">
+<table>
+<tr><th>Command</th><th>What it does</th></tr>
+<tr><td><code>git clone &lt;url&gt;</code></td><td>Copy a remote repository to your machine.</td></tr>
+<tr><td><code>git status</code></td><td>Show changed/untracked files.</td></tr>
+<tr><td><code>git add .</code></td><td>Stage changes for commit.</td></tr>
+<tr><td><code>git commit -m "msg"</code></td><td>Save staged changes with a message.</td></tr>
+<tr><td><code>git push</code></td><td>Upload commits to the remote.</td></tr>
+<tr><td><code>git pull</code></td><td>Download and merge remote changes.</td></tr>
+<tr><td><code>git branch</code></td><td>List or create branches.</td></tr>
+<tr><td><code>git merge</code></td><td>Combine another branch into the current one.</td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q2. Difference between <code>git merge</code> and <code>git fetch</code>?</div>
+<div class="a"><b>git fetch</b> only downloads remote changes but does not apply them. <b>git merge</b> combines changes into your current branch. <code>git pull</code> = fetch + merge in one step.</div></div>
+
+<div class="qa"><div class="q">Q3. How do you revert/undo changes in Git?</div>
+<div class="a"><ul>
+<li><code>git checkout -- file</code> &mdash; discard local changes to a file (older syntax).</li>
+<li><code>git revert &lt;commit&gt;</code> &mdash; create a new commit that undoes a previous one (safe for shared history).</li>
+<li><code>git reset --hard</code> &mdash; throw away local changes back to a commit (use carefully).</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q4. What are common Unix commands?</div>
+<div class="a">
+<table>
+<tr><th>Command</th><th>What it does</th></tr>
+<tr><td><code>ls</code></td><td>List files and folders in the current directory.</td></tr>
+<tr><td><code>cd</code></td><td>Change directory.</td></tr>
+<tr><td><code>pwd</code></td><td>Print the current directory path.</td></tr>
+<tr><td><code>cat file</code></td><td>Show the contents of a file.</td></tr>
+<tr><td><code>mv a b</code></td><td>Move or rename a file.</td></tr>
+<tr><td><code>cp a b</code></td><td>Copy a file.</td></tr>
+<tr><td><code>rm file</code></td><td>Remove a file.</td></tr>
+<tr><td><code>rm -r folder</code></td><td>Remove a folder and everything inside it (recursively).</td></tr>
+<tr><td><code>mkdir name</code></td><td>Create a new folder.</td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q5. What does the <code>ls</code> command do, and the <code>cat</code> command?</div>
+<div class="a"><b>ls</b> lists the files and folders in the current directory. <b>cat</b> prints the contents of a file to the screen (and can join files together).</div></div>
+
+<div class="qa"><div class="q">Q6. How do you move a file and remove a folder recursively?</div>
+<div class="a">Move/rename with <code>mv oldname newname</code>. Remove a folder and all its contents with <code>rm -r foldername</code>.</div></div>
+
+<!-- ============ 13. AGILE / SOLID ============ -->
+<h2 id="j13">13. Agile, SOLID &amp; Software Concepts</h2>
+
+<div class="qa"><div class="q">Q1. What is Agile methodology?</div>
+<div class="a">A way of building software in small, repeating cycles called <b>sprints</b> (often 2 weeks). The team delivers a working piece each cycle, gets feedback, and improves &mdash; instead of building everything at once.</div></div>
+
+<div class="qa"><div class="q">Q2. What are common Agile terms?</div>
+<div class="a">
+<table>
+<tr><th>Term</th><th>Meaning</th></tr>
+<tr><td>Sprint</td><td>A short, fixed period of work (e.g. 2 weeks).</td></tr>
+<tr><td>User Story</td><td>A small feature described from the user's point of view.</td></tr>
+<tr><td>Backlog</td><td>The prioritized list of work to be done.</td></tr>
+<tr><td>Stand-up</td><td>A short daily meeting about progress and blockers.</td></tr>
+<tr><td>Scrum Master</td><td>The person who helps the team follow Agile and removes blockers.</td></tr>
+<tr><td>Retrospective</td><td>A meeting to discuss what went well and what to improve.</td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q3. What are the SOLID principles?</div>
+<div class="a">Five rules for clean, maintainable object-oriented code:
+<table>
+<tr><th>Letter</th><th>Principle</th><th>Simple meaning</th></tr>
+<tr><td>S</td><td>Single Responsibility</td><td>A class should do one job only.</td></tr>
+<tr><td>O</td><td>Open/Closed</td><td>Open to extend, closed to modify.</td></tr>
+<tr><td>L</td><td>Liskov Substitution</td><td>A subclass should work wherever its parent is used.</td></tr>
+<tr><td>I</td><td>Interface Segregation</td><td>Many small interfaces are better than one big one.</td></tr>
+<tr><td>D</td><td>Dependency Inversion</td><td>Depend on abstractions, not concrete classes.</td></tr>
+</table>
+</div></div>
+
+<div class="qa"><div class="q">Q4. What is the difference between tight coupling and loose coupling?</div>
+<div class="a"><b>Tight coupling:</b> classes depend heavily on each other, so a change in one breaks the other. <b>Loose coupling:</b> classes depend on interfaces, so they can change independently. Spring's dependency injection helps achieve loose coupling.</div></div>
+
+<div class="qa"><div class="q">Q5. Difference between a method and a function?</div>
+<div class="a">A <b>function</b> is a block of reusable code. A <b>method</b> is a function that belongs to a class/object. In Java everything is inside classes, so we usually say "method".</div></div>
+
+<!-- ============ 14. MORE CORE JAVA ============ -->
+<h2 id="j14">14. More Core Java (Tricky &amp; Common)</h2>
+
+<div class="qa"><div class="q">Q1. What are the primitive data types in Java?</div>
+<div class="a">Eight: <code>byte</code>, <code>short</code>, <code>int</code>, <code>long</code>, <code>float</code>, <code>double</code>, <code>char</code>, <code>boolean</code>. Everything else (like <code>String</code>, arrays, objects) is a non-primitive (reference) type.</div></div>
+
+<div class="qa"><div class="q">Q2. What is the <code>static</code> keyword?</div>
+<div class="a">It makes a field or method belong to the <b>class</b> itself, not to each object. You can use it without creating an object, e.g. <code>Math.max(...)</code>.</div></div>
+
+<div class="qa"><div class="q">Q3. Difference between static and non-static (instance) members?</div>
+<div class="a"><b>Static</b> members are shared by all objects and accessed via the class name. <b>Non-static</b> members belong to each object separately and need an object to access.</div></div>
+
+<div class="qa"><div class="q">Q4. Difference between <code>this</code> and <code>super</code>?</div>
+<div class="a"><code>this</code> refers to the current object; <code>super</code> refers to the parent class (its constructor, methods, or fields).</div></div>
+
+<div class="qa"><div class="q">Q5. What is the <code>final</code> keyword (with a class, method, variable)?</div>
+<div class="a"><ul>
+<li><b>final variable:</b> its value cannot change (a constant).</li>
+<li><b>final method:</b> cannot be overridden by a subclass.</li>
+<li><b>final class:</b> cannot be extended (e.g. <code>String</code>).</li>
+</ul></div></div>
+
+<div class="qa"><div class="q">Q6. Can we extend the String class or the Exception class?</div>
+<div class="a">You <b>cannot</b> extend <code>String</code> because it is <code>final</code>. You <b>can</b> extend <code>Exception</code> to create your own custom exceptions.</div></div>
+
+<div class="qa"><div class="q">Q7. What are the predefined methods in the Object class?</div>
+<div class="a">Common ones: <code>equals()</code>, <code>hashCode()</code>, <code>toString()</code>, <code>getClass()</code>, <code>clone()</code>, <code>wait()</code>, <code>notify()</code>, <code>notifyAll()</code>, and <code>finalize()</code>.</div></div>
+
+<div class="qa"><div class="q">Q8. What is a marker interface? Name a few.</div>
+<div class="a">An interface with <b>no methods</b> that simply "marks" a class to give it a capability. Examples: <code>Serializable</code>, <code>Cloneable</code>, and (legacy) <code>RandomAccess</code>.</div></div>
+
+<div class="qa"><div class="q">Q9. What is serialization?</div>
+<div class="a">Converting an object into a stream of bytes so it can be saved to a file or sent over a network, and later restored (deserialization). The class must implement <code>Serializable</code>.</div></div>
+
+<div class="qa"><div class="q">Q10. What is a generic type?</div>
+<div class="a">Generics let you write classes and methods that work with a type you specify later, giving type safety. <code>List&lt;String&gt;</code> means a list that only holds Strings, caught at compile time.</div></div>
+
+<div class="qa"><div class="q">Q11. What is autoboxing and unboxing?</div>
+<div class="a"><b>Autoboxing</b> converts a primitive to its wrapper automatically (<code>int</code> &rarr; <code>Integer</code>). <b>Unboxing</b> is the reverse (<code>Integer</code> &rarr; <code>int</code>).</div></div>
+
+<div class="qa"><div class="q">Q12. What is an immutable object and how do you create one?</div>
+<div class="a">An object whose state cannot change after creation. To make one: mark the class <code>final</code>, make fields <code>private final</code>, set them only in the constructor, and provide no setters.</div></div>
+
+<div class="qa"><div class="q">Q13. Program: add the digits 1 to 9 (or a list of numbers) using Java.</div>
+<div class="a">
+<div class="filebox"><span class="cap">Sum numbers in a loop</span><span class="kw">int</span> sum = <span class="st">0</span>;
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="st">1</span>; i &lt;= <span class="st">9</span>; i++) {
+    sum += i;
+}
+System.out.println(sum); <span class="cm">// 45</span></div></div></div>
+
+<div class="qa"><div class="q">Q14. Program: check if a number is prime.</div>
+<div class="a">
+<div class="filebox"><span class="cap">Prime check</span><span class="kw">int</span> n = <span class="st">29</span>;
+<span class="kw">boolean</span> prime = n &gt; <span class="st">1</span>;
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="st">2</span>; i &lt;= Math.sqrt(n); i++) {
+    <span class="kw">if</span> (n % i == <span class="st">0</span>) { prime = <span class="kw">false</span>; <span class="kw">break</span>; }
+}
+System.out.println(prime ? <span class="st">"Prime"</span> : <span class="st">"Not prime"</span>);</div></div></div>
+
+<div class="qa"><div class="q">Q15. What does <code>a++ + ++a</code> evaluate to (with <code>a = 2</code>)?</div>
+<div class="a">Yes, it is valid in a print statement. Step by step with <code>a = 2</code>: <code>a++</code> uses 2 (then a becomes 3), <code>++a</code> makes a 4 and uses 4. So the result is <code>2 + 4 = 6</code>.</div></div>
+
+<div class="qa"><div class="q">Q16. Can <code>A a = new D();</code> work if D is a subclass several levels below A?</div>
+<div class="a">Yes. A parent reference can point to any subclass object. Calling <code>a.m1()</code> works if <code>m1()</code> is defined in A (or inherited), and the actual D version runs at runtime (dynamic binding).</div></div>
+
+<div class="qa"><div class="q">Q17. Have you seen StackOverflowError? How do you increase heap memory?</div>
+<div class="a"><code>StackOverflowError</code> usually comes from infinite recursion (a method calling itself with no end). To increase heap memory, use JVM flags like <code>-Xms</code> (initial) and <code>-Xmx</code> (maximum), e.g. <code>java -Xmx512m MyApp</code>.</div></div>
+
+<!-- ============ 15. JUNIT / MOCKITO ============ -->
+<h2 id="j15">15. JUnit, Mockito &amp; Testing</h2>
+
+<div class="qa"><div class="q">Q1. What is JUnit?</div>
+<div class="a">A popular Java framework for writing and running <b>unit tests</b> &mdash; small tests that check one method or class behaves correctly.</div></div>
+
+<div class="qa"><div class="q">Q2. What is the difference between unit testing and integration testing?</div>
+<div class="a"><b>Unit testing</b> checks one small part in isolation (one method/class). <b>Integration testing</b> checks that several parts work correctly <i>together</i> (e.g. controller + service + database).</div></div>
+
+<div class="qa"><div class="q">Q3. Which JUnit method checks if two values are equal?</div>
+<div class="a"><code>assertEquals(expected, actual)</code>. For Strings, it compares content. Other common ones: <code>assertTrue</code>, <code>assertFalse</code>, <code>assertNull</code>, <code>assertNotNull</code>.</div>
+<div class="filebox"><span class="cap">A simple JUnit test</span><span class="kw">@Test</span>
+<span class="kw">void</span> testAdd() {
+    assertEquals(<span class="st">5</span>, calculator.add(<span class="st">2</span>, <span class="st">3</span>));
+}</div></div>
+
+<div class="qa"><div class="q">Q4. What is Mockito and why is it used?</div>
+<div class="a">Mockito creates <b>mock (fake) objects</b> so you can test one class without needing its real dependencies (like a database). You tell the mock what to return, then test your class in isolation.</div>
+<div class="why"><b>Example:</b> Mock a repository to return a fixed user, so you can test the service without a real database.</div></div>
+
+<div class="qa"><div class="q">Q5. What are common JUnit annotations?</div>
+<div class="a"><code>@Test</code> (marks a test method), <code>@BeforeEach</code> (runs before each test), <code>@AfterEach</code> (runs after each test), <code>@BeforeAll</code>/<code>@AfterAll</code> (run once for the whole class), and <code>@Disabled</code> (skip a test).</div></div>
+
+<!-- ============ 16. MORE SPRING / MICROSERVICES ============ -->
+<h2 id="j16">16. More Spring Boot &amp; Microservices</h2>
+
+<div class="qa"><div class="q">Q1. Why do we need Spring Boot instead of plain Spring/Java?</div>
+<div class="a">It removes most manual setup: auto-configuration, starter dependencies, and a built-in (embedded) server. You can run a web app with a single <code>main()</code> method and almost no XML configuration.</div></div>
+
+<div class="qa"><div class="q">Q2. What is <code>@SpringBootApplication</code>?</div>
+<div class="a">A single annotation that combines three: <code>@Configuration</code>, <code>@EnableAutoConfiguration</code>, and <code>@ComponentScan</code>. It marks the main class and starts the whole auto-configuration process.</div></div>
+
+<div class="qa"><div class="q">Q3. What is <code>@Autowired</code> and what can we use instead?</div>
+<div class="a"><code>@Autowired</code> tells Spring to inject a dependency automatically. Instead of field injection, you can use <b>constructor injection</b> (preferred), which also works without writing <code>@Autowired</code> on a single constructor.</div></div>
+
+<div class="qa"><div class="q">Q4. Difference between <code>@Qualifier</code> and <code>@Primary</code>?</div>
+<div class="a">When several beans of the same type exist: <code>@Primary</code> sets a default one; <code>@Qualifier("name")</code> picks a specific one by name at the injection point.</div></div>
+
+<div class="qa"><div class="q">Q5. How do you validate incoming requests in Spring Boot?</div>
+<div class="a">Add validation annotations (<code>@NotNull</code>, <code>@Size</code>, <code>@Email</code>) on the request object and put <code>@Valid</code> before the parameter in the controller. Spring checks the rules and reports errors automatically.</div></div>
+
+<div class="qa"><div class="q">Q6. What is <code>@Transactional</code>?</div>
+<div class="a">It wraps a method in a database transaction: if everything succeeds it commits; if an exception occurs it rolls back, keeping the data consistent (all-or-nothing).</div></div>
+
+<div class="qa"><div class="q">Q7. What are microservices? (simple meaning)</div>
+<div class="a">An approach where a big application is split into many small, independent services, each doing one job (like login, payment, email). They run separately and talk to each other through APIs.</div>
+<div class="why"><b>Analogy:</b> Like departments in a school &mdash; teaching, accounts, canteen &mdash; each works independently but together they run the school.</div></div>
+
+<div class="qa"><div class="q">Q8. How do microservices communicate?</div>
+<div class="a">Usually through <b>REST APIs over HTTP</b> (one service calls another's URL), or through a <b>message queue</b> (like RabbitMQ/Kafka) for asynchronous messages.</div></div>
+
+<div class="qa"><div class="q">Q9. What happens when one microservice goes down?</div>
+<div class="a">Other services should keep working. Patterns like <b>timeouts</b>, <b>retries</b>, and a <b>circuit breaker</b> stop the failure from spreading, and a fallback response can be returned instead.</div></div>
+
+<div class="qa"><div class="q">Q10. Difference between authentication and authorization?</div>
+<div class="a"><b>Authentication</b> = "Who are you?" (verifying identity, e.g. login). <b>Authorization</b> = "What are you allowed to do?" (checking permissions/roles).</div></div>
+
+<div class="qa"><div class="q">Q11. Difference between HTTP 401 and 403?</div>
+<div class="a"><b>401 Unauthorized:</b> you are not logged in / identity not verified. <b>403 Forbidden:</b> you are logged in but not allowed to access this resource.</div></div>
+
+<div class="qa"><div class="q">Q12. What is a GlobalExceptionHandler in Spring Boot?</div>
+<div class="a">A class annotated with <code>@RestControllerAdvice</code> that catches exceptions from all controllers in one place using <code>@ExceptionHandler</code> methods, so you return clean, consistent error responses.</div></div>
+
+<!-- ============ 17. MORE SQL ============ -->
+<h2 id="j17">17. More SQL (Normalization, Views, Triggers)</h2>
+
+<div class="qa"><div class="q">Q1. What is normalization?</div>
+<div class="a">Organizing tables to reduce duplicate data and keep it consistent. You split big tables into smaller related ones and link them with keys. Common forms: 1NF, 2NF, 3NF.</div></div>
+
+<div class="qa"><div class="q">Q2. Difference between CHAR and VARCHAR?</div>
+<div class="a"><b>CHAR(n)</b> is fixed length (always uses n characters, padded with spaces). <b>VARCHAR(n)</b> is variable length (uses only what is needed, up to n). Use VARCHAR for most text.</div></div>
+
+<div class="qa"><div class="q">Q3. Difference between WHERE and HAVING (again, simply)?</div>
+<div class="a"><b>WHERE</b> filters individual rows before grouping. <b>HAVING</b> filters groups after <code>GROUP BY</code>, usually with aggregates like <code>COUNT</code> or <code>SUM</code>.</div></div>
+
+<div class="qa"><div class="q">Q4. What are aggregate functions?</div>
+<div class="a">Functions that compute a single value from many rows: <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code>. Often used with <code>GROUP BY</code>.</div></div>
+
+<div class="qa"><div class="q">Q5. What is a view?</div>
+<div class="a">A saved query that behaves like a virtual table. It does not store data itself but shows data from one or more tables, useful for simplifying complex queries and limiting access.</div></div>
+
+<div class="qa"><div class="q">Q6. What is a subquery?</div>
+<div class="a">A query inside another query. The inner query runs first and its result is used by the outer query.</div>
+<div class="filebox"><span class="cap">Subquery example</span><span class="kw">SELECT</span> name <span class="kw">FROM</span> students
+<span class="kw">WHERE</span> marks &gt; (<span class="kw">SELECT</span> AVG(marks) <span class="kw">FROM</span> students);</div></div>
+
+<div class="qa"><div class="q">Q7. What is a trigger?</div>
+<div class="a">A piece of SQL that runs automatically when an event happens on a table (INSERT, UPDATE, or DELETE). For example, automatically writing to an audit log whenever a row is updated.</div></div>
+
+<div class="qa"><div class="q">Q8. Difference between INNER JOIN and OUTER JOIN?</div>
+<div class="a"><b>INNER JOIN</b> returns only matching rows from both tables. <b>OUTER JOIN</b> (LEFT/RIGHT/FULL) also returns non-matching rows, filling missing sides with NULL.</div></div>
+
+<div class="qa"><div class="q">Q9. Difference between IN and EXISTS?</div>
+<div class="a"><b>IN</b> checks if a value is in a list/subquery result. <b>EXISTS</b> checks if a subquery returns any row at all. EXISTS is often faster for large subqueries.</div></div>
+
+<div class="qa"><div class="q">Q10. What are COMMIT, ROLLBACK, and SAVEPOINT?</div>
+<div class="a"><b>COMMIT</b> saves all changes permanently. <b>ROLLBACK</b> undoes changes since the last commit. <b>SAVEPOINT</b> sets a marker you can roll back to partially.</div></div>
+
+<!-- ============ 18. SCENARIO BASED ============ -->
+<h2 id="j18">18. Scenario-Based Questions (Beginner)</h2>
+
+<div class="qa"><div class="q">Q1. Scenario: your program crashes with NullPointerException. How do you find and fix it?</div>
+<div class="a">Read the stack trace to find the exact line, check which variable is <code>null</code> there, and make sure it is initialized before use. Using <code>Optional</code> or null checks helps prevent it.</div></div>
+
+<div class="qa"><div class="q">Q2. Scenario: you need a list where you frequently add/remove items in the middle. Which collection?</div>
+<div class="a"><code>LinkedList</code>, because inserts and deletes in the middle are faster than in an <code>ArrayList</code> (which must shift elements).</div></div>
+
+<div class="qa"><div class="q">Q3. Scenario: you must store unique usernames and check membership quickly. Which collection?</div>
+<div class="a"><code>HashSet</code>, because it stores only unique values and offers fast (near O(1)) lookups.</div></div>
+
+<div class="qa"><div class="q">Q4. Scenario: you need to look up an employee by their ID very fast. Which collection?</div>
+<div class="a"><code>HashMap</code> with the ID as the key and the employee as the value, giving fast lookups by key.</div></div>
+
+<div class="qa"><div class="q">Q5. Scenario: two threads update the same counter and the total is wrong. Why and how to fix?</div>
+<div class="a">It is a race condition &mdash; both threads change the value at the same time. Fix it with <code>synchronized</code>, an <code>AtomicInteger</code>, or a lock so only one thread updates at a time.</div></div>
+
+<div class="qa"><div class="q">Q6. Scenario: a user submits a form with an empty required field. How do you stop bad data?</div>
+<div class="a">Validate the input. On the server, use Bean Validation (<code>@NotNull</code>, <code>@NotBlank</code>) with <code>@Valid</code> in the controller; show a clear error message back to the user.</div></div>
+
+<div class="qa"><div class="q">Q7. Scenario: your Spring Boot app cannot connect to MySQL on startup. What do you check?</div>
+<div class="a">Check the database URL, username, and password in <code>application.properties</code>; confirm MySQL is running; confirm the database exists; and make sure the MySQL driver dependency is present.</div></div>
+
+<div class="qa"><div class="q">Q8. Scenario: your REST API must create a new record. Which HTTP method and annotation?</div>
+<div class="a">Use <b>POST</b> with <code>@PostMapping</code>. Use GET to read, PUT to replace, PATCH to partially update, and DELETE to remove.</div></div>
+
+<div class="qa"><div class="q">Q9. Scenario: you want the same error response format for all controllers. How?</div>
+<div class="a">Create a global handler with <code>@RestControllerAdvice</code> and <code>@ExceptionHandler</code> methods, returning a consistent error object for every controller.</div></div>
+
+<div class="qa"><div class="q">Q10. Scenario: a query is slow on a large table searched by email. What helps?</div>
+<div class="a">Add an <b>index</b> on the email column. It makes searches much faster (at a small cost to insert/update speed).</div></div>
+
+<div class="qa"><div class="q">Q11. Scenario: you must update two tables together, and either both succeed or neither. How?</div>
+<div class="a">Wrap the operation in a transaction using <code>@Transactional</code>, so if the second update fails, the first is rolled back automatically.</div></div>
+
+<div class="qa"><div class="q">Q12. Scenario: you need different database settings for your laptop and the server. How?</div>
+<div class="a">Use Spring profiles: put values in <code>application-dev.properties</code> and <code>application-prod.properties</code>, and switch with <code>spring.profiles.active</code>.</div></div>
+
+<!-- ============ 19. RAPID FIRE ============ -->
+<h2 id="j19">19. Rapid-Fire Practice (Quick Q&amp;A)</h2>
+
+<div class="qa"><div class="q">Q1. Default value of an <code>int</code> field?</div>
+<div class="a"><code>0</code>.</div></div>
+
+<div class="qa"><div class="q">Q2. Default value of an object reference field?</div>
+<div class="a"><code>null</code>.</div></div>
+
+<div class="qa"><div class="q">Q3. Which collection keeps insertion order and allows duplicates?</div>
+<div class="a"><code>ArrayList</code> (a List).</div></div>
+
+<div class="qa"><div class="q">Q4. Which collection sorts its keys automatically?</div>
+<div class="a"><code>TreeMap</code> (and <code>TreeSet</code> for values).</div></div>
+
+<div class="qa"><div class="q">Q5. Keyword to inherit a class?</div>
+<div class="a"><code>extends</code>.</div></div>
+
+<div class="qa"><div class="q">Q6. Keyword to implement an interface?</div>
+<div class="a"><code>implements</code>.</div></div>
+
+<div class="qa"><div class="q">Q7. Method that starts a thread?</div>
+<div class="a"><code>start()</code> (which then calls <code>run()</code>).</div></div>
+
+<div class="qa"><div class="q">Q8. Annotation that marks a JPA entity?</div>
+<div class="a"><code>@Entity</code>.</div></div>
+
+<div class="qa"><div class="q">Q9. Annotation for a REST controller?</div>
+<div class="a"><code>@RestController</code>.</div></div>
+
+<div class="qa"><div class="q">Q10. HTTP method to read data?</div>
+<div class="a"><code>GET</code> (with <code>@GetMapping</code>).</div></div>
+
+<div class="qa"><div class="q">Q11. SQL keyword to sort results?</div>
+<div class="a"><code>ORDER BY</code>.</div></div>
+
+<div class="qa"><div class="q">Q12. SQL keyword to group rows?</div>
+<div class="a"><code>GROUP BY</code>.</div></div>
+
+<div class="qa"><div class="q">Q13. Command to clone a Git repo?</div>
+<div class="a"><code>git clone &lt;url&gt;</code>.</div></div>
+
+<div class="qa"><div class="q">Q14. Unix command to list files?</div>
+<div class="a"><code>ls</code>.</div></div>
+
+<div class="qa"><div class="q">Q15. Which OOP pillar hides data behind methods?</div>
+<div class="a">Encapsulation.</div></div>
+
+<footer>
+Core Java, SQL &amp; Spring &mdash; Beginner Interview Q&amp;A Guide &bull; Clear answers, simple examples, and beginner-friendly explanations &bull; For learning and interview preparation.
+</footer>
+
+</body>
+</html>

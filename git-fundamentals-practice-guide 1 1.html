@@ -1,0 +1,2301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Git Fundamentals - Complete Practice Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf8f5;
+    --surface: #ffffff;
+    --surface-2: #f3eee7;
+    --border: #e0d8cc;
+    --text: #1a1a1a;
+    --text-muted: #6b6358;
+    --accent: #f05033;
+    --accent-soft: #fde8e3;
+    --green: #1a7f37;
+    --green-soft: #dcf3e3;
+    --orange: #bf6516;
+    --orange-soft: #fce8d4;
+    --purple: #6639ba;
+    --purple-soft: #ebe3fa;
+    --blue: #0969da;
+    --blue-soft: #ddf4ff;
+    --red: #cf222e;
+    --terminal-bg: #1f1f28;
+    --terminal-text: #e8e6e3;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-sans: 'DM Sans', sans-serif;
+    --font-serif: 'Fraunces', serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    padding: 60px 24px 50px;
+    text-align: center;
+    background: linear-gradient(180deg, var(--accent-soft) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .git-icon {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+
+  .hero h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 12px;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .hero h1 .accent { color: var(--accent); }
+
+  .hero .subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 30px 24px 80px;
+  }
+
+  /* Navigation Tabs */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 5px;
+    background: var(--surface);
+    border-radius: 14px;
+    margin-bottom: 32px;
+    border: 1px solid var(--border);
+    position: sticky;
+    top: 8px;
+    z-index: 100;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+
+  .tab {
+    flex: 1;
+    min-width: max-content;
+    padding: 11px 16px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.83rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.25s;
+    white-space: nowrap;
+  }
+
+  .tab:hover { color: var(--text); background: var(--surface-2); }
+  .tab.active {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .section { display: none; animation: fadeIn 0.3s ease; }
+  .section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: 1.7rem;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .section-desc {
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    font-size: 0.95rem;
+  }
+
+  /* Concept Cards */
+  .concept {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .concept:hover {
+    border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(240, 80, 51, 0.08);
+  }
+
+  .concept h3 {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+  }
+
+  .concept p, .concept li {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.75;
+  }
+
+  .concept ul, .concept ol { padding-left: 22px; margin-top: 8px; }
+  .concept li { margin-bottom: 5px; }
+
+  .concept code {
+    background: var(--surface-2);
+    color: var(--accent);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-orange { background: var(--orange-soft); color: var(--orange); }
+  .badge-green { background: var(--green-soft); color: var(--green); }
+  .badge-purple { background: var(--purple-soft); color: var(--purple); }
+  .badge-blue { background: var(--blue-soft); color: var(--blue); }
+  .badge-red { background: var(--accent-soft); color: var(--accent); }
+
+  /* Terminal */
+  .terminal {
+    background: var(--terminal-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 12px 0;
+    border: 1px solid #2d2d3a;
+  }
+
+  .terminal-header {
+    background: #2a2a35;
+    padding: 7px 13px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    border-bottom: 1px solid #3a3a48;
+  }
+
+  .terminal-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+  }
+
+  .terminal-dot.r { background: #ff5f57; }
+  .terminal-dot.y { background: #febc2e; }
+  .terminal-dot.g { background: #28c840; }
+
+  .terminal-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #999;
+    margin-left: 8px;
+  }
+
+  .terminal-body {
+    padding: 14px 16px;
+    font-family: var(--font-mono);
+    font-size: 0.81rem;
+    line-height: 1.85;
+    overflow-x: auto;
+    color: var(--terminal-text);
+  }
+
+  .terminal-body .prompt { color: #50fa7b; }
+  .terminal-body .cmd { color: #f8f8f2; }
+  .terminal-body .out { color: #888; }
+  .terminal-body .cm { color: #6272a4; font-style: italic; }
+  .terminal-body .hl { color: #8be9fd; }
+  .terminal-body .warn { color: #ffb86c; }
+  .terminal-body .err { color: #ff5555; }
+  .terminal-body .ok { color: #50fa7b; }
+
+  /* Q&A Cards */
+  .qa {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+
+  .qa-q {
+    padding: 16px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.92rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    list-style: none;
+    color: var(--text);
+    user-select: none;
+  }
+
+  .qa-q::-webkit-details-marker { display: none; }
+
+  .qa-q::before {
+    content: '+';
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    transition: transform 0.3s;
+    line-height: 1;
+    margin-top: 1px;
+  }
+
+  details[open] .qa-q::before { transform: rotate(45deg); }
+
+  .qa-q .qnum {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  .qa-q .qtext { flex: 1; }
+
+  .qa-a {
+    padding: 0 20px 20px 20px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+
+  .qa-a code {
+    background: var(--surface-2);
+    color: var(--accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+  }
+
+  .qa-a strong { color: var(--text); }
+
+  /* Quiz */
+  .quiz-q {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 18px;
+  }
+
+  .quiz-q h4 {
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    color: var(--text);
+  }
+
+  .quiz-q h4 .qnum {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-weight: 700;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 8px; }
+
+  .option {
+    padding: 11px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.86rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-sans);
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  .option:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .option.correct { border-color: var(--green); background: var(--green-soft); color: var(--green); font-weight: 600; }
+  .option.wrong { border-color: var(--red); background: #fde8ea; color: var(--red); }
+  .option.disabled { pointer-events: none; }
+
+  .explanation {
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.75;
+    display: none;
+  }
+
+  .explanation code {
+    background: rgba(0,0,0,0.06);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+
+  .explanation.show { display: block; }
+  .explanation.correct-exp {
+    background: var(--green-soft);
+    color: #114a1e;
+    border-left: 3px solid var(--green);
+  }
+  .explanation.wrong-exp {
+    background: #fde8ea;
+    color: #7d1620;
+    border-left: 3px solid var(--red);
+  }
+
+  .score-bar {
+    margin-bottom: 24px;
+    padding: 14px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .score-bar span { color: var(--accent); font-family: var(--font-mono); font-size: 1.1rem; }
+
+  /* Cheatsheet table */
+  .cheat-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+    font-size: 0.85rem;
+  }
+
+  .cheat-table th {
+    background: var(--surface-2);
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cheat-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .cheat-table tr:last-child td { border-bottom: none; }
+  .cheat-table tr:hover td { background: var(--surface-2); }
+
+  .cheat-table code {
+    background: var(--terminal-bg);
+    color: #50fa7b;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    white-space: nowrap;
+  }
+
+  .cheat-table .desc { color: var(--text-muted); }
+
+  .cheat-section-title {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    color: var(--accent);
+    margin: 28px 0 12px;
+    font-weight: 700;
+  }
+
+  .cheat-section-title:first-of-type { margin-top: 0; }
+
+  /* Diagram */
+  .git-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 18px 0;
+    overflow-x: auto;
+  }
+
+  .git-diagram svg {
+    width: 100%;
+    height: auto;
+    min-width: 500px;
+  }
+
+  /* Tip box */
+  .tip-box {
+    background: var(--blue-soft);
+    border-left: 3px solid var(--blue);
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin: 12px 0;
+    font-size: 0.88rem;
+    color: #0a2942;
+  }
+
+  .tip-box strong { color: var(--blue); }
+
+  .warn-box {
+    background: var(--orange-soft);
+    border-left: 3px solid var(--orange);
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin: 12px 0;
+    font-size: 0.88rem;
+    color: #4a2a08;
+  }
+
+  .warn-box strong { color: var(--orange); }
+
+  @media (max-width: 600px) {
+    .tabs { gap: 2px; }
+    .tab { padding: 9px 12px; font-size: 0.75rem; }
+    .concept { padding: 18px; }
+    .cheat-table { font-size: 0.78rem; }
+    .cheat-table th, .cheat-table td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="git-icon">◆ ◆ ◆ &nbsp; G I T &nbsp; F U N D A M E N T A L S &nbsp; ◆ ◆ ◆</div>
+  <h1>Master <span class="accent">Git</span> — Complete Practice Guide</h1>
+  <p class="subtitle">All 4 modules covered. Concepts explained, commands demonstrated, 60+ practice questions with detailed answers.</p>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab(0)">📘 Module 1: Intro</button>
+    <button class="tab" onclick="switchTab(1)">💻 Module 2: Local</button>
+    <button class="tab" onclick="switchTab(2)">🌐 Module 3: Remote</button>
+    <button class="tab" onclick="switchTab(3)">🌳 Module 4: Branching</button>
+    <button class="tab" onclick="switchTab(4)">📋 Cheatsheet</button>
+    <button class="tab" onclick="switchTab(5)">🎯 MCQ Quiz</button>
+  </div>
+
+  <!-- ===== MODULE 1: INTRODUCTION ===== -->
+  <div class="section active" id="tab0">
+    <h2 class="section-title">Module 1: Git Introduction</h2>
+    <p class="section-desc">Foundational concepts: version control, DVCS, Git workflow, installation, and configuration.</p>
+
+    <div class="concept">
+      <h3><span class="badge badge-orange">CONCEPT</span> What is Version Control?</h3>
+      <p><strong>Version Control System (VCS)</strong> is a system that records changes to files over time so you can recall specific versions later. Think of it as a "time machine" for your code.</p>
+      <p style="margin-top:10px"><strong>Three types of VCS:</strong></p>
+      <ul>
+        <li><strong>Local VCS:</strong> All versions stored on your computer only (e.g., RCS). Risky — if your computer crashes, everything is lost.</li>
+        <li><strong>Centralized VCS (CVCS):</strong> One central server holds all versions. Multiple users connect to it (e.g., SVN, CVS, Perforce). Single point of failure.</li>
+        <li><strong>Distributed VCS (DVCS):</strong> Every user has the FULL repository on their machine, including complete history (e.g., Git, Mercurial). Fast, reliable, works offline.</li>
+      </ul>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-orange">CONCEPT</span> What is a Distributed Version Control System (DVCS)?</h3>
+      <p>In a DVCS, every developer has a complete copy of the repository — including the full history — on their local machine. You can commit, view history, and create branches without any network connection.</p>
+      <div class="tip-box"><strong>Why this matters:</strong> If the central server dies, ANY developer's copy can be used to restore everything. There's no single point of failure.</div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-red">CONCEPT</span> What is Git?</h3>
+      <p>Git is a free, open-source distributed version control system created by <strong>Linus Torvalds in 2005</strong> for Linux kernel development. It's now the world's most widely used VCS.</p>
+      <p style="margin-top:8px"><strong>Key features:</strong></p>
+      <ul>
+        <li>Distributed — every clone is a full backup</li>
+        <li>Fast — most operations are local</li>
+        <li>Branching is cheap and fast</li>
+        <li>Data integrity via SHA-1 hashes</li>
+        <li>Snapshots, not differences (Git stores full snapshots of files)</li>
+      </ul>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-purple">CONCEPT</span> Git Workflow — The Three States</h3>
+      <p>Every file in Git lives in one of three states. Understanding this is critical:</p>
+      <div class="git-diagram">
+        <svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L9,3 z" fill="#f05033"/>
+            </marker>
+          </defs>
+          <!-- Working Directory -->
+          <rect x="20" y="60" width="180" height="100" rx="10" fill="#fde8e3" stroke="#f05033" stroke-width="2"/>
+          <text x="110" y="95" text-anchor="middle" font-family="DM Sans" font-weight="700" font-size="16" fill="#1a1a1a">Working Directory</text>
+          <text x="110" y="120" text-anchor="middle" font-family="DM Sans" font-size="12" fill="#6b6358">Your actual files</text>
+          <text x="110" y="138" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#bf6516">(modified)</text>
+
+          <!-- Staging Area -->
+          <rect x="270" y="60" width="180" height="100" rx="10" fill="#fce8d4" stroke="#bf6516" stroke-width="2"/>
+          <text x="360" y="95" text-anchor="middle" font-family="DM Sans" font-weight="700" font-size="16" fill="#1a1a1a">Staging Area</text>
+          <text x="360" y="120" text-anchor="middle" font-family="DM Sans" font-size="12" fill="#6b6358">Index / Cache</text>
+          <text x="360" y="138" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#bf6516">(staged)</text>
+
+          <!-- Repository -->
+          <rect x="520" y="60" width="180" height="100" rx="10" fill="#dcf3e3" stroke="#1a7f37" stroke-width="2"/>
+          <text x="610" y="95" text-anchor="middle" font-family="DM Sans" font-weight="700" font-size="16" fill="#1a1a1a">.git Repository</text>
+          <text x="610" y="120" text-anchor="middle" font-family="DM Sans" font-size="12" fill="#6b6358">Permanent history</text>
+          <text x="610" y="138" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#1a7f37">(committed)</text>
+
+          <!-- Arrows -->
+          <line x1="200" y1="110" x2="270" y2="110" stroke="#f05033" stroke-width="2" marker-end="url(#arrow)"/>
+          <text x="235" y="100" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#f05033">git add</text>
+
+          <line x1="450" y1="110" x2="520" y2="110" stroke="#f05033" stroke-width="2" marker-end="url(#arrow)"/>
+          <text x="485" y="100" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#f05033">git commit</text>
+
+          <line x1="520" y1="180" x2="200" y2="180" stroke="#6639ba" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow)"/>
+          <text x="360" y="200" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#6639ba">git checkout / git restore</text>
+        </svg>
+      </div>
+      <ul>
+        <li><strong>Modified:</strong> You changed a file, but haven't told Git yet.</li>
+        <li><strong>Staged:</strong> You marked a modified file (with <code>git add</code>) to go into the next commit.</li>
+        <li><strong>Committed:</strong> Data is safely stored in your local <code>.git</code> repository.</li>
+      </ul>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-blue">SETUP</span> Installing Git on Windows</h3>
+      <ol>
+        <li>Go to <code>https://git-scm.com/download/win</code></li>
+        <li>Download the installer (Git for Windows)</li>
+        <li>Run the .exe — accept defaults for most options (Git Bash is recommended terminal)</li>
+        <li>Verify installation:</li>
+      </ol>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Git Bash</span>
+        </div>
+        <div class="terminal-body">
+          <span class="prompt">$</span> <span class="cmd">git --version</span><br>
+          <span class="ok">git version 2.45.2.windows.1</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-blue">SETUP</span> Configuring Git (First-Time Setup)</h3>
+      <p>Set your identity — this is attached to every commit:</p>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Git Configuration</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Set your name and email (used in every commit)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git config --global user.name "John Doe"</span><br>
+          <span class="prompt">$</span> <span class="cmd">git config --global user.email "john@example.com"</span><br><br>
+          <span class="cm"># Set default editor (optional)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git config --global core.editor "code --wait"</span><br><br>
+          <span class="cm"># Set default branch name</span><br>
+          <span class="prompt">$</span> <span class="cmd">git config --global init.defaultBranch main</span><br><br>
+          <span class="cm"># View all settings</span><br>
+          <span class="prompt">$</span> <span class="cmd">git config --list</span>
+        </div>
+      </div>
+      <div class="tip-box"><strong>Three config levels:</strong> <code>--system</code> (all users), <code>--global</code> (current user), <code>--local</code> (current repo, default). Local overrides global, global overrides system.</div>
+    </div>
+
+    <h3 style="margin: 32px 0 16px; font-family: var(--font-serif); font-size: 1.3rem; color: var(--accent);">📝 Practice Questions — Module 1</h3>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q1</span><span class="qtext">What is the main difference between a Centralized VCS and a Distributed VCS?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> In a <strong>Centralized VCS</strong> (like SVN), there is ONE central server that stores all versioned files and history. Developers check out files from this server. If the server goes down, no one can collaborate or save versioned changes.<br><br>
+        In a <strong>Distributed VCS</strong> (like Git), every developer has a FULL copy of the repository — including complete history — on their local machine. Work continues offline, and any clone can serve as a backup if the central server fails.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q2</span><span class="qtext">Who created Git, when, and why?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> Git was created by <strong>Linus Torvalds in 2005</strong>. The Linux kernel community had been using BitKeeper, but lost access to it. Linus designed Git to be fast, distributed, support non-linear development (thousands of branches), and handle large projects efficiently.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q3</span><span class="qtext">Explain the three states of a file in Git.</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ol>
+          <li><strong>Modified:</strong> File has been changed in your working directory but not yet staged.</li>
+          <li><strong>Staged:</strong> Modified file marked (via <code>git add</code>) to be included in the next commit.</li>
+          <li><strong>Committed:</strong> Changes are safely stored in the local <code>.git</code> database.</li>
+        </ol>
+        These three states correspond to three areas: <strong>Working Directory → Staging Area (Index) → Git Repository</strong>.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q4</span><span class="qtext">What command do you use to set your name and email globally in Git?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <pre style="background: var(--terminal-bg); color: #50fa7b; padding: 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.82rem; margin-top: 8px;">git config --global user.name "Your Name"
+git config --global user.email "you@example.com"</pre>
+        The <code>--global</code> flag means these settings apply to ALL Git repositories for the current user.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q5</span><span class="qtext">What are the three configuration levels in Git, and what's their precedence?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> Git has three config levels:
+        <ul>
+          <li><code>--system</code> — applies to all users on the machine (file: <code>/etc/gitconfig</code>)</li>
+          <li><code>--global</code> — applies to current user, all repos (file: <code>~/.gitconfig</code>)</li>
+          <li><code>--local</code> — applies only to the current repo (file: <code>.git/config</code>) — this is the default</li>
+        </ul>
+        <strong>Precedence (highest wins):</strong> <code>local</code> &gt; <code>global</code> &gt; <code>system</code>.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q6</span><span class="qtext">How do you check the installed Git version?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>git --version</code><br><br>
+        Output example: <code>git version 2.45.2</code>. This is also a quick way to confirm Git is installed and accessible from your terminal.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q7</span><span class="qtext">Why is Git called "distributed"?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> Because every clone is a complete repository with full history — not just a snapshot of files. Every developer has the entire project history on their machine, can commit, branch, and merge offline, and can act as a "server" for others. There's no single authoritative central source by design (though teams often agree on one, like GitHub).
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q8</span><span class="qtext">How does Git store data — as differences (deltas) or as snapshots?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> Git stores data as <strong>snapshots</strong>, not deltas. When you commit, Git takes a picture of what all your files look like at that moment and stores a reference to that snapshot. If a file hasn't changed, Git just stores a link to the previous identical file. This is a key difference from older VCSs (like SVN) which stored differences.<br><br>
+        Internally, Git uses content-addressable storage with SHA-1 hashes to identify each snapshot.
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== MODULE 2: LOCAL ===== -->
+  <div class="section" id="tab1">
+    <h2 class="section-title">Module 2: Working Locally with Git</h2>
+    <p class="section-desc">Creating repos, staging, committing, viewing history, undoing changes, and ignoring files.</p>
+
+    <div class="concept">
+      <h3><span class="badge badge-green">CMD</span> Creating a Local Repository</h3>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Initialize a Repo</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Create a new project folder and init Git</span><br>
+          <span class="prompt">$</span> <span class="cmd">mkdir my-project && cd my-project</span><br>
+          <span class="prompt">$</span> <span class="cmd">git init</span><br>
+          <span class="ok">Initialized empty Git repository in /home/user/my-project/.git/</span><br><br>
+          <span class="cm"># Check status (no commits yet)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git status</span><br>
+          <span class="out">On branch main</span><br>
+          <span class="out">No commits yet</span><br>
+          <span class="out">nothing to commit (create/copy files and use "git add" to track)</span>
+        </div>
+      </div>
+      <p style="margin-top:8px"><code>git init</code> creates a hidden <code>.git</code> folder which is the entire database for the repo.</p>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-green">CMD</span> Adding Files & Committing</h3>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Add &amp; Commit</span>
+        </div>
+        <div class="terminal-body">
+          <span class="prompt">$</span> <span class="cmd">echo "# My Project" > README.md</span><br>
+          <span class="prompt">$</span> <span class="cmd">git add README.md</span> <span class="cm"># stage one file</span><br>
+          <span class="prompt">$</span> <span class="cmd">git add .</span> <span class="cm"># stage everything in current dir</span><br>
+          <span class="prompt">$</span> <span class="cmd">git add -A</span> <span class="cm"># stage all changes (incl. deletions)</span><br><br>
+          <span class="prompt">$</span> <span class="cmd">git commit -m "Initial commit"</span><br>
+          <span class="ok">[main (root-commit) e8a4b2c] Initial commit</span><br>
+          <span class="out"> 1 file changed, 1 insertion(+)</span><br>
+          <span class="out"> create mode 100644 README.md</span><br><br>
+          <span class="cm"># Skip the staging area (only for tracked files)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git commit -am "Quick fix"</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-green">CMD</span> Viewing History & Diffs</h3>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">History &amp; Diffs</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Full commit log</span><br>
+          <span class="prompt">$</span> <span class="cmd">git log</span><br><br>
+          <span class="cm"># Compact one-line per commit</span><br>
+          <span class="prompt">$</span> <span class="cmd">git log --oneline</span><br>
+          <span class="hl">e8a4b2c</span> <span class="out">Initial commit</span><br>
+          <span class="hl">a1b9d3f</span> <span class="out">Add login feature</span><br><br>
+          <span class="cm"># Pretty graph</span><br>
+          <span class="prompt">$</span> <span class="cmd">git log --oneline --graph --all --decorate</span><br><br>
+          <span class="cm"># Diffs</span><br>
+          <span class="prompt">$</span> <span class="cmd">git diff</span> <span class="cm"># working dir vs staged</span><br>
+          <span class="prompt">$</span> <span class="cmd">git diff --staged</span> <span class="cm"># staged vs last commit</span><br>
+          <span class="prompt">$</span> <span class="cmd">git diff HEAD</span> <span class="cm"># working dir vs last commit</span><br>
+          <span class="prompt">$</span> <span class="cmd">git diff abc123 def456</span> <span class="cm"># between two commits</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-green">CMD</span> Staging Changes as Multiple Commits</h3>
+      <p>Often you've made several changes that should logically be separate commits. Use <code>git add -p</code> for interactive staging:</p>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Interactive Staging</span>
+        </div>
+        <div class="terminal-body">
+          <span class="prompt">$</span> <span class="cmd">git add -p</span><br>
+          <span class="out">@@ -1,3 +1,5 @@</span><br>
+          <span class="out"> existing line</span><br>
+          <span class="ok">+new line A (bug fix)</span><br>
+          <span class="ok">+new line B (new feature)</span><br>
+          <span class="warn">Stage this hunk [y,n,q,a,d,s,e,?]?</span> <span class="hl">s</span> <span class="cm"># split hunk</span><br><br>
+          <span class="cm"># Then stage one piece, commit it, stage the other, commit it</span><br>
+          <span class="prompt">$</span> <span class="cmd">git commit -m "Fix login bug"</span><br>
+          <span class="prompt">$</span> <span class="cmd">git add -p</span><br>
+          <span class="prompt">$</span> <span class="cmd">git commit -m "Add new feature"</span>
+        </div>
+      </div>
+      <div class="tip-box"><strong>Why?</strong> Atomic commits — each commit does one thing — make history readable and easier to revert.</div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-green">CMD</span> Deleting & Renaming Files</h3>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Delete &amp; Rename</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Delete a tracked file</span><br>
+          <span class="prompt">$</span> <span class="cmd">git rm old-file.txt</span><br>
+          <span class="prompt">$</span> <span class="cmd">git commit -m "Remove old-file.txt"</span><br><br>
+          <span class="cm"># Remove from git but keep on disk</span><br>
+          <span class="prompt">$</span> <span class="cmd">git rm --cached secrets.env</span><br><br>
+          <span class="cm"># Rename a file</span><br>
+          <span class="prompt">$</span> <span class="cmd">git mv old-name.txt new-name.txt</span><br>
+          <span class="prompt">$</span> <span class="cmd">git commit -m "Rename file"</span><br><br>
+          <span class="cm"># git mv is shorthand for: mv + git rm + git add</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-purple">UNDO</span> Undoing Changes to the Working Copy</h3>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Undo Working Copy Changes</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Discard changes to a single file (modern way)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git restore file.txt</span><br><br>
+          <span class="cm"># Old way (still works)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git checkout -- file.txt</span><br><br>
+          <span class="cm"># Discard ALL working copy changes</span><br>
+          <span class="prompt">$</span> <span class="cmd">git restore .</span><br><br>
+          <span class="cm"># Unstage a file (move from staged → modified)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git restore --staged file.txt</span>
+        </div>
+      </div>
+      <div class="warn-box"><strong>⚠️ Warning:</strong> <code>git restore file.txt</code> permanently discards uncommitted changes. There's no undo.</div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-purple">UNDO</span> Undoing/Redoing Repository Changes</h3>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Reset, Revert, Amend</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Amend the last commit (change message or add files)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git commit --amend -m "Better message"</span><br><br>
+          <span class="cm"># Undo last commit, KEEP changes staged</span><br>
+          <span class="prompt">$</span> <span class="cmd">git reset --soft HEAD~1</span><br><br>
+          <span class="cm"># Undo last commit, KEEP changes in working dir (default)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git reset --mixed HEAD~1</span><br><br>
+          <span class="cm"># Undo last commit, DISCARD all changes ⚠️</span><br>
+          <span class="prompt">$</span> <span class="cmd">git reset --hard HEAD~1</span><br><br>
+          <span class="cm"># Create a NEW commit that undoes a previous one (safe for shared history)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git revert abc123</span>
+        </div>
+      </div>
+      <div class="tip-box"><strong>Reset vs Revert:</strong> <code>reset</code> rewrites history (dangerous on shared branches). <code>revert</code> creates a new "undo" commit (safe for shared branches).</div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-purple">CLEAN</span> Cleaning the Working Copy</h3>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Remove Untracked Files</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Preview what would be removed (DRY RUN — always do this first!)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git clean -n</span><br>
+          <span class="out">Would remove temp.log</span><br>
+          <span class="out">Would remove build/</span><br><br>
+          <span class="cm"># Remove untracked files</span><br>
+          <span class="prompt">$</span> <span class="cmd">git clean -f</span><br><br>
+          <span class="cm"># Remove untracked files AND directories</span><br>
+          <span class="prompt">$</span> <span class="cmd">git clean -fd</span><br><br>
+          <span class="cm"># Also remove ignored files</span><br>
+          <span class="prompt">$</span> <span class="cmd">git clean -fdx</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-blue">CONFIG</span> Ignoring Files with .gitignore</h3>
+      <p>Create a file named <code>.gitignore</code> at your repo root with patterns to ignore:</p>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">.gitignore example</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Comments start with #</span><br><br>
+          <span class="cm"># Ignore specific files</span><br>
+          <span class="hl">secrets.env</span><br>
+          <span class="hl">config.local.json</span><br><br>
+          <span class="cm"># Ignore by extension</span><br>
+          <span class="hl">*.log</span><br>
+          <span class="hl">*.tmp</span><br><br>
+          <span class="cm"># Ignore folders</span><br>
+          <span class="hl">node_modules/</span><br>
+          <span class="hl">build/</span><br>
+          <span class="hl">.idea/</span><br><br>
+          <span class="cm"># Ignore everything in /logs but keep .gitkeep</span><br>
+          <span class="hl">logs/*</span><br>
+          <span class="hl">!logs/.gitkeep</span>
+        </div>
+      </div>
+      <div class="warn-box"><strong>⚠️ Important:</strong> <code>.gitignore</code> only ignores UNTRACKED files. If a file is already tracked, you must <code>git rm --cached file</code> first.</div>
+    </div>
+
+    <h3 style="margin: 32px 0 16px; font-family: var(--font-serif); font-size: 1.3rem; color: var(--accent);">📝 Practice Questions — Module 2</h3>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q1</span><span class="qtext">What command initializes a new Git repository in the current folder?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>git init</code><br><br>
+        This creates a hidden <code>.git/</code> directory containing all the metadata and object database for the new repository. It does NOT create any commit yet — your repo starts empty.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q2</span><span class="qtext">What's the difference between <code>git add file.txt</code>, <code>git add .</code>, and <code>git add -A</code>?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ul>
+          <li><code>git add file.txt</code> — stages only that specific file</li>
+          <li><code>git add .</code> — stages all changes in the current directory and subdirectories (including new files, modifications, and deletions in modern Git)</li>
+          <li><code>git add -A</code> — stages ALL changes in the entire repository (regardless of current directory)</li>
+        </ul>
+        For most cases, <code>git add .</code> from the repo root is equivalent to <code>git add -A</code>.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q3</span><span class="qtext">How do you commit changes with a message in one line?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>git commit -m "Your message here"</code><br><br>
+        The <code>-m</code> flag lets you add the message inline instead of opening an editor. For multi-line messages, repeat <code>-m</code>: <code>git commit -m "Title" -m "Description on second line"</code>.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q4</span><span class="qtext">What does <code>git commit -am "msg"</code> do, and what's its limitation?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>-am</code> combines <code>-a</code> (auto-stage modified tracked files) and <code>-m</code> (message). It saves typing <code>git add</code> separately.<br><br>
+        <strong>Limitation:</strong> It only stages MODIFIED files that are already TRACKED. New untracked files are NOT included — you must explicitly <code>git add</code> those first.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q5</span><span class="qtext">How do you see a compact, one-line-per-commit history?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>git log --oneline</code><br><br>
+        For a visual graph showing branches: <code>git log --oneline --graph --all --decorate</code>. Many developers create an alias for this: <code>git config --global alias.lg "log --oneline --graph --all --decorate"</code>.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q6</span><span class="qtext">What's the difference between <code>git diff</code>, <code>git diff --staged</code>, and <code>git diff HEAD</code>?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ul>
+          <li><code>git diff</code> — shows changes in working directory that are NOT yet staged</li>
+          <li><code>git diff --staged</code> (or <code>--cached</code>) — shows changes that ARE staged but not yet committed</li>
+          <li><code>git diff HEAD</code> — shows ALL changes (both staged and unstaged) compared to the last commit</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q7</span><span class="qtext">How do you delete a tracked file from Git?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>git rm filename.txt</code> then <code>git commit -m "Remove filename.txt"</code>.<br><br>
+        This removes the file from both the working directory and Git tracking. To remove from Git tracking but KEEP the file on disk (e.g., for accidentally committed secrets), use <code>git rm --cached filename.txt</code>.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q8</span><span class="qtext">How do you rename a file in Git?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>git mv old-name.txt new-name.txt</code><br><br>
+        This is shorthand for three operations: rename the file in the OS, <code>git rm</code> the old name, and <code>git add</code> the new name. Git is smart enough to detect renames automatically even if you use the OS <code>mv</code> command directly, as long as content similarity is high.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q9</span><span class="qtext">You modified a file but want to discard changes and revert to the last committed version. How?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>git restore file.txt</code> (modern) or <code>git checkout -- file.txt</code> (older syntax).<br><br>
+        ⚠️ This permanently destroys your uncommitted changes. There is no undo. To discard ALL working directory changes: <code>git restore .</code>.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q10</span><span class="qtext">You staged a file by mistake. How do you unstage it without losing changes?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>git restore --staged file.txt</code> (modern) or <code>git reset HEAD file.txt</code> (older syntax).<br><br>
+        Both move the file from "staged" back to "modified" — the changes remain in your working directory.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q11</span><span class="qtext">Explain the difference between <code>git reset --soft</code>, <code>--mixed</code>, and <code>--hard</code>.</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> All three move HEAD backward, but they differ in what they do with your changes:
+        <ul>
+          <li><code>--soft</code> — moves HEAD only. Changes stay STAGED. Use when you want to redo the commit.</li>
+          <li><code>--mixed</code> (default) — moves HEAD and unstages. Changes stay in working directory. Use to redo staging.</li>
+          <li><code>--hard</code> — moves HEAD, unstages, AND discards working directory changes. ⚠️ Destructive.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q12</span><span class="qtext">When should you use <code>git revert</code> instead of <code>git reset</code>?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> Use <code>git revert</code> when the commit you want to undo has been <strong>pushed to a shared remote</strong>. <code>revert</code> creates a NEW commit that undoes the changes — preserving history.<br><br>
+        Use <code>git reset</code> only on LOCAL commits that haven't been pushed. <code>reset</code> rewrites history, which causes problems for collaborators if they've already pulled those commits.<br><br>
+        <strong>Golden rule:</strong> Never rewrite shared history.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q13</span><span class="qtext">You forgot to include a file in your last commit. How do you add it without creating a new commit?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <pre style="background: var(--terminal-bg); color: #50fa7b; padding: 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.82rem;">git add forgotten-file.txt
+git commit --amend --no-edit</pre>
+        <code>--amend</code> modifies the last commit. <code>--no-edit</code> keeps the original commit message. ⚠️ Don't amend commits that have been pushed to shared branches.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q14</span><span class="qtext">How do you remove untracked files from your working directory?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ul>
+          <li><code>git clean -n</code> — DRY RUN (preview, always run first!)</li>
+          <li><code>git clean -f</code> — actually remove untracked files</li>
+          <li><code>git clean -fd</code> — remove untracked files AND directories</li>
+          <li><code>git clean -fdx</code> — also remove files normally ignored by .gitignore</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q15</span><span class="qtext">You have a tracked file <code>config.json</code> that contains secrets. You added it to <code>.gitignore</code> but it's still being tracked. Why, and how do you fix it?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>.gitignore</code> only affects UNTRACKED files. Once a file is tracked, Git keeps tracking it regardless of <code>.gitignore</code>.<br><br>
+        <strong>Fix:</strong>
+        <pre style="background: var(--terminal-bg); color: #50fa7b; padding: 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.82rem;">git rm --cached config.json
+git commit -m "Remove config.json from tracking"</pre>
+        This stops tracking but keeps the file on your disk. The file then matches <code>.gitignore</code> and won't be re-added.<br><br>
+        ⚠️ Note: secrets are still in history! For a real leak, you also need to rewrite history with tools like <code>git filter-repo</code> and rotate the secret.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q16</span><span class="qtext">Write a <code>.gitignore</code> that ignores all <code>.log</code> files, the <code>node_modules/</code> folder, and a file called <code>.env</code> — but DOES track <code>example.env</code>.</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <pre style="background: var(--terminal-bg); color: #f8f8f2; padding: 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.82rem;">*.log
+node_modules/
+.env
+!example.env</pre>
+        The <code>!</code> prefix negates a previous pattern. <code>example.env</code> won't match <code>.env</code> exactly anyway, but <code>!</code> is essential when you want to whitelist files inside an ignored folder.
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== MODULE 3: REMOTE ===== -->
+  <div class="section" id="tab2">
+    <h2 class="section-title">Module 3: Working Remotely with Git</h2>
+    <p class="section-desc">Cloning, fetching, pulling, pushing, protocols, and tagging.</p>
+
+    <div class="concept">
+      <h3><span class="badge badge-blue">CMD</span> Cloning a Remote Repository</h3>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">git clone</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># HTTPS clone (most common)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git clone https://github.com/user/repo.git</span><br><br>
+          <span class="cm"># SSH clone (after key setup)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git clone git@github.com:user/repo.git</span><br><br>
+          <span class="cm"># Clone into a specific folder name</span><br>
+          <span class="prompt">$</span> <span class="cmd">git clone https://github.com/user/repo.git my-folder</span><br><br>
+          <span class="cm"># Clone only the latest snapshot (saves bandwidth)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git clone --depth 1 https://github.com/user/repo.git</span>
+        </div>
+      </div>
+      <p style="margin-top:8px"><code>git clone</code> downloads the entire repo + history and automatically sets up the remote named <code>origin</code>.</p>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-blue">INSPECT</span> Repository Statistics & Inspection</h3>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Inspecting a Repo</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># List all remotes</span><br>
+          <span class="prompt">$</span> <span class="cmd">git remote -v</span><br>
+          <span class="out">origin  https://github.com/user/repo.git (fetch)</span><br>
+          <span class="out">origin  https://github.com/user/repo.git (push)</span><br><br>
+          <span class="cm"># Detailed remote info</span><br>
+          <span class="prompt">$</span> <span class="cmd">git remote show origin</span><br><br>
+          <span class="cm"># Count commits</span><br>
+          <span class="prompt">$</span> <span class="cmd">git rev-list --count HEAD</span><br><br>
+          <span class="cm"># Contributors and commit counts</span><br>
+          <span class="prompt">$</span> <span class="cmd">git shortlog -sn</span><br><br>
+          <span class="cm"># Last commit details</span><br>
+          <span class="prompt">$</span> <span class="cmd">git show HEAD</span><br><br>
+          <span class="cm"># Show specific commit</span><br>
+          <span class="prompt">$</span> <span class="cmd">git show abc123</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-purple">PROTO</span> Git Protocols</h3>
+      <p>Git supports four protocols for connecting to remotes:</p>
+      <ul>
+        <li><strong>HTTPS</strong> (e.g., <code>https://github.com/user/repo.git</code>) — easiest setup, works through firewalls, requires username/token for push</li>
+        <li><strong>SSH</strong> (e.g., <code>git@github.com:user/repo.git</code>) — secure, requires SSH key setup, no password prompts after setup</li>
+        <li><strong>Git protocol</strong> (e.g., <code>git://...</code>) — fast, read-only, no authentication, mostly deprecated</li>
+        <li><strong>Local</strong> (e.g., <code>/path/to/repo</code>) — for repos on the same machine</li>
+      </ul>
+      <div class="tip-box"><strong>Recommendation:</strong> Use SSH for personal projects (no repeated logins). Use HTTPS for occasional contributions or restricted networks.</div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-blue">VIEW</span> Viewing Branches and Tags</h3>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Branches &amp; Tags</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># List local branches (current marked with *)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git branch</span><br>
+          <span class="ok">* main</span><br>
+          <span class="out">  feature-login</span><br><br>
+          <span class="cm"># List remote branches</span><br>
+          <span class="prompt">$</span> <span class="cmd">git branch -r</span><br><br>
+          <span class="cm"># List all (local + remote)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git branch -a</span><br><br>
+          <span class="cm"># List all tags</span><br>
+          <span class="prompt">$</span> <span class="cmd">git tag</span><br><br>
+          <span class="cm"># Show details of a tag</span><br>
+          <span class="prompt">$</span> <span class="cmd">git show v1.0.0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-green">SYNC</span> Fetch vs Pull — The Critical Difference</h3>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Fetch &amp; Pull</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Download remote changes — does NOT merge into your branch</span><br>
+          <span class="prompt">$</span> <span class="cmd">git fetch origin</span><br>
+          <span class="out">From github.com:user/repo</span><br>
+          <span class="out">   abc123..def456  main -&gt; origin/main</span><br><br>
+          <span class="cm"># Now you can inspect what changed</span><br>
+          <span class="prompt">$</span> <span class="cmd">git log main..origin/main</span><br><br>
+          <span class="cm"># Pull = fetch + merge (in one step)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git pull origin main</span><br><br>
+          <span class="cm"># Pull with rebase instead of merge (cleaner history)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git pull --rebase origin main</span>
+        </div>
+      </div>
+      <div class="tip-box"><strong>Best practice:</strong> Use <code>git fetch</code> first to inspect changes safely, then merge or rebase deliberately. <code>pull</code> is convenient but can cause unexpected merges.</div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-green">SYNC</span> Pushing to a Remote</h3>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">git push</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Push current branch to its tracked remote branch</span><br>
+          <span class="prompt">$</span> <span class="cmd">git push</span><br><br>
+          <span class="cm"># Push and set upstream tracking (first push of a new branch)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git push -u origin feature-login</span><br><br>
+          <span class="cm"># Force push (DANGEROUS - rewrites remote history)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git push --force</span><br><br>
+          <span class="cm"># Safer force push - fails if someone else pushed</span><br>
+          <span class="prompt">$</span> <span class="cmd">git push --force-with-lease</span><br><br>
+          <span class="cm"># Delete a remote branch</span><br>
+          <span class="prompt">$</span> <span class="cmd">git push origin --delete old-branch</span>
+        </div>
+      </div>
+      <div class="warn-box"><strong>⚠️ NEVER use <code>--force</code> on shared branches</strong> like <code>main</code> or <code>develop</code>. It will overwrite work that other people may have already pushed. Always prefer <code>--force-with-lease</code>.</div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-orange">TAG</span> Creating & Verifying Tags</h3>
+      <p>Tags mark specific points in history — usually releases (v1.0, v2.5.3).</p>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Tagging</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Lightweight tag (just a pointer)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git tag v1.0.0</span><br><br>
+          <span class="cm"># Annotated tag (recommended - has author, date, message, can be GPG-signed)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git tag -a v1.0.0 -m "Release version 1.0.0"</span><br><br>
+          <span class="cm"># Tag a specific past commit</span><br>
+          <span class="prompt">$</span> <span class="cmd">git tag -a v0.9.0 abc123 -m "Beta release"</span><br><br>
+          <span class="cm"># Verify a tag</span><br>
+          <span class="prompt">$</span> <span class="cmd">git show v1.0.0</span><br><br>
+          <span class="cm"># Delete a tag locally</span><br>
+          <span class="prompt">$</span> <span class="cmd">git tag -d v0.9.0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-orange">TAG</span> Pushing Tags to a Remote</h3>
+      <p>By default, <code>git push</code> does NOT push tags. You must push them explicitly:</p>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Pushing Tags</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Push a single tag</span><br>
+          <span class="prompt">$</span> <span class="cmd">git push origin v1.0.0</span><br><br>
+          <span class="cm"># Push ALL local tags</span><br>
+          <span class="prompt">$</span> <span class="cmd">git push origin --tags</span><br><br>
+          <span class="cm"># Delete a remote tag</span><br>
+          <span class="prompt">$</span> <span class="cmd">git push origin --delete v0.9.0</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin: 32px 0 16px; font-family: var(--font-serif); font-size: 1.3rem; color: var(--accent);">📝 Practice Questions — Module 3</h3>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q1</span><span class="qtext">What's the difference between <code>git clone</code> and <code>git init</code>?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ul>
+          <li><code>git init</code> — creates a new EMPTY local repository in the current folder</li>
+          <li><code>git clone &lt;url&gt;</code> — downloads an EXISTING remote repo (with full history) to your machine and automatically sets up the <code>origin</code> remote</li>
+        </ul>
+        Cloning is essentially: <code>init</code> + <code>remote add origin &lt;url&gt;</code> + <code>fetch</code> + <code>checkout</code> the default branch.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q2</span><span class="qtext">How do you list all remotes configured for a repository?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>git remote -v</code> (the <code>-v</code> means verbose — shows URLs).<br><br>
+        Output:
+        <pre style="background: var(--terminal-bg); color: #888; padding: 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.82rem;">origin  https://github.com/user/repo.git (fetch)
+origin  https://github.com/user/repo.git (push)</pre>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q3</span><span class="qtext">What is the default name of the remote when you clone a repository?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <strong><code>origin</code></strong>. This is just a convention — you can rename it with <code>git remote rename origin upstream</code> or use a different name when adding manually: <code>git remote add myremote &lt;url&gt;</code>.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q4</span><span class="qtext">List the four Git protocols and when you'd use each.</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ul>
+          <li><strong>HTTPS</strong> (<code>https://...</code>) — easiest, works through firewalls. Use for occasional contributions or where SSH is blocked.</li>
+          <li><strong>SSH</strong> (<code>git@host:...</code>) — secure, no repeated logins after key setup. Use for daily personal work.</li>
+          <li><strong>Git</strong> (<code>git://...</code>) — fast read-only, no auth. Mostly legacy, rarely used today.</li>
+          <li><strong>Local</strong> (<code>/path/to/repo</code> or <code>file://...</code>) — for repos on the same machine or shared filesystem.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q5</span><span class="qtext">What is the critical difference between <code>git fetch</code> and <code>git pull</code>?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ul>
+          <li><code>git fetch</code> — downloads remote changes into your local repo's tracking branches (e.g., <code>origin/main</code>) but does NOT touch your working branch.</li>
+          <li><code>git pull</code> — does <code>fetch</code> AND immediately merges the remote changes into your current branch. Equivalent to <code>git fetch &amp;&amp; git merge</code>.</li>
+        </ul>
+        <strong>Why it matters:</strong> <code>fetch</code> is safe — you can inspect changes before integrating. <code>pull</code> is convenient but can cause unwanted merge commits if not careful.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q6</span><span class="qtext">What's the difference between <code>git pull</code> and <code>git pull --rebase</code>?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ul>
+          <li><code>git pull</code> = <code>fetch</code> + <code>merge</code> — creates a merge commit if local and remote have diverged. History becomes branched.</li>
+          <li><code>git pull --rebase</code> = <code>fetch</code> + <code>rebase</code> — replays your local commits ON TOP of the fetched remote commits. History stays linear.</li>
+        </ul>
+        Many teams configure rebase as default with: <code>git config --global pull.rebase true</code>.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q7</span><span class="qtext">You created a new local branch <code>feature-x</code>. What command pushes it to the remote AND sets up tracking so future <code>git push</code>/<code>pull</code> work without specifying the branch?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>git push -u origin feature-x</code><br><br>
+        The <code>-u</code> flag (or <code>--set-upstream</code>) tells Git to remember the link between your local <code>feature-x</code> and the remote <code>origin/feature-x</code>. After this, you can simply run <code>git push</code> or <code>git pull</code> without arguments.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q8</span><span class="qtext">When and why is <code>git push --force</code> dangerous? What's the safer alternative?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>--force</code> overwrites the remote branch's history with your local version. If someone else pushed commits since you last fetched, their work will be DESTROYED — not just unmerged, but gone from the remote.<br><br>
+        <strong>Safer alternative:</strong> <code>git push --force-with-lease</code>. This force-pushes ONLY if the remote is in the state you last saw it. If anyone else pushed in the meantime, the push fails — protecting their work.<br><br>
+        Even safer: never force-push to shared branches like <code>main</code>.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q9</span><span class="qtext">How do you delete a branch on the remote?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>git push origin --delete branch-name</code><br><br>
+        Older syntax (still works): <code>git push origin :branch-name</code> (note the colon and no space). This deletes only the remote branch — the local branch stays. To delete the local branch too: <code>git branch -d branch-name</code>.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q10</span><span class="qtext">What's the difference between a lightweight tag and an annotated tag?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ul>
+          <li><strong>Lightweight tag:</strong> Just a pointer to a commit. Created with <code>git tag v1.0</code>. No metadata.</li>
+          <li><strong>Annotated tag:</strong> A full Git object with author, date, message, and optional GPG signature. Created with <code>git tag -a v1.0 -m "message"</code>.</li>
+        </ul>
+        <strong>Recommendation:</strong> Use annotated tags for releases — they carry meaningful metadata and can be cryptographically verified.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q11</span><span class="qtext">You created tag <code>v1.0.0</code> locally and pushed your code with <code>git push</code>. The tag isn't showing up on GitHub. Why?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> By default, <code>git push</code> does NOT push tags. You must push them explicitly:
+        <pre style="background: var(--terminal-bg); color: #50fa7b; padding: 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.82rem;">git push origin v1.0.0       # push specific tag
+git push origin --tags       # push all local tags</pre>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q12</span><span class="qtext">How would you tag a past commit (not the latest one) as <code>v0.5.0</code>?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ol>
+          <li>Find the commit hash with <code>git log --oneline</code></li>
+          <li>Tag it: <code>git tag -a v0.5.0 abc123 -m "Beta release"</code> (replace <code>abc123</code> with the actual hash)</li>
+          <li>Push it: <code>git push origin v0.5.0</code></li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q13</span><span class="qtext">How can you see how many commits each contributor has made?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>git shortlog -sn</code><br><br>
+        <code>-s</code> = summary (count only), <code>-n</code> = sort numerically. Output:
+        <pre style="background: var(--terminal-bg); color: #888; padding: 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.82rem;">  142  Alice
+   89  Bob
+   23  Charlie</pre>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== MODULE 4: BRANCHING ===== -->
+  <div class="section" id="tab3">
+    <h2 class="section-title">Module 4: Branching, Merging & Rebasing</h2>
+    <p class="section-desc">The most powerful (and most asked-about) Git topics: branches, merges, rebases, and stashes.</p>
+
+    <div class="concept">
+      <h3><span class="badge badge-purple">CMD</span> Creating Local Branches</h3>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Create Branches</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Create branch (without switching to it)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git branch feature-login</span><br><br>
+          <span class="cm"># Create AND switch (modern syntax)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git switch -c feature-login</span><br><br>
+          <span class="cm"># Create AND switch (older syntax, still common)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git checkout -b feature-login</span><br><br>
+          <span class="cm"># Switch between branches</span><br>
+          <span class="prompt">$</span> <span class="cmd">git switch main</span><br>
+          <span class="prompt">$</span> <span class="cmd">git checkout main</span> <span class="cm"># older syntax</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-purple">CONCEPT</span> Branches vs Tags</h3>
+      <table style="width: 100%; margin-top: 12px; font-size: 0.88rem;">
+        <thead>
+          <tr style="background: var(--surface-2);">
+            <th style="padding: 10px; text-align: left;">Branch</th>
+            <th style="padding: 10px; text-align: left;">Tag</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 10px;">Movable pointer to a commit</td>
+            <td style="padding: 10px;">Fixed pointer to a commit</td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 10px;">Advances with each new commit</td>
+            <td style="padding: 10px;">Never moves — stays on that commit</td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 10px;">For ongoing development</td>
+            <td style="padding: 10px;">For marking releases / milestones</td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 10px;">Examples: <code>main</code>, <code>feature-x</code></td>
+            <td style="padding: 10px;">Examples: <code>v1.0.0</code>, <code>v2.5.3</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-purple">CMD</span> Renaming and Deleting Branches</h3>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Rename &amp; Delete</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Rename current branch</span><br>
+          <span class="prompt">$</span> <span class="cmd">git branch -m new-name</span><br><br>
+          <span class="cm"># Rename a different branch</span><br>
+          <span class="prompt">$</span> <span class="cmd">git branch -m old-name new-name</span><br><br>
+          <span class="cm"># Delete a branch (safe — fails if unmerged)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git branch -d feature-x</span><br><br>
+          <span class="cm"># Force delete (even if unmerged) ⚠️</span><br>
+          <span class="prompt">$</span> <span class="cmd">git branch -D feature-x</span><br><br>
+          <span class="cm"># You can't delete the branch you're on — switch first!</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-orange">RECOVER</span> Recovering Deleted Commits — git reflog</h3>
+      <p>Git keeps a log of EVERY change to HEAD for ~30 days. This means even "deleted" commits can usually be recovered.</p>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Reflog Recovery</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Show every move HEAD has made</span><br>
+          <span class="prompt">$</span> <span class="cmd">git reflog</span><br>
+          <span class="hl">e8a4b2c</span> <span class="out">HEAD@{0}: reset: moving to HEAD~3</span><br>
+          <span class="hl">a1b9d3f</span> <span class="out">HEAD@{1}: commit: Add feature X (the "lost" one!)</span><br>
+          <span class="hl">c5d2e8a</span> <span class="out">HEAD@{2}: commit: Initial work</span><br><br>
+          <span class="cm"># Recover by resetting to the lost commit</span><br>
+          <span class="prompt">$</span> <span class="cmd">git reset --hard a1b9d3f</span><br><br>
+          <span class="cm"># Or create a branch from the lost commit</span><br>
+          <span class="prompt">$</span> <span class="cmd">git branch recovered-work a1b9d3f</span>
+        </div>
+      </div>
+      <div class="tip-box"><strong>Lifesaver:</strong> Whenever you do something destructive and panic — <code>git reflog</code> is your friend. Almost nothing is truly lost in Git for at least 30 days.</div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-blue">SAVE</span> Stashing Changes</h3>
+      <p>Stash temporarily saves uncommitted work so you can switch branches cleanly. Like a clipboard for code.</p>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Stash</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Save current changes &amp; revert working dir to last commit</span><br>
+          <span class="prompt">$</span> <span class="cmd">git stash</span><br>
+          <span class="ok">Saved working directory and index state WIP on main</span><br><br>
+          <span class="cm"># Stash with a descriptive message</span><br>
+          <span class="prompt">$</span> <span class="cmd">git stash push -m "Half-done login form"</span><br><br>
+          <span class="cm"># Include untracked files too</span><br>
+          <span class="prompt">$</span> <span class="cmd">git stash push -u -m "WIP with new files"</span><br><br>
+          <span class="cm"># List all stashes</span><br>
+          <span class="prompt">$</span> <span class="cmd">git stash list</span><br>
+          <span class="out">stash@{0}: On main: Half-done login form</span><br>
+          <span class="out">stash@{1}: On feature-x: experimental refactor</span><br><br>
+          <span class="cm"># Apply most recent stash and remove it from stash list</span><br>
+          <span class="prompt">$</span> <span class="cmd">git stash pop</span><br><br>
+          <span class="cm"># Apply but keep in stash list</span><br>
+          <span class="prompt">$</span> <span class="cmd">git stash apply stash@{1}</span><br><br>
+          <span class="cm"># Delete a stash</span><br>
+          <span class="prompt">$</span> <span class="cmd">git stash drop stash@{0}</span><br><br>
+          <span class="cm"># Delete ALL stashes</span><br>
+          <span class="prompt">$</span> <span class="cmd">git stash clear</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-green">MERGE</span> Merging Branches</h3>
+      <p>Merging combines work from one branch INTO another. Two main types:</p>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Merging</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Switch to target branch (the one receiving changes)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git switch main</span><br><br>
+          <span class="cm"># Merge feature-x INTO main</span><br>
+          <span class="prompt">$</span> <span class="cmd">git merge feature-x</span><br><br>
+          <span class="cm"># Force a merge commit (no fast-forward)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git merge --no-ff feature-x</span><br><br>
+          <span class="cm"># Abort if conflicts get messy</span><br>
+          <span class="prompt">$</span> <span class="cmd">git merge --abort</span>
+        </div>
+      </div>
+      <p style="margin-top:12px;"><strong>Two merge types:</strong></p>
+      <ul>
+        <li><strong>Fast-forward merge:</strong> If main hasn't moved since branching, Git just moves main's pointer forward. No merge commit.</li>
+        <li><strong>3-way merge:</strong> If both branches have new commits, Git creates a new "merge commit" combining both histories.</li>
+      </ul>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-red">CONFLICT</span> Resolving Merge Conflicts</h3>
+      <p>When Git can't auto-merge, it marks conflicts in the affected files:</p>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Conflict Resolution</span>
+        </div>
+        <div class="terminal-body">
+          <span class="prompt">$</span> <span class="cmd">git merge feature-x</span><br>
+          <span class="err">CONFLICT (content): Merge conflict in app.js</span><br>
+          <span class="err">Automatic merge failed; fix conflicts and commit.</span><br><br>
+          <span class="cm"># Open the conflicted file. You'll see:</span><br>
+          <span class="warn">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br>
+          <span class="cmd">code from current branch (main)</span><br>
+          <span class="warn">=======</span><br>
+          <span class="cmd">code from incoming branch (feature-x)</span><br>
+          <span class="warn">&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature-x</span><br><br>
+          <span class="cm"># 1. Edit the file - keep what you want, remove markers</span><br>
+          <span class="cm"># 2. Stage the resolved file</span><br>
+          <span class="prompt">$</span> <span class="cmd">git add app.js</span><br>
+          <span class="cm"># 3. Complete the merge</span><br>
+          <span class="prompt">$</span> <span class="cmd">git commit</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-orange">REBASE</span> Rebasing Changes</h3>
+      <p>Rebase replays your branch's commits ON TOP of another branch — creating a linear, cleaner history.</p>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Rebase</span>
+        </div>
+        <div class="terminal-body">
+          <span class="prompt">$</span> <span class="cmd">git switch feature-x</span><br>
+          <span class="prompt">$</span> <span class="cmd">git rebase main</span><br><br>
+          <span class="cm"># If conflicts arise:</span><br>
+          <span class="cm"># 1. Fix conflicts manually</span><br>
+          <span class="prompt">$</span> <span class="cmd">git add &lt;file&gt;</span><br>
+          <span class="prompt">$</span> <span class="cmd">git rebase --continue</span><br><br>
+          <span class="cm"># Bail out if needed</span><br>
+          <span class="prompt">$</span> <span class="cmd">git rebase --abort</span><br><br>
+          <span class="cm"># Interactive rebase — squash, reorder, edit commits</span><br>
+          <span class="prompt">$</span> <span class="cmd">git rebase -i HEAD~3</span>
+        </div>
+      </div>
+      <div class="warn-box"><strong>⚠️ The Golden Rule of Rebase:</strong> Never rebase commits that have been pushed to a public/shared branch. It rewrites history and breaks others' clones.</div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-purple">COMPARE</span> Merge vs Rebase — Which to Use?</h3>
+      <table style="width: 100%; margin-top: 12px; font-size: 0.85rem;">
+        <thead>
+          <tr style="background: var(--surface-2);">
+            <th style="padding: 10px; text-align: left;">Aspect</th>
+            <th style="padding: 10px; text-align: left;">Merge</th>
+            <th style="padding: 10px; text-align: left;">Rebase</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 10px;"><strong>History</strong></td>
+            <td style="padding: 10px;">Branched, with merge commits</td>
+            <td style="padding: 10px;">Linear, clean</td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 10px;"><strong>Preserves history?</strong></td>
+            <td style="padding: 10px;">Yes — exactly as it happened</td>
+            <td style="padding: 10px;">No — rewrites commits</td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 10px;"><strong>Safe for shared branches?</strong></td>
+            <td style="padding: 10px;">✅ Yes</td>
+            <td style="padding: 10px;">❌ No</td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 10px;"><strong>Best for</strong></td>
+            <td style="padding: 10px;">Public/team branches, releases</td>
+            <td style="padding: 10px;">Cleaning up local feature branches before pushing</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="concept">
+      <h3><span class="badge badge-blue">CMD</span> Creating & Deleting Remote Branches</h3>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">Remote Branches</span>
+        </div>
+        <div class="terminal-body">
+          <span class="cm"># Create remote branch by pushing local branch</span><br>
+          <span class="prompt">$</span> <span class="cmd">git switch -c feature-x</span><br>
+          <span class="prompt">$</span> <span class="cmd">git push -u origin feature-x</span><br><br>
+          <span class="cm"># Delete remote branch</span><br>
+          <span class="prompt">$</span> <span class="cmd">git push origin --delete feature-x</span><br><br>
+          <span class="cm"># Older syntax (still works)</span><br>
+          <span class="prompt">$</span> <span class="cmd">git push origin :feature-x</span><br><br>
+          <span class="cm"># Clean up stale references to deleted remote branches</span><br>
+          <span class="prompt">$</span> <span class="cmd">git fetch --prune</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin: 32px 0 16px; font-family: var(--font-serif); font-size: 1.3rem; color: var(--accent);">📝 Practice Questions — Module 4</h3>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q1</span><span class="qtext">What's the difference between <code>git branch feature-x</code> and <code>git checkout -b feature-x</code>?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ul>
+          <li><code>git branch feature-x</code> — creates the branch but stays on the current branch</li>
+          <li><code>git checkout -b feature-x</code> (or <code>git switch -c feature-x</code>) — creates the branch AND switches to it</li>
+        </ul>
+        Modern Git recommends <code>git switch -c</code> over <code>checkout -b</code> for clarity.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q2</span><span class="qtext">What's the fundamental difference between a branch and a tag?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ul>
+          <li><strong>Branch:</strong> A movable pointer that advances every time you commit on it. Used for active development.</li>
+          <li><strong>Tag:</strong> A fixed pointer that NEVER moves. Used to mark specific points in history, typically releases.</li>
+        </ul>
+        Internally, both are just refs pointing to a commit, but they're treated differently. Tags don't move with new commits.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q3</span><span class="qtext">How do you rename your current branch from <code>feature-old</code> to <code>feature-new</code>?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ol>
+          <li><strong>Locally:</strong> <code>git branch -m feature-new</code></li>
+          <li><strong>If already pushed:</strong>
+            <ul>
+              <li><code>git push origin -u feature-new</code> (push the renamed branch)</li>
+              <li><code>git push origin --delete feature-old</code> (delete the old remote branch)</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q4</span><span class="qtext">What's the difference between <code>git branch -d</code> and <code>git branch -D</code>?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ul>
+          <li><code>-d</code> (lowercase) — SAFE delete. Refuses if the branch has unmerged commits, protecting you from data loss.</li>
+          <li><code>-D</code> (uppercase) — FORCE delete. Removes the branch even if commits would be lost.</li>
+        </ul>
+        Use <code>-d</code> by default. Only use <code>-D</code> when you're certain you want to discard the branch's unique commits.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q5</span><span class="qtext">You accidentally ran <code>git reset --hard HEAD~5</code> and lost 5 commits! How do you recover?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> Use <code>git reflog</code> — Git keeps a log of every HEAD movement for ~30 days.
+        <pre style="background: var(--terminal-bg); color: #50fa7b; padding: 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.82rem;">git reflog
+# Find the commit hash before the reset, e.g., a1b9d3f
+git reset --hard a1b9d3f</pre>
+        Or create a branch from it: <code>git branch recovered a1b9d3f</code>. Almost nothing is truly lost in Git!
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q6</span><span class="qtext">You're working on changes but suddenly need to switch branches to fix a bug. You don't want to commit your half-done work. What do you do?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> Use <code>git stash</code>:
+        <pre style="background: var(--terminal-bg); color: #50fa7b; padding: 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.82rem;">git stash push -m "WIP: half-done feature"
+git switch hotfix-branch
+# ... fix the bug, commit, push ...
+git switch original-branch
+git stash pop</pre>
+        <code>stash</code> saves your changes safely, leaves the working dir clean, and lets you restore them later.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q7</span><span class="qtext">What's the difference between <code>git stash pop</code> and <code>git stash apply</code>?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ul>
+          <li><code>git stash pop</code> — applies the most recent stash AND removes it from the stash list</li>
+          <li><code>git stash apply</code> — applies the stash but KEEPS it in the stash list (useful if you want to apply the same stash to multiple branches)</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q8</span><span class="qtext">Explain a fast-forward merge vs a 3-way merge.</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ul>
+          <li><strong>Fast-forward merge:</strong> If <code>main</code> hasn't received any new commits since you branched off, Git simply moves <code>main</code>'s pointer forward to your branch's tip. No merge commit is created.</li>
+          <li><strong>3-way merge:</strong> If both branches have advanced since they diverged, Git uses three commits — the common ancestor, the tip of branch A, the tip of branch B — to create a new merge commit that combines them.</li>
+        </ul>
+        Force a merge commit even when fast-forward is possible: <code>git merge --no-ff feature-x</code> (preserves the fact that a feature branch existed in history).
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q9</span><span class="qtext">You ran <code>git merge feature-x</code> and got a conflict. Walk through how to resolve it.</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ol>
+          <li>Run <code>git status</code> to see which files have conflicts</li>
+          <li>Open each conflicted file. Look for markers:
+            <pre style="background: var(--terminal-bg); color: #f8f8f2; padding: 8px; border-radius: 4px; font-family: var(--font-mono); font-size: 0.78rem; margin: 6px 0;">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+your code (current branch)
+=======
+their code (incoming branch)
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature-x</pre>
+          </li>
+          <li>Edit the file — choose what to keep, delete the markers</li>
+          <li>Stage the resolved file: <code>git add filename</code></li>
+          <li>Complete the merge: <code>git commit</code> (Git provides a default merge message)</li>
+        </ol>
+        To bail out entirely: <code>git merge --abort</code>.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q10</span><span class="qtext">What's the conceptual difference between <code>merge</code> and <code>rebase</code>?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong>
+        <ul>
+          <li><strong>Merge:</strong> Combines two branches by creating a new merge commit. History stays branched and shows exactly what happened.</li>
+          <li><strong>Rebase:</strong> Takes your branch's commits and replays them ON TOP of another branch. This creates a linear history but rewrites commit hashes — the original commits are replaced with new ones.</li>
+        </ul>
+        Visually: merge preserves the branching shape; rebase pretends your work was done after the latest changes on the target branch.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q11</span><span class="qtext">When should you NEVER use rebase?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <strong>Never rebase commits that have already been pushed to a shared/public branch.</strong><br><br>
+        Rebase rewrites commit history (changes hashes). If others have already pulled those commits and based their work on them, rebasing breaks their clones — they'll have duplicate or conflicting history.<br><br>
+        <strong>Golden rule:</strong> Rebase is for cleaning up your LOCAL branch before pushing. Once pushed and shared, use merge.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q12</span><span class="qtext">You started a rebase and got into a conflict mess. How do you abort?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>git rebase --abort</code><br><br>
+        This returns your branch to its pre-rebase state. To CONTINUE after fixing conflicts: <code>git add &lt;files&gt;</code> then <code>git rebase --continue</code>. To skip the current commit: <code>git rebase --skip</code>.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q13</span><span class="qtext">How do you create a remote branch?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> You can't create a remote branch directly. You create it locally, then push it:
+        <pre style="background: var(--terminal-bg); color: #50fa7b; padding: 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.82rem;">git switch -c feature-x
+git push -u origin feature-x</pre>
+        The <code>-u</code> sets up tracking so future <code>git push</code>/<code>pull</code> work automatically.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q14</span><span class="qtext">After deleting branches on the remote (e.g., via GitHub UI), <code>git branch -r</code> still shows them. How do you clean up?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> <code>git fetch --prune</code> (or <code>git fetch -p</code>) — this removes references to remote branches that no longer exist.<br><br>
+        To do it automatically on every fetch: <code>git config --global fetch.prune true</code>.
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary class="qa-q"><span class="qnum">Q15</span><span class="qtext">What does <code>git rebase -i HEAD~3</code> do?</span></summary>
+      <div class="qa-a">
+        <strong>Answer:</strong> Opens an INTERACTIVE rebase for the last 3 commits. You'll see a list like:
+        <pre style="background: var(--terminal-bg); color: #f8f8f2; padding: 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.82rem;">pick a1b2c3 First commit
+pick d4e5f6 Second commit
+pick g7h8i9 Third commit</pre>
+        You can change <code>pick</code> to:
+        <ul>
+          <li><code>reword</code> — change the message</li>
+          <li><code>edit</code> — pause to amend the commit</li>
+          <li><code>squash</code> — combine with previous commit</li>
+          <li><code>fixup</code> — like squash but discards this commit's message</li>
+          <li><code>drop</code> — remove the commit entirely</li>
+        </ul>
+        ⚠️ Don't do this on commits already pushed to shared branches.
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== CHEATSHEET ===== -->
+  <div class="section" id="tab4">
+    <h2 class="section-title">Quick Reference Cheatsheet</h2>
+    <p class="section-desc">All the commands you need, organized by topic. Bookmark this!</p>
+
+    <h3 class="cheat-section-title">⚙️ Setup & Configuration</h3>
+    <table class="cheat-table">
+      <thead><tr><th style="width: 45%;">Command</th><th class="desc">Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>git --version</code></td><td class="desc">Check installed version</td></tr>
+        <tr><td><code>git config --global user.name "Name"</code></td><td class="desc">Set your name globally</td></tr>
+        <tr><td><code>git config --global user.email "x@y.com"</code></td><td class="desc">Set your email globally</td></tr>
+        <tr><td><code>git config --list</code></td><td class="desc">View all current settings</td></tr>
+        <tr><td><code>git config --global init.defaultBranch main</code></td><td class="desc">Set default branch name</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="cheat-section-title">📂 Local Repository</h3>
+    <table class="cheat-table">
+      <thead><tr><th style="width: 45%;">Command</th><th class="desc">Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>git init</code></td><td class="desc">Initialize a new local repo</td></tr>
+        <tr><td><code>git status</code></td><td class="desc">Show working dir &amp; staging status</td></tr>
+        <tr><td><code>git add file.txt</code></td><td class="desc">Stage a specific file</td></tr>
+        <tr><td><code>git add .</code></td><td class="desc">Stage everything in current dir</td></tr>
+        <tr><td><code>git add -A</code></td><td class="desc">Stage all changes in entire repo</td></tr>
+        <tr><td><code>git add -p</code></td><td class="desc">Interactively stage hunks</td></tr>
+        <tr><td><code>git commit -m "message"</code></td><td class="desc">Commit staged changes</td></tr>
+        <tr><td><code>git commit -am "msg"</code></td><td class="desc">Stage tracked files &amp; commit (one step)</td></tr>
+        <tr><td><code>git commit --amend</code></td><td class="desc">Modify the last commit</td></tr>
+        <tr><td><code>git rm file.txt</code></td><td class="desc">Delete file (tracked)</td></tr>
+        <tr><td><code>git rm --cached file.txt</code></td><td class="desc">Untrack but keep on disk</td></tr>
+        <tr><td><code>git mv old new</code></td><td class="desc">Rename a file</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="cheat-section-title">🔍 History & Diffs</h3>
+    <table class="cheat-table">
+      <thead><tr><th style="width: 45%;">Command</th><th class="desc">Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>git log</code></td><td class="desc">Full commit history</td></tr>
+        <tr><td><code>git log --oneline</code></td><td class="desc">Compact one-line log</td></tr>
+        <tr><td><code>git log --oneline --graph --all</code></td><td class="desc">Visual branch graph</td></tr>
+        <tr><td><code>git log -p file.txt</code></td><td class="desc">History with patches for file</td></tr>
+        <tr><td><code>git show HEAD</code></td><td class="desc">Show last commit details</td></tr>
+        <tr><td><code>git diff</code></td><td class="desc">Unstaged changes</td></tr>
+        <tr><td><code>git diff --staged</code></td><td class="desc">Staged changes</td></tr>
+        <tr><td><code>git diff HEAD</code></td><td class="desc">All uncommitted changes</td></tr>
+        <tr><td><code>git diff branch1 branch2</code></td><td class="desc">Compare two branches</td></tr>
+        <tr><td><code>git shortlog -sn</code></td><td class="desc">Contributors with commit counts</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="cheat-section-title">↩️ Undo & Reset</h3>
+    <table class="cheat-table">
+      <thead><tr><th style="width: 45%;">Command</th><th class="desc">Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>git restore file.txt</code></td><td class="desc">Discard changes to a file</td></tr>
+        <tr><td><code>git restore --staged file.txt</code></td><td class="desc">Unstage a file</td></tr>
+        <tr><td><code>git reset --soft HEAD~1</code></td><td class="desc">Undo commit, keep staged</td></tr>
+        <tr><td><code>git reset --mixed HEAD~1</code></td><td class="desc">Undo commit, keep working dir</td></tr>
+        <tr><td><code>git reset --hard HEAD~1</code></td><td class="desc">⚠️ Undo commit, discard everything</td></tr>
+        <tr><td><code>git revert abc123</code></td><td class="desc">Create new commit that undoes abc123</td></tr>
+        <tr><td><code>git reflog</code></td><td class="desc">Show every HEAD movement (lifesaver)</td></tr>
+        <tr><td><code>git clean -n</code></td><td class="desc">Preview untracked files to remove</td></tr>
+        <tr><td><code>git clean -fd</code></td><td class="desc">Remove untracked files &amp; dirs</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="cheat-section-title">🌐 Remote Operations</h3>
+    <table class="cheat-table">
+      <thead><tr><th style="width: 45%;">Command</th><th class="desc">Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>git clone &lt;url&gt;</code></td><td class="desc">Clone a remote repo</td></tr>
+        <tr><td><code>git remote -v</code></td><td class="desc">List remotes with URLs</td></tr>
+        <tr><td><code>git remote add origin &lt;url&gt;</code></td><td class="desc">Add a remote</td></tr>
+        <tr><td><code>git fetch origin</code></td><td class="desc">Download remote changes (no merge)</td></tr>
+        <tr><td><code>git fetch --prune</code></td><td class="desc">Fetch &amp; clean stale remote refs</td></tr>
+        <tr><td><code>git pull origin main</code></td><td class="desc">Fetch + merge into current branch</td></tr>
+        <tr><td><code>git pull --rebase</code></td><td class="desc">Fetch + rebase (linear history)</td></tr>
+        <tr><td><code>git push</code></td><td class="desc">Push current branch to its tracked remote</td></tr>
+        <tr><td><code>git push -u origin branch</code></td><td class="desc">Push &amp; set upstream tracking</td></tr>
+        <tr><td><code>git push --force-with-lease</code></td><td class="desc">Safer force push</td></tr>
+        <tr><td><code>git push origin --delete branch</code></td><td class="desc">Delete remote branch</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="cheat-section-title">🌳 Branches & Tags</h3>
+    <table class="cheat-table">
+      <thead><tr><th style="width: 45%;">Command</th><th class="desc">Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>git branch</code></td><td class="desc">List local branches</td></tr>
+        <tr><td><code>git branch -a</code></td><td class="desc">List all (local + remote)</td></tr>
+        <tr><td><code>git branch -r</code></td><td class="desc">List remote branches only</td></tr>
+        <tr><td><code>git branch &lt;name&gt;</code></td><td class="desc">Create new branch (don't switch)</td></tr>
+        <tr><td><code>git switch -c &lt;name&gt;</code></td><td class="desc">Create &amp; switch to new branch</td></tr>
+        <tr><td><code>git switch &lt;name&gt;</code></td><td class="desc">Switch to existing branch</td></tr>
+        <tr><td><code>git branch -m new-name</code></td><td class="desc">Rename current branch</td></tr>
+        <tr><td><code>git branch -d &lt;name&gt;</code></td><td class="desc">Safe delete (won't remove unmerged)</td></tr>
+        <tr><td><code>git branch -D &lt;name&gt;</code></td><td class="desc">⚠️ Force delete branch</td></tr>
+        <tr><td><code>git tag v1.0</code></td><td class="desc">Lightweight tag</td></tr>
+        <tr><td><code>git tag -a v1.0 -m "msg"</code></td><td class="desc">Annotated tag (recommended)</td></tr>
+        <tr><td><code>git push origin --tags</code></td><td class="desc">Push all tags</td></tr>
+        <tr><td><code>git tag -d v0.9</code></td><td class="desc">Delete local tag</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="cheat-section-title">🔀 Merge, Rebase & Stash</h3>
+    <table class="cheat-table">
+      <thead><tr><th style="width: 45%;">Command</th><th class="desc">Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>git merge feature-x</code></td><td class="desc">Merge feature-x into current branch</td></tr>
+        <tr><td><code>git merge --no-ff feature-x</code></td><td class="desc">Force merge commit (no fast-forward)</td></tr>
+        <tr><td><code>git merge --abort</code></td><td class="desc">Abort an in-progress merge</td></tr>
+        <tr><td><code>git rebase main</code></td><td class="desc">Replay current branch on top of main</td></tr>
+        <tr><td><code>git rebase -i HEAD~3</code></td><td class="desc">Interactive rebase last 3 commits</td></tr>
+        <tr><td><code>git rebase --continue</code></td><td class="desc">Continue rebase after fixing conflict</td></tr>
+        <tr><td><code>git rebase --abort</code></td><td class="desc">Abort an in-progress rebase</td></tr>
+        <tr><td><code>git stash</code></td><td class="desc">Save uncommitted changes</td></tr>
+        <tr><td><code>git stash push -m "msg"</code></td><td class="desc">Stash with message</td></tr>
+        <tr><td><code>git stash list</code></td><td class="desc">List all stashes</td></tr>
+        <tr><td><code>git stash pop</code></td><td class="desc">Apply latest &amp; remove from stash</td></tr>
+        <tr><td><code>git stash apply</code></td><td class="desc">Apply but keep in stash</td></tr>
+        <tr><td><code>git stash drop stash@{0}</code></td><td class="desc">Delete a specific stash</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== MCQ QUIZ ===== -->
+  <div class="section" id="tab5">
+    <h2 class="section-title">Multiple Choice Quiz</h2>
+    <p class="section-desc">25 exam-style questions covering all 4 modules. Click to check your answer with explanations.</p>
+
+    <div class="score-bar">
+      Score: <span id="scoreVal">0</span> / <span id="totalVal">25</span>
+    </div>
+
+    <div id="quizContainer"></div>
+  </div>
+
+</div>
+
+<script>
+function switchTab(idx) {
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+  document.querySelectorAll('.section').forEach((s, i) => s.classList.toggle('active', i === idx));
+  window.scrollTo({ top: 200, behavior: 'smooth' });
+}
+
+const questions = [
+  // Module 1
+  {
+    q: "Which of these is NOT a Distributed Version Control System?",
+    opts: ["Git", "Mercurial", "Subversion (SVN)", "Bazaar"],
+    correct: 2,
+    explain: "SVN (Subversion) is a CENTRALIZED VCS — there's one central server holding all history, and clients have only working copies. Git, Mercurial, and Bazaar are all distributed."
+  },
+  {
+    q: "Who created Git and in what year?",
+    opts: ["Bill Gates, 2000", "Linus Torvalds, 2005", "Linus Torvalds, 1991", "Richard Stallman, 1998"],
+    correct: 1,
+    explain: "Linus Torvalds created Git in 2005 to manage Linux kernel development after the Linux community lost access to BitKeeper."
+  },
+  {
+    q: "What command sets your global Git username?",
+    opts: ["git user.name 'Name'", "git set-name 'Name'", "git config --global user.name 'Name'", "git config user.name 'Name'"],
+    correct: 2,
+    explain: "git config --global user.name 'Name' sets the username for ALL repos for the current user. Without --global, it would only apply to the current repo."
+  },
+  // Module 2
+  {
+    q: "What command initializes a new Git repository in the current folder?",
+    opts: ["git start", "git create", "git init", "git new"],
+    correct: 2,
+    explain: "git init creates a hidden .git/ folder containing all the metadata for your new repository. It does not create any commits — your repo starts empty."
+  },
+  {
+    q: "Which command shows you which files are staged, modified, or untracked?",
+    opts: ["git log", "git status", "git show", "git diff"],
+    correct: 1,
+    explain: "git status is your most-used command — it tells you the state of every file: staged, modified (unstaged), or untracked."
+  },
+  {
+    q: "You modified a tracked file. Which command shows the changes that are NOT yet staged?",
+    opts: ["git diff", "git diff --staged", "git diff HEAD", "git log -p"],
+    correct: 0,
+    explain: "git diff (with no arguments) shows changes in your working directory that haven't been staged yet. git diff --staged shows staged changes; git diff HEAD shows ALL uncommitted changes."
+  },
+  {
+    q: "What does git commit -am 'msg' do?",
+    opts: [
+      "Commits all files including untracked ones",
+      "Stages tracked modified files and commits in one step",
+      "Amends the last commit",
+      "Aborts the commit"
+    ],
+    correct: 1,
+    explain: "-a auto-stages MODIFIED tracked files (does NOT include new untracked files), and -m provides the message inline. Equivalent to git add -u && git commit -m 'msg'."
+  },
+  {
+    q: "You staged a file by mistake. How do you unstage it without losing changes?",
+    opts: ["git restore file.txt", "git restore --staged file.txt", "git rm file.txt", "git revert file.txt"],
+    correct: 1,
+    explain: "git restore --staged file.txt moves the file from staging back to modified state, keeping your changes. git restore file.txt (without --staged) would DISCARD the changes."
+  },
+  {
+    q: "Which command creates a new commit that undoes a previous commit (safe for shared history)?",
+    opts: ["git reset --hard", "git revert", "git checkout", "git rm"],
+    correct: 1,
+    explain: "git revert <commit> creates a NEW commit that reverses the changes — preserving history. Safe for shared/pushed branches. git reset rewrites history (dangerous on shared branches)."
+  },
+  {
+    q: "What's the difference between git reset --soft HEAD~1 and git reset --hard HEAD~1?",
+    opts: [
+      "No difference — they're aliases",
+      "--soft keeps changes staged; --hard discards everything",
+      "--soft is faster than --hard",
+      "--soft works only locally; --hard works on remotes"
+    ],
+    correct: 1,
+    explain: "--soft moves HEAD back but keeps all changes STAGED (ready to recommit). --hard moves HEAD back AND discards all changes from staging and working directory — destructive."
+  },
+  {
+    q: "You added secrets.env to .gitignore but Git still tracks it. Why?",
+    opts: [
+      ".gitignore syntax is wrong",
+      ".gitignore only affects untracked files; the file is already tracked",
+      "You need to restart Git",
+      "You need to commit .gitignore first"
+    ],
+    correct: 1,
+    explain: ".gitignore only ignores UNTRACKED files. Once a file is tracked, it stays tracked. Fix: git rm --cached secrets.env, then commit."
+  },
+  // Module 3
+  {
+    q: "What's the default name of the remote when you clone a repository?",
+    opts: ["main", "remote", "origin", "master"],
+    correct: 2,
+    explain: "By convention, the default remote name is 'origin'. You can rename it or add additional remotes with different names."
+  },
+  {
+    q: "What is the critical difference between git fetch and git pull?",
+    opts: [
+      "git fetch is faster",
+      "git fetch downloads changes without merging; git pull does fetch + merge",
+      "git pull is read-only",
+      "git fetch only works for tags"
+    ],
+    correct: 1,
+    explain: "git fetch downloads remote changes into your tracking branches (origin/main) but doesn't touch your working branch. git pull = git fetch + git merge in one step."
+  },
+  {
+    q: "You created a new local branch feature-x. What's the correct command to push it AND set up tracking?",
+    opts: [
+      "git push feature-x",
+      "git push origin feature-x",
+      "git push -u origin feature-x",
+      "git push --new origin feature-x"
+    ],
+    correct: 2,
+    explain: "git push -u origin feature-x pushes the branch AND sets upstream tracking. After this, you can simply use 'git push' and 'git pull' without arguments on this branch."
+  },
+  {
+    q: "Why is git push --force dangerous on shared branches?",
+    opts: [
+      "It uses more bandwidth",
+      "It overwrites remote history and can destroy others' commits",
+      "It corrupts the .git folder",
+      "It logs you out"
+    ],
+    correct: 1,
+    explain: "--force replaces the remote branch with your local version. If others pushed commits since you fetched, their work is destroyed. Use --force-with-lease for safer force pushes."
+  },
+  {
+    q: "How do you delete a branch on the remote?",
+    opts: [
+      "git delete origin branch",
+      "git rm origin/branch",
+      "git push origin --delete branch",
+      "git remote remove branch"
+    ],
+    correct: 2,
+    explain: "git push origin --delete branch (or older syntax: git push origin :branch) deletes the branch on the remote. The local branch is unaffected."
+  },
+  {
+    q: "You created a tag locally and ran git push. The tag isn't on the remote. Why?",
+    opts: [
+      "Tags are pushed automatically",
+      "git push doesn't push tags by default — use git push --tags",
+      "Tags only work locally",
+      "You need to recreate the tag"
+    ],
+    correct: 1,
+    explain: "By default, git push pushes branches but NOT tags. Push tags explicitly with: git push origin v1.0.0 (single) or git push origin --tags (all)."
+  },
+  {
+    q: "What's the difference between a lightweight tag and an annotated tag?",
+    opts: [
+      "Lightweight tags can be deleted; annotated tags cannot",
+      "Annotated tags include metadata (author, date, message); lightweight is just a pointer",
+      "They're the same thing",
+      "Lightweight tags work only locally"
+    ],
+    correct: 1,
+    explain: "Annotated tags (git tag -a) are full Git objects with author, date, message, and optional GPG signature. Lightweight tags (git tag) are just a pointer to a commit. Use annotated for releases."
+  },
+  // Module 4
+  {
+    q: "What's the difference between git branch feature-x and git switch -c feature-x?",
+    opts: [
+      "No difference",
+      "git branch creates and switches; git switch only creates",
+      "git branch creates without switching; git switch -c creates AND switches",
+      "git switch only works for remote branches"
+    ],
+    correct: 2,
+    explain: "git branch feature-x creates the branch but stays on the current one. git switch -c feature-x (or git checkout -b) creates the new branch AND switches to it."
+  },
+  {
+    q: "What's the difference between a branch and a tag?",
+    opts: [
+      "A branch is for code; a tag is for documentation",
+      "A branch is a movable pointer that advances with new commits; a tag is a fixed pointer that never moves",
+      "Branches work locally; tags work remotely",
+      "There is no difference"
+    ],
+    correct: 1,
+    explain: "A branch advances every time you commit on it (it 'moves'). A tag is fixed — it always points to the same commit. Tags are typically used to mark releases (v1.0, v2.0)."
+  },
+  {
+    q: "You ran 'git reset --hard HEAD~5' and lost 5 commits! How can you recover?",
+    opts: [
+      "The commits are gone forever",
+      "Use git reflog to find the lost commit and reset back to it",
+      "Use git revert",
+      "Reinstall Git"
+    ],
+    correct: 1,
+    explain: "git reflog shows every move HEAD has made for ~30 days. Find the hash before the reset, then: git reset --hard <hash>. Almost nothing is truly lost in Git!"
+  },
+  {
+    q: "You're working on changes but need to switch branches without committing. What command saves your work temporarily?",
+    opts: ["git save", "git pause", "git stash", "git hold"],
+    correct: 2,
+    explain: "git stash saves uncommitted changes (both staged and unstaged) and reverts your working directory to the last commit. Restore later with git stash pop."
+  },
+  {
+    q: "What's the difference between git stash pop and git stash apply?",
+    opts: [
+      "pop applies stash and removes it; apply keeps it in the stash list",
+      "They're identical",
+      "pop is for branches; apply is for tags",
+      "apply is destructive"
+    ],
+    correct: 0,
+    explain: "git stash pop applies the latest stash and REMOVES it from the stash list. git stash apply applies but KEEPS the stash — useful for applying the same stash to multiple branches."
+  },
+  {
+    q: "What is the GOLDEN RULE of rebase?",
+    opts: [
+      "Always rebase before merge",
+      "Rebase only on Tuesdays",
+      "Never rebase commits that have been pushed to a shared branch",
+      "Always use interactive rebase"
+    ],
+    correct: 2,
+    explain: "Rebase rewrites history (changes commit hashes). If others have pulled those commits, rebasing breaks their clones. Rebase is for cleaning up your LOCAL feature branch BEFORE pushing — never on shared branches."
+  },
+  {
+    q: "What command shows a visual graph of all branches?",
+    opts: [
+      "git log",
+      "git branch --visual",
+      "git log --oneline --graph --all",
+      "git tree"
+    ],
+    correct: 2,
+    explain: "git log --oneline --graph --all --decorate is the standard incantation for a compact visual representation of branch history. Many developers alias it to 'git lg'."
+  }
+];
+
+let score = 0;
+
+function renderQuiz() {
+  const container = document.getElementById('quizContainer');
+  document.getElementById('totalVal').textContent = questions.length;
+  container.innerHTML = questions.map((q, qi) => `
+    <div class="quiz-q" id="q${qi}">
+      <h4><span class="qnum">Q${qi + 1}</span> <span>${q.q}</span></h4>
+      <div class="options">
+        ${q.opts.map((opt, oi) => `
+          <div class="option" onclick="checkAnswer(${qi}, ${oi})" id="q${qi}o${oi}">${String.fromCharCode(65 + oi)}. ${opt}</div>
+        `).join('')}
+      </div>
+      <div class="explanation" id="exp${qi}"></div>
+    </div>
+  `).join('');
+}
+
+function checkAnswer(qi, oi) {
+  const q = questions[qi];
+  const expEl = document.getElementById(`exp${qi}`);
+
+  q.opts.forEach((_, i) => {
+    const el = document.getElementById(`q${qi}o${i}`);
+    el.classList.add('disabled');
+    if (i === q.correct) el.classList.add('correct');
+    else if (i === oi && oi !== q.correct) el.classList.add('wrong');
+  });
+
+  const isCorrect = oi === q.correct;
+  if (isCorrect) score++;
+
+  expEl.className = `explanation show ${isCorrect ? 'correct-exp' : 'wrong-exp'}`;
+  expEl.innerHTML = `${isCorrect ? '✅ Correct!' : '❌ Incorrect.'} ${q.explain}`;
+
+  document.getElementById('scoreVal').textContent = score;
+}
+
+renderQuiz();
+</script>
+
+</body>
+</html>
